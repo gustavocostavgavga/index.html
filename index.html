@@ -14,7 +14,7 @@
         header h1 { font-size: 1.8rem; font-weight: 700; color: #ff6b00; letter-spacing: 1px; }
         header p { font-size: 0.9rem; color: #8899aa; margin-top: 5px; }
         .tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 25px; flex-wrap: wrap; }
-        .tab-btn { background: #1a1c23; border: 1px solid #2a2d35; color: #8899aa; padding: 12px 28px; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.3s; font-size: 0.95rem; }
+        .tab-btn { background: #1a1c23; border: 1px solid #2a2d35; color: #8899aa; padding: 12px 28px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.3s; font-size: 0.95rem; }
         .tab-btn.active, .tab-btn:hover { background: #ff6b00; color: #fff; border-color: #ff6b00; box-shadow: 0 0 20px rgba(255,107,0,0.3); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
@@ -58,11 +58,11 @@
         .executive-card .kpi-item:last-child { border: none; }
         .executive-card .kpi-item .label { color: #8899aa; }
         .executive-card .kpi-item .value { font-weight: 600; }
-        .etapas-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .etapa-card { background: #15171f; border: 1px solid #2a2d35; border-radius: 12px; padding: 20px; }
-        .etapa-card h3 { color: #00f0ff; margin-bottom: 15px; font-size: 1.1rem; }
+        .etapas-container { display: flex; justify-content: center; }
+        .etapa-card { background: #15171f; border: 1px solid #2a2d35; border-radius: 12px; padding: 20px; max-width: 600px; width: 100%; }
+        .etapa-card h3 { color: #00f0ff; margin-bottom: 15px; font-size: 1.1rem; text-align: center; }
         .etapa-list { list-style: none; }
-        .etapa-list li { padding: 10px 0; border-bottom: 1px solid #2a2d35; color: #e0e0e0; display: flex; align-items: center; }
+        .etapa-list li { padding: 10px 0; border-bottom: 1px solid #2a2d35; color: #e0e0e0; display: flex; align-items: center; justify-content: center; text-align: center; }
         .etapa-list li:before { content: '✓'; color: #00e676; font-weight: bold; margin-right: 10px; font-size: 1.2rem; }
         .etapa-list li:last-child { border: none; }
     </style>
@@ -70,13 +70,13 @@
 <body>
     <div class="dashboard">
         <header>
-            <h1>DASHBOARD SUPRIMENTOS GRP - CONTROLE DE ORÇAMENTOS E CUSTOS</h1>
-            <p>Visão gerencial - Analista de Engenharia - CasaGrande Urbanismo</p>
+            <h1>DASHBOARD GRP - CONTROLE DE ORÇAMENTOS E CUSTOS</h1>
+            <p>Visão Gerencial - CasaGrande Urbanismo</p>
         </header>
         <div class="tabs">
-            <button class="tab-btn active" data-tab="mirante">MIRANTE DA LAGOA</button>
-            <button class="tab-btn" data-tab="joaquim">JOAQUIM LEME</button>
-            <button class="tab-btn" data-tab="geral">VISÃO GERAL</button>
+            <button class="tab-btn active" data-tab="mirante"><strong>MIRANTE DA LAGOA</strong></button>
+            <button class="tab-btn" data-tab="joaquim"><strong>JOAQUIM LEME</strong></button>
+            <button class="tab-btn" data-tab="geral"><strong>VISÃO GERAL</strong></button>
         </div>
         <!-- MIRANTE DA LAGOA -->
         <div class="tab-content active" id="tab-mirante">
@@ -89,7 +89,7 @@
                 <div class="kpi-card"><div class="label">Custo/Lote</div><div class="value">R$ 9.521</div></div>
             </div>
             <div class="sub-tabs">
-                <button class="sub-tab-btn active" data-subtab="detalhe-mirante">Detalhamento por Macro Etapa</button>
+                <button class="sub-tab-btn active" data-subtab="detalhe-mirante">Detalhamento por Etapa</button>
                 <button class="sub-tab-btn" data-subtab="historico-mirante">Histórico Mensal de Desembolsos</button>
                 <button class="sub-tab-btn" data-subtab="fluxo-mirante">Fluxo de Desembolsos Previsto</button>
                 <button class="sub-tab-btn" data-subtab="etapas-mirante">Etapas Vigentes</button>
@@ -149,7 +149,7 @@
                 <div class="kpi-card"><div class="label">Custo/Lote</div><div class="value">R$ 6.603</div></div>
             </div>
             <div class="sub-tabs">
-                <button class="sub-tab-btn active" data-subtab="detalhe-joaquim">Detalhamento por Macro Etapa</button>
+                <button class="sub-tab-btn active" data-subtab="detalhe-joaquim">Detalhamento por Etapa</button>
                 <button class="sub-tab-btn" data-subtab="historico-joaquim">Histórico Mensal de Desembolsos</button>
                 <button class="sub-tab-btn" data-subtab="fluxo-joaquim">Fluxo de Desembolsos Previsto</button>
                 <button class="sub-tab-btn" data-subtab="etapas-joaquim">Etapas Vigentes</button>
@@ -318,24 +318,24 @@
         const joaquimFluxoMeses = ['Mai/2026','Jun/2026','Jul/2026','Ago/2026','Set/2026','Out/2026','Nov/2026','Dez/2026','Jan/2027','Fev/2027','Mar/2027','Abr/2027','Mai/2027'];
         const joaquimFluxoValores = [185000,198000,211000,224000,237000,250000,263000,276000,289000,302000,315000,328000,341000];
         
-        function createLineChart(canvasId, labels, data, title) {
+        function createColumnChart(canvasId, labels, data, title) {
             new Chart(document.getElementById(canvasId), {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: labels,
-                    datasets: [{ label: title, data: data, borderColor: neonOrange, backgroundColor: neonOrange+'33', fill: true, tension: 0.4, borderWidth: 2 }]
+                    datasets: [{ label: title, data: data, backgroundColor: neonOrange, borderRadius: 4 }]
                 },
                 options: {
                     responsive: true,
                     plugins: { legend: { labels: { color: '#e0e0e0' } } },
-                    scales: { x: { ticks: { color: '#8899aa' } }, y: { ticks: { color: '#8899aa', callback: v => fmtNum(v) } } }
+                    scales: { x: { ticks: { color: '#8899aa', maxRotation: 45 } }, y: { ticks: { color: '#8899aa', callback: v => fmtNum(v) } } }
                 }
             });
         }
-        createLineChart('chartMiranteHistorico', miranteHistoricoMeses, miranteHistoricoValores, 'Valor gasto por Mês');
-        createLineChart('chartJoaquimHistorico', joaquimHistoricoMeses, joaquimHistoricoValores, 'Valor gasto por Mês');
-        createLineChart('chartMiranteFluxo', miranteFluxoMeses, miranteFluxoValores, 'Desembolso Previsto por Mês');
-        createLineChart('chartJoaquimFluxo', joaquimFluxoMeses, joaquimFluxoValores, 'Desembolso Previsto por Mês');
+        createColumnChart('chartMiranteHistorico', miranteHistoricoMeses, miranteHistoricoValores, 'Valor gasto por Mês');
+        createColumnChart('chartJoaquimHistorico', joaquimHistoricoMeses, joaquimHistoricoValores, 'Valor gasto por Mês');
+        createColumnChart('chartMiranteFluxo', miranteFluxoMeses, miranteFluxoValores, 'Desembolso Previsto por Mês');
+        createColumnChart('chartJoaquimFluxo', joaquimFluxoMeses, joaquimFluxoValores, 'Desembolso Previsto por Mês');
         
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', function() {

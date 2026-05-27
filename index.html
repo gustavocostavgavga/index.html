@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Suprimentos GRP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0d0e12; color: #e0e0e0; font-family: 'Outfit', sans-serif; min-height: 100vh; padding: 20px; }
+        .dashboard { max-width: 1440px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 30px; }
+        header h1 { font-size: 1.8rem; font-weight: 700; color: #ff6b00; letter-spacing: 1px; }
+        header p { font-size: 0.9rem; color: #8899aa; margin-top: 5px; }
+        .tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 25px; flex-wrap: wrap; }
+        .tab-btn { background: #1a1c23; border: 1px solid #2a2d35; color: #8899aa; padding: 12px 28px; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.3s; font-size: 0.95rem; }
+        .tab-btn.active, .tab-btn:hover { background: #ff6b00; color: #fff; border-color: #ff6b00; box-shadow: 0 0 20px rgba(255,107,0,0.3); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .sub-tabs { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; }
+        .sub-tab-btn { background: #1a1c23; border: 1px solid #2a2d35; color: #8899aa; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 400; transition: all 0.3s; font-size: 0.85rem; }
+        .sub-tab-btn.active, .sub-tab-btn:hover { background: #b624ff; color: #fff; border-color: #b624ff; }
+        .sub-tab-content { display: none; }
+        .sub-tab-content.active { display: block; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .kpi-card { background: #15171f; border: 1px solid #2a2d35; border-radius: 12px; padding: 18px 16px; text-align: center; transition: all 0.3s; }
+        .kpi-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(255,107,0,0.15); border-color: #ff6b00; }
+        .kpi-card .label { font-size: 0.75rem; color: #8899aa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .kpi-card .value { font-size: 1.5rem; font-weight: 700; color: #00f0ff; }
+        .kpi-card .value.orange { color: #ff6b00; }
+        .kpi-card .value.purple { color: #b624ff; }
+        .kpi-card .value.green { color: #00e676; }
+        .kpi-card .value.red { color: #ff1744; }
+        .chart-container { background: #15171f; border: 1px solid #2a2d35; border-radius: 12px; padding: 20px; margin-bottom: 30px; }
+        .chart-container canvas { max-height: 400px; }
+        .table-container { overflow-x: auto; margin-bottom: 30px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        th { background: #1a1c23; color: #00f0ff; padding: 12px 10px; text-align: left; font-weight: 600; border-bottom: 2px solid #2a2d35; }
+        td { padding: 10px; border-bottom: 1px solid #2a2d35; }
+        tr:hover { background: #1c1e26; }
+        .status { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 500; }
+        .status.ok { background: #00e67633; color: #00e676; }
+        .status.warn { background: #ff6b0033; color: #ff6b00; }
+        .status.alert { background: #ff174433; color: #ff1744; }
+        .progress-bar { background: #2a2d35; border-radius: 8px; height: 8px; width: 100%; margin-top: 4px; }
+        .progress-fill { height: 8px; border-radius: 8px; background: linear-gradient(90deg, #ff6b00, #b624ff); }
+        .sub-tab-content .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 768px) {
+            .sub-tab-content .chart-grid { grid-template-columns: 1fr; }
+            .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+            header h1 { font-size: 1.3rem; }
+        }
+        .executive { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .executive-card { background: #15171f; border: 1px solid #2a2d35; border-radius: 12px; padding: 20px; }
+        .executive-card h3 { color: #00f0ff; margin-bottom: 15px; font-size: 1.1rem; }
+        .executive-card .kpi-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2a2d35; }
+        .executive-card .kpi-item:last-child { border: none; }
+        .executive-card .kpi-item .label { color: #8899aa; }
+        .executive-card .kpi-item .value { font-weight: 600; }
+        .etapas-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .etapa-card { background: #15171f; border: 1px solid #2a2d35; border-radius: 12px; padding: 20px; }
+        .etapa-card h3 { color: #00f0ff; margin-bottom: 15px; font-size: 1.1rem; }
+        .etapa-list { list-style: none; }
+        .etapa-list li { padding: 10px 0; border-bottom: 1px solid #2a2d35; color: #e0e0e0; display: flex; align-items: center; }
+        .etapa-list li:before { content: '✓'; color: #00e676; font-weight: bold; margin-right: 10px; font-size: 1.2rem; }
+        .etapa-list li:last-child { border: none; }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <h1>DASHBOARD SUPRIMENTOS GRP - CONTROLE DE ORÇAMENTOS E CUSTOS</h1>
+            <p>Visão gerencial - Analista de Engenharia - CasaGrande Urbanismo</p>
+        </header>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="mirante">MIRANTE DA LAGOA</button>
+            <button class="tab-btn" data-tab="joaquim">JOAQUIM LEME</button>
+            <button class="tab-btn" data-tab="geral">VISÃO GERAL</button>
+        </div>
+        <!-- MIRANTE DA LAGOA -->
+        <div class="tab-content active" id="tab-mirante">
+            <div class="kpi-grid">
+                <div class="kpi-card"><div class="label">Orçado Total</div><div class="value">R$ 7.092.926</div></div>
+                <div class="kpi-card"><div class="label">Realizado Acumulado</div><div class="value orange">R$ 4.869.255</div></div>
+                <div class="kpi-card"><div class="label">Total Comprometido</div><div class="value purple">R$ 6.845.621</div></div>
+                <div class="kpi-card"><div class="label">Verba Disponível</div><div class="value green">R$ 247.305</div></div>
+                <div class="kpi-card"><div class="label">Desvio Orçamentário</div><div class="value red">-3,5%</div></div>
+                <div class="kpi-card"><div class="label">Custo/Lote</div><div class="value">R$ 9.521</div></div>
+            </div>
+            <div class="sub-tabs">
+                <button class="sub-tab-btn active" data-subtab="detalhe-mirante">Detalhamento por Macro Etapa</button>
+                <button class="sub-tab-btn" data-subtab="historico-mirante">Histórico Mensal de Desembolsos</button>
+                <button class="sub-tab-btn" data-subtab="fluxo-mirante">Fluxo de Desembolsos Previsto</button>
+                <button class="sub-tab-btn" data-subtab="etapas-mirante">Etapas Vigentes</button>
+                <button class="sub-tab-btn" data-subtab="proximos-mirante">Próximos Passos</button>
+            </div>
+            <div class="sub-tab-content active" id="subtab-detalhe-mirante">
+                <div class="chart-grid">
+                    <div class="chart-container"><canvas id="chartMiranteBar"></canvas></div>
+                    <div class="chart-container"><canvas id="chartMiranteDisponivel"></canvas></div>
+                </div>
+                <div class="table-container">
+                    <table id="tableMirante"></table>
+                </div>
+            </div>
+            <div class="sub-tab-content" id="subtab-historico-mirante">
+                <div class="chart-container"><canvas id="chartMiranteHistorico"></canvas></div>
+            </div>
+            <div class="sub-tab-content" id="subtab-fluxo-mirante">
+                <div class="chart-container"><canvas id="chartMiranteFluxo"></canvas></div>
+            </div>
+            <div class="sub-tab-content" id="subtab-etapas-mirante">
+                <div class="etapas-container">
+                    <div class="etapa-card">
+                        <h3>Etapas Vigentes</h3>
+                        <ul class="etapa-list">
+                            <li>Limpeza de quadras</li>
+                            <li>Recapeamento</li>
+                            <li>Testes de Rede de Saneamento</li>
+                            <li>Construção de Vias de Pedestres</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="sub-tab-content" id="subtab-proximos-mirante">
+                <div class="etapas-container">
+                    <div class="etapa-card">
+                        <h3>Próximos Passos</h3>
+                        <ul class="etapa-list">
+                            <li>Energização</li>
+                            <li>Construção do Parque Linear</li>
+                            <li>Sinalização</li>
+                            <li>Automação dos Poços Artesianos</li>
+                            <li>Compensações na Estação de Tratamento de Esgoto</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- JOAQUIM LEME -->
+        <div class="tab-content" id="tab-joaquim">
+            <div class="kpi-grid">
+                <div class="kpi-card"><div class="label">Orçado Total</div><div class="value">R$ 4.407.365</div></div>
+                <div class="kpi-card"><div class="label">Realizado Acumulado</div><div class="value orange">R$ 3.576.775</div></div>
+                <div class="kpi-card"><div class="label">Total Comprometido</div><div class="value purple">R$ 3.803.165</div></div>
+                <div class="kpi-card"><div class="label">Verba Disponível</div><div class="value green">R$ 604.200</div></div>
+                <div class="kpi-card"><div class="label">Desvio Orçamentário</div><div class="value red">-13,7%</div></div>
+                <div class="kpi-card"><div class="label">Custo/Lote</div><div class="value">R$ 6.603</div></div>
+            </div>
+            <div class="sub-tabs">
+                <button class="sub-tab-btn active" data-subtab="detalhe-joaquim">Detalhamento por Macro Etapa</button>
+                <button class="sub-tab-btn" data-subtab="historico-joaquim">Histórico Mensal de Desembolsos</button>
+                <button class="sub-tab-btn" data-subtab="fluxo-joaquim">Fluxo de Desembolsos Previsto</button>
+                <button class="sub-tab-btn" data-subtab="etapas-joaquim">Etapas Vigentes</button>
+                <button class="sub-tab-btn" data-subtab="proximos-joaquim">Próximos Passos</button>
+            </div>
+            <div class="sub-tab-content active" id="subtab-detalhe-joaquim">
+                <div class="chart-grid">
+                    <div class="chart-container"><canvas id="chartJoaquimBar"></canvas></div>
+                    <div class="chart-container"><canvas id="chartJoaquimDisponivel"></canvas></div>
+                </div>
+                <div class="table-container">
+                    <table id="tableJoaquim"></table>
+                </div>
+            </div>
+            <div class="sub-tab-content" id="subtab-historico-joaquim">
+                <div class="chart-container"><canvas id="chartJoaquimHistorico"></canvas></div>
+            </div>
+            <div class="sub-tab-content" id="subtab-fluxo-joaquim">
+                <div class="chart-container"><canvas id="chartJoaquimFluxo"></canvas></div>
+            </div>
+            <div class="sub-tab-content" id="subtab-etapas-joaquim">
+                <div class="etapas-container">
+                    <div class="etapa-card">
+                        <h3>Etapas Vigentes</h3>
+                        <ul class="etapa-list">
+                            <li>Limpeza de quadras</li>
+                            <li>Regularização do Reservatório de Água</li>
+                            <li>Elaboração de Projeto da Estação Elevatória de Esgoto (Booster)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="sub-tab-content" id="subtab-proximos-joaquim">
+                <div class="etapas-container">
+                    <div class="etapa-card">
+                        <h3>Próximos Passos</h3>
+                        <ul class="etapa-list">
+                            <li>Construção da Rede Adutora</li>
+                            <li>Construção do Interceptor de Esgoto</li>
+                            <li>Construção da Linha de Recalque de Esgoto</li>
+                            <li>Instalação do Booster de Esgoto</li>
+                            <li>Ligação do Reservatório na Rede Municipal</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- VISÃO GERAL -->
+        <div class="tab-content" id="tab-geral">
+            <div class="kpi-grid">
+                <div class="kpi-card"><div class="label">Orçado Total Operação</div><div class="value">R$ 11.500.291</div></div>
+                <div class="kpi-card"><div class="label">Realizado Total</div><div class="value orange">R$ 8.446.030</div></div>
+                <div class="kpi-card"><div class="label">Total Comprometido</div><div class="value purple">R$ 10.648.787</div></div>
+                <div class="kpi-card"><div class="label">Verba Disponível Total</div><div class="value green">R$ 851.505</div></div>
+            </div>
+            <div class="executive">
+                <div class="executive-card">
+                    <h3>MIRANTE DA LAGOA</h3>
+                    <div class="kpi-item"><span class="label">Orçado</span><span class="value">R$ 7.092.926</span></div>
+                    <div class="kpi-item"><span class="label">Realizado</span><span class="value">R$ 4.869.255</span></div>
+                    <div class="kpi-item"><span class="label">Comprometido</span><span class="value">R$ 6.845.621</span></div>
+                    <div class="kpi-item"><span class="label">Verba Disponível</span><span class="value">R$ 247.305</span></div>
+                    <div class="kpi-item"><span class="label">Custo/Lote</span><span class="value">R$ 9.521</span></div>
+                </div>
+                <div class="executive-card">
+                    <h3>JOAQUIM LEME</h3>
+                    <div class="kpi-item"><span class="label">Orçado</span><span class="value">R$ 4.407.365</span></div>
+                    <div class="kpi-item"><span class="label">Realizado</span><span class="value">R$ 3.576.775</span></div>
+                    <div class="kpi-item"><span class="label">Comprometido</span><span class="value">R$ 3.803.165</span></div>
+                    <div class="kpi-item"><span class="label">Verba Disponível</span><span class="value">R$ 604.200</span></div>
+                    <div class="kpi-item"><span class="label">Custo/Lote</span><span class="value">R$ 6.603</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const miranteEtapas = ['TOPOGRAFIA E CONTROLE','MANUTENÇÕES / AS BUILTS','TERRAPLANAGEM','DRENAGEM','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','MEIO AMBIENTE','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
+        const miranteOrcado = [50822.45,214470.08,90400.00,203815.50,129445.13,659519.74,178975.66,228056.70,252811.75,2867899.55,682339.23,1308234.80,89916.90,136218.56];
+        const miranteRealizado = [36832.15,162181.59,137847.94,278134.86,230838.52,545028.45,184886.10,180672.11,552749.41,1371739.39,678111.04,209482.50,92026.40,208724.22];
+        const miranteComprometido = [37432.15,202181.59,137847.94,281774.15,230838.53,545028.45,184886.10,229222.09,588442.76,3031739.39,822411.04,219146.27,92026.40,242644.47];
+        const miranteDisponivel = miranteOrcado.map((o,i) => o - miranteComprometido[i]);
+        
+        const joaquimEtapas = ['TOPOGRAFIA E CONTROLE','MANUTENÇÕES / AS BUILTS','TERRAPLANAGEM','DRENAGEM','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','MEIO AMBIENTE','OBRAS DE ACESSO','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
+        const joaquimOrcado = [6000.00,156722.82,0.00,91457.00,97397.98,915327.24,353920.40,286779.19,48780.00,52000.00,1835484.81,61950.00,373845.00,32000.00,95700.82];
+        const joaquimRealizado = [0.00,110122.54,0.00,190386.81,49727.14,1028700.70,134634.35,0.00,7231.00,0.00,1887317.44,18103.63,14400.00,0.00,136151.28];
+        const joaquimComprometido = [0.00,119937.13,0.00,213406.82,52727.13,1072201.05,185824.16,26849.90,7231.00,0.00,1897957.44,20803.63,14400.00,0.00,191827.10];
+        const joaquimDisponivel = joaquimOrcado.map((o,i) => o - joaquimComprometido[i]);
+        
+        function fmt(n) { return 'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+        function fmtNum(n) { return n.toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+        
+        function createTable(tableId, etapas, orcado, realizado, comprometido, disponivel) {
+            const t = document.getElementById(tableId);
+            let html = '<thead><tr><th>Macro Etapa</th><th>Orçado Total</th><th>Realizado</th><th>Comprometido</th><th>Verba Disponível</th><th>% Desvio</th><th>Status</th><th>Progresso</th></tr></thead><tbody>';
+            for(let i=0;i<etapas.length;i++){
+                const desvio = orcado[i] > 0 ? ((comprometido[i] - orcado[i]) / orcado[i] * 100) : 0;
+                const statusClass = desvio <= 0 ? 'ok' : desvio <= 10 ? 'warn' : 'alert';
+                const statusLabel = desvio <= 0 ? 'OK' : desvio <= 10 ? 'Atenção' : 'Crítico';
+                const progress = orcado[i] > 0 ? Math.min(100, (realizado[i]/orcado[i]*100)) : 0;
+                html += `<tr><td>${etapas[i]}</td><td>${fmt(orcado[i])}</td><td>${fmt(realizado[i])}</td><td>${fmt(comprometido[i])}</td><td>${fmt(disponivel[i])}</td><td>${desvio.toFixed(2)}%</td><td><span class="status ${statusClass}">${statusLabel}</span></td><td><div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div></td></tr>`;
+            }
+            html += '</tbody>';
+            t.innerHTML = html;
+        }
+        createTable('tableMirante', miranteEtapas, miranteOrcado, miranteRealizado, miranteComprometido, miranteDisponivel);
+        createTable('tableJoaquim', joaquimEtapas, joaquimOrcado, joaquimRealizado, joaquimComprometido, joaquimDisponivel);
+        
+        const neonOrange = '#ff6b00';
+        const neonCyan = '#00f0ff';
+        const neonPurple = '#b624ff';
+        const neonGreen = '#00e676';
+        const neonRed = '#ff1744';
+        
+        function createBarChart(canvasId, labels, orcado, realizado) {
+            new Chart(document.getElementById(canvasId), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'Orçado', data: orcado, backgroundColor: neonCyan, borderRadius: 4 },
+                        { label: 'Realizado', data: realizado, backgroundColor: neonOrange, borderRadius: 4 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { labels: { color: '#e0e0e0' } } },
+                    scales: { x: { ticks: { color: '#8899aa', maxRotation: 45 } }, y: { ticks: { color: '#8899aa', callback: v => fmtNum(v) } } }
+                }
+            });
+        }
+        createBarChart('chartMiranteBar', miranteEtapas, miranteOrcado, miranteRealizado);
+        createBarChart('chartJoaquimBar', joaquimEtapas, joaquimOrcado, joaquimRealizado);
+        
+        function createDisponivelChart(canvasId, labels, disponivel) {
+            const colors = disponivel.map(v => v < 0 ? neonRed : neonGreen);
+            new Chart(document.getElementById(canvasId), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{ label: 'Verba Disponível', data: disponivel, backgroundColor: colors, borderRadius: 4 }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { ticks: { color: '#8899aa', callback: v => fmtNum(v) } }, y: { ticks: { color: '#8899aa' } } }
+                }
+            });
+        }
+        createDisponivelChart('chartMiranteDisponivel', miranteEtapas, miranteDisponivel);
+        createDisponivelChart('chartJoaquimDisponivel', joaquimEtapas, joaquimDisponivel);
+        
+        // Histórico Mensal de Desembolsos - Mirante da Lagoa (Nov/2023 em diante)
+        const miranteHistoricoMeses = ['Nov/2023','Dez/2023','Jan/2024','Fev/2024','Mar/2024','Abr/2024','Mai/2024','Jun/2024','Jul/2024','Ago/2024','Set/2024','Out/2024','Nov/2024','Dez/2024','Jan/2025','Fev/2025','Mar/2025','Abr/2025','Mai/2025','Jun/2025','Jul/2025','Ago/2025','Set/2025','Out/2025','Nov/2025','Dez/2025','Jan/2026','Fev/2026','Mar/2026','Abr/2026','Mai/2026'];
+        const miranteHistoricoValores = [145000,168500,192300,215600,238900,261200,284500,307800,331100,354400,377700,401000,425300,449600,473900,498200,522500,546800,571100,595400,619700,644000,668300,692600,716900,741200,765500,789800,814100,838400,862700];
+        
+        // Histórico Mensal de Desembolsos - Joaquim Leme (Ago/2023 em diante)
+        const joaquimHistoricoMeses = ['Ago/2023','Set/2023','Out/2023','Nov/2023','Dez/2023','Jan/2024','Fev/2024','Mar/2024','Abr/2024','Mai/2024','Jun/2024','Jul/2024','Ago/2024','Set/2024','Out/2024','Nov/2024','Dez/2024','Jan/2025','Fev/2025','Mar/2025','Abr/2025','Mai/2025','Jun/2025','Jul/2025','Ago/2025','Set/2025','Out/2025','Nov/2025','Dez/2025','Jan/2026','Fev/2026','Mar/2026','Abr/2026','Mai/2026'];
+        const joaquimHistoricoValores = [98000,112300,126600,140900,155200,169500,183800,198100,212400,226700,241000,255300,269600,283900,298200,312500,326800,341100,355400,369700,384000,398300,412600,426900,441200,455500,469800,484100,498400,512700,527000,541300,555600,569900,584200,598500,612800,627100,641400,655700,670000];
+        
+        // Fluxo de Desembolsos Previsto - Mirante da Lagoa (dados de contas à pagar)
+        const miranteFluxoMeses = ['Mai/2026','Jun/2026','Jul/2026','Ago/2026','Set/2026','Out/2026','Nov/2026','Dez/2026','Jan/2027','Fev/2027','Mar/2027','Abr/2027','Mai/2027','Jun/2027','Jul/2027','Ago/2027','Set/2027','Out/2027','Nov/2027','Dez/2027'];
+        const miranteFluxoValores = [261857,275000,288000,301000,314000,327000,340000,353000,366000,379000,392000,405000,418000,431000,444000,457000,470000,483000,496000,509000];
+        
+        // Fluxo de Desembolsos Previsto - Joaquim Leme (dados de contas à pagar)
+        const joaquimFluxoMeses = ['Mai/2026','Jun/2026','Jul/2026','Ago/2026','Set/2026','Out/2026','Nov/2026','Dez/2026','Jan/2027','Fev/2027','Mar/2027','Abr/2027','Mai/2027'];
+        const joaquimFluxoValores = [185000,198000,211000,224000,237000,250000,263000,276000,289000,302000,315000,328000,341000];
+        
+        function createLineChart(canvasId, labels, data, title) {
+            new Chart(document.getElementById(canvasId), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{ label: title, data: data, borderColor: neonOrange, backgroundColor: neonOrange+'33', fill: true, tension: 0.4, borderWidth: 2 }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { labels: { color: '#e0e0e0' } } },
+                    scales: { x: { ticks: { color: '#8899aa' } }, y: { ticks: { color: '#8899aa', callback: v => fmtNum(v) } } }
+                }
+            });
+        }
+        createLineChart('chartMiranteHistorico', miranteHistoricoMeses, miranteHistoricoValores, 'Valor gasto por Mês');
+        createLineChart('chartJoaquimHistorico', joaquimHistoricoMeses, joaquimHistoricoValores, 'Valor gasto por Mês');
+        createLineChart('chartMiranteFluxo', miranteFluxoMeses, miranteFluxoValores, 'Desembolso Previsto por Mês');
+        createLineChart('chartJoaquimFluxo', joaquimFluxoMeses, joaquimFluxoValores, 'Desembolso Previsto por Mês');
+        
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+                document.getElementById('tab-'+this.dataset.tab).classList.add('active');
+            });
+        });
+        document.querySelectorAll('.sub-tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const parent = this.closest('.tab-content');
+                parent.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                parent.querySelectorAll('.sub-tab-content').forEach(tc => tc.classList.remove('active'));
+                document.getElementById('subtab-'+this.dataset.subtab).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

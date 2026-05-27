@@ -63,9 +63,11 @@
         .etapa-card h3 { color: #00f0ff; margin-bottom: 15px; font-size: 1.1rem; text-align: center; }
         .etapa-list { list-style: none; }
         .etapa-list li { padding: 10px 0; border-bottom: 1px solid #2a2d35; color: #e0e0e0; display: flex; align-items: center; justify-content: center; text-align: center; }
-        .etapa-list li:before { content: '⚙'; color: #ff6b00; font-weight: bold; margin-right: 10px; font-size: 1.2rem; animation: spin 2s linear infinite; }
+        .etapa-list li.vigente:before { content: '⚙'; color: #ff6b00; font-weight: bold; margin-right: 10px; font-size: 1.2rem; animation: spin 2s linear infinite; }
+        .etapa-list li.proximo:before { content: '⏳'; color: #b624ff; font-weight: bold; margin-right: 10px; font-size: 1.2rem; animation: flip 1.5s ease-in-out infinite; }
         .etapa-list li:last-child { border: none; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes flip { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(-1); } }
     </style>
 </head>
 <body>
@@ -92,7 +94,6 @@
             <div class="sub-tabs">
                 <button class="sub-tab-btn active" data-subtab="detalhe-mirante">Detalhamento por Etapa</button>
                 <button class="sub-tab-btn" data-subtab="historico-mirante">Histórico Mensal de Desembolsos</button>
-                <button class="sub-tab-btn" data-subtab="fluxo-mirante">Fluxo de Desembolsos Previsto</button>
                 <button class="sub-tab-btn" data-subtab="etapas-mirante">Etapas Vigentes</button>
                 <button class="sub-tab-btn" data-subtab="proximos-mirante">Próximos Passos</button>
             </div>
@@ -108,18 +109,15 @@
             <div class="sub-tab-content" id="subtab-historico-mirante">
                 <div class="chart-container"><canvas id="chartMiranteHistorico"></canvas></div>
             </div>
-            <div class="sub-tab-content" id="subtab-fluxo-mirante">
-                <div class="chart-container"><canvas id="chartMiranteFluxo"></canvas></div>
-            </div>
             <div class="sub-tab-content" id="subtab-etapas-mirante">
                 <div class="etapas-container">
                     <div class="etapa-card">
                         <h3>Etapas Vigentes</h3>
                         <ul class="etapa-list">
-                            <li>Limpeza de quadras</li>
-                            <li>Recapeamento</li>
-                            <li>Testes de Rede de Saneamento</li>
-                            <li>Construção de Vias de Pedestres</li>
+                            <li class="vigente">Limpeza de quadras</li>
+                            <li class="vigente">Recapeamento</li>
+                            <li class="vigente">Testes de Rede de Saneamento</li>
+                            <li class="vigente">Construção de Vias de Pedestres</li>
                         </ul>
                     </div>
                 </div>
@@ -129,11 +127,11 @@
                     <div class="etapa-card">
                         <h3>Próximos Passos</h3>
                         <ul class="etapa-list">
-                            <li>Energização</li>
-                            <li>Construção do Parque Linear</li>
-                            <li>Sinalização</li>
-                            <li>Automação dos Poços Artesianos</li>
-                            <li>Compensações na Estação de Tratamento de Esgoto</li>
+                            <li class="proximo">Energização</li>
+                            <li class="proximo">Construção do Parque Linear</li>
+                            <li class="proximo">Sinalização</li>
+                            <li class="proximo">Automação dos Poços Artesianos</li>
+                            <li class="proximo">Compensações na Estação de Tratamento de Esgoto</li>
                         </ul>
                     </div>
                 </div>
@@ -152,7 +150,6 @@
             <div class="sub-tabs">
                 <button class="sub-tab-btn active" data-subtab="detalhe-joaquim">Detalhamento por Etapa</button>
                 <button class="sub-tab-btn" data-subtab="historico-joaquim">Histórico Mensal de Desembolsos</button>
-                <button class="sub-tab-btn" data-subtab="fluxo-joaquim">Fluxo de Desembolsos Previsto</button>
                 <button class="sub-tab-btn" data-subtab="etapas-joaquim">Etapas Vigentes</button>
                 <button class="sub-tab-btn" data-subtab="proximos-joaquim">Próximos Passos</button>
             </div>
@@ -168,17 +165,14 @@
             <div class="sub-tab-content" id="subtab-historico-joaquim">
                 <div class="chart-container"><canvas id="chartJoaquimHistorico"></canvas></div>
             </div>
-            <div class="sub-tab-content" id="subtab-fluxo-joaquim">
-                <div class="chart-container"><canvas id="chartJoaquimFluxo"></canvas></div>
-            </div>
             <div class="sub-tab-content" id="subtab-etapas-joaquim">
                 <div class="etapas-container">
                     <div class="etapa-card">
                         <h3>Etapas Vigentes</h3>
                         <ul class="etapa-list">
-                            <li>Limpeza de quadras</li>
-                            <li>Regularização do Reservatório de Água</li>
-                            <li>Elaboração de Projeto da Estação Elevatória de Esgoto (Booster)</li>
+                            <li class="vigente">Limpeza de quadras</li>
+                            <li class="vigente">Regularização do Reservatório de Água</li>
+                            <li class="vigente">Elaboração de Projeto da Estação Elevatória de Esgoto (Booster)</li>
                         </ul>
                     </div>
                 </div>
@@ -188,11 +182,11 @@
                     <div class="etapa-card">
                         <h3>Próximos Passos</h3>
                         <ul class="etapa-list">
-                            <li>Construção da Rede Adutora</li>
-                            <li>Construção do Interceptor de Esgoto</li>
-                            <li>Construção da Linha de Recalque de Esgoto</li>
-                            <li>Instalação do Booster de Esgoto</li>
-                            <li>Ligação do Reservatório na Rede Municipal</li>
+                            <li class="proximo">Construção da Rede Adutora</li>
+                            <li class="proximo">Construção do Interceptor de Esgoto</li>
+                            <li class="proximo">Construção da Linha de Recalque de Esgoto</li>
+                            <li class="proximo">Instalação do Booster de Esgoto</li>
+                            <li class="proximo">Ligação do Reservatório na Rede Municipal</li>
                         </ul>
                     </div>
                 </div>
@@ -311,14 +305,6 @@
         const joaquimHistoricoMeses = ['Ago/23','Set/23','Out/23','Nov/23','Dez/23','Jan/24','Fev/24','Mar/24','Abr/24','Mai/24','Jun/24','Jul/24','Ago/24','Set/24','Out/24','Nov/24','Dez/24','Jan/25','Fev/25','Mar/25','Abr/25','Mai/25','Jun/25','Jul/25','Ago/25','Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26','Mar/26','Abr/26'];
         const joaquimHistoricoValores = [9197,5000,7500,6900,0,0,0,8000,0,0,400,0,0,5000,0,2950,0,2950,85000,76195,68195,97659,265328,2102,613931,126801,846921,49210,464746,126667,162155,388593,15427];
         
-        // Fluxo de Desembolsos Previsto - Mirante da Lagoa (dados de contas à pagar)
-        const miranteFluxoMeses = ['Mai/2026','Jun/2026','Jul/2026','Ago/2026','Set/2026','Out/2026','Nov/2026','Dez/2026','Jan/2027','Fev/2027','Mar/2027','Abr/2027','Mai/2027','Jun/2027','Jul/2027','Ago/2027','Set/2027','Out/2027','Nov/2027','Dez/2027'];
-        const miranteFluxoValores = [261857,275000,288000,301000,314000,327000,340000,353000,366000,379000,392000,405000,418000,431000,444000,457000,470000,483000,496000,509000];
-        
-        // Fluxo de Desembolsos Previsto - Joaquim Leme (dados de contas à pagar)
-        const joaquimFluxoMeses = ['Mai/2026','Jun/2026','Jul/2026','Ago/2026','Set/2026','Out/2026','Nov/2026','Dez/2026','Jan/2027','Fev/2027','Mar/2027','Abr/2027','Mai/2027'];
-        const joaquimFluxoValores = [185000,198000,211000,224000,237000,250000,263000,276000,289000,302000,315000,328000,341000];
-        
         function createColumnChart(canvasId, labels, data, title) {
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
@@ -335,8 +321,6 @@
         }
         createColumnChart('chartMiranteHistorico', miranteHistoricoMeses, miranteHistoricoValores, 'Gasto até Abr/26');
         createColumnChart('chartJoaquimHistorico', joaquimHistoricoMeses, joaquimHistoricoValores, 'Gasto até Abr/26');
-        createColumnChart('chartMiranteFluxo', miranteFluxoMeses, miranteFluxoValores, 'Desembolso Previsto por Mês');
-        createColumnChart('chartJoaquimFluxo', joaquimFluxoMeses, joaquimFluxoValores, 'Desembolso Previsto por Mês');
         
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', function() {

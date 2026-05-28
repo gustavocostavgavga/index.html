@@ -8,43 +8,43 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #0d0e12; color: #e0e0e0; font-family: 'Outfit', sans-serif; min-height: 100vh; padding: 20px; }
+        body { background: #e8eaed; color: #2c3e50; font-family: 'Outfit', sans-serif; min-height: 100vh; padding: 20px; }
         .dashboard { max-width: 1440px; margin: 0 auto; }
         header { text-align: center; margin-bottom: 30px; }
-        header h1 { font-size: 1.8rem; font-weight: 700; color: #ff6b00; letter-spacing: 1px; }
-        header p { font-size: 0.9rem; color: #8899aa; margin-top: 5px; }
+        header h1 { font-size: 1.8rem; font-weight: 700; color: #1b5e20; letter-spacing: 1px; }
+        header p { font-size: 0.9rem; color: #558b2f; margin-top: 5px; }
         .tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 25px; flex-wrap: wrap; }
-        .tab-btn { background: #1a1c23; border: 1px solid #2a2d35; color: #8899aa; padding: 12px 28px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.3s; font-size: 0.95rem; }
-        .tab-btn.active, .tab-btn:hover { background: #ff6b00; color: #fff; border-color: #ff6b00; box-shadow: 0 0 20px rgba(255,107,0,0.3); }
+        .tab-btn { background: #ffffff; border: 2px solid #c0c0c0; color: #558b2f; padding: 12px 28px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.3s; font-size: 0.95rem; }
+        .tab-btn.active, .tab-btn:hover { background: #558b2f; color: #ffffff; border-color: #558b2f; box-shadow: 0 0 20px rgba(85,139,47,0.3); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         .sub-tabs { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; }
-        .sub-tab-btn { background: #1a1c23; border: 1px solid #2a2d35; color: #8899aa; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 400; transition: all 0.3s; font-size: 0.85rem; }
-        .sub-tab-btn.active, .sub-tab-btn:hover { background: #b624ff; color: #fff; border-color: #b624ff; }
+        .sub-tab-btn { background: #ffffff; border: 1px solid #c0c0c0; color: #558b2f; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 400; transition: all 0.3s; font-size: 0.85rem; }
+        .sub-tab-btn.active, .sub-tab-btn:hover { background: #7cb342; color: #ffffff; border-color: #7cb342; }
         .sub-tab-content { display: none; }
         .sub-tab-content.active { display: block; }
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 30px; }
-        .kpi-card { background: #15171f; border: 1px solid #2a2d35; border-radius: 12px; padding: 18px 16px; text-align: center; transition: all 0.3s; }
-        .kpi-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(255,107,0,0.15); border-color: #ff6b00; }
-        .kpi-card .label { font-size: 0.75rem; color: #8899aa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-        .kpi-card .value { font-size: 1.5rem; font-weight: 700; color: #00f0ff; }
-        .kpi-card .value.orange { color: #ff6b00; }
-        .kpi-card .value.purple { color: #b624ff; }
-        .kpi-card .value.green { color: #00e676; }
-        .kpi-card .value.red { color: #ff1744; }
-        .chart-container { background: #15171f; border: 1px solid #2a2d35; border-radius: 12px; padding: 20px; margin-bottom: 30px; }
+        .kpi-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 18px 16px; text-align: center; transition: all 0.3s; }
+        .kpi-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(85,139,47,0.15); border-color: #558b2f; }
+        .kpi-card .label { font-size: 0.75rem; color: #558b2f; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .kpi-card .value { font-size: 1.5rem; font-weight: 700; color: #1b5e20; }
+        .kpi-card .value.orange { color: #558b2f; }
+        .kpi-card .value.purple { color: #7cb342; }
+        .kpi-card .value.green { color: #2e7d32; }
+        .kpi-card .value.red { color: #d32f2f; }
+        .chart-container { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; margin-bottom: 30px; }
         .chart-container canvas { max-height: 400px; }
         .table-container { overflow-x: auto; margin-bottom: 30px; }
         table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-        th { background: #1a1c23; color: #00f0ff; padding: 12px 10px; text-align: left; font-weight: 600; border-bottom: 2px solid #2a2d35; }
-        td { padding: 10px; border-bottom: 1px solid #2a2d35; }
-        tr:hover { background: #1c1e26; }
+        th { background: #f5f5f5; color: #1b5e20; padding: 12px 10px; text-align: left; font-weight: 600; border-bottom: 2px solid #c0c0c0; }
+        td { padding: 10px; border-bottom: 1px solid #e0e0e0; color: #2c3e50; }
+        tr:hover { background: #f9f9f9; }
         .status { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 500; }
-        .status.ok { background: #00e67633; color: #00e676; }
-        .status.warn { background: #ff6b0033; color: #ff6b00; }
-        .status.alert { background: #ff174433; color: #ff1744; }
-        .progress-bar { background: #2a2d35; border-radius: 8px; height: 8px; width: 100%; margin-top: 4px; }
-        .progress-fill { height: 8px; border-radius: 8px; background: linear-gradient(90deg, #ff6b00, #b624ff); }
+        .status.ok { background: #c8e6c9; color: #1b5e20; }
+        .status.warn { background: #fff9c4; color: #f57f17; }
+        .status.alert { background: #ffcdd2; color: #c62828; }
+        .progress-bar { background: #e0e0e0; border-radius: 8px; height: 8px; width: 100%; margin-top: 4px; }
+        .progress-fill { height: 8px; border-radius: 8px; background: linear-gradient(90deg, #558b2f, #7cb342); }
         .sub-tab-content .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         @media (max-width: 768px) {
             .sub-tab-content .chart-grid { grid-template-columns: 1fr; }
@@ -52,19 +52,19 @@
             header h1 { font-size: 1.3rem; }
         }
         .executive { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .executive-card { background: #15171f; border: 1px solid #2a2d35; border-radius: 12px; padding: 20px; }
-        .executive-card h3 { color: #00f0ff; margin-bottom: 15px; font-size: 1.1rem; }
-        .executive-card .kpi-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2a2d35; }
+        .executive-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; }
+        .executive-card h3 { color: #1b5e20; margin-bottom: 15px; font-size: 1.1rem; }
+        .executive-card .kpi-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e0e0e0; }
         .executive-card .kpi-item:last-child { border: none; }
-        .executive-card .kpi-item .label { color: #8899aa; }
-        .executive-card .kpi-item .value { font-weight: 600; }
+        .executive-card .kpi-item .label { color: #558b2f; }
+        .executive-card .kpi-item .value { font-weight: 600; color: #1b5e20; }
         .etapas-container { display: flex; justify-content: center; }
-        .etapa-card { background: #15171f; border: 1px solid #2a2d35; border-radius: 12px; padding: 20px; max-width: 600px; width: 100%; }
-        .etapa-card h3 { color: #00f0ff; margin-bottom: 15px; font-size: 1.1rem; text-align: center; }
+        .etapa-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; max-width: 600px; width: 100%; }
+        .etapa-card h3 { color: #1b5e20; margin-bottom: 15px; font-size: 1.1rem; text-align: center; }
         .etapa-list { list-style: none; }
-        .etapa-list li { padding: 10px 0; border-bottom: 1px solid #2a2d35; color: #e0e0e0; display: flex; align-items: center; justify-content: center; text-align: center; }
-        .etapa-list li.vigente:before { content: '⚙'; color: #ff6b00; font-weight: bold; margin-right: 10px; font-size: 1.2rem; animation: spin 2s linear infinite; }
-        .etapa-list li.proximo:before { content: '⏳'; color: #b624ff; font-weight: bold; margin-right: 10px; font-size: 1.2rem; animation: flip 1.5s ease-in-out infinite; }
+        .etapa-list li { padding: 10px 0; border-bottom: 1px solid #e0e0e0; color: #2c3e50; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .etapa-list li.vigente:before { content: '⚙'; color: #558b2f; font-weight: bold; margin-right: 10px; font-size: 1.2rem; animation: spin 2s linear infinite; }
+        .etapa-list li.proximo:before { content: '⏳'; color: #7cb342; font-weight: bold; margin-right: 10px; font-size: 1.2rem; animation: flip 1.5s ease-in-out infinite; }
         .etapa-list li:last-child { border: none; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes flip { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(-1); } }
@@ -252,11 +252,11 @@
         createTable('tableMirante', miranteEtapas, miranteOrcado, miranteRealizado, miranteComprometido, miranteDisponivel);
         createTable('tableJoaquim', joaquimEtapas, joaquimOrcado, joaquimRealizado, joaquimComprometido, joaquimDisponivel);
         
-        const neonOrange = '#ff6b00';
-        const neonCyan = '#00f0ff';
-        const neonPurple = '#b624ff';
-        const neonGreen = '#00e676';
-        const neonRed = '#ff1744';
+        const greenDark = '#1b5e20';
+        const greenMedium = '#558b2f';
+        const greenLight = '#7cb342';
+        const white = '#ffffff';
+        const red = '#d32f2f';
         
         function createBarChart(canvasId, labels, orcado, realizado) {
             new Chart(document.getElementById(canvasId), {
@@ -264,14 +264,14 @@
                 data: {
                     labels: labels,
                     datasets: [
-                        { label: 'Orçado', data: orcado, backgroundColor: neonCyan, borderRadius: 4 },
-                        { label: 'Realizado', data: realizado, backgroundColor: neonOrange, borderRadius: 4 }
+                        { label: 'Orçado', data: orcado, backgroundColor: greenLight, borderRadius: 4 },
+                        { label: 'Realizado', data: realizado, backgroundColor: greenMedium, borderRadius: 4 }
                     ]
                 },
                 options: {
                     responsive: true,
-                    plugins: { legend: { labels: { color: '#e0e0e0' } } },
-                    scales: { x: { ticks: { color: '#8899aa', maxRotation: 45 } }, y: { ticks: { color: '#8899aa', callback: v => fmtNum(v) } } }
+                    plugins: { legend: { labels: { color: '#2c3e50' } } },
+                    scales: { x: { ticks: { color: '#558b2f', maxRotation: 45 } }, y: { ticks: { color: '#558b2f', callback: v => fmtNum(v) } } }
                 }
             });
         }
@@ -279,7 +279,7 @@
         createBarChart('chartJoaquimBar', joaquimEtapas, joaquimOrcado, joaquimRealizado);
         
         function createDisponivelChart(canvasId, labels, disponivel) {
-            const colors = disponivel.map(v => v < 0 ? neonRed : neonGreen);
+            const colors = disponivel.map(v => v < 0 ? red : '#2e7d32');
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
                 data: {
@@ -290,18 +290,16 @@
                     indexAxis: 'y',
                     responsive: true,
                     plugins: { legend: { display: false } },
-                    scales: { x: { ticks: { color: '#8899aa', callback: v => fmtNum(v) } }, y: { ticks: { color: '#8899aa' } } }
+                    scales: { x: { ticks: { color: '#558b2f', callback: v => fmtNum(v) } }, y: { ticks: { color: '#2c3e50' } } }
                 }
             });
         }
         createDisponivelChart('chartMiranteDisponivel', miranteEtapas, miranteDisponivel);
         createDisponivelChart('chartJoaquimDisponivel', joaquimEtapas, joaquimDisponivel);
         
-        // Histórico Mensal de Desembolsos - Mirante da Lagoa (dados reais dos relatórios)
         const miranteHistoricoMeses = ['Out/23','Nov/23','Dez/23','Jan/24','Fev/24','Mar/24','Abr/24','Mai/24','Jun/24','Jul/24','Ago/24','Set/24','Out/24','Nov/24','Dez/24','Jan/25','Fev/25','Mar/25','Abr/25','Mai/25','Jun/25','Jul/25','Ago/25','Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26','Mar/26','Abr/26'];
         const miranteHistoricoValores = [15941,10938,1000,7000,7500,9500,19220,0,27359,17200,13036,13800,16900,44080,31408,37084,142367,113630,189413,78009,87416,112178,215158,477827,531463,523136,1012576,353551,286552,165518,90625];
         
-        // Histórico Mensal de Desembolsos - Joaquim Leme (dados reais dos relatórios)
         const joaquimHistoricoMeses = ['Ago/23','Set/23','Out/23','Nov/23','Dez/23','Jan/24','Fev/24','Mar/24','Abr/24','Mai/24','Jun/24','Jul/24','Ago/24','Set/24','Out/24','Nov/24','Dez/24','Jan/25','Fev/25','Mar/25','Abr/25','Mai/25','Jun/25','Jul/25','Ago/25','Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26','Mar/26','Abr/26'];
         const joaquimHistoricoValores = [9197,5000,7500,6900,0,0,0,8000,0,0,400,0,0,5000,0,2950,0,2950,85000,76195,68195,97659,265328,2102,613931,126801,846921,49210,464746,126667,162155,388593,15427];
         
@@ -310,12 +308,12 @@
                 type: 'bar',
                 data: {
                     labels: labels,
-                    datasets: [{ label: title, data: data, backgroundColor: neonOrange, borderRadius: 4 }]
+                    datasets: [{ label: title, data: data, backgroundColor: greenMedium, borderRadius: 4 }]
                 },
                 options: {
                     responsive: true,
-                    plugins: { legend: { labels: { color: '#e0e0e0' } } },
-                    scales: { x: { ticks: { color: '#8899aa', maxRotation: 45 } }, y: { ticks: { color: '#8899aa', callback: v => fmtNum(v) } } }
+                    plugins: { legend: { labels: { color: '#2c3e50' } } },
+                    scales: { x: { ticks: { color: '#558b2f', maxRotation: 45 } }, y: { ticks: { color: '#558b2f', callback: v => fmtNum(v) } } }
                 }
             });
         }

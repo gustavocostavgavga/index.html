@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: linear-gradient(135deg, #f5f6f8 0%, #e8eaed 50%, #f5f6f8 100%); color: #2c3e50; font-family: 'Outfit', sans-serif; min-height: 100vh; padding: 20px; }
+        body { background: linear-gradient(135deg, #f0f2f5 0%, #e8eaed 50%, #f0f2f5 100%); color: #2c3e50; font-family: 'Outfit', sans-serif; min-height: 100vh; padding: 20px; }
         .dashboard { max-width: 1440px; margin: 0 auto; }
         header { display: flex; align-items: center; justify-content: center; margin-bottom: 30px; gap: 20px; }
         header .title-section { flex: 1; background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; text-align: center; }
@@ -39,8 +39,9 @@
         .abc-header h3 { color: #1b5e20; font-size: 1.1rem; }
         .table-container { overflow-x: auto; margin-bottom: 30px; }
         table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-        th { background: #f5f5f5; color: #1b5e20; padding: 12px 10px; text-align: left; font-weight: 600; border-bottom: 2px solid #c0c0c0; }
-        td { padding: 10px; border-bottom: 1px solid #e0e0e0; color: #2c3e50; }
+        th { background: #f5f5f5; color: #1b5e20; padding: 12px 10px; text-align: center; font-weight: 600; border-bottom: 2px solid #c0c0c0; }
+        td { padding: 10px; border-bottom: 1px solid #e0e0e0; color: #2c3e50; text-align: center; }
+        td:first-child { text-align: left; }
         tr:hover { background: #f9f9f9; }
         .status { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 500; }
         .status.ok { background: #c8e6c9; color: #1b5e20; }
@@ -121,7 +122,7 @@
                 </div>
                 <div class="kpi-card">
                     <div class="label">Desvio Orçamentário</div>
-                    <div class="value">-3,5%</div>
+                    <div class="value economy">-3,5%</div>
                     <div style="font-size: 0.75rem; color: #558b2f; margin-top: 5px;">Economia Projetada</div>
                 </div>
                 <div class="kpi-card">
@@ -149,8 +150,8 @@
             <div class="sub-tab-content" id="subtab-historico-mirante">
                 <div class="chart-container">
                     <div class="chart-legend">
-                        <div class="legend-item"><div class="legend-color" style="background: #558b2f;"></div>Gasto até Abr/26</div>
-                        <div class="legend-item"><div class="legend-color" style="background: #ff9800;"></div>Desembolso Planejado</div>
+                        <div class="legend-item"><div class="legend-color" style="background: #558b2f;"></div>Desembolsos Realizados</div>
+                        <div class="legend-item"><div class="legend-color" style="background: #ff9800;"></div>Desembolsos Previstos</div>
                     </div>
                     <canvas id="chartMiranteHistorico"></canvas>
                 </div>
@@ -224,7 +225,7 @@
                 </div>
                 <div class="kpi-card">
                     <div class="label">Desvio Orçamentário</div>
-                    <div class="value">-13,7%</div>
+                    <div class="value economy">-13,7%</div>
                     <div style="font-size: 0.75rem; color: #558b2f; margin-top: 5px;">Economia Projetada</div>
                 </div>
                 <div class="kpi-card">
@@ -252,8 +253,8 @@
             <div class="sub-tab-content" id="subtab-historico-joaquim">
                 <div class="chart-container">
                     <div class="chart-legend">
-                        <div class="legend-item"><div class="legend-color" style="background: #558b2f;"></div>Gasto até Abr/26</div>
-                        <div class="legend-item"><div class="legend-color" style="background: #ff9800;"></div>Desembolso Planejado</div>
+                        <div class="legend-item"><div class="legend-color" style="background: #558b2f;"></div>Desembolsos Realizados</div>
+                        <div class="legend-item"><div class="legend-color" style="background: #ff9800;"></div>Desembolsos Previstos</div>
                     </div>
                     <canvas id="chartJoaquimHistorico"></canvas>
                 </div>
@@ -316,6 +317,9 @@
             <div class="executive">
                 <div class="executive-card">
                     <h3>MIRANTE DA LAGOA</h3>
+                    <div class="kpi-item"><span class="label">Cidade</span><span class="value">Bocaiúva</span></div>
+                    <div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
+                    <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">705</span></div>
                     <div class="kpi-item"><span class="label">Orçado</span><span class="value">R$ 7.092.926</span></div>
                     <div class="kpi-item"><span class="label">Realizado</span><span class="value">R$ 4.869.255</span></div>
                     <div class="kpi-item"><span class="label">Comprometido</span><span class="value">R$ 6.845.621</span></div>
@@ -324,6 +328,9 @@
                 </div>
                 <div class="executive-card">
                     <h3>JOAQUIM LEME</h3>
+                    <div class="kpi-item"><span class="label">Cidade</span><span class="value">Ituiutaba</span></div>
+                    <div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
+                    <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">576</span></div>
                     <div class="kpi-item"><span class="label">Orçado</span><span class="value">R$ 4.407.365</span></div>
                     <div class="kpi-item"><span class="label">Realizado</span><span class="value">R$ 3.576.775</span></div>
                     <div class="kpi-item"><span class="label">Comprometido</span><span class="value">R$ 3.803.165</span></div>
@@ -346,8 +353,7 @@
         const joaquimComprometido = [0.00,119937.13,0.00,213406.82,52727.13,1072201.05,185824.16,26849.90,7231.00,0.00,1897957.44,20803.63,14400.00,0.00,191827.10];
         const joaquimDisponivel = joaquimOrcado.map((o,i) => o - joaquimComprometido[i]);
         
-        function fmt(n) { return 'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-        function fmtNum(n) { return n.toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+        function fmtNum(n) { return Math.ceil(n).toLocaleString('pt-BR'); }
         
         const miranteABCEtapas = ['PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','DRENAGEM','MANUTENÇÕES / AS BUILTS','GUIAS E SARJETAS','REDE DE ÁGUA POTÁVEL','ESTAÇÃO ELEVATÓRIA DE ESGOTO','TOPOGRAFIA E CONTROLE','TERRAPLANAGEM','MEIO AMBIENTE','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
         const miranteABCValores = [1371739.39,678111.04,545028.45,184886.10,278134.86,162181.59,552749.41,230838.52,180672.11,36832.15,137847.94,209482.50,92026.40,208724.22];
@@ -397,7 +403,7 @@
                 let pctAcum = (acumulado / total) * 100;
                 let classe = pctAcum <= 80 ? 'A' : pctAcum <= 95 ? 'B' : 'C';
                 let classColor = classe === 'A' ? 'classA' : classe === 'B' ? 'classB' : 'classC';
-                html += `<tr><td>${dados[i].etapa}</td><td>${fmt(dados[i].valor)}</td><td>${pctIndividual.toFixed(2)}%</td><td>${fmt(acumulado)}</td><td>${pctAcum.toFixed(2)}%</td><td><span class="status ${classColor}">${classe}</span></td></tr>`;
+                html += `<tr><td>${dados[i].etapa}</td><td>${fmtNum(dados[i].valor)}</td><td>${pctIndividual.toFixed(2)}%</td><td>${fmtNum(acumulado)}</td><td>${pctAcum.toFixed(2)}%</td><td><span class="status ${classColor}">${classe}</span></td></tr>`;
             }
             html += '</tbody>';
             document.getElementById(tableId).innerHTML = html;
@@ -410,13 +416,13 @@
         
         function createTable(tableId, etapas, orcado, realizado, comprometido, disponivel) {
             const t = document.getElementById(tableId);
-            let html = '<thead><tr><th>Macro Etapa</th><th>Orçado Total</th><th>Realizado</th><th>Comprometido</th><th>Verba Disponível</th><th>% Desvio</th><th>Status</th><th>Progresso</th></tr></thead><tbody>';
+            let html = '<thead><tr><th>Macro Etapa</th><th>Orçado Total</th><th>Realizado</th><th>Verba Disponível</th><th>% Desvio</th><th>Status</th><th>Progresso</th></tr></thead><tbody>';
             for(let i=0;i<etapas.length;i++){
                 const desvio = orcado[i] > 0 ? ((comprometido[i] - orcado[i]) / orcado[i] * 100) : 0;
                 const statusClass = desvio <= 0 ? 'ok' : desvio <= 10 ? 'warn' : 'alert';
                 const statusLabel = desvio <= 0 ? 'OK' : desvio <= 10 ? 'Atenção' : 'Crítico';
                 const progress = orcado[i] > 0 ? Math.min(100, (realizado[i]/orcado[i]*100)) : 0;
-                html += `<tr><td>${etapas[i]}</td><td>${fmt(orcado[i])}</td><td>${fmt(realizado[i])}</td><td>${fmt(comprometido[i])}</td><td>${fmt(disponivel[i])}</td><td>${desvio.toFixed(2)}%</td><td><span class="status ${statusClass}">${statusLabel}</span></td><td><div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div></td></tr>`;
+                html += `<tr><td>${etapas[i]}</td><td>${fmtNum(orcado[i])}</td><td>${fmtNum(realizado[i])}</td><td>${fmtNum(disponivel[i])}</td><td>${desvio.toFixed(2)}%</td><td><span class="status ${statusClass}">${statusLabel}</span></td><td><div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div></td></tr>`;
             }
             html += '</tbody>';
             t.innerHTML = html;
@@ -429,7 +435,6 @@
         const greenLight = '#7cb342';
         const white = '#ffffff';
         const red = '#d32f2f';
-        const orange = '#ff9800';
         
         function createBarChart(canvasId, labels, orcado, realizado) {
             new Chart(document.getElementById(canvasId), {

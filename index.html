@@ -6,6 +6,7 @@
     <title>Dashboard GRP - Controle de Orçamentos e Custos</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gauge-js@1.3.2/dist/gauge.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: linear-gradient(135deg, #f5f6f8 0%, #e8eaed 50%, #f5f6f8 100%); color: #2c3e50; font-family: 'Outfit', sans-serif; min-height: 100vh; padding: 20px; }
@@ -31,7 +32,7 @@
         .kpi-card .value { font-size: 1.5rem; font-weight: 700; color: #1b5e20; }
         .kpi-card .sublabel { font-size: 0.7rem; color: #558b2f; margin-top: 8px; }
         .gauge-container { margin-top: 15px; text-align: center; }
-        .gauge-canvas { max-width: 150px; margin: 0 auto; }
+        .gauge-canvas { width: 100%; height: 180px; }
         .chart-container { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; margin-bottom: 30px; }
         .chart-container canvas { max-height: 400px; }
         .chart-legend { display: flex; gap: 20px; justify-content: center; margin-bottom: 15px; flex-wrap: wrap; }
@@ -564,33 +565,68 @@
         createColumnChart('chartMiranteHistorico', miranteHistoricoMeses, miranteHistoricoValores, miranteHistoricoColors);
         createColumnChart('chartJoaquimHistorico', joaquimHistoricoMeses, joaquimHistoricoValores, joaquimHistoricoColors);
         
-        function createGaugeChart(canvasId, realizado, orcado) {
+        // Criar Velocímetros (Gauges)
+        function createGauge(canvasId, realizado, orcado) {
             let percentual = (realizado / orcado) * 100;
-            let cor = percentual <= 80 ? '#2e7d32' : percentual <= 100 ? '#558b2f' : '#d32f2f';
             
-            new Chart(document.getElementById(canvasId), {
-                type: 'doughnut',
-                data: {
-                    labels: ['Desembolsado', 'Restante'],
-                    datasets: [{
-                        data: [percentual, 100 - percentual],
-                        backgroundColor: [cor, '#e0e0e0'],
-                        borderColor: '#ffffff',
-                        borderWidth: 2
-                    }]
+            const opts = {
+                angle: 0.15,
+                lineWidth: 0.44,
+                radiusScale: 1,
+                pointer: {
+                    length: 0.6,
+                    strokeWidth: 0.035,
+                    color: '#1b5e20'
                 },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: { enabled: false }
-                    }
-                }
-            });
+                limitMax: false,
+                limitMin: false,
+                colorStart: '#2e7d32',
+                colorStop: '#d32f2f',
+                strokeColor: '#c0c0c0',
+                generateGradient: true,
+                highDpiSupport: true,
+                renderTicks: {
+                    divisions: 5,
+                    divWidth: 1.1,
+                    divLength: 0.7,
+                    divColor: '#333',
+                    subDivisions: 3,
+                    subLength: 0.5,
+                    subWidth: 0.6,
+                    subColor: '#666'
+                },
+                staticLabels: {
+                    font: "10px sans-serif",
+                    labels: [0, 25, 50, 75, 100],
+                    color: "#000000",
+                    fractionDigits: 0
+                },
+                staticZones: [
+                    {strokeStyle: "#2e7d32", min: 0, max: 80},
+                    {strokeStyle: "#ffc107", min: 80, max: 100},
+                    {strokeStyle: "#d32f2f", min: 100, max: 120}
+                ]
+            };
+            
+            const target = document.getElementById(canvasId);
+            const gauge = new Gauge(target).setOptions(opts);
+            gauge.maxValue = 120;
+            gauge.animationSpeed = 32;
+            gauge.set(percentual);
+            
+            // Adicionar label com percentual
+            const label = document.createElement('div');
+            label.style.textAlign = 'center';
+            label.style.marginTop = '-30px';
+            label.style.fontSize = '14px';
+            label.style.fontWeight = 'bold';
+            label.style.color = '#1b5e20';
+            label.textContent = percentual.toFixed(1) + '%';
+            target.parentElement.appendChild(label);
         }
         
-        createGaugeChart('gaugeMirante', 4869255, 7092926);
-        createGaugeChart('gaugeJoaquim', 3576775, 4407365);
+        createGauge('gaugeMirante', 4869255, 7092926);
+        createGauge('gaugeJoaquim', 3576775, 4407365);
         
         function closeModal(modalId) {
             document.getElementById(modalId).classList.remove('active');

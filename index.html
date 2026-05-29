@@ -379,37 +379,54 @@
         const joaquimABCValores = [1887317.44,1028700.70,110122.54,190386.81,49727.14,134634.35,14400.00,136151.28,0.00,0.00,7231.00,18103.63,0.00,0.00];
         
         function createABCChart(canvasId, labels, valores) {
-            // Calcular acumulado e percentual
-            let total = valores.reduce((a, b) => a + b, 0);
+            // Criar array de objetos com etapa, valor e índice original
+            let dados = labels.map((label, idx) => ({
+                etapa: label,
+                valor: valores[idx],
+                idx: idx
+            }));
+            
+            // Ordenar por valor decrescente
+            dados.sort((a, b) => b.valor - a.valor);
+            
+            // Extrair dados ordenados
+            let etapasOrdenadas = dados.map(d => d.etapa);
+            let valoresOrdenados = dados.map(d => d.valor);
+            
+            // Calcular total e percentuais
+            let total = valoresOrdenados.reduce((a, b) => a + b, 0);
             let acumulado = 0;
-            let percentuais = [];
+            let percentuaisAcum = [];
+            let percentuaisIndividuais = [];
             let classes = [];
             
-            for (let i = 0; i < valores.length; i++) {
-                acumulado += valores[i];
-                let pct = (acumulado / total) * 100;
-                percentuais.push(pct);
+            for (let i = 0; i < valoresOrdenados.length; i++) {
+                acumulado += valoresOrdenados[i];
+                let pctAcum = (acumulado / total) * 100;
+                let pctIndividual = (valoresOrdenados[i] / total) * 100;
+                percentuaisAcum.push(pctAcum);
+                percentuaisIndividuais.push(pctIndividual);
                 
-                if (pct <= 80) classes.push('A');
-                else if (pct <= 95) classes.push('B');
+                if (pctAcum <= 80) classes.push('A');
+                else if (pctAcum <= 95) classes.push('B');
                 else classes.push('C');
             }
             
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
                 data: {
-                    labels: labels,
+                    labels: etapasOrdenadas,
                     datasets: [
                         {
                             label: 'Valor Desembolsado',
-                            data: valores,
+                            data: valoresOrdenados,
                             backgroundColor: classes.map(c => c === 'A' ? '#1b5e20' : c === 'B' ? '#ffd54f' : '#c8e6c9'),
                             borderRadius: 4,
                             yAxisID: 'y'
                         },
                         {
                             label: 'Acumulado %',
-                            data: percentuais,
+                            data: percentuaisAcum,
                             type: 'line',
                             borderColor: '#d32f2f',
                             backgroundColor: 'rgba(211, 47, 47, 0.1)',
@@ -435,7 +452,7 @@
                             type: 'linear',
                             display: true,
                             position: 'right',
-                            ticks: { color: '#d32f2f', callback: v => v + '%' },
+                            ticks: { color: '#d32f2f', callback: v => v.toFixed(1) + '%' },
                             min: 0,
                             max: 100,
                             grid: { drawOnChartArea: false }
@@ -447,17 +464,30 @@
         }
         
         function createABCTable(tableId, labels, valores) {
-            let total = valores.reduce((a, b) => a + b, 0);
-            let acumulado = 0;
-            let html = '<thead><tr><th>Etapa</th><th>Valor Desembolsado</th><th>Acumulado</th><th>% Acumulado</th><th>Classe</th></tr></thead><tbody>';
+            // Criar array de objetos com etapa, valor e índice original
+            let dados = labels.map((label, idx) => ({
+                etapa: label,
+                valor: valores[idx],
+                idx: idx
+            }));
             
-            for (let i = 0; i < labels.length; i++) {
-                acumulado += valores[i];
+            // Ordenar por valor decrescente
+            dados.sort((a, b) => b.valor - a.valor);
+            
+            // Calcular total
+            let total = dados.reduce((sum, d) => sum + d.valor, 0);
+            let acumulado = 0;
+            
+            let html = '<thead><tr><th>Etapa</th><th>Valor Desembolsado</th><th>% Individual</th><th>Acumulado</th><th>% Acumulado</th><th>Classe</th></tr></thead><tbody>';
+            
+            for (let i = 0; i < dados.length; i++) {
+                acumulado += dados[i].valor;
+                let pctIndividual = (dados[i].valor / total) * 100;
                 let pctAcum = (acumulado / total) * 100;
                 let classe = pctAcum <= 80 ? 'A' : pctAcum <= 95 ? 'B' : 'C';
                 let classColor = classe === 'A' ? 'classA' : classe === 'B' ? 'classB' : 'classC';
                 
-                html += `<tr><td>${labels[i]}</td><td>${fmt(valores[i])}</td><td>${fmt(acumulado)}</td><td>${pctAcum.toFixed(2)}%</td><td><span class="status ${classColor}">${classe}</span></td></tr>`;
+                html += `<tr><td>${dados[i].etapa}</td><td>${fmt(dados[i].valor)}</td><td>${pctIndividual.toFixed(2)}%</td><td>${fmt(acumulado)}</td><td>${pctAcum.toFixed(2)}%</td><td><span class="status ${classColor}">${classe}</span></td></tr>`;
             }
             html += '</tbody>';
             document.getElementById(tableId).innerHTML = html;

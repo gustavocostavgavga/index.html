@@ -27,15 +27,20 @@
         .sub-tab-content { display: none; }
         .sub-tab-content.active { display: block; }
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 30px; }
-        .kpi-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 18px 16px; text-align: center; transition: all 0.3s; }
+        .kpi-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 18px 16px; text-align: center; transition: all 0.3s; position: relative; }
         .kpi-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(85,139,47,0.15); border-color: #558b2f; }
         .kpi-card .label { font-size: 0.75rem; color: #558b2f; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
         .kpi-card .value { font-size: 1.5rem; font-weight: 700; color: #1b5e20; }
         .kpi-card .value.economy { color: #1b5e20; }
         .kpi-card .value.extrapolation { color: #d32f2f; }
         .kpi-card .sublabel { font-size: 0.7rem; color: #558b2f; margin-top: 8px; }
+        .kpi-card .logo-badge { position: absolute; top: 8px; right: 8px; height: 30px; width: auto; }
         .chart-container { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; margin-bottom: 30px; }
         .chart-container canvas { max-height: 400px; }
+        .abc-container { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; margin-bottom: 30px; position: relative; }
+        .abc-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .abc-header .logo { height: 50px; width: auto; }
+        .abc-header h3 { color: #1b5e20; font-size: 1.1rem; }
         .table-container { overflow-x: auto; margin-bottom: 30px; }
         table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
         th { background: #f5f5f5; color: #1b5e20; padding: 12px 10px; text-align: left; font-weight: 600; border-bottom: 2px solid #c0c0c0; }
@@ -45,6 +50,9 @@
         .status.ok { background: #c8e6c9; color: #1b5e20; }
         .status.warn { background: #fff9c4; color: #f57f17; }
         .status.alert { background: #ffcdd2; color: #c62828; }
+        .status.classA { background: #1b5e20; color: #ffffff; }
+        .status.classB { background: #ffd54f; color: #333; }
+        .status.classC { background: #c8e6c9; color: #1b5e20; }
         .progress-bar { background: #e0e0e0; border-radius: 8px; height: 8px; width: 100%; margin-top: 4px; }
         .progress-fill { height: 8px; border-radius: 8px; background: linear-gradient(90deg, #558b2f, #7cb342); }
         .sub-tab-content .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -55,8 +63,9 @@
             header h1 { font-size: 1.3rem; }
         }
         .executive { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .executive-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; }
-        .executive-card h3 { color: #1b5e20; margin-bottom: 15px; font-size: 1.1rem; }
+        .executive-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; position: relative; }
+        .executive-card h3 { color: #1b5e20; margin-bottom: 15px; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+        .executive-card h3 img { height: 25px; width: auto; }
         .executive-card .kpi-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e0e0e0; }
         .executive-card .kpi-item:last-child { border: none; }
         .executive-card .kpi-item .label { color: #558b2f; }
@@ -79,8 +88,7 @@
         .modal-content { max-width: 90%; max-height: 90%; position: relative; }
         .modal-content img { width: 100%; height: auto; }
         .modal-close { position: absolute; top: 10px; right: 20px; color: #fff; font-size: 2rem; cursor: pointer; }
-        .analyses-container { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 30px; text-align: center; }
-        .analyses-placeholder { color: #999; font-size: 1.1rem; }
+        .analyses-container { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes flip { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(-1); } }
     </style>
@@ -104,12 +112,32 @@
         <!-- MIRANTE DA LAGOA -->
         <div class="tab-content active" id="tab-mirante">
             <div class="kpi-grid">
-                <div class="kpi-card"><div class="label">Orçado Total</div><div class="value">R$ 7.092.926</div></div>
-                <div class="kpi-card"><div class="label">Realizado Acumulado</div><div class="value">R$ 4.869.255</div></div>
-                <div class="kpi-card"><div class="label">Total Comprometido</div><div class="value">R$ 6.845.621</div></div>
-                <div class="kpi-card"><div class="label">Verba Disponível</div><div class="value">R$ 247.305</div></div>
-                <div class="kpi-card"><div class="label">Desvio Orçamentário</div><div class="value economy">-3,5%</div><div style="font-size: 0.75rem; color: #558b2f; margin-top: 5px;">Economia Projetada</div></div>
-                <div class="kpi-card"><div class="label">Custo/Lote</div><div class="value">R$ 9.521</div><div class="sublabel">742 Lotes</div></div>
+                <div class="kpi-card">
+                    <div class="label">Orçado Total</div>
+                    <div class="value">R$ 7.092.926</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Realizado Acumulado</div>
+                    <div class="value">R$ 4.869.255</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Total Comprometido</div>
+                    <div class="value">R$ 6.845.621</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Verba Disponível</div>
+                    <div class="value">R$ 247.305</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Desvio Orçamentário</div>
+                    <div class="value economy">-3,5%</div>
+                    <div style="font-size: 0.75rem; color: #558b2f; margin-top: 5px;">Economia Projetada</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Custo/Lote</div>
+                    <div class="value">R$ 9.521</div>
+                    <div class="sublabel">742 Lotes</div>
+                </div>
             </div>
             <div class="sub-tabs">
                 <button class="sub-tab-btn active" data-subtab="detalhe-mirante">Detalhamento por Etapa</button>
@@ -168,19 +196,50 @@
             </div>
             <div class="sub-tab-content" id="subtab-analises-mirante">
                 <div class="analyses-container">
-                    <div class="analyses-placeholder">Análise de Preços - SICRO/SINAPI<br><br>Dados serão adicionados em breve</div>
+                    <div class="abc-header">
+                        <h3>Curva ABC de Desembolsos por Etapa</h3>
+                        <svg height="50" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                            <text x="50" y="60" font-size="36" font-weight="bold" fill="#1b5e20">MIRANTE</text>
+                            <polygon points="20,30 40,10 40,50" fill="#558b2f"/>
+                            <polygon points="40,30 60,10 60,50" fill="#1b5e20"/>
+                        </svg>
+                    </div>
+                    <div class="chart-container"><canvas id="chartMiranteABC"></canvas></div>
+                    <div class="table-container">
+                        <table id="tableABCMirante"></table>
+                    </div>
                 </div>
             </div>
         </div>
         <!-- JOAQUIM LEME -->
         <div class="tab-content" id="tab-joaquim">
             <div class="kpi-grid">
-                <div class="kpi-card"><div class="label">Orçado Total</div><div class="value">R$ 4.407.365</div></div>
-                <div class="kpi-card"><div class="label">Realizado Acumulado</div><div class="value">R$ 3.576.775</div></div>
-                <div class="kpi-card"><div class="label">Total Comprometido</div><div class="value">R$ 3.803.165</div></div>
-                <div class="kpi-card"><div class="label">Verba Disponível</div><div class="value">R$ 604.200</div></div>
-                <div class="kpi-card"><div class="label">Desvio Orçamentário</div><div class="value economy">-13,7%</div><div style="font-size: 0.75rem; color: #558b2f; margin-top: 5px;">Economia Projetada</div></div>
-                <div class="kpi-card"><div class="label">Custo/Lote</div><div class="value">R$ 6.603</div><div class="sublabel">542 Lotes</div></div>
+                <div class="kpi-card">
+                    <div class="label">Orçado Total</div>
+                    <div class="value">R$ 4.407.365</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Realizado Acumulado</div>
+                    <div class="value">R$ 3.576.775</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Total Comprometido</div>
+                    <div class="value">R$ 3.803.165</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Verba Disponível</div>
+                    <div class="value">R$ 604.200</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Desvio Orçamentário</div>
+                    <div class="value economy">-13,7%</div>
+                    <div style="font-size: 0.75rem; color: #558b2f; margin-top: 5px;">Economia Projetada</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Custo/Lote</div>
+                    <div class="value">R$ 6.603</div>
+                    <div class="sublabel">542 Lotes</div>
+                </div>
             </div>
             <div class="sub-tabs">
                 <button class="sub-tab-btn active" data-subtab="detalhe-joaquim">Detalhamento por Etapa</button>
@@ -238,7 +297,18 @@
             </div>
             <div class="sub-tab-content" id="subtab-analises-joaquim">
                 <div class="analyses-container">
-                    <div class="analyses-placeholder">Análise de Preços - SICRO/SINAPI<br><br>Dados serão adicionados em breve</div>
+                    <div class="abc-header">
+                        <h3>Curva ABC de Desembolsos por Etapa</h3>
+                        <svg height="50" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                            <text x="30" y="60" font-size="32" font-weight="bold" fill="#1b5e20">JOAQUIM</text>
+                            <polygon points="20,30 40,10 40,50" fill="#558b2f"/>
+                            <polygon points="40,30 60,10 60,50" fill="#1b5e20"/>
+                        </svg>
+                    </div>
+                    <div class="chart-container"><canvas id="chartJoaquimABC"></canvas></div>
+                    <div class="table-container">
+                        <table id="tableABCJoaquim"></table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -252,7 +322,14 @@
             </div>
             <div class="executive">
                 <div class="executive-card">
-                    <h3>MIRANTE DA LAGOA</h3>
+                    <h3>
+                        <svg height="25" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                            <text x="40" y="70" font-size="32" font-weight="bold" fill="#1b5e20">MIRANTE</text>
+                            <polygon points="10,40 25,20 25,60" fill="#558b2f"/>
+                            <polygon points="25,40 40,20 40,60" fill="#1b5e20"/>
+                        </svg>
+                        MIRANTE DA LAGOA
+                    </h3>
                     <div class="kpi-item"><span class="label">Orçado</span><span class="value">R$ 7.092.926</span></div>
                     <div class="kpi-item"><span class="label">Realizado</span><span class="value">R$ 4.869.255</span></div>
                     <div class="kpi-item"><span class="label">Comprometido</span><span class="value">R$ 6.845.621</span></div>
@@ -260,7 +337,14 @@
                     <div class="kpi-item"><span class="label">Custo/Lote</span><span class="value">R$ 9.521</span></div>
                 </div>
                 <div class="executive-card">
-                    <h3>JOAQUIM LEME</h3>
+                    <h3>
+                        <svg height="25" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                            <text x="20" y="70" font-size="28" font-weight="bold" fill="#1b5e20">JOAQUIM</text>
+                            <polygon points="10,40 25,20 25,60" fill="#558b2f"/>
+                            <polygon points="25,40 40,20 40,60" fill="#1b5e20"/>
+                        </svg>
+                        JOAQUIM LEME
+                    </h3>
                     <div class="kpi-item"><span class="label">Orçado</span><span class="value">R$ 4.407.365</span></div>
                     <div class="kpi-item"><span class="label">Realizado</span><span class="value">R$ 3.576.775</span></div>
                     <div class="kpi-item"><span class="label">Comprometido</span><span class="value">R$ 3.803.165</span></div>
@@ -285,6 +369,105 @@
         
         function fmt(n) { return 'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
         function fmtNum(n) { return n.toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+        
+        // Dados ABC - Mirante da Lagoa (ordenado por valor realizado decrescente)
+        const miranteABCEtapas = ['PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','DRENAGEM','MANUTENÇÕES / AS BUILTS','GUIAS E SARJETAS','REDE DE ÁGUA POTÁVEL','ESTAÇÃO ELEVATÓRIA DE ESGOTO','TOPOGRAFIA E CONTROLE','TERRAPLANAGEM','MEIO AMBIENTE','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
+        const miranteABCValores = [1371739.39,678111.04,545028.45,184886.10,278134.86,162181.59,552749.41,230838.52,180672.11,36832.15,137847.94,209482.50,92026.40,208724.22];
+        
+        // Dados ABC - Joaquim Leme (ordenado por valor realizado decrescente)
+        const joaquimABCEtapas = ['ELETRIFICAÇÃO','RESERVATÓRIO / ADUTORA','MANUTENÇÕES / AS BUILTS','DRENAGEM','REDE DE ÁGUA POTÁVEL','SISTEMA DE ESGOTO SANITÁRIO','OBRAS DE ACESSO','INDIRETO DE OBRAS','ESTAÇÃO ELEVATÓRIA DE ESGOTO','TOPOGRAFIA DE ENTREGA','GUIAS E SARJETAS','MEIO AMBIENTE','TOPOGRAFIA E CONTROLE','TERRAPLANAGEM'];
+        const joaquimABCValores = [1887317.44,1028700.70,110122.54,190386.81,49727.14,134634.35,14400.00,136151.28,0.00,0.00,7231.00,18103.63,0.00,0.00];
+        
+        function createABCChart(canvasId, labels, valores) {
+            // Calcular acumulado e percentual
+            let total = valores.reduce((a, b) => a + b, 0);
+            let acumulado = 0;
+            let percentuais = [];
+            let classes = [];
+            
+            for (let i = 0; i < valores.length; i++) {
+                acumulado += valores[i];
+                let pct = (acumulado / total) * 100;
+                percentuais.push(pct);
+                
+                if (pct <= 80) classes.push('A');
+                else if (pct <= 95) classes.push('B');
+                else classes.push('C');
+            }
+            
+            new Chart(document.getElementById(canvasId), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Valor Desembolsado',
+                            data: valores,
+                            backgroundColor: classes.map(c => c === 'A' ? '#1b5e20' : c === 'B' ? '#ffd54f' : '#c8e6c9'),
+                            borderRadius: 4,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Acumulado %',
+                            data: percentuais,
+                            type: 'line',
+                            borderColor: '#d32f2f',
+                            backgroundColor: 'rgba(211, 47, 47, 0.1)',
+                            borderWidth: 3,
+                            fill: false,
+                            yAxisID: 'y1',
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: { legend: { labels: { color: '#2c3e50' } } },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            ticks: { color: '#558b2f', callback: v => fmtNum(v) }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            ticks: { color: '#d32f2f', callback: v => v + '%' },
+                            min: 0,
+                            max: 100,
+                            grid: { drawOnChartArea: false }
+                        },
+                        x: { ticks: { color: '#558b2f', maxRotation: 45 } }
+                    }
+                }
+            });
+        }
+        
+        function createABCTable(tableId, labels, valores) {
+            let total = valores.reduce((a, b) => a + b, 0);
+            let acumulado = 0;
+            let html = '<thead><tr><th>Etapa</th><th>Valor Desembolsado</th><th>Acumulado</th><th>% Acumulado</th><th>Classe</th></tr></thead><tbody>';
+            
+            for (let i = 0; i < labels.length; i++) {
+                acumulado += valores[i];
+                let pctAcum = (acumulado / total) * 100;
+                let classe = pctAcum <= 80 ? 'A' : pctAcum <= 95 ? 'B' : 'C';
+                let classColor = classe === 'A' ? 'classA' : classe === 'B' ? 'classB' : 'classC';
+                
+                html += `<tr><td>${labels[i]}</td><td>${fmt(valores[i])}</td><td>${fmt(acumulado)}</td><td>${pctAcum.toFixed(2)}%</td><td><span class="status ${classColor}">${classe}</span></td></tr>`;
+            }
+            html += '</tbody>';
+            document.getElementById(tableId).innerHTML = html;
+        }
+        
+        createABCChart('chartMiranteABC', miranteABCEtapas, miranteABCValores);
+        createABCTable('tableABCMirante', miranteABCEtapas, miranteABCValores);
+        
+        createABCChart('chartJoaquimABC', joaquimABCEtapas, joaquimABCValores);
+        createABCTable('tableABCJoaquim', joaquimABCEtapas, joaquimABCValores);
         
         function createTable(tableId, etapas, orcado, realizado, comprometido, disponivel) {
             const t = document.getElementById(tableId);

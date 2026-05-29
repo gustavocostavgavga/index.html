@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Suprimentos GRP</title>
+    <title>Dashboard GRP - Controle de Orçamentos e Custos</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #e8eaed; color: #2c3e50; font-family: 'Outfit', sans-serif; min-height: 100vh; padding: 20px; }
         .dashboard { max-width: 1440px; margin: 0 auto; }
-        header { text-align: center; margin-bottom: 30px; }
+        header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; gap: 20px; }
+        header .logo-section { display: flex; align-items: center; gap: 15px; }
+        header .logo-section img { height: 80px; width: auto; }
+        header .title-section { flex: 1; }
         header h1 { font-size: 1.8rem; font-weight: 700; color: #1b5e20; letter-spacing: 1px; }
         header p { font-size: 0.9rem; color: #558b2f; margin-top: 5px; }
         .tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 25px; flex-wrap: wrap; }
@@ -28,10 +31,9 @@
         .kpi-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(85,139,47,0.15); border-color: #558b2f; }
         .kpi-card .label { font-size: 0.75rem; color: #558b2f; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
         .kpi-card .value { font-size: 1.5rem; font-weight: 700; color: #1b5e20; }
-        .kpi-card .value.orange { color: #558b2f; }
-        .kpi-card .value.purple { color: #7cb342; }
-        .kpi-card .value.green { color: #2e7d32; }
-        .kpi-card .value.red { color: #d32f2f; }
+        .kpi-card .value.economy { color: #1b5e20; }
+        .kpi-card .value.extrapolation { color: #d32f2f; }
+        .kpi-card .sublabel { font-size: 0.7rem; color: #558b2f; margin-top: 8px; }
         .chart-container { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; margin-bottom: 30px; }
         .chart-container canvas { max-height: 400px; }
         .table-container { overflow-x: auto; margin-bottom: 30px; }
@@ -49,6 +51,7 @@
         @media (max-width: 768px) {
             .sub-tab-content .chart-grid { grid-template-columns: 1fr; }
             .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+            header { flex-direction: column; }
             header h1 { font-size: 1.3rem; }
         }
         .executive { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -58,14 +61,26 @@
         .executive-card .kpi-item:last-child { border: none; }
         .executive-card .kpi-item .label { color: #558b2f; }
         .executive-card .kpi-item .value { font-weight: 600; color: #1b5e20; }
-        .etapas-container { display: flex; justify-content: center; }
-        .etapa-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; max-width: 600px; width: 100%; }
-        .etapa-card h3 { color: #1b5e20; margin-bottom: 15px; font-size: 1.1rem; text-align: center; }
-        .etapa-list { list-style: none; }
-        .etapa-list li { padding: 10px 0; border-bottom: 1px solid #e0e0e0; color: #2c3e50; display: flex; align-items: center; justify-content: center; text-align: center; }
-        .etapa-list li.vigente:before { content: '⚙'; color: #558b2f; font-weight: bold; margin-right: 10px; font-size: 1.2rem; animation: spin 2s linear infinite; }
-        .etapa-list li.proximo:before { content: '⏳'; color: #7cb342; font-weight: bold; margin-right: 10px; font-size: 1.2rem; animation: flip 1.5s ease-in-out infinite; }
-        .etapa-list li:last-child { border: none; }
+        .planejamento-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .planejamento-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; }
+        .planejamento-card h3 { color: #1b5e20; margin-bottom: 15px; font-size: 1.1rem; text-align: center; }
+        .planejamento-list { list-style: none; }
+        .planejamento-list li { padding: 10px 0; border-bottom: 1px solid #e0e0e0; color: #2c3e50; display: flex; align-items: center; }
+        .planejamento-list li.vigente:before { content: '⚙'; color: #558b2f; font-weight: bold; margin-right: 10px; font-size: 1.2rem; animation: spin 2s linear infinite; }
+        .planejamento-list li.proximo:before { content: '⏳'; color: #7cb342; font-weight: bold; margin-right: 10px; font-size: 1.2rem; animation: flip 1.5s ease-in-out infinite; }
+        .planejamento-list li:last-child { border: none; }
+        .gallery-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; padding: 20px; background: #ffffff; border-radius: 12px; }
+        .gallery-item { position: relative; overflow: hidden; border-radius: 8px; background: #f5f5f5; aspect-ratio: 1; cursor: pointer; transition: transform 0.3s; }
+        .gallery-item:hover { transform: scale(1.05); }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+        .gallery-placeholder { display: flex; align-items: center; justify-content: center; color: #999; font-size: 0.9rem; text-align: center; padding: 10px; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); }
+        .modal.active { display: flex; align-items: center; justify-content: center; }
+        .modal-content { max-width: 90%; max-height: 90%; position: relative; }
+        .modal-content img { width: 100%; height: auto; }
+        .modal-close { position: absolute; top: 10px; right: 20px; color: #fff; font-size: 2rem; cursor: pointer; }
+        .analyses-container { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 30px; text-align: center; }
+        .analyses-placeholder { color: #999; font-size: 1.1rem; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes flip { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(-1); } }
     </style>
@@ -73,8 +88,13 @@
 <body>
     <div class="dashboard">
         <header>
-            <h1>DASHBOARD GRP - CONTROLE DE ORÇAMENTOS E CUSTOS</h1>
-            <p>Visão Gerencial - CasaGrande Urbanismo</p>
+            <div class="logo-section">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100'%3E%3Ctext x='50' y='60' font-size='48' font-weight='bold' fill='%231b5e20'%3EGRP%3C/text%3E%3Cpolygon points='20,30 40,10 40,50' fill='%2358b368'/%3E%3Cpolygon points='40,30 60,10 60,50' fill='%231b5e20'/%3E%3C/svg%3E" alt="GRP Logo">
+            </div>
+            <div class="title-section">
+                <h1>DASHBOARD DE CONTROLE - ORÇAMENTOS E CUSTOS DE OBRAS</h1>
+                <p>Visão Gerencial - CasaGrande Urbanismo</p>
+            </div>
         </header>
         <div class="tabs">
             <button class="tab-btn active" data-tab="mirante"><strong>MIRANTE DA LAGOA</strong></button>
@@ -85,17 +105,18 @@
         <div class="tab-content active" id="tab-mirante">
             <div class="kpi-grid">
                 <div class="kpi-card"><div class="label">Orçado Total</div><div class="value">R$ 7.092.926</div></div>
-                <div class="kpi-card"><div class="label">Realizado Acumulado</div><div class="value orange">R$ 4.869.255</div></div>
-                <div class="kpi-card"><div class="label">Total Comprometido</div><div class="value purple">R$ 6.845.621</div></div>
-                <div class="kpi-card"><div class="label">Verba Disponível</div><div class="value green">R$ 247.305</div></div>
-                <div class="kpi-card"><div class="label">Desvio Orçamentário</div><div class="value red">-3,5%</div></div>
-                <div class="kpi-card"><div class="label">Custo/Lote</div><div class="value">R$ 9.521</div></div>
+                <div class="kpi-card"><div class="label">Realizado Acumulado</div><div class="value">R$ 4.869.255</div></div>
+                <div class="kpi-card"><div class="label">Total Comprometido</div><div class="value">R$ 6.845.621</div></div>
+                <div class="kpi-card"><div class="label">Verba Disponível</div><div class="value">R$ 247.305</div></div>
+                <div class="kpi-card"><div class="label">Desvio Orçamentário</div><div class="value economy">-3,5%</div><div style="font-size: 0.75rem; color: #558b2f; margin-top: 5px;">Economia Projetada</div></div>
+                <div class="kpi-card"><div class="label">Custo/Lote</div><div class="value">R$ 9.521</div><div class="sublabel">742 Lotes</div></div>
             </div>
             <div class="sub-tabs">
                 <button class="sub-tab-btn active" data-subtab="detalhe-mirante">Detalhamento por Etapa</button>
                 <button class="sub-tab-btn" data-subtab="historico-mirante">Histórico Mensal de Desembolsos</button>
-                <button class="sub-tab-btn" data-subtab="etapas-mirante">Etapas Vigentes</button>
-                <button class="sub-tab-btn" data-subtab="proximos-mirante">Próximos Passos</button>
+                <button class="sub-tab-btn" data-subtab="planejamento-mirante">Planejamento</button>
+                <button class="sub-tab-btn" data-subtab="fotos-mirante">Relatório Fotográfico</button>
+                <button class="sub-tab-btn" data-subtab="analises-mirante">Análises</button>
             </div>
             <div class="sub-tab-content active" id="subtab-detalhe-mirante">
                 <div class="chart-grid">
@@ -109,24 +130,20 @@
             <div class="sub-tab-content" id="subtab-historico-mirante">
                 <div class="chart-container"><canvas id="chartMiranteHistorico"></canvas></div>
             </div>
-            <div class="sub-tab-content" id="subtab-etapas-mirante">
-                <div class="etapas-container">
-                    <div class="etapa-card">
-                        <h3>Etapas Vigentes</h3>
-                        <ul class="etapa-list">
+            <div class="sub-tab-content" id="subtab-planejamento-mirante">
+                <div class="planejamento-container">
+                    <div class="planejamento-card">
+                        <h3>Etapas Vigentes e Contratadas</h3>
+                        <ul class="planejamento-list">
                             <li class="vigente">Limpeza de quadras</li>
                             <li class="vigente">Recapeamento</li>
                             <li class="vigente">Testes de Rede de Saneamento</li>
                             <li class="vigente">Construção de Vias de Pedestres</li>
                         </ul>
                     </div>
-                </div>
-            </div>
-            <div class="sub-tab-content" id="subtab-proximos-mirante">
-                <div class="etapas-container">
-                    <div class="etapa-card">
-                        <h3>Próximos Passos</h3>
-                        <ul class="etapa-list">
+                    <div class="planejamento-card">
+                        <h3>Próximas Ativações Previstas</h3>
+                        <ul class="planejamento-list">
                             <li class="proximo">Energização</li>
                             <li class="proximo">Construção do Parque Linear</li>
                             <li class="proximo">Sinalização</li>
@@ -136,22 +153,41 @@
                     </div>
                 </div>
             </div>
+            <div class="sub-tab-content" id="subtab-fotos-mirante">
+                <div class="gallery-container" id="galleryMirante">
+                    <div class="gallery-item"><div class="gallery-placeholder">Foto 1</div></div>
+                    <div class="gallery-item"><div class="gallery-placeholder">Foto 2</div></div>
+                    <div class="gallery-item"><div class="gallery-placeholder">Foto 3</div></div>
+                </div>
+                <div class="modal" id="modalMirante">
+                    <span class="modal-close" onclick="closeModal('modalMirante')">&times;</span>
+                    <div class="modal-content">
+                        <img id="modalImageMirante" src="" alt="Foto ampliada">
+                    </div>
+                </div>
+            </div>
+            <div class="sub-tab-content" id="subtab-analises-mirante">
+                <div class="analyses-container">
+                    <div class="analyses-placeholder">Análise de Preços - SICRO/SINAPI<br><br>Dados serão adicionados em breve</div>
+                </div>
+            </div>
         </div>
         <!-- JOAQUIM LEME -->
         <div class="tab-content" id="tab-joaquim">
             <div class="kpi-grid">
                 <div class="kpi-card"><div class="label">Orçado Total</div><div class="value">R$ 4.407.365</div></div>
-                <div class="kpi-card"><div class="label">Realizado Acumulado</div><div class="value orange">R$ 3.576.775</div></div>
-                <div class="kpi-card"><div class="label">Total Comprometido</div><div class="value purple">R$ 3.803.165</div></div>
-                <div class="kpi-card"><div class="label">Verba Disponível</div><div class="value green">R$ 604.200</div></div>
-                <div class="kpi-card"><div class="label">Desvio Orçamentário</div><div class="value red">-13,7%</div></div>
-                <div class="kpi-card"><div class="label">Custo/Lote</div><div class="value">R$ 6.603</div></div>
+                <div class="kpi-card"><div class="label">Realizado Acumulado</div><div class="value">R$ 3.576.775</div></div>
+                <div class="kpi-card"><div class="label">Total Comprometido</div><div class="value">R$ 3.803.165</div></div>
+                <div class="kpi-card"><div class="label">Verba Disponível</div><div class="value">R$ 604.200</div></div>
+                <div class="kpi-card"><div class="label">Desvio Orçamentário</div><div class="value economy">-13,7%</div><div style="font-size: 0.75rem; color: #558b2f; margin-top: 5px;">Economia Projetada</div></div>
+                <div class="kpi-card"><div class="label">Custo/Lote</div><div class="value">R$ 6.603</div><div class="sublabel">542 Lotes</div></div>
             </div>
             <div class="sub-tabs">
                 <button class="sub-tab-btn active" data-subtab="detalhe-joaquim">Detalhamento por Etapa</button>
                 <button class="sub-tab-btn" data-subtab="historico-joaquim">Histórico Mensal de Desembolsos</button>
-                <button class="sub-tab-btn" data-subtab="etapas-joaquim">Etapas Vigentes</button>
-                <button class="sub-tab-btn" data-subtab="proximos-joaquim">Próximos Passos</button>
+                <button class="sub-tab-btn" data-subtab="planejamento-joaquim">Planejamento</button>
+                <button class="sub-tab-btn" data-subtab="fotos-joaquim">Relatório Fotográfico</button>
+                <button class="sub-tab-btn" data-subtab="analises-joaquim">Análises</button>
             </div>
             <div class="sub-tab-content active" id="subtab-detalhe-joaquim">
                 <div class="chart-grid">
@@ -165,23 +201,19 @@
             <div class="sub-tab-content" id="subtab-historico-joaquim">
                 <div class="chart-container"><canvas id="chartJoaquimHistorico"></canvas></div>
             </div>
-            <div class="sub-tab-content" id="subtab-etapas-joaquim">
-                <div class="etapas-container">
-                    <div class="etapa-card">
-                        <h3>Etapas Vigentes</h3>
-                        <ul class="etapa-list">
+            <div class="sub-tab-content" id="subtab-planejamento-joaquim">
+                <div class="planejamento-container">
+                    <div class="planejamento-card">
+                        <h3>Etapas Vigentes e Contratadas</h3>
+                        <ul class="planejamento-list">
                             <li class="vigente">Limpeza de quadras</li>
                             <li class="vigente">Regularização do Reservatório de Água</li>
                             <li class="vigente">Elaboração de Projeto da Estação Elevatória de Esgoto (Booster)</li>
                         </ul>
                     </div>
-                </div>
-            </div>
-            <div class="sub-tab-content" id="subtab-proximos-joaquim">
-                <div class="etapas-container">
-                    <div class="etapa-card">
-                        <h3>Próximos Passos</h3>
-                        <ul class="etapa-list">
+                    <div class="planejamento-card">
+                        <h3>Próximas Ativações Previstas</h3>
+                        <ul class="planejamento-list">
                             <li class="proximo">Construção da Rede Adutora</li>
                             <li class="proximo">Construção do Interceptor de Esgoto</li>
                             <li class="proximo">Construção da Linha de Recalque de Esgoto</li>
@@ -191,14 +223,32 @@
                     </div>
                 </div>
             </div>
+            <div class="sub-tab-content" id="subtab-fotos-joaquim">
+                <div class="gallery-container" id="galleryJoaquim">
+                    <div class="gallery-item"><div class="gallery-placeholder">Foto 1</div></div>
+                    <div class="gallery-item"><div class="gallery-placeholder">Foto 2</div></div>
+                    <div class="gallery-item"><div class="gallery-placeholder">Foto 3</div></div>
+                </div>
+                <div class="modal" id="modalJoaquim">
+                    <span class="modal-close" onclick="closeModal('modalJoaquim')">&times;</span>
+                    <div class="modal-content">
+                        <img id="modalImageJoaquim" src="" alt="Foto ampliada">
+                    </div>
+                </div>
+            </div>
+            <div class="sub-tab-content" id="subtab-analises-joaquim">
+                <div class="analyses-container">
+                    <div class="analyses-placeholder">Análise de Preços - SICRO/SINAPI<br><br>Dados serão adicionados em breve</div>
+                </div>
+            </div>
         </div>
         <!-- VISÃO GERAL -->
         <div class="tab-content" id="tab-geral">
             <div class="kpi-grid">
                 <div class="kpi-card"><div class="label">Orçado Total Operação</div><div class="value">R$ 11.500.291</div></div>
-                <div class="kpi-card"><div class="label">Realizado Total</div><div class="value orange">R$ 8.446.030</div></div>
-                <div class="kpi-card"><div class="label">Total Comprometido</div><div class="value purple">R$ 10.648.787</div></div>
-                <div class="kpi-card"><div class="label">Verba Disponível Total</div><div class="value green">R$ 851.505</div></div>
+                <div class="kpi-card"><div class="label">Realizado Total</div><div class="value">R$ 8.446.030</div></div>
+                <div class="kpi-card"><div class="label">Total Comprometido</div><div class="value">R$ 10.648.787</div></div>
+                <div class="kpi-card"><div class="label">Verba Disponível Total</div><div class="value">R$ 851.505</div></div>
             </div>
             <div class="executive">
                 <div class="executive-card">
@@ -319,6 +369,10 @@
         }
         createColumnChart('chartMiranteHistorico', miranteHistoricoMeses, miranteHistoricoValores, 'Gasto até Abr/26');
         createColumnChart('chartJoaquimHistorico', joaquimHistoricoMeses, joaquimHistoricoValores, 'Gasto até Abr/26');
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
         
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', function() {

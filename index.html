@@ -197,19 +197,26 @@
                     </div>
                 </div>
             </div>
-            <div class="sub-tab-content" id="subtab-fotos-mirante">
-                <div class="gallery-container" id="galleryMirante">
-                    <div class="gallery-item"><div class="gallery-placeholder">Foto 1</div></div>
-                    <div class="gallery-item"><div class="gallery-placeholder">Foto 2</div></div>
-                    <div class="gallery-item"><div class="gallery-placeholder">Foto 3</div></div>
-                </div>
-                <div class="modal" id="modalMirante">
-                    <span class="modal-close" onclick="closeModal('modalMirante')">&times;</span>
-                    <div class="modal-content">
-                        <img id="modalImageMirante" src="" alt="Foto ampliada">
-                    </div>
-                </div>
-            </div>
+              	 <div class="sub-tab-content" id="subtab-fotos-mirante">
+       			<div class="gallery-container" id="galleryMirante">
+          		 <div class="gallery-item" onclick="openModal('modalMirante', 0)">
+             		  <img src="3.jpeg" alt="Foto 1 - Mirante da Lagoa">
+           </div>
+          		 <div class="gallery-item" onclick="openModal('modalMirante', 1)">
+              		 <img src="5.jpeg" alt="Foto 2 - Mirante da Lagoa">
+           </div>
+          		 <div class="gallery-item" onclick="openModal('modalMirante', 2)">
+              		 <img src="27.jpeg" alt="Foto 3 - Mirante da Lagoa">
+          	 </div>
+       		</div>
+       <div class="modal" id="modalMirante">
+           <span class="modal-close" onclick="closeModal('modalMirante')">&times;</span>
+           <div class="modal-content">
+               <img id="modalImageMirante" src="" alt="Foto ampliada">
+           </div>
+       </div>
+   </div>
+
             <div class="sub-tab-content" id="subtab-analises-mirante">
                 <div class="analyses-container">
                     <div class="abc-header">

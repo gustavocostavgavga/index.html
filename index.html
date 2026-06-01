@@ -8,12 +8,12 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: linear-gradient(135deg, #f0f2f5 0%, #e8eaed 50%, #f0f2f5 100%); color: #2c3e50; font-family: 'Montserrat', sans-serif; min-height: 100vh; padding: 20px; }
+        body { background: linear-gradient(135deg, #f0f2f5 0%, #e8eaed 50%, #f0f2f5 100%); color: #2c3e50; font-family: 'Montserrat', sans-serif; min-height: 100vh; padding: 20px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
         .dashboard { max-width: 1440px; margin: 0 auto; }
         header { display: flex; align-items: center; justify-content: center; margin-bottom: 30px; gap: 20px; }
         header .title-section { flex: 1; background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; text-align: center; }
-        header h1 { font-size: 1.9rem; font-weight: 700; color: #1b5e20; letter-spacing: 1px; }
-        header p { font-size: 1rem; color: #558b2f; margin-top: 8px; }
+        header h1 { font-size: 1.9rem; font-weight: 700; color: #1b5e20; letter-spacing: 1px; font-family: 'Montserrat', sans-serif; }
+        header p { font-size: 1rem; color: #558b2f; margin-top: 8px; font-family: 'Montserrat', sans-serif; }
         .tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 25px; flex-wrap: wrap; }
         .tab-btn { background: #ffffff; border: 2px solid #c0c0c0; color: #558b2f; padding: 12px 28px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.3s; font-size: 0.95rem; font-family: 'Montserrat', sans-serif; }
         .tab-btn.active, .tab-btn:hover { background: #558b2f; color: #ffffff; border-color: #558b2f; box-shadow: 0 0 20px rgba(85,139,47,0.3); }
@@ -27,33 +27,37 @@
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 30px; }
         .kpi-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 18px 16px; text-align: center; transition: all 0.3s; }
         .kpi-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(85,139,47,0.15); border-color: #558b2f; }
-        .kpi-card .label { font-size: 0.75rem; color: #558b2f; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
-        .kpi-card .value { font-size: 1.5rem; font-weight: 700; color: #1b5e20; }
-        .kpi-card .sublabel { font-size: 0.7rem; color: #558b2f; margin-top: 8px; }
-        .chart-container { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 15px; margin-bottom: 20px; position: relative; min-height: 480px; display: flex; flex-direction: column; }
-        .chart-container canvas { max-height: 350px; flex: 1; }
-        .chart-container-pie { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 15px; position: relative; min-height: 480px; display: flex; flex-direction: column; }
-        .chart-pie-wrapper { flex: 1; display: flex; align-items: center; gap: 15px; }
-        .chart-pie-canvas { flex: 1; display: flex; align-items: center; justify-content: center; }
+        .kpi-card .label { font-size: 0.75rem; color: #558b2f; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; font-family: 'Montserrat', sans-serif; }
+        .kpi-card .value { font-size: 1.5rem; font-weight: 700; color: #1b5e20; font-family: 'Montserrat', sans-serif; }
+        .kpi-card .sublabel { font-size: 0.7rem; color: #558b2f; margin-top: 8px; font-family: 'Montserrat', sans-serif; }
+        .chart-grid-top { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; align-items: stretch; }
+        .chart-container-pie { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 15px; position: relative; display: flex; flex-direction: column; }
+        .chart-title { color: #1b5e20; font-size: 1rem; font-weight: 600; margin-bottom: 15px; text-align: center; font-family: 'Montserrat', sans-serif; flex-shrink: 0; }
+        .chart-pie-wrapper { display: flex; align-items: center; justify-content: center; gap: 20px; flex: 1; }
+        .chart-pie-canvas { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; }
         .chart-pie-canvas canvas { max-height: 280px; max-width: 280px; }
-        .chart-pie-legend { flex: 0 0 auto; width: 200px; }
-        .chart-pie-legend-item { display: flex; align-items: flex-start; gap: 6px; margin-bottom: 8px; font-size: 0.7rem; font-family: 'Montserrat', sans-serif; }
-        .chart-pie-legend-color { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; margin-top: 2px; }
-        .chart-pie-legend-label { color: #2c3e50; flex: 1; word-break: break-word; line-height: 1.3; }
-        .chart-pie-legend-percent { color: #558b2f; font-weight: 600; flex-shrink: 0; font-size: 0.65rem; }
-        .chart-title { color: #1b5e20; font-size: 1rem; font-weight: 600; margin-bottom: 10px; text-align: center; font-family: 'Montserrat', sans-serif; }
-        .chart-legend { display: flex; gap: 20px; justify-content: center; margin-bottom: 15px; flex-wrap: wrap; }
-        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #2c3e50; font-family: 'Montserrat', sans-serif; }
+        .chart-pie-legend { flex: 1; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; max-height: 280px; }
+        .chart-pie-legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; font-family: 'Montserrat', sans-serif; }
+        .chart-pie-legend-color { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+        .chart-pie-legend-label { color: #2c3e50; flex: 1; word-break: break-word; line-height: 1.3; font-family: 'Montserrat', sans-serif; font-weight: 400; }
+        .chart-pie-legend-percent { color: #558b2f; font-weight: 500; flex-shrink: 0; font-size: 0.7rem; font-family: 'Montserrat', sans-serif; }
+        .chart-container-disponivel { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 15px; position: relative; display: flex; flex-direction: column; }
+        .chart-container-disponivel-inner { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; }
+        .chart-container-disponivel canvas { max-height: 280px; width: 100%; }
+        .chart-container { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 15px; margin-bottom: 20px; position: relative; }
+        .chart-container canvas { max-height: 400px; }
+        .chart-legend { display: flex; gap: 20px; justify-content: center; margin-bottom: 15px; flex-wrap: wrap; font-family: 'Montserrat', sans-serif; }
+        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #000000; font-family: 'Montserrat', sans-serif; }
         .legend-color { width: 20px; height: 20px; border-radius: 3px; }
         .abc-container { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; margin-bottom: 30px; }
         .abc-header h3 { color: #1b5e20; font-size: 1.1rem; margin-bottom: 20px; font-family: 'Montserrat', sans-serif; }
         .table-container { overflow-x: auto; margin-bottom: 30px; }
         table { width: 100%; border-collapse: collapse; font-size: 0.8rem; font-family: 'Montserrat', sans-serif; }
-        th { background: #f5f5f5; color: #1b5e20; padding: 12px 10px; text-align: center; font-weight: 600; border-bottom: 2px solid #c0c0c0; }
-        td { padding: 10px; border-bottom: 1px solid #e0e0e0; color: #2c3e50; text-align: center; }
+        th { background: #f5f5f5; color: #1b5e20; padding: 12px 10px; text-align: center; font-weight: 600; border-bottom: 2px solid #c0c0c0; font-family: 'Montserrat', sans-serif; }
+        td { padding: 10px; border-bottom: 1px solid #e0e0e0; color: #2c3e50; text-align: center; font-family: 'Montserrat', sans-serif; }
         td:first-child { text-align: left; }
         tr:hover { background: #f9f9f9; }
-        .status { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 500; }
+        .status { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 500; font-family: 'Montserrat', sans-serif; }
         .status.ok { background: #c8e6c9; color: #1b5e20; }
         .status.warn { background: #fff9c4; color: #f57f17; }
         .status.alert { background: #ffcdd2; color: #c62828; }
@@ -62,12 +66,11 @@
         .status.classC { background: #c8e6c9; color: #1b5e20; }
         .progress-bar { background: #e0e0e0; border-radius: 8px; height: 8px; width: 100%; margin-top: 4px; }
         .progress-fill { height: 8px; border-radius: 8px; background: linear-gradient(90deg, #558b2f, #7cb342); }
-        .chart-grid-top { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
         .chart-grid-bottom { display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 30px; }
         @media (max-width: 768px) {
             .chart-grid-top { grid-template-columns: 1fr; }
             .chart-pie-wrapper { flex-direction: column; }
-            .chart-pie-legend { width: 100%; }
+            .chart-pie-legend { flex-direction: row; flex-wrap: wrap; }
             .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
             header h1 { font-size: 1.5rem; }
         }
@@ -76,8 +79,8 @@
         .executive-card h3 { color: #1b5e20; margin-bottom: 15px; font-size: 1.1rem; font-family: 'Montserrat', sans-serif; }
         .executive-card .kpi-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e0e0e0; }
         .executive-card .kpi-item:last-child { border: none; }
-        .executive-card .kpi-item .label { color: #558b2f; }
-        .executive-card .kpi-item .value { font-weight: 600; color: #1b5e20; }
+        .executive-card .kpi-item .label { color: #558b2f; font-family: 'Montserrat', sans-serif; }
+        .executive-card .kpi-item .value { font-weight: 600; color: #1b5e20; font-family: 'Montserrat', sans-serif; }
         .planejamento-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
         .planejamento-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; }
         .planejamento-card h3 { color: #1b5e20; margin-bottom: 15px; font-size: 1.1rem; text-align: center; font-family: 'Montserrat', sans-serif; }
@@ -90,7 +93,7 @@
         .gallery-item { position: relative; overflow: hidden; border-radius: 8px; background: #f5f5f5; aspect-ratio: 1; cursor: pointer; transition: transform 0.3s; }
         .gallery-item:hover { transform: scale(1.05); }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
-        .gallery-placeholder { display: flex; align-items: center; justify-content: center; color: #999; font-size: 0.9rem; text-align: center; padding: 10px; }
+        .gallery-placeholder { display: flex; align-items: center; justify-content: center; color: #999; font-size: 0.9rem; text-align: center; padding: 10px; font-family: 'Montserrat', sans-serif; }
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); }
         .modal.active { display: flex; align-items: center; justify-content: center; }
         .modal-content { max-width: 90%; max-height: 90%; position: relative; }
@@ -162,14 +165,19 @@
                             <div class="chart-pie-legend" id="legendMirantePie"></div>
                         </div>
                     </div>
-                    <div class="chart-container">
+                    <div class="chart-container-disponivel">
                         <div class="chart-title">Controle de verba por etapa</div>
-                        <canvas id="chartMiranteDisponivel"></canvas>
+                        <div class="chart-container-disponivel-inner">
+                            <canvas id="chartMiranteDisponivel"></canvas>
+                        </div>
                     </div>
                 </div>
                 <div class="chart-grid-bottom">
                     <div class="chart-container">
-                        <div class="chart-title">Orçado x Realizado por Etapa</div>
+                        <div class="chart-legend">
+                            <div class="legend-item"><div class="legend-color" style="background: #7cb342;"></div>Orçado</div>
+                            <div class="legend-item"><div class="legend-color" style="background: #558b2f;"></div>Realizado</div>
+                        </div>
                         <canvas id="chartMiranteBar"></canvas>
                     </div>
                 </div>
@@ -282,14 +290,19 @@
                             <div class="chart-pie-legend" id="legendJoaquimPie"></div>
                         </div>
                     </div>
-                    <div class="chart-container">
+                    <div class="chart-container-disponivel">
                         <div class="chart-title">Controle de verba por etapa</div>
-                        <canvas id="chartJoaquimDisponivel"></canvas>
+                        <div class="chart-container-disponivel-inner">
+                            <canvas id="chartJoaquimDisponivel"></canvas>
+                        </div>
                     </div>
                 </div>
                 <div class="chart-grid-bottom">
                     <div class="chart-container">
-                        <div class="chart-title">Orçado x Realizado por Etapa</div>
+                        <div class="chart-legend">
+                            <div class="legend-item"><div class="legend-color" style="background: #7cb342;"></div>Orçado</div>
+                            <div class="legend-item"><div class="legend-color" style="background: #558b2f;"></div>Realizado</div>
+                        </div>
                         <canvas id="chartJoaquimBar"></canvas>
                     </div>
                 </div>
@@ -452,9 +465,7 @@
                                     let percentage = ((context.parsed / total) * 100).toFixed(1);
                                     return label + ' - ' + percentage + '%';
                                 }
-                            },
-                            titleFont: { family: "'Montserrat', sans-serif" },
-                            bodyFont: { family: "'Montserrat', sans-serif" }
+                            }
                         }
                     }
                 }
@@ -487,7 +498,7 @@
                     labels: etapasOrdenadas,
                     datasets: [{label: 'Valor Desembolsado', data: valoresOrdenados, backgroundColor: classes.map(c => c === 'A' ? '#1b5e20' : c === 'B' ? '#ffd54f' : '#c8e6c9'), borderRadius: 4, yAxisID: 'y'}, {label: 'Acumulado %', data: percentuaisAcum, type: 'line', borderColor: '#d32f2f', backgroundColor: 'rgba(211, 47, 47, 0.1)', borderWidth: 3, fill: false, yAxisID: 'y1', tension: 0.4}]
                 },
-                options: {responsive: true, interaction: {mode: 'index', intersect: false}, plugins: {legend: {labels: {color: '#2c3e50', font: {family: "'Montserrat', sans-serif"}}}}, scales: {y: {type: 'linear', display: true, position: 'left', ticks: {color: '#558b2f', font: {family: "'Montserrat', sans-serif"}, callback: v => fmtNum(v)}}, y1: {type: 'linear', display: true, position: 'right', ticks: {color: '#d32f2f', font: {family: "'Montserrat', sans-serif"}, callback: v => v.toFixed(1) + '%'}, min: 0, max: 100, grid: {drawOnChartArea: false}}, x: {ticks: {color: '#558b2f', font: {family: "'Montserrat', sans-serif"}, maxRotation: 45}}}}
+                options: {responsive: true, interaction: {mode: 'index', intersect: false}, plugins: {legend: {labels: {color: '#2c3e50', font: {family: "'Montserrat', sans-serif"}}}}, scales: {y: {type: 'linear', display: true, position: 'left', ticks: {color: '#558b2f', callback: v => fmtNum(v), font: {family: "'Montserrat', sans-serif"}}}, y1: {type: 'linear', display: true, position: 'right', ticks: {color: '#d32f2f', callback: v => v.toFixed(1) + '%', font: {family: "'Montserrat', sans-serif"}}, min: 0, max: 100, grid: {drawOnChartArea: false}}, x: {ticks: {color: '#558b2f', maxRotation: 45, font: {family: "'Montserrat', sans-serif"}}}}}
             });
         }
         
@@ -534,7 +545,7 @@
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
                 data: {labels: labels, datasets: [{label: 'Orçado', data: orcado, backgroundColor: '#7cb342', borderRadius: 4}, {label: 'Realizado', data: realizado, backgroundColor: '#558b2f', borderRadius: 4}]},
-                options: {responsive: true, plugins: {legend: {labels: {color: '#000000', font: {family: "'Montserrat', sans-serif"}}}}, scales: {x: {ticks: {color: '#000000', font: {family: "'Montserrat', sans-serif"}, maxRotation: 45}}, y: {ticks: {color: '#000000', font: {family: "'Montserrat', sans-serif"}, callback: v => fmtNum(v)}}}}
+                options: {responsive: true, plugins: {legend: {labels: {color: '#000000', font: {family: "'Montserrat', sans-serif"}}}}, scales: {x: {ticks: {color: '#558b2f', maxRotation: 45, font: {family: "'Montserrat', sans-serif"}}}, y: {ticks: {color: '#558b2f', callback: v => fmtNum(v), font: {family: "'Montserrat', sans-serif"}}}}}
             });
         }
         createBarChart('chartMiranteBar', miranteEtapas, miranteOrcado, miranteRealizado);
@@ -545,7 +556,7 @@
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
                 data: {labels: labels, datasets: [{label: 'Verba Disponível', data: disponivel, backgroundColor: colors, borderRadius: 4}]},
-                options: {indexAxis: 'y', responsive: true, plugins: {legend: {display: false}}, scales: {x: {ticks: {color: '#000000', font: {family: "'Montserrat', sans-serif"}, callback: v => fmtNum(v)}}, y: {ticks: {color: '#000000', font: {family: "'Montserrat', sans-serif", size: 9}}}}}
+                options: {indexAxis: 'y', responsive: true, maintainAspectRatio: true, plugins: {legend: {display: false}}, scales: {x: {ticks: {color: '#000000', callback: v => fmtNum(v), font: {family: "'Montserrat', sans-serif"}}}, y: {ticks: {color: '#2c3e50', font: {family: "'Montserrat', sans-serif"}}}}}
             });
         }
         createDisponivelChart('chartMiranteDisponivel', miranteEtapas, miranteDisponivel);
@@ -563,7 +574,7 @@
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
                 data: {labels: labels, datasets: [{label: 'Desembolso', data: data, backgroundColor: colors, borderRadius: 4}]},
-                options: {responsive: true, plugins: {legend: {display: false}}, scales: {x: {ticks: {color: '#558b2f', font: {family: "'Montserrat', sans-serif"}, maxRotation: 45}}, y: {ticks: {color: '#558b2f', font: {family: "'Montserrat', sans-serif"}, callback: v => fmtNum(v)}}}}
+                options: {responsive: true, plugins: {legend: {display: false}}, scales: {x: {ticks: {color: '#558b2f', maxRotation: 45, font: {family: "'Montserrat', sans-serif"}}}, y: {ticks: {color: '#558b2f', callback: v => fmtNum(v), font: {family: "'Montserrat', sans-serif"}}}}}
             });
         }
         createColumnChart('chartMiranteHistorico', miranteHistoricoMeses, miranteHistoricoValores, miranteHistoricoColors);

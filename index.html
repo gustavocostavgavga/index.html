@@ -266,15 +266,15 @@
             <div class="kpi-grid">
                 <div class="kpi-card">
                     <div class="label">Orçado Total</div>
-                    <div class="value">R$ 4.407.365</div>
+                    <div class="value">R$ 4.407.366</div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Realizado Acumulado</div>
-                    <div class="value">R$ 3.436.828</div>
+                    <div class="value">R$ 3.246.608</div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Total Comprometido</div>
-                    <div class="value">R$ 3.803.165</div>
+                    <div class="value">R$ 3.803.166</div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Verba Disponível</div>
@@ -287,7 +287,7 @@
                 </div>
                 <div class="kpi-card">
                     <div class="label">Custo/Lote</div>
-                    <div class="value">R$ 5.967</div>
+                    <div class="value">R$ 5.637</div>
                     <div class="sublabel">576 Lotes</div>
                 </div>
             </div>
@@ -379,8 +379,8 @@
         <!-- VISÃO GERAL -->
         <div class="tab-content" id="tab-geral">
             <div class="kpi-grid">
-                <div class="kpi-card"><div class="label">Orçado Total Operação</div><div class="value">R$ 11.500.291</div></div>
-                <div class="kpi-card"><div class="label">Realizado Total</div><div class="value">R$ 8.088.214</div></div>
+                <div class="kpi-card"><div class="label">Orçado Total Operação</div><div class="value">R$ 11.500.292</div></div>
+                <div class="kpi-card"><div class="label">Realizado Total</div><div class="value">R$ 7.897.995</div></div>
                 <div class="kpi-card"><div class="label">Total Comprometido</div><div class="value">R$ 10.648.787</div></div>
                 <div class="kpi-card"><div class="label">Verba Disponível Total</div><div class="value">R$ 851.505</div></div>
             </div>
@@ -403,11 +403,11 @@
                     <div class="kpi-item"><span class="label">Cidade</span><span class="value">Ituiutaba</span></div>
                     <div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
                     <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">576</span></div>
-                    <div class="kpi-item"><span class="label">Orçado</span><span class="value">R$ 4.407.365</span></div>
-                    <div class="kpi-item"><span class="label">Realizado</span><span class="value">R$ 3.436.828</span></div>
-                    <div class="kpi-item"><span class="label">Comprometido</span><span class="value">R$ 3.803.165</span></div>
+                    <div class="kpi-item"><span class="label">Orçado</span><span class="value">R$ 4.407.366</span></div>
+                    <div class="kpi-item"><span class="label">Realizado</span><span class="value">R$ 3.246.608</span></div>
+                    <div class="kpi-item"><span class="label">Comprometido</span><span class="value">R$ 3.803.166</span></div>
                     <div class="kpi-item"><span class="label">Verba Disponível</span><span class="value">R$ 604.200</span></div>
-                    <div class="kpi-item"><span class="label">Custo/Lote</span><span class="value">R$ 5.967</span></div>
+                    <div class="kpi-item"><span class="label">Custo/Lote</span><span class="value">R$ 5.637</span></div>
                 </div>
             </div>
         </div>
@@ -438,10 +438,10 @@
         const miranteComprometido = [37432.15,202181.59,137847.94,281774.15,230838.53,545028.45,184886.10,229222.09,588442.76,3031739.39,822411.04,219146.27,92026.40,242644.47];
         const miranteDisponivel = miranteOrcado.map((o,i) => o - miranteComprometido[i]);
         
-        const joaquimEtapas = ['TOPOGRAFIA E CONTROLE','MANUTENÇÕES / AS BUILTS','TERRAPLANAGEM','DRENAGEM','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','MEIO AMBIENTE','OBRAS DE ACESSO','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
-        const joaquimOrcado = [6000.00,156722.82,0.00,91457.00,97397.98,915327.24,353920.40,286779.19,48780.00,52000.00,1835484.81,61950.00,373845.00,32000.00,95700.82];
-        const joaquimRealizado = [0,84253.43,190220,49733.64,1018739.29,94949.93,0,7231,0,1835484.81,16369.58,14400,0,0,125445.5];
-        const joaquimComprometido = [0.00,119937.13,0.00,213406.82,52727.13,1072201.05,185824.16,26849.90,7231.00,0.00,1897957.44,20803.63,14400.00,0.00,191827.10];
+        const joaquimEtapas = ['TOPOGRAFIA e CONTROLE','MANUTENÇÕES / AS BUILTS','DRENAGEM DE ÁGUAS PLUVIAIS','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','RECAPEAMENTO VIÁRIO','ENERGIA / ILUMINAÇÃO','MEIO AMBIENTE / PRAÇAS','OBRA DE ACESSO','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
+        const joaquimOrcado = [6000.00,156722.82,91457.00,97397.98,915327.24,353920.40,286779.19,48780.00,52000.00,1835484.81,61950.00,373845.00,32000.00,95700.82];
+        const joaquimRealizado = [0,84253.43,49733.64,1018739.29,94949.93,0,7231,0,1835484.81,16369.58,14400,0,0,125445.5];
+        const joaquimComprometido = [0.00,119937.13,213406.82,52727.13,1072201.05,185824.16,26849.90,7231.00,0.00,1897957.44,20803.63,14400.00,0.00,191827.10];
         const joaquimDisponivel = joaquimOrcado.map((o,i) => o - joaquimComprometido[i]);
         
         function fmtNum(n) { return Math.ceil(n).toLocaleString('pt-BR'); }
@@ -449,8 +449,8 @@
         const miranteABCEtapas = ['PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','DRENAGEM','MANUTENÇÕES / AS BUILTS','GUIAS E SARJETAS','REDE DE ÁGUA POTÁVEL','ESTAÇÃO ELEVATÓRIA DE ESGOTO','TOPOGRAFIA E CONTROLE','TERRAPLANAGEM','MEIO AMBIENTE','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
         const miranteABCValores = [1331431.74,645422.37,526825.04,168759.29,258771.76,155479.65,543203.95,191188.45,169211.11,36657.72,134826.68,206585.31,91808.4,191214.58];
         
-        const joaquimABCEtapas = ['ELETRIFICAÇÃO','RESERVATÓRIO / ADUTORA','MANUTENÇÕES / AS BUILTS','DRENAGEM','REDE DE ÁGUA POTÁVEL','SISTEMA DE ESGOTO SANITÁRIO','OBRAS DE ACESSO','INDIRETO DE OBRAS','ESTAÇÃO ELEVATÓRIA DE ESGOTO','TOPOGRAFIA DE ENTREGA','GUIAS E SARJETAS','MEIO AMBIENTE','TOPOGRAFIA E CONTROLE','TERRAPLANAGEM'];
-        const joaquimABCValores = [16369.58,94949.93,84253.43,49733.64,1018739.29,0,0,125445.5,7231,0,0,14400,0,190220];
+        const joaquimABCEtapas = ['RECAPEAMENTO VIÁRIO','REDE DE ÁGUA POTÁVEL','INDIRETO DE OBRAS','RESERVATÓRIO','MANUTENÇÕES / AS BUILTS','DRENAGEM DE ÁGUAS PLUVIAIS','ENERGIA / ILUMINAÇÃO','MEIO AMBIENTE / PRAÇAS','ESTAÇÃO ELEVATÓRIA DE ESGOTO','TOPOGRAFIA e CONTROLE','SISTEMA DE ESGOTO SANITÁRIO','GUIAS E SARJETAS','OBRA DE ACESSO','TOPOGRAFIA DE ENTREGA'];
+        const joaquimABCValores = [1835484.81,1018739.29,125445.5,94949.93,84253.43,49733.64,16369.58,14400,7231,0,0,0,0,0];
         
         function createPieChart(canvasId, labels, valores) {
             const cores = ['#E74C3C','#3498DB','#2ECC71','#F39C12','#9B59B6','#1ABC9C','#E67E22','#C0392B','#34495E','#16A085','#D35400','#8E44AD','#27AE60','#2980B9'];

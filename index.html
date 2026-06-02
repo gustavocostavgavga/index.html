@@ -49,6 +49,12 @@
         td { padding: 10px; border-bottom: 1px solid #e0e0e0; color: #2c3e50; text-align: center; font-family: 'Montserrat', sans-serif; }
         td:first-child { text-align: left; }
         tr:hover { background: #f9f9f9; }
+        tr.etapa-row { cursor: pointer; transition: background 0.2s, box-shadow 0.2s; }
+        tr.etapa-row:hover { background: #f1f8e9; }
+        tr.etapa-row td:first-child { color: #1b5e20; font-weight: 600; }
+        tr.etapa-row td:first-child::after { content: ' ▸'; font-size: 0.7rem; color: #7cb342; opacity: 0; transition: opacity 0.2s; }
+        tr.etapa-row:hover td:first-child::after { opacity: 1; }
+        .table-hint { font-size: 0.75rem; color: #558b2f; text-align: center; margin: -20px 0 15px; font-family: 'Montserrat', sans-serif; }
         .status { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 500; font-family: 'Montserrat', sans-serif; }
         .status.ok { background: #c8e6c9; color: #1b5e20; }
         .status.warn { background: #fff9c4; color: #f57f17; }
@@ -90,6 +96,22 @@
         .modal-content img { width: 100%; height: auto; }
         .modal-close { position: absolute; top: 10px; right: 20px; color: #fff; font-size: 2rem; cursor: pointer; }
         .analyses-container { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; }
+        .gauge-modal { background-color: rgba(44, 62, 80, 0.55); }
+        .gauge-modal-box { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 28px 24px 24px; max-width: 480px; width: 92%; position: relative; text-align: center; font-family: 'Montserrat', sans-serif; }
+        .gauge-modal-close { position: absolute; top: 12px; right: 16px; color: #558b2f; font-size: 1.75rem; cursor: pointer; line-height: 1; font-weight: 300; }
+        .gauge-modal-close:hover { color: #1b5e20; }
+        .gauge-modal-box h3 { color: #1b5e20; font-size: 1rem; font-weight: 700; margin-bottom: 4px; line-height: 1.35; padding: 0 24px; }
+        .gauge-obra { color: #558b2f; font-size: 0.8rem; margin-bottom: 16px; }
+        .gauge-chart-wrap { position: relative; height: 220px; max-width: 360px; margin: 0 auto 16px; }
+        .gauge-chart-wrap canvas { max-height: 220px; }
+        .gauge-center-label { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); text-align: center; pointer-events: none; }
+        .gauge-center-label #gaugePercent { display: block; font-size: 2rem; font-weight: 700; color: #1b5e20; line-height: 1.1; }
+        .gauge-center-label span:last-child { font-size: 0.7rem; color: #558b2f; text-transform: uppercase; letter-spacing: 1px; }
+        .gauge-details { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left; font-size: 0.8rem; }
+        .gauge-detail-item { background: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 12px; }
+        .gauge-detail-item .g-label { color: #558b2f; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .gauge-detail-item .g-value { color: #1b5e20; font-weight: 600; }
+        .gauge-detail-item.full { grid-column: 1 / -1; text-align: center; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes flip { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(-1); } }
     </style>
@@ -161,6 +183,7 @@
                         <canvas id="chartMiranteBar"></canvas>
                     </div>
                 </div>
+                <p class="table-hint">Clique em uma etapa para visualizar o avanço (Realizado × Orçado)</p>
                 <div class="table-container">
                     <table id="tableMirante"></table>
                 </div>
@@ -283,6 +306,7 @@
                         <canvas id="chartJoaquimBar"></canvas>
                     </div>
                 </div>
+                <p class="table-hint">Clique em uma etapa para visualizar o avanço (Realizado × Orçado)</p>
                 <div class="table-container">
                     <table id="tableJoaquim"></table>
                 </div>
@@ -377,6 +401,25 @@
             </div>
         </div>
     </div>
+    <div class="modal gauge-modal" id="modalGauge" onclick="if(event.target===this) closeGaugeModal()">
+        <div class="gauge-modal-box">
+            <span class="gauge-modal-close" onclick="closeGaugeModal()" title="Fechar">&times;</span>
+            <h3 id="gaugeEtapaTitle"></h3>
+            <p class="gauge-obra" id="gaugeObraTitle"></p>
+            <div class="gauge-chart-wrap">
+                <canvas id="chartGauge"></canvas>
+                <div class="gauge-center-label">
+                    <span id="gaugePercent">0%</span>
+                    <span>Avanço</span>
+                </div>
+            </div>
+            <div class="gauge-details">
+                <div class="gauge-detail-item"><div class="g-label">Orçado</div><div class="g-value" id="gaugeOrcado">—</div></div>
+                <div class="gauge-detail-item"><div class="g-label">Realizado</div><div class="g-value" id="gaugeRealizado">—</div></div>
+                <div class="gauge-detail-item full"><div class="g-label">Saldo (Orçado − Realizado)</div><div class="g-value" id="gaugeSaldo">—</div></div>
+            </div>
+        </div>
+    </div>
     <script>
         const miranteEtapas = ['TOPOGRAFIA E CONTROLE','MANUTENÇÕES / AS BUILTS','TERRAPLANAGEM','DRENAGEM','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','MEIO AMBIENTE','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
         const miranteOrcado = [50822.45,214470.08,90400.00,203815.50,129445.13,659519.74,178975.66,228056.70,252811.75,2867899.55,682339.23,1308234.80,89916.90,136218.56];
@@ -457,7 +500,81 @@
         createABCChart('chartJoaquimABC', joaquimABCEtapas, joaquimABCValores);
         createABCTable('tableABCJoaquim', joaquimABCEtapas, joaquimABCValores);
         
-        function createTable(tableId, etapas, orcado, realizado, comprometido, disponivel) {
+        let gaugeChart = null;
+
+        function fmtMoney(n) { return 'R$ ' + fmtNum(n); }
+
+        function gaugeColor(pct) {
+            if (pct >= 100) return '#d32f2f';
+            if (pct >= 85) return '#f57f17';
+            return '#558b2f';
+        }
+
+        function calcAvanco(orcado, realizado) {
+            if (orcado > 0) return (realizado / orcado) * 100;
+            return realizado > 0 ? 100 : 0;
+        }
+
+        function renderGaugeChart(orcado, realizado) {
+            const pct = calcAvanco(orcado, realizado);
+            const arcValue = Math.min(pct, 100);
+            const color = gaugeColor(pct);
+            if (gaugeChart) gaugeChart.destroy();
+            gaugeChart = new Chart(document.getElementById('chartGauge'), {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [arcValue, 100 - arcValue],
+                        backgroundColor: [color, '#e8eaed'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    circumference: 180,
+                    rotation: -90,
+                    cutout: '72%',
+                    plugins: { legend: { display: false }, tooltip: { enabled: false } }
+                }
+            });
+            document.getElementById('gaugePercent').textContent = pct.toFixed(1).replace('.', ',') + '%';
+            document.getElementById('gaugePercent').style.color = color;
+        }
+
+        function openGaugeModal(obraNome, etapa, orcado, realizado) {
+            document.getElementById('gaugeEtapaTitle').textContent = etapa;
+            document.getElementById('gaugeObraTitle').textContent = obraNome;
+            document.getElementById('gaugeOrcado').textContent = orcado > 0 ? fmtMoney(orcado) : 'Não definido';
+            document.getElementById('gaugeRealizado').textContent = fmtMoney(realizado);
+            const saldo = orcado - realizado;
+            const saldoEl = document.getElementById('gaugeSaldo');
+            saldoEl.textContent = orcado > 0 ? fmtMoney(saldo) : '—';
+            saldoEl.style.color = saldo < 0 ? '#c62828' : '#1b5e20';
+            if (orcado <= 0) {
+                if (gaugeChart) gaugeChart.destroy();
+                document.getElementById('gaugePercent').textContent = '—';
+                document.getElementById('gaugePercent').style.color = '#558b2f';
+                gaugeChart = new Chart(document.getElementById('chartGauge'), {
+                    type: 'doughnut',
+                    data: { datasets: [{ data: [0, 100], backgroundColor: ['#c0c0c0', '#e8eaed'], borderWidth: 0 }] },
+                    options: { responsive: true, maintainAspectRatio: false, circumference: 180, rotation: -90, cutout: '72%', plugins: { legend: { display: false }, tooltip: { enabled: false } } }
+                });
+            } else {
+                renderGaugeChart(orcado, realizado);
+            }
+            document.getElementById('modalGauge').classList.add('active');
+        }
+
+        function closeGaugeModal() {
+            document.getElementById('modalGauge').classList.remove('active');
+            if (gaugeChart) {
+                gaugeChart.destroy();
+                gaugeChart = null;
+            }
+        }
+
+        function createTable(tableId, obraNome, etapas, orcado, realizado, comprometido, disponivel) {
             const t = document.getElementById(tableId);
             let html = '<thead><tr><th>Macro Etapa</th><th>Orçado Total</th><th>Realizado</th><th>Verba Disponível</th><th>% Desvio</th><th>Status</th><th>Progresso</th></tr></thead><tbody>';
             for(let i=0;i<etapas.length;i++){
@@ -465,13 +582,19 @@
                 const statusClass = desvio <= 0 ? 'ok' : desvio <= 10 ? 'warn' : 'alert';
                 const statusLabel = desvio <= 0 ? 'OK' : desvio <= 10 ? 'Atenção' : 'Crítico';
                 const progress = orcado[i] > 0 ? Math.min(100, (realizado[i]/orcado[i]*100)) : 0;
-                html += `<tr><td>${etapas[i]}</td><td>${fmtNum(orcado[i])}</td><td>${fmtNum(realizado[i])}</td><td>${fmtNum(disponivel[i])}</td><td>${desvio.toFixed(2)}%</td><td><span class="status ${statusClass}">${statusLabel}</span></td><td><div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div></td></tr>`;
+                html += `<tr class="etapa-row" data-index="${i}" title="Clique para ver avanço da etapa"><td>${etapas[i]}</td><td>${fmtNum(orcado[i])}</td><td>${fmtNum(realizado[i])}</td><td>${fmtNum(disponivel[i])}</td><td>${desvio.toFixed(2)}%</td><td><span class="status ${statusClass}">${statusLabel}</span></td><td><div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div></td></tr>`;
             }
             html += '</tbody>';
             t.innerHTML = html;
+            t.querySelectorAll('tbody tr.etapa-row').forEach(row => {
+                row.addEventListener('click', function() {
+                    const idx = parseInt(this.dataset.index, 10);
+                    openGaugeModal(obraNome, etapas[idx], orcado[idx], realizado[idx]);
+                });
+            });
         }
-        createTable('tableMirante', miranteEtapas, miranteOrcado, miranteRealizado, miranteComprometido, miranteDisponivel);
-        createTable('tableJoaquim', joaquimEtapas, joaquimOrcado, joaquimRealizado, joaquimComprometido, joaquimDisponivel);
+        createTable('tableMirante', 'MIRANTE DA LAGOA', miranteEtapas, miranteOrcado, miranteRealizado, miranteComprometido, miranteDisponivel);
+        createTable('tableJoaquim', 'JOAQUIM LEME', joaquimEtapas, joaquimOrcado, joaquimRealizado, joaquimComprometido, joaquimDisponivel);
         
         function createBarChart(canvasId, labels, orcado, realizado) {
             new Chart(document.getElementById(canvasId), {
@@ -532,6 +655,10 @@
                 parent.querySelectorAll('.sub-tab-content').forEach(tc => tc.classList.remove('active'));
                 document.getElementById('subtab-'+this.dataset.subtab).classList.add('active');
             });
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeGaugeModal();
         });
     </script>
 </body>

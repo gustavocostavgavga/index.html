@@ -403,7 +403,7 @@
             new Chart(document.getElementById(canvasId), {
                 type: 'doughnut',
                 data: {labels: labels, datasets: [{data: valores, backgroundColor: cores, borderColor: '#ffffff', borderWidth: 2}]},
-                options: {responsive: true, maintainAspectRatio: true, plugins: {legend: {position: 'right', labels: {color: '#000000', font: {size: 10}, padding: 10}}, tooltip: {callbacks: {label: function(context) {let label = context.label || ''; let total = context.dataset.data.reduce((a,b) => a+b, 0); let percentage = ((context.parsed / total) * 100).toFixed(1); return label + ' - ' + percentage + '%';}}}}}
+                options: {responsive: true, maintainAspectRatio: true, plugins: {legend: {position: 'right', labels: {color: '#000000', font: {size: 10, family: "'Montserrat', sans-serif"}, padding: 10}}, tooltip: {callbacks: {label: function(context) {let label = context.label || ''; let total = context.dataset.data.reduce((a,b) => a+b, 0); let percentage = ((context.parsed / total) * 100).toFixed(1); return label + ' - ' + percentage + '%';}}}}}
             });
         }
         
@@ -477,7 +477,7 @@
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
                 data: {labels: labels, datasets: [{label: 'Orçado', data: orcado, backgroundColor: '#7cb342', borderRadius: 4}, {label: 'Realizado', data: realizado, backgroundColor: '#558b2f', borderRadius: 4}]},
-                options: {responsive: true, plugins: {legend: {display: false}}, scales: {x: {ticks: {color: '#558b2f', maxRotation: 45, font: {family: "'Montserrat', sans-serif"}}}, y: {ticks: {color: '#558b2f', callback: v => fmtNum(v), font: {family: "'Montserrat', sans-serif"}}}}}
+                options: {responsive: true, plugins: {legend: {display: false}}, scales: {x: {ticks: {color: '#000000', maxRotation: 45, font: {family: "'Montserrat', sans-serif"}}}, y: {ticks: {color: '#000000', callback: v => fmtNum(v), font: {family: "'Montserrat', sans-serif"}}}}}
             });
         }
         createBarChart('chartMiranteBar', miranteEtapas, miranteOrcado, miranteRealizado);
@@ -532,7 +532,4 @@
                 parent.querySelectorAll('.sub-tab-content').forEach(tc => tc.classList.remove('active'));
                 document.getElementById('subtab-'+this.dataset.subtab).classList.add('active');
             });
-        });
-    </script>
-</body>
-</html>
+     

@@ -14,6 +14,9 @@
         header .title-section { flex: 1; background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; text-align: center; }
         header h1 { font-size: 1.9rem; font-weight: 700; color: #1b5e20; letter-spacing: 1px; font-family: 'Montserrat', sans-serif; }
         header p { font-size: 1rem; color: #558b2f; margin-top: 8px; font-family: 'Montserrat', sans-serif; }
+        .tab-obra-header { margin-bottom: 25px; }
+        .tab-obra-header .obra-entrega { font-size: 1rem; color: #2c3e50; font-family: 'Montserrat', sans-serif; }
+        .tab-obra-header .obra-entrega strong { font-weight: 700; color: #1b5e20; }
         .tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 25px; flex-wrap: wrap; }
         .tab-btn { background: #ffffff; border: 2px solid #c0c0c0; color: #558b2f; padding: 12px 28px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.3s; font-size: 0.95rem; font-family: 'Montserrat', sans-serif; }
         .tab-btn.active, .tab-btn:hover { background: #558b2f; color: #ffffff; border-color: #558b2f; box-shadow: 0 0 20px rgba(85,139,47,0.3); }
@@ -75,8 +78,8 @@
         .executive-card h3 { color: #1b5e20; margin-bottom: 15px; font-size: 1.1rem; font-family: 'Montserrat', sans-serif; }
         .executive-card .kpi-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e0e0e0; }
         .executive-card .kpi-item:last-child { border: none; }
-        .executive-card .kpi-item .label { color: #558b2f; font-family: 'Montserrat', sans-serif; }
-        .executive-card .kpi-item .value { font-weight: 600; color: #1b5e20; font-family: 'Montserrat', sans-serif; }
+        .executive-card .kpi-item .label { color: #000000; font-family: 'Montserrat', sans-serif; }
+        .executive-card .kpi-item .value { font-weight: 600; color: #000000; font-family: 'Montserrat', sans-serif; }
         .planejamento-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
         .planejamento-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; }
         .planejamento-card h3 { color: #1b5e20; margin-bottom: 15px; font-size: 1.1rem; text-align: center; font-family: 'Montserrat', sans-serif; }
@@ -131,6 +134,9 @@
         </div>
         <!-- MIRANTE DA LAGOA -->
         <div class="tab-content active" id="tab-mirante">
+            <div class="title-section tab-obra-header">
+                <p class="obra-entrega">Data de entrega: <strong>31/07/2026</strong></p>
+            </div>
             <div class="kpi-grid">
                 <div class="kpi-card">
                     <div class="label">Orçado Total</div>
@@ -254,6 +260,9 @@
         </div>
         <!-- JOAQUIM LEME -->
         <div class="tab-content" id="tab-joaquim">
+            <div class="title-section tab-obra-header">
+                <p class="obra-entrega">Data de entrega: <strong>31/08/2026</strong></p>
+            </div>
             <div class="kpi-grid">
                 <div class="kpi-card">
                     <div class="label">Orçado Total</div>
@@ -378,6 +387,7 @@
             <div class="executive">
                 <div class="executive-card">
                     <h3>MIRANTE DA LAGOA</h3>
+                    <div class="kpi-item"><span class="label">Data de Entrega</span><span class="value">31/07/2026</span></div>
                     <div class="kpi-item"><span class="label">Cidade</span><span class="value">Bocaiúva</span></div>
                     <div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
                     <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">705</span></div>
@@ -389,6 +399,7 @@
                 </div>
                 <div class="executive-card">
                     <h3>JOAQUIM LEME</h3>
+                    <div class="kpi-item"><span class="label">Data de Entrega</span><span class="value">31/08/2026</span></div>
                     <div class="kpi-item"><span class="label">Cidade</span><span class="value">Ituiutaba</span></div>
                     <div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
                     <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">576</span></div>

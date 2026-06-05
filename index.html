@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -7,32 +8,38 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: linear-gradient(135deg, #f0f2f5 0%, #e8eaed 50%, #f0f2f5 100%); color: #2c3e50; font-family: 'Montserrat', sans-serif; min-height: 100vh; padding: 20px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        /* Aplicação global e irrestrita da fonte Montserrat */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Montserrat', sans-serif !important;
+        }
+        body { background: linear-gradient(135deg, #f0f2f5 0%, #e8eaed 50%, #f0f2f5 100%); color: #2c3e50; min-height: 100vh; padding: 20px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
         .dashboard { max-width: 1440px; margin: 0 auto; }
         header { display: flex; align-items: center; justify-content: center; margin-bottom: 30px; gap: 20px; }
         header .title-section { flex: 1; background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; text-align: center; }
-        header h1 { font-size: 1.9rem; font-weight: 700; color: #1b5e20; letter-spacing: 1px; font-family: 'Montserrat', sans-serif; }
-        header p { font-size: 1rem; color: #558b2f; margin-top: 8px; font-family: 'Montserrat', sans-serif; }
+        header h1 { font-size: 1.9rem; font-weight: 700; color: #1b5e20; letter-spacing: 1px; }
+        header p { font-size: 1rem; color: #558b2f; margin-top: 8px; }
         .tab-obra-header { margin-bottom: 25px; }
-        .tab-obra-header .obra-entrega { font-size: 1rem; color: #2c3e50; font-family: 'Montserrat', sans-serif; }
+        .tab-obra-header .obra-entrega { font-size: 1rem; color: #2c3e50; }
         .tab-obra-header .obra-entrega strong { font-weight: 700; color: #1b5e20; }
         .tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 25px; flex-wrap: wrap; }
-        .tab-btn { background: #ffffff; border: 2px solid #c0c0c0; color: #558b2f; padding: 12px 28px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.3s; font-size: 0.95rem; font-family: 'Montserrat', sans-serif; }
+        .tab-btn { background: #ffffff; border: 2px solid #c0c0c0; color: #558b2f; padding: 12px 28px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.3s; font-size: 0.95rem; }
         .tab-btn.active, .tab-btn:hover { background: #558b2f; color: #ffffff; border-color: #558b2f; box-shadow: 0 0 20px rgba(85,139,47,0.3); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         .sub-tabs { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; }
-        .sub-tab-btn { background: #ffffff; border: 1px solid #c0c0c0; color: #558b2f; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 400; transition: all 0.3s; font-size: 0.85rem; font-family: 'Montserrat', sans-serif; }
+        .sub-tab-btn { background: #ffffff; border: 1px solid #c0c0c0; color: #558b2f; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 400; transition: all 0.3s; font-size: 0.85rem; }
         .sub-tab-btn.active, .sub-tab-btn:hover { background: #7cb342; color: #ffffff; border-color: #7cb342; }
         .sub-tab-content { display: none; }
         .sub-tab-content.active { display: block; }
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 30px; }
         .kpi-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 18px 16px; text-align: center; transition: all 0.3s; }
         .kpi-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(85,139,47,0.15); border-color: #558b2f; }
-        .kpi-card .label { font-size: 0.75rem; color: #558b2f; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; font-family: 'Montserrat', sans-serif; }
-        .kpi-card .value { font-size: 1.5rem; font-weight: 700; color: #1b5e20; font-family: 'Montserrat', sans-serif; }
-        .kpi-card .sublabel { font-size: 0.7rem; color: #558b2f; margin-top: 8px; font-family: 'Montserrat', sans-serif; }
+        .kpi-card .label { font-size: 0.75rem; color: #558b2f; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .kpi-card .value { font-size: 1.3rem; font-weight: 700; color: #1b5e20; }
+        .kpi-card .sublabel { font-size: 0.7rem; color: #558b2f; margin-top: 8px; }
         .chart-grid-top { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
         .chart-container-pie { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 15px; position: relative; }
         .chart-container-pie canvas { max-height: 350px; }
@@ -40,25 +47,23 @@
         .chart-container-disponivel canvas { max-height: 350px; }
         .chart-container { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 15px; margin-bottom: 30px; position: relative; }
         .chart-container canvas { max-height: 300px; }
-        .chart-title { color: #1b5e20; font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; text-align: center; font-family: 'Montserrat', sans-serif; }
-        .chart-legend { display: flex; gap: 20px; justify-content: center; margin-bottom: 15px; flex-wrap: wrap; }
-        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #2c3e50; font-family: 'Montserrat', sans-serif; }
-        .legend-color { width: 20px; height: 20px; border-radius: 3px; }
+        .chart-title { color: #1b5e20; font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; text-align: center; }
         .abc-container { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; margin-bottom: 30px; }
-        .abc-header h3 { color: #1b5e20; font-size: 1.1rem; margin-bottom: 20px; font-family: 'Montserrat', sans-serif; }
+        .abc-header h3 { color: #1b5e20; font-size: 1.1rem; margin-bottom: 20px; }
         .table-container { overflow-x: auto; margin-bottom: 30px; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; font-family: 'Montserrat', sans-serif; }
-        th { background: #f5f5f5; color: #1b5e20; padding: 12px 10px; text-align: center; font-weight: 600; border-bottom: 2px solid #c0c0c0; font-family: 'Montserrat', sans-serif; }
-        td { padding: 10px; border-bottom: 1px solid #e0e0e0; color: #2c3e50; text-align: center; font-family: 'Montserrat', sans-serif; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        th { background: #f5f5f5; color: #1b5e20; padding: 12px 10px; text-align: center; font-weight: 600; border-bottom: 2px solid #c0c0c0; }
+        td { padding: 10px; border-bottom: 1px solid #e0e0e0; color: #2c3e50; text-align: center; }
         td:first-child { text-align: left; }
         tr:hover { background: #f9f9f9; }
-        tr.etapa-row { cursor: pointer; transition: background 0.2s, box-shadow 0.2s; }
+        tr.etapa-row { cursor: pointer; transition: background 0.2s; }
         tr.etapa-row:hover { background: #f1f8e9; }
         tr.etapa-row td:first-child { color: #1b5e20; font-weight: 600; }
-        tr.etapa-row td:first-child::after { content: ' ▸'; font-size: 0.7rem; color: #7cb342; opacity: 0; transition: opacity 0.2s; }
-        tr.etapa-row:hover td:first-child::after { opacity: 1; }
-        .table-hint { font-size: 0.75rem; color: #558b2f; text-align: center; margin: -20px 0 15px; font-family: 'Montserrat', sans-serif; }
-        .status { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 500; font-family: 'Montserrat', sans-serif; }
+        tr.total-row { background: #f5f5f5; font-weight: 700; border-top: 2px solid #c0c0c0; }
+        tr.total-row td { color: #1b5e20; padding: 14px 10px; border-bottom: 2px solid #c0c0c0; font-weight: 700; }
+        tr.total-row td:first-child { color: #1b5e20; }
+        .table-hint { font-size: 0.75rem; color: #558b2f; text-align: center; margin: -20px 0 15px; }
+        .status { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 500; }
         .status.ok { background: #c8e6c9; color: #1b5e20; }
         .status.warn { background: #fff9c4; color: #f57f17; }
         .status.alert { background: #ffcdd2; color: #c62828; }
@@ -68,34 +73,34 @@
         .progress-bar { background: #e0e0e0; border-radius: 8px; height: 8px; width: 100%; margin-top: 4px; }
         .progress-fill { height: 8px; border-radius: 8px; background: linear-gradient(90deg, #558b2f, #7cb342); }
         .chart-grid-bottom { display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 30px; }
+        @media (max-width: 992px) {
+            .summary-container { grid-template-columns: 1fr !important; }
+        }
         @media (max-width: 768px) {
             .chart-grid-top { grid-template-columns: 1fr; }
             .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
             header h1 { font-size: 1.5rem; }
+            .planejamento-container { grid-template-columns: 1fr !important; }
         }
         .executive { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .executive-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; }
-        .executive-card h3 { color: #1b5e20; margin-bottom: 15px; font-size: 1.1rem; font-family: 'Montserrat', sans-serif; }
+        .executive-card h3 { color: #1b5e20; margin-bottom: 15px; font-size: 1.1rem; }
         .executive-card .kpi-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e0e0e0; }
         .executive-card .kpi-item:last-child { border: none; }
-        .executive-card .kpi-item .label { color: #000000; font-family: 'Montserrat', sans-serif; }
-        .executive-card .kpi-item .value { font-weight: 600; color: #000000; font-family: 'Montserrat', sans-serif; }
+        .executive-card .kpi-item .label { color: #000000; }
+        .executive-card .kpi-item .value { font-weight: 600; color: #000000; }
         .planejamento-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
         .planejamento-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; }
-        .planejamento-card h3 { color: #1b5e20; margin-bottom: 15px; font-size: 1.1rem; text-align: center; font-family: 'Montserrat', sans-serif; }
+        .planejamento-card h3 { color: #1b5e20; margin-bottom: 15px; font-size: 1.1rem; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .planejamento-list { list-style: none; }
-        .planejamento-list li { padding: 10px 0; border-bottom: 1px solid #e0e0e0; color: #2c3e50; display: flex; align-items: center; font-family: 'Montserrat', sans-serif; }
-        .planejamento-list li.vigente:before { content: '⚙'; color: #558b2f; font-weight: bold; margin-right: 10px; font-size: 1.2rem; animation: spin 2s linear infinite; }
-        .planejamento-list li.proximo:before { content: '⏳'; color: #7cb342; font-weight: bold; margin-right: 10px; font-size: 1.2rem; animation: flip 1.5s ease-in-out infinite; }
+        .planejamento-list li { padding: 10px 0; border-bottom: 1px solid #e0e0e0; color: #2c3e50; display: flex; align-items: center; }
         .planejamento-list li:last-child { border: none; }
         
-        /* Estilos do Relatório Fotográfico Avançado */
         .gallery-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; padding: 20px; background: #ffffff; border-radius: 12px; }
         .gallery-item { position: relative; overflow: hidden; border-radius: 8px; background: #f5f5f5; aspect-ratio: 1.5; cursor: pointer; transition: transform 0.3s; border: 1px solid #e0e0e0; }
-        .gallery-item:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+        .gallery-item:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(0,0,0,0.15); border: 1px solid #e0e0e0; }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
         
-        /* Modal Global de Ampliação */
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(4px); align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
         .modal.active { display: flex; opacity: 1; }
         .modal-content { max-width: 85%; max-height: 85%; position: relative; transform: scale(0.9); transition: transform 0.3s ease; }
@@ -106,7 +111,7 @@
 
         .analyses-container { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; }
         .gauge-modal { background-color: rgba(44, 62, 80, 0.55); z-index: 1500; }
-        .gauge-modal-box { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 28px 24px 24px; max-width: 480px; width: 92%; position: relative; text-align: center; font-family: 'Montserrat', sans-serif; }
+        .gauge-modal-box { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 28px 24px 24px; max-width: 480px; width: 92%; position: relative; text-align: center; }
         .gauge-modal-close { position: absolute; top: 12px; right: 16px; color: #558b2f; font-size: 1.75rem; cursor: pointer; line-height: 1; font-weight: 300; }
         .gauge-modal-close:hover { color: #1b5e20; }
         .gauge-modal-box h3 { color: #1b5e20; font-size: 1rem; font-weight: 700; margin-bottom: 4px; line-height: 1.35; padding: 0 24px; }
@@ -121,8 +126,23 @@
         .gauge-detail-item .g-label { color: #558b2f; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
         .gauge-detail-item .g-value { color: #1b5e20; font-weight: 600; }
         .gauge-detail-item full { grid-column: 1 / -1; text-align: center; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes flip { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(-1); } }
+        .chart-legend { display: flex; gap: 20px; justify-content: center; margin-bottom: 15px; flex-wrap: wrap; }
+        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #2c3e50; }
+        .legend-color { width: 20px; height: 20px; border-radius: 3px; }
+        
+        /* Nova estrutura do grid de resumos inferiores expandida para 3 colunas */
+        .summary-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 20px; }
+        .summary-box { background: #ffffff; border: 2px solid #1b5e20; border-radius: 12px; padding: 18px; text-align: center; }
+        .summary-box .summary-title { font-size: 0.85rem; font-weight: 600; color: #1b5e20; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .summary-box .summary-value { font-size: 1.5rem; font-weight: 700; color: #1b5e20; }
+        
+        .summary-box.projected { border-color: #f39c12; }
+        .summary-box.projected .summary-title { color: #e67e22; }
+        .summary-box.projected .summary-value { color: #d35400; }
+
+        .summary-box.executed-projected { border-color: #1a5276; }
+        .summary-box.executed-projected .summary-title { color: #2471a3; }
+        .summary-box.executed-projected .summary-value { color: #1a5276; }
     </style>
 </head>
 <body>
@@ -147,27 +167,27 @@
             <div class="kpi-grid">
                 <div class="kpi-card">
                     <div class="label">Orçado Total</div>
-                    <div class="value">R$ 7.092.926</div>
+                    <div class="value">R$ 7.859.182</div>
                 </div>
                 <div class="kpi-card">
-                    <div class="label">Realizado Acumulado</div>
-                    <div class="value">R$ 4.651.387</div>
+                    <div class="label">Desembolso Acumulado</div>
+                    <div class="value">R$ 4.957.062</div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Total Comprometido</div>
-                    <div class="value" id="kpiMiranteComprometido">R$ 6.453.967</div>
+                    <div class="value">R$ 6.453.967</div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Verba Disponível</div>
-                    <div class="value" id="kpiMiranteDisponivel">R$ 638.959</div>
+                    <div class="value">R$ 1.405.215</div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Desvio Orçamentário</div>
-                    <div class="value economy" id="kpiMiranteDesvio">-9,0%</div>
+                    <div class="value" style="color: #2e7d32;">-17,9%</div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Custo/Lote</div>
-                    <div class="value">R$ 6.598</div>
+                    <div class="value">R$ 9.155</div>
                     <div class="sublabel">705 Lotes</div>
                 </div>
             </div>
@@ -175,13 +195,13 @@
                 <button class="sub-tab-btn active" data-subtab="detalhe-mirante">Detalhamento por Etapa</button>
                 <button class="sub-tab-btn" data-subtab="historico-mirante">Fluxo de Desembolsos</button>
                 <button class="sub-tab-btn" data-subtab="planejamento-mirante">Planejamento</button>
-                <button class="sub-tab-btn" data-subtab="fotos-mirante">Relatório Fotográfico</button>
+                <button class="sub-tab-btn" data-subtab="fotos-mirante">Galeria de Fotos</button>
                 <button class="sub-tab-btn" data-subtab="analises-mirante">Análises</button>
             </div>
             <div class="sub-tab-content active" id="subtab-detalhe-mirante">
                 <div class="chart-grid-top">
                     <div class="chart-container-pie">
-                        <div class="chart-title">Distribuição percentual por etapa</div>
+                        <div class="chart-title">Distribuição percentual por etapa (Orçado)</div>
                         <canvas id="chartMirantePie"></canvas>
                     </div>
                     <div class="chart-container-disponivel">
@@ -191,67 +211,62 @@
                 </div>
                 <div class="chart-grid-bottom">
                     <div class="chart-container">
-                        <div class="chart-title">Orçado x Realizado por Etapa</div>
+                        <div class="chart-title">Orçado x Comprometido por Etapa</div>
                         <canvas id="chartMiranteBar"></canvas>
                     </div>
                 </div>
-                <p class="table-hint">Clique em uma etapa para visualizar o avanço (Realizado × Orçado)</p>
+                <p class="table-hint">Clique em uma etapa para visualizar o avanço (Comprometido × Orçado)</p>
                 <div class="table-container">
                     <table id="tableMirante"></table>
                 </div>
             </div>
             <div class="sub-tab-content" id="subtab-historico-mirante">
                 <div class="chart-container">
-                    <div class="chart-legend">
-                        <div class="legend-item"><div class="legend-color" style="background: #558b2f;"></div>Desembolsos Realizados</div>
-                        <div class="legend-item"><div class="legend-color" style="background: #ff9800;"></div>Desembolsos Previstos</div>
-                    </div>
+                    <div class="chart-title">Histórico e Projeção de Desembolsos</div>
                     <canvas id="chartMiranteHistorico"></canvas>
+                    <div class="summary-container">
+                        <div class="summary-box">
+                            <div class="summary-title">Valor Total Desembolsado no Período</div>
+                            <div class="summary-value">R$ 4.957.062</div>
+                        </div>
+                        <div class="summary-box projected">
+                            <div class="summary-title">Valor Total de Desembolso Projetado</div>
+                            <div class="summary-value">R$ 3.380.322,29</div>
+                        </div>
+                        <div class="summary-box executed-projected">
+                            <div class="summary-title">Valor Executado Projetado</div>
+                            <div class="summary-value">R$ 8.337.384,29</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="sub-tab-content" id="subtab-planejamento-mirante">
                 <div class="planejamento-container">
                     <div class="planejamento-card">
-                        <h3>Etapas Vigentes e Contratadas</h3>
+                        <h3>⚙️ Etapas Vigentes ou Contratadas</h3>
                         <ul class="planejamento-list">
-                            <li class="vigente">Limpeza de quadras</li>
-                            <li class="vigente">Recapeamento</li>
-                            <li class="vigente">Testes de Rede de Saneamento</li>
-                            <li class="vigente">Construção de Vias de Pedestres</li>
+                            <li>Limpeza de quadras</li>
+                            <li>Recapeamento</li>
+                            <li>Testes de Rede de Saneamento</li>
+                            <li>Construção de Vias de Pedestres</li>
                         </ul>
                     </div>
                     <div class="planejamento-card">
-                        <h3>Próximas Ativações Previstas</h3>
+                        <h3>⏳ Próximas Ativações</h3>
                         <ul class="planejamento-list">
-                            <li class="proximo">Energização</li>
-                            <li class="proximo">Construção do Parque Linear</li>
-                            <li class="proximo">Sinalização</li>
-                            <li class="proximo">Automação dos Poços Artesianos</li>
-                            <li class="proximo">Compensações na Estação de Tratamento de Esgoto</li>
+                            <li>Energização</li>
+                            <li>Construção do Parque Linear</li>
+                            <li>Sinalização</li>
+                            <li>Automação dos Poços Artesianos</li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="sub-tab-content" id="subtab-fotos-mirante">
-                <div class="gallery-container" id="galleryMirante">
-                    <div class="gallery-item" onclick="openPhotoModal('3.jpeg')">
-                        <img src="3.jpeg" alt="Foto 3 - Mirante da Lagoa">
-                    </div>
-                    <div class="gallery-item" onclick="openPhotoModal('5.jpeg')">
-                        <img src="5.jpeg" alt="Foto 5 - Mirante da Lagoa">
-                    </div>
-                    <div class="gallery-item" onclick="openPhotoModal('27.jpeg')">
-                        <img src="27.jpeg" alt="Foto 27 - Mirante da Lagoa">
-                    </div>
-                    <div class="gallery-item" onclick="openPhotoModal('8.jpeg')">
-                        <img src="8.jpeg" alt="Foto 8 - Mirante da Lagoa">
-                    </div>
-                    <div class="gallery-item" onclick="openPhotoModal('9.jpeg')">
-                        <img src="9.jpeg" alt="Foto 9 - Mirante da Lagoa">
-                    </div>
-                    <div class="gallery-item" onclick="openPhotoModal('33.jpeg')">
-                        <img src="33.jpeg" alt="Foto 33 - Mirante da Lagoa">
-                    </div>
+                <div class="gallery-container">
+                    <div class="gallery-item" onclick="openPhotoModal('3.jpeg')"><img src="3.jpeg" alt="Foto"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('5.jpeg')"><img src="5.jpeg" alt="Foto"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('27.jpeg')"><img src="27.jpeg" alt="Foto"></div>
                 </div>
             </div>
             <div class="sub-tab-content" id="subtab-analises-mirante">
@@ -275,27 +290,27 @@
             <div class="kpi-grid">
                 <div class="kpi-card">
                     <div class="label">Orçado Total</div>
-                    <div class="value">R$ 4.407.366</div>
+                    <div class="value">R$ 5.019.403</div>
                 </div>
                 <div class="kpi-card">
-                    <div class="label">Realizado Acumulado</div>
-                    <div class="value">R$ 3.246.608</div>
+                    <div class="label">Desembolso Acumulado</div>
+                    <div class="value">R$ 3.465.877</div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Total Comprometido</div>
-                    <div class="value" id="kpiJoaquimComprometido">R$ 3.732.107</div>
+                    <div class="value">R$ 3.732.107</div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Verba Disponível</div>
-                    <div class="value" id="kpiJoaquimDisponivel">R$ 675.259</div>
+                    <div class="value">R$ 1.287.297</div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Desvio Orçamentário</div>
-                    <div class="value economy" id="kpiJoaquimDesvio">-15,3%</div>
+                    <div class="value" style="color: #2e7d32;">-25,6%</div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Custo/Lote</div>
-                    <div class="value">R$ 5.637</div>
+                    <div class="value">R$ 6.479</div>
                     <div class="sublabel">576 Lotes</div>
                 </div>
             </div>
@@ -303,13 +318,13 @@
                 <button class="sub-tab-btn active" data-subtab="detalhe-joaquim">Detalhamento por Etapa</button>
                 <button class="sub-tab-btn" data-subtab="historico-joaquim">Fluxo de Desembolsos</button>
                 <button class="sub-tab-btn" data-subtab="planejamento-joaquim">Planejamento</button>
-                <button class="sub-tab-btn" data-subtab="fotos-joaquim">Relatório Fotográfico</button>
+                <button class="sub-tab-btn" data-subtab="fotos-joaquim">Galeria de Fotos</button>
                 <button class="sub-tab-btn" data-subtab="analises-joaquim">Análises</button>
             </div>
             <div class="sub-tab-content active" id="subtab-detalhe-joaquim">
                 <div class="chart-grid-top">
                     <div class="chart-container-pie">
-                        <div class="chart-title">Distribuição percentual por etapa</div>
+                        <div class="chart-title">Distribuição percentual por etapa (Orçado)</div>
                         <canvas id="chartJoaquimPie"></canvas>
                     </div>
                     <div class="chart-container-disponivel">
@@ -319,54 +334,58 @@
                 </div>
                 <div class="chart-grid-bottom">
                     <div class="chart-container">
-                        <div class="chart-title">Orçado x Realizado por Etapa</div>
+                        <div class="chart-title">Orçado x Comprometido por Etapa</div>
                         <canvas id="chartJoaquimBar"></canvas>
                     </div>
                 </div>
-                <p class="table-hint">Clique em uma etapa para visualizar o avanço (Realizado × Orçado)</p>
+                <p class="table-hint">Clique em uma etapa para visualizar o avanço (Comprometido × Orçado)</p>
                 <div class="table-container">
                     <table id="tableJoaquim"></table>
                 </div>
             </div>
             <div class="sub-tab-content" id="subtab-historico-joaquim">
                 <div class="chart-container">
-                    <div class="chart-legend">
-                        <div class="legend-item"><div class="legend-color" style="background: #558b2f;"></div>Desembolsos Realizados</div>
-                        <div class="legend-item"><div class="legend-color" style="background: #ff9800;"></div>Desembolsos Previstos</div>
-                    </div>
+                    <div class="chart-title">Histórico e Projeção de Desembolsos</div>
                     <canvas id="chartJoaquimHistorico"></canvas>
+                    <div class="summary-container">
+                        <div class="summary-box">
+                            <div class="summary-title">Valor Total Desembolsado no Período</div>
+                            <div class="summary-value">R$ 3.465.877</div>
+                        </div>
+                        <div class="summary-box projected">
+                            <div class="summary-title">Valor Total de Desembolso Projetado</div>
+                            <div class="summary-value">R$ 1.049.898,94</div>
+                        </div>
+                        <div class="summary-box executed-projected">
+                            <div class="summary-title">Valor Executado Projetado</div>
+                            <div class="summary-value">R$ 4.515.775,94</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="sub-tab-content" id="subtab-planejamento-joaquim">
                 <div class="planejamento-container">
                     <div class="planejamento-card">
-                        <h3>Etapas Vigentes e Contratadas</h3>
+                        <h3>⚙️ Etapas Vigentes ou Contratadas</h3>
                         <ul class="planejamento-list">
-                            <li class="vigente">Limpeza de quadras</li>
-                            <li class="vigente">Regularização do Reservatório de Água</li>
-                            <li class="vigente">Elaboração de Projeto da Estação Elevatória de Esgoto (Booster)</li>
+                            <li>Limpeza de quadras</li>
+                            <li>Regularização do Reservatório de Água</li>
+                            <li>Elaboração de Projeto da EEE (Booster)</li>
                         </ul>
                     </div>
                     <div class="planejamento-card">
-                        <h3>Próximas Ativações Previstas</h3>
+                        <h3>⏳ Próximas Ativações</h3>
                         <ul class="planejamento-list">
-                            <li class="proximo">Construção da Rede Adutora</li>
-                            <li class="proximo">Construção do Interceptor de Esgoto</li>
-                            <li class="proximo">Construção da Linha de Recalque de Esgoto</li>
-                            <li class="proximo">Instalação do Booster de Esgoto</li>
-                            <li class="proximo">Ligação do Reservatório na Rede Municipal</li>
+                            <li>Construção da Rede Adutora</li>
+                            <li>Construção do Interceptor de Esgoto</li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="sub-tab-content" id="subtab-fotos-joaquim">
-                <div class="gallery-container" id="galleryJoaquim">
-                    <div class="gallery-item" onclick="openPhotoModal('DJI_0369.JPG')">
-                        <img src="DJI_0369.JPG" alt="Foto DJI_0369 - Joaquim Leme">
-                    </div>
-                    <div class="gallery-item" onclick="openPhotoModal('DJI_0389.JPG')">
-                        <img src="DJI_0389.JPG" alt="Foto DJI_0389 - Joaquim Leme">
-                    </div>
+                <div class="gallery-container">
+                    <div class="gallery-item" onclick="openPhotoModal('DJI_0369.JPG')"><img src="DJI_0369.JPG" alt="Foto"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('DJI_0389.JPG')"><img src="DJI_0389.JPG" alt="Foto"></div>
                 </div>
             </div>
             <div class="sub-tab-content" id="subtab-analises-joaquim">
@@ -385,10 +404,10 @@
         <!-- VISÃO GERAL -->
         <div class="tab-content" id="tab-geral">
             <div class="kpi-grid">
-                <div class="kpi-card"><div class="label">Orçado Total Operação</div><div class="value">R$ 11.500.292</div></div>
-                <div class="kpi-card"><div class="label">Realizado Total</div><div class="value">R$ 7.897.995</div></div>
-                <div class="kpi-card"><div class="label">Total Comprometido</div><div class="value" id="kpiGeralComprometido">R$ 10.186.074</div></div>
-                <div class="kpi-card"><div class="label">Verba Disponível Total</div><div class="value" id="kpiGeralDisponivel">R$ 1.314.218</div></div>
+                <div class="kpi-card"><div class="label">Orçado Total Operação</div><div class="value">R$ 12.878.585</div></div>
+                <div class="kpi-card"><div class="label">Realizado Total</div><div class="value">R$ 8.422.939</div></div>
+                <div class="kpi-card"><div class="label">Total Comprometido</div><div class="value">R$ 10.186.074</div></div>
+                <div class="kpi-card"><div class="label">Verba Disponível Total</div><div class="value">R$ 2.692.511</div></div>
             </div>
             <div class="executive">
                 <div class="executive-card">
@@ -397,11 +416,11 @@
                     <div class="kpi-item"><span class="label">Cidade</span><span class="value">Bocaiúva</span></div>
                     <div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
                     <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">705</span></div>
-                    <div class="kpi-item"><span class="label">Orçado</span><span class="value">R$ 7.092.926</span></div>
-                    <div class="kpi-item"><span class="label">Realizado</span><span class="value">R$ 4.651.387</span></div>
-                    <div class="kpi-item"><span class="label">Comprometido</span><span class="value" id="execMiranteComprometido">R$ 6.453.967</span></div>
-                    <div class="kpi-item"><span class="label">Verba Disponível</span><span class="value" id="execMiranteDisponivel">R$ 638.959</span></div>
-                    <div class="kpi-item"><span class="label">Custo/Lote</span><span class="value">R$ 6.598</span></div>
+                    <div class="kpi-item"><span class="label">Orçado</span><span class="value">R$ 7.859.182</span></div>
+                    <div class="kpi-item"><span class="label">Realizado</span><span class="value">R$ 4.957.062</span></div>
+                    <div class="kpi-item"><span class="label">Total Comprometido</span><span class="value">R$ 6.453.967</span></div>
+                    <div class="kpi-item"><span class="label">Verba Disponível</span><span class="value">R$ 1.405.215</span></div>
+                    <div class="kpi-item"><span class="label">Custo/Lote</span><span class="value">R$ 9.155</span></div>
                 </div>
                 <div class="executive-card">
                     <h3>JOAQUIM LEME</h3>
@@ -409,17 +428,17 @@
                     <div class="kpi-item"><span class="label">Cidade</span><span class="value">Ituiutaba</span></div>
                     <div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
                     <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">576</span></div>
-                    <div class="kpi-item"><span class="label">Orçado</span><span class="value">R$ 4.407.366</span></div>
-                    <div class="kpi-item"><span class="label">Realizado</span><span class="value">R$ 3.246.608</span></div>
-                    <div class="kpi-item"><span class="label">Comprometido</span><span class="value" id="execJoaquimComprometido">R$ 3.732.107</span></div>
-                    <div class="kpi-item"><span class="label">Verba Disponível</span><span class="value" id="execJoaquimDisponivel">R$ 675.259</span></div>
-                    <div class="kpi-item"><span class="label">Custo/Lote</span><span class="value">R$ 5.637</span></div>
+                    <div class="kpi-item"><span class="label">Orçado</span><span class="value">R$ 5.019.403</span></div>
+                    <div class="kpi-item"><span class="label">Realizado</span><span class="value">R$ 3.465.877</span></div>
+                    <div class="kpi-item"><span class="label">Total Comprometido</span><span class="value">R$ 3.732.107</span></div>
+                    <div class="kpi-item"><span class="label">Verba Disponível</span><span class="value">R$ 1.287.297</span></div>
+                    <div class="kpi-item"><span class="label">Custo/Lote</span><span class="value">R$ 6.479</span></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal de Ampliação de Fotos Unificado (Global) -->
+    <!-- Modais -->
     <div class="modal" id="photoGlobalModal" onclick="if(event.target===this) closePhotoModal()">
         <div class="modal-content">
             <span class="modal-close" onclick="closePhotoModal()">&times;</span>
@@ -427,95 +446,109 @@
         </div>
     </div>
 
-    <!-- Modal das Metas/Gauges de Etapa -->
     <div class="modal gauge-modal" id="modalGauge" onclick="if(event.target===this) closeGaugeModal()">
         <div class="gauge-modal-box">
-            <span class="gauge-modal-close" onclick="closeGaugeModal()" title="Fechar">&times;</span>
+            <span class="gauge-modal-close" onclick="closeGaugeModal()">&times;</span>
             <h3 id="gaugeEtapaTitle"></h3>
             <p class="gauge-obra" id="gaugeObraTitle"></p>
             <div class="gauge-chart-wrap">
                 <canvas id="chartGauge"></canvas>
                 <div class="gauge-center-label">
                     <span id="gaugePercent">0%</span>
-                    <span>Avanço</span>
+                    <span>Comprometido</span>
                 </div>
             </div>
             <div class="gauge-details">
                 <div class="gauge-detail-item"><div class="g-label">Orçado</div><div class="g-value" id="gaugeOrcado">—</div></div>
-                <div class="gauge-detail-item"><div class="g-label">Realizado</div><div class="g-value" id="gaugeRealizado">—</div></div>
-                <div class="gauge-detail-item full"><div class="g-label">Saldo (Orçado − Realizado)</div><div class="g-value" id="gaugeSaldo">—</div></div>
+                <div class="gauge-detail-item"><div class="g-label">Comprometido</div><div class="g-value" id="gaugeRealizado">—</div></div>
+                <div class="gauge-detail-item full"><div class="g-label">Saldo de Verba</div><div class="g-value" id="gaugeSaldo">—</div></div>
             </div>
         </div>
     </div>
 
     <script>
+        // --- DATA ESTRUTURADA ---
         const miranteEtapas = ['TOPOGRAFIA E CONTROLE','MANUTENÇÕES / AS BUILTS','TERRAPLANAGEM','DRENAGEM','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','MEIO AMBIENTE','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
-        const miranteOrcado = [50822.45,214470.08,90400.00,203815.50,129445.13,659519.74,178975.66,228056.70,252811.75,2867899.55,682339.23,1308234.80,89916.90,136218.56];
-        const miranteRealizado = [36657.72,155479.65,134826.68,258771.76,191188.45,526825.04,168759.29,169211.11,543203.95,1331431.74,645422.37,206585.31,91808.4,191214.58];
-        const miranteComprometido = [37257.72,201591.92,134826.68,284987.25,212449.73,533313.97,171635.74,221077.81,578897.30,2741431.72,789722.37,218312.39,91808.40,236654.19];
-        const miranteDisponivel = miranteOrcado.map((o,i) => o - miranteComprometido[i]);
+        const miranteOrcado = [36057.70, 234986.23, 134826.68, 278796.63, 207210.79, 645418.69, 176835.76, 313662.78, 597885.26, 2774330.81, 790022.37, 1316034.53, 94960.90, 258152.78];
+        const miranteRealizado = [36657.72, 155560.32, 134826.68, 269217.91, 214556.85, 531064.04, 168759.29, 169211.11, 543203.95, 1581431.74, 645422.37, 208403.22, 91808.40, 206938.45];
+        const miranteComprometido = [37257.72, 201591.92, 134826.68, 284987.25, 212449.72, 533313.97, 171635.74, 221077.81, 578897.30, 2741431.72, 789722.37, 218312.39, 91808.40, 236654.19];
+        const miranteDisponivel = miranteOrcado.map((orc, idx) => orc - miranteComprometido[idx]);
+
+        const joaquimEtapas = ['TOPOGRAFIA E CONTROLE','MANUTENÇÕES / AS BUILTS','DRENAGEM','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','MEIO AMBIENTE','OBRAS DE ACESSO','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
+        const joaquimOrcado = [6000.00, 146722.82, 205220.00, 84333.64, 1184518.92, 320633.13, 273976.19, 104745.00, 146000.00, 1846124.81, 69219.58, 448834.00, 32000.00, 151075.26];
+        const joaquimRealizado = [0.00, 117659.68, 190220.00, 49733.63, 1018739.29, 75158.33, 0.00, 7231.00, 0.00, 1835484.81, 18103.58, 14400.00, 0.00, 139146.28];
+        const joaquimComprometido = [0.00, 119574.27, 213214.32, 52733.62, 1061802.54, 185722.94, 26849.90, 7231.00, 0.00, 1846216.57, 20803.58, 14400.00, 0.00, 183557.87];
+        const joaquimDisponivel = joaquimOrcado.map((orc, idx) => orc - joaquimComprometido[idx]);
+
+        // --- DADOS DO FLUXO ATUALIZADOS ATÉ DEZEMBRO/2026 ---
+        const mesesHistorico = [
+            'ago/23','set/23','out/23','nov/23','dez/23',
+            'jan/24','fev/24','mar/24','abr/24','mai/24','jun/24','jul/24','ago/24','set/24','out/24','nov/24','dez/24',
+            'jan/25','fev/25','mar/25','abr/25','mai/25','jun/25','jul/25','ago/25','set/25','out/25','nov/25','dez/25',
+            'jan/26','fev/26','mar/26','abr/26','mai/26',
+            'jun/26','jul/26','ago/26','set/26','out/26','nov/26','dez/26'
+        ];
         
-        const joaquimEtapas = ['TOPOGRAFIA e CONTROLE','MANUTENÇÕES / AS BUILTS','DRENAGEM DE ÁGUAS PLUVIAIS','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','RECAPEAMENTO VIÁRIO','ENERGIA / ILUMINAÇÃO','MEIO AMBIENTE / PRAÇAS','OBRA DE ACESSO','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
-        const joaquimOrcado = [6000.00,156722.82,91457.00,97397.98,915327.24,353920.40,286779.19,48780.00,52000.00,1835484.81,61950.00,373845.00,32000.00,95700.82];
-        const joaquimRealizado = [0,84253.43,49733.64,1018739.29,94949.93,0,7231,0,1835484.81,16369.58,14400,0,0,125445.5];
-        const joaquimComprometido = [0.00,119574.27,213214.32,52733.63,1061802.54,185722.94,26849.89,7231.00,0.00,1846216.57,20803.58,14400.00,0.00,183557.87];
-        const joaquimDisponivel = joaquimOrcado.map((o,i) => o - joaquimComprometido[i]);
+        const desembolsosMirante = [
+            0, 0, 15941, 10938, 1000, 
+            7000, 7500, 9500, 19220, 0, 27359, 17200, 13036, 13800, 16900, 44080, 31408, 
+            37084, 142367, 113630, 189413, 78009, 87416, 112178, 215158, 477827, 531463, 523136, 1012576, 
+            353551, 286552, 165518, 90625, 305676,
+            847473.81, 719920.00, 693672.72, 600280.99, 485263.72, 18533.52, 15177.52
+        ];
         
-        function fmtNum(n) { return Math.ceil(n).toLocaleString('pt-BR'); }
-        function fmtMoney(n) { return 'R$ ' + fmtNum(n); }
-        
-        const miranteABCEtapas = ['PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','DRENAGEM','MANUTENÇÕES / AS BUILTS','GUIAS E SARJETAS','REDE DE ÁGUA POTÁVEL','ESTAÇÃO ELEVATÓRIA DE ESGOTO','TOPOGRAFIA E CONTROLE','TERRAPLANAGEM','MEIO AMBIENTE','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
-        const miranteABCValores = [1331431.74,645422.37,526825.04,168759.29,258771.76,155479.65,543203.95,191188.45,169211.11,36657.72,134826.68,206585.31,91808.4,191214.58];
-        
-        const joaquimABCEtapas = ['RECAPEAMENTO VIÁRIO','REDE DE ÁGUA POTÁVEL','INDIRETO DE OBRAS','RESERVATÓRIO','MANUTENÇÕES / AS BUILTS','DRENAGEM DE ÁGUAS PLUVIAIS','ENERGIA / ILUMINAÇÃO','MEIO AMBIENTE / PRAÇAS','ESTAÇÃO ELEVATÓRIA DE ESGOTO','TOPOGRAFIA e CONTROLE','SISTEMA DE ESGOTO SANITÁRIO','GUIAS E SARJETAS','OBRA DE ACESSO','TOPOGRAFIA DE ENTREGA'];
-        const joaquimABCValores = [1835484.81,1018739.29,125445.5,94949.93,84253.43,49733.64,16369.58,14400,7231,0,0,0,0,0];
-        
-        // Funções para Controle do Modal de Fotos
-        function openPhotoModal(imgSrc) {
-            const modal = document.getElementById('photoGlobalModal');
-            const modalImg = document.getElementById('photoGlobalImage');
-            modalImg.src = imgSrc;
-            modal.style.display = 'flex';
-            setTimeout(() => {
-                modal.classList.add('active');
-            }, 10);
+        const desembolsosJoaquim = [
+            9197, 5000, 7500, 6900, 0, 
+            0, 0, 8000, 0, 0, 400, 0, 0, 5000, 0, 2950, 0, 
+            2950, 85000, 76195, 68195, 97659, 265328, 2102, 613931, 126801, 846921, 49210, 464746, 
+            126667, 162155, 388593, 15427, 29049,
+            357168.57, 525167.39, 489187.97, -60089.99, -62289.99, -62829.99, -62829.99
+        ];
+
+        function fmtNum(n) { 
+            return Math.ceil(n).toLocaleString('pt-BR'); 
+        }
+        function fmtMoney(n) { 
+            return 'R$ ' + parseFloat(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); 
         }
 
+        // --- GLOBAL CONFIGS & MODALS ---
+        let gaugeChart = null;
+        function openPhotoModal(imgSrc) {
+            const modal = document.getElementById('photoGlobalModal');
+            document.getElementById('photoGlobalImage').src = imgSrc;
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+        }
         function closePhotoModal() {
             const modal = document.getElementById('photoGlobalModal');
             modal.classList.remove('active');
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 300);
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+        function closeGaugeModal() {
+            document.getElementById('modalGauge').classList.remove('active');
+            if (gaugeChart) { gaugeChart.destroy(); gaugeChart = null; }
         }
 
-        // Plugin customizado para alinhar no centro da Rosca (ignorando a legenda)
+        // --- CHART GENERATORS ---
         const centerTextPlugin = {
             id: 'centerText',
             beforeDraw: function(chart) {
                 if (chart.config.type === 'doughnut' && chart.options.plugins.centerText) {
                     const ctx = chart.ctx;
                     const meta = chart.getDatasetMeta(0);
-                    if (!meta.data || meta.data.length === 0) return;
-                    
+                    if (!meta.data || !meta.data[0]) return;
                     const centerX = meta.data[0].x;
                     const centerY = meta.data[0].y;
-                    
                     ctx.restore();
-                    
-                    ctx.font = "bold 1.1rem 'Montserrat', sans-serif";
+                    ctx.font = "bold 1.1rem 'Montserrat'";
                     ctx.textBaseline = "middle";
                     ctx.textAlign = "center";
                     ctx.fillStyle = "#1b5e20";
-                    
-                    const text1 = chart.options.plugins.centerText.text;
-                    ctx.fillText(text1, centerX, centerY - 8);
-                    
-                    ctx.font = "500 0.7rem 'Montserrat', sans-serif";
+                    ctx.fillText(parseFloat(chart.options.plugins.centerText.text).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL', maximumFractionDigits: 0}), centerX, centerY - 8);
+                    ctx.font = "500 0.7rem 'Montserrat'";
                     ctx.fillStyle = "#558b2f";
-                    
-                    const text2 = "ORÇADO TOTAL";
-                    ctx.fillText(text2, centerX, centerY + 14);
+                    ctx.fillText("ORÇADO TOTAL", centerX, centerY + 14);
                     ctx.save();
                 }
             }
@@ -525,219 +558,216 @@
         function createPieChart(canvasId, labels, valores) {
             const cores = ['#E74C3C','#3498DB','#2ECC71','#F39C12','#9B59B6','#1ABC9C','#E67E22','#C0392B','#34495E','#16A085','#D35400','#8E44AD','#27AE60','#2980B9'];
             const totalSum = valores.reduce((a, b) => a + b, 0);
-            
             new Chart(document.getElementById(canvasId), {
                 type: 'doughnut',
-                data: {labels: labels, datasets: [{data: valores, backgroundColor: cores, borderColor: '#ffffff', borderWidth: 2}]},
+                data: { labels: labels, datasets: [{ data: valores, backgroundColor: cores.slice(0, labels.length), borderColor: '#ffffff', borderWidth: 2 }] },
                 options: {
-                    responsive: true, 
-                    maintainAspectRatio: true, 
+                    responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            position: 'right', 
-                            labels: {color: '#000000', font: {size: 10, family: "'Montserrat', sans-serif"}, padding: 10}
-                        }, 
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.label || ''; 
-                                    let val = context.parsed;
-                                    let percentage = ((val / totalSum) * 100).toFixed(1); 
-                                    return ' ' + label + ': ' + fmtMoney(val) + ' (' + percentage + '%)';
-                                }
-                            }
-                        },
-                        centerText: {
-                            text: fmtMoney(totalSum)
-                        }
+                        legend: { position: 'right', labels: { color: '#000000', font: { size: 9, family: "'Montserrat'" }, padding: 8 } },
+                        centerText: { text: totalSum }
                     }
                 }
             });
         }
-        
-        createPieChart('chartMirantePie', miranteEtapas, miranteOrcado);
-        createPieChart('chartJoaquimPie', joaquimEtapas, joaquimOrcado);
-        
-        function createABCChart(canvasId, labels, valores) {
-            let dados = labels.map((label, idx) => ({etapa: label, valor: valores[idx]}));
-            dados.sort((a, b) => b.valor - a.valor);
-            let etapasOrdenadas = dados.map(d => d.etapa);
-            let valoresOrdenados = dados.map(d => d.valor);
-            let total = valoresOrdenados.reduce((a, b) => a + b, 0);
-            let acumulado = 0;
-            let percentuaisAcum = [];
-            let classes = [];
-            for (let i = 0; i < valoresOrdenados.length; i++) {
-                acumulado += valoresOrdenados[i];
-                let pctAcum = (acumulado / total) * 100;
-                percentuaisAcum.push(pctAcum);
-                if (pctAcum <= 80) classes.push('A');
-                else if (pctAcum <= 95) classes.push('B');
-                else classes.push('C');
-            }
+
+        function createBarChart(canvasId, labels, orcado, comprometido) {
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
-                data: {labels: etapasOrdenadas, datasets: [{label: 'Valor Desembolsado', data: valoresOrdenados, backgroundColor: classes.map(c => c === 'A' ? '#1b5e20' : c === 'B' ? '#ffd54f' : '#c8e6c9'), borderRadius: 4, yAxisID: 'y'}, {label: 'Acumulado %', data: percentuaisAcum, type: 'line', borderColor: '#d32f2f', backgroundColor: 'rgba(211, 47, 47, 0.1)', borderWidth: 3, fill: false, yAxisID: 'y1', tension: 0.4}]},
-                options: {responsive: true, interaction: {mode: 'index', intersect: false}, plugins: {legend: {labels: {color: '#2c3e50', font: {family: "'Montserrat', sans-serif"}}}}, scales: {y: {type: 'linear', display: true, position: 'left', ticks: {color: '#558b2f', callback: v => fmtNum(v), font: {family: "'Montserrat', sans-serif"}}}, y1: {type: 'linear', display: true, position: 'right', ticks: {color: '#d32f2f', callback: v => v.toFixed(1) + '%', font: {family: "'Montserrat', sans-serif"}}, min: 0, max: 100, grid: {drawOnChartArea: false}}, x: {ticks: {color: '#558b2f', maxRotation: 45, font: {family: "'Montserrat', sans-serif"}}}}}
-            });
-        }
-        
-        function createABCTable(tableId, labels, valores) {
-            let dados = labels.map((label, idx) => ({etapa: label, valor: valores[idx]}));
-            dados.sort((a, b) => b.valor - a.valor);
-            let total = dados.reduce((sum, d) => sum + d.valor, 0);
-            let acumulado = 0;
-            let html = '<thead><tr><th>Etapa</th><th>Valor Desembolsado</th><th>% Individual</th><th>Acumulado</th><th>% Acumulado</th><th>Classe</th></tr></thead><tbody>';
-            for (let i = 0; i < dados.length; i++) {
-                acumulado += dados[i].valor;
-                let pctIndividual = (dados[i].valor / total) * 100;
-                let pctAcum = (acumulado / total) * 100;
-                let classe = pctAcum <= 80 ? 'A' : pctAcum <= 95 ? 'B' : 'C';
-                let classColor = classe === 'A' ? 'classA' : classe === 'B' ? 'classB' : 'classC';
-                html += `<tr><td>${dados[i].etapa}</td><td>${fmtNum(dados[i].valor)}</td><td>${pctIndividual.toFixed(2)}%</td><td>${fmtNum(acumulado)}</td><td>${pctAcum.toFixed(2)}%</td><td><span class="status ${classColor}">${classe}</span></td></tr>`;
-            }
-            html += '</tbody>';
-            document.getElementById(tableId).innerHTML = html;
-        }
-        
-        createABCChart('chartMiranteABC', miranteABCEtapas, miranteABCValores);
-        createABCTable('tableABCMirante', miranteABCEtapas, miranteABCValores);
-        createABCChart('chartJoaquimABC', joaquimABCEtapas, joaquimABCValores);
-        createABCTable('tableABCJoaquim', joaquimABCEtapas, joaquimABCValores);
-        
-        let gaugeChart = null;
-
-        function gaugeColor(pct) {
-            if (pct >= 100) return '#d32f2f';
-            if (pct >= 85) return '#f57f17';
-            return '#558b2f';
-        }
-
-        function calcAvanco(orcado, realizado) {
-            if (orcado > 0) return (realizado / orcado) * 100;
-            return realizado > 0 ? 100 : 0;
-        }
-
-        function renderGaugeChart(orcado, realizado) {
-            const pct = calcAvanco(orcado, realizado);
-            const arcValue = Math.min(pct, 100);
-            const color = gaugeColor(pct);
-            if (gaugeChart) gaugeChart.destroy();
-            gaugeChart = new Chart(document.getElementById('chartGauge'), {
-                type: 'doughnut',
-                data: {
-                    datasets: [{
-                        data: [arcValue, 100 - arcValue],
-                        backgroundColor: [color, '#e8eaed'],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    circumference: 180,
-                    rotation: -90,
-                    cutout: '72%',
-                    plugins: { legend: { display: false }, tooltip: { enabled: false } }
+                data: { labels: labels, datasets: [{ label: 'Orçado', data: orcado, backgroundColor: '#7cb342', borderRadius: 4 }, { label: 'Comprometido', data: comprometido, backgroundColor: '#1b5e20', borderRadius: 4 }] },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { labels: { font: { family: "'Montserrat'" } } } },
+                    scales: { 
+                        x: { ticks: { color: '#000000', maxRotation: 45, font: { size: 9, family: "'Montserrat'" } } }, 
+                        y: { ticks: { color: '#000000', font: { family: "'Montserrat'" }, callback: v => fmtNum(v) } } 
+                    } 
                 }
             });
-            document.getElementById('gaugePercent').textContent = pct.toFixed(1).replace('.', ',') + '%';
-            document.getElementById('gaugePercent').style.color = color;
         }
 
-        function openGaugeModal(obraNome, etapa, orcado, realizado) {
-            document.getElementById('gaugeEtapaTitle').textContent = etapa;
-            document.getElementById('gaugeObraTitle').textContent = obraNome;
-            document.getElementById('gaugeOrcado').textContent = orcado > 0 ? fmtMoney(orcado) : 'Não definido';
-            document.getElementById('gaugeRealizado').textContent = fmtMoney(realizado);
-            const saldo = orcado - realizado;
-            const saldoEl = document.getElementById('gaugeSaldo');
-            saldoEl.textContent = orcado > 0 ? fmtMoney(saldo) : '—';
-            saldoEl.style.color = saldo < 0 ? '#c62828' : '#1b5e20';
-            if (orcado <= 0) {
-                if (gaugeChart) gaugeChart.destroy();
-                document.getElementById('gaugePercent').textContent = '—';
-                document.getElementById('gaugePercent').style.color = '#558b2f';
-                gaugeChart = new Chart(document.getElementById('chartGauge'), {
-                    type: 'doughnut',
-                    data: { datasets: [{ data: [0, 100], backgroundColor: ['#c0c0c0', '#e8eaed'], borderWidth: 0 }] },
-                    options: { responsive: true, maintainAspectRatio: false, circumference: 180, rotation: -90, cutout: '72%', plugins: { legend: { display: false }, tooltip: { enabled: false } } }
-                });
-            } else {
-                renderGaugeChart(orcado, realizado);
-            }
-            document.getElementById('modalGauge').classList.add('active');
-        }
-
-        function closeGaugeModal() {
-            document.getElementById('modalGauge').classList.remove('active');
-            if (gaugeChart) {
-                gaugeChart.destroy();
-                gaugeChart = null;
-            }
-        }
-
-        function createTable(tableId, obraNome, etapas, orcado, realizado, comprometido, disponivel) {
-            const t = document.getElementById(tableId);
-            let html = '<thead><tr><th>Macro Etapa</th><th>Orçado Total</th><th>Realizado</th><th>Comprometido</th><th>Verba Disponível</th><th>% Desvio</th><th>Status</th><th>Progresso</th></tr></thead><tbody>';
-            for(let i=0;i<etapas.length;i++){
-                const desvio = orcado[i] > 0 ? ((comprometido[i] - orcado[i]) / orcado[i] * 100) : 0;
-                const statusClass = desvio <= 0 ? 'ok' : desvio <= 10 ? 'warn' : 'alert';
-                const statusLabel = desvio <= 0 ? 'OK' : desvio <= 10 ? 'Atenção' : 'Crítico';
-                const progress = orcado[i] > 0 ? Math.min(100, (realizado[i]/orcado[i]*100)) : 0;
-                html += `<tr class="etapa-row" data-index="${i}" title="Clique para ver avanço da etapa"><td>${etapas[i]}</td><td>${fmtNum(orcado[i])}</td><td>${fmtNum(realizado[i])}</td><td>${fmtNum(comprometido[i])}</td><td>${fmtNum(disponivel[i])}</td><td>${desvio.toFixed(2)}%</td><td><span class="status ${statusClass}">${statusLabel}</span></td><td><div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div></td></tr>`;
-            }
-            html += '</tbody>';
-            t.innerHTML = html;
-            t.querySelectorAll('tbody tr.etapa-row').forEach(row => {
-                row.addEventListener('click', function() {
-                    const idx = parseInt(this.dataset.index, 10);
-                    openGaugeModal(obraNome, etapas[idx], orcado[idx], realizado[idx]);
-                });
-            });
-        }
-        createTable('tableMirante', 'MIRANTE DA LAGOA', miranteEtapas, miranteOrcado, miranteRealizado, miranteComprometido, miranteDisponivel);
-        createTable('tableJoaquim', 'JOAQUIM LEME', joaquimEtapas, joaquimOrcado, joaquimRealizado, joaquimComprometido, joaquimDisponivel);
-        
-        function createBarChart(canvasId, labels, orcado, realizado) {
-            new Chart(document.getElementById(canvasId), {
-                type: 'bar',
-                data: {labels: labels, datasets: [{label: 'Orçado', data: orcado, backgroundColor: '#7cb342', borderRadius: 4}, {label: 'Realizado', data: realizado, backgroundColor: '#558b2f', borderRadius: 4}]},
-                options: {responsive: true, plugins: {legend: {display: false}}, scales: {x: {ticks: {color: '#000000', maxRotation: 45, font: {family: "'Montserrat', sans-serif"}}}, y: {ticks: {color: '#000000', callback: v => fmtNum(v), font: {family: "'Montserrat', sans-serif"}}}}}
-            });
-        }
-        createBarChart('chartMiranteBar', miranteEtapas, miranteOrcado, miranteRealizado);
-        createBarChart('chartJoaquimBar', joaquimEtapas, joaquimOrcado, joaquimRealizado);
-        
         function createDisponivelChart(canvasId, labels, disponivel) {
             const colors = disponivel.map(v => v < 0 ? '#d32f2f' : '#2e7d32');
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
-                data: {labels: labels, datasets: [{label: 'Verba Disponível', data: disponivel, backgroundColor: colors, borderRadius: 4}]},
-                options: {indexAxis: 'y', responsive: true, maintainAspectRatio: true, plugins: {legend: {display: false}}, scales: {x: {ticks: {color: '#000000', callback: v => fmtNum(v), font: {family: "'Montserrat', sans-serif"}}}, y: {ticks: {color: '#2c3e50', font: {family: "'Montserrat', sans-serif"}}}}}
+                data: { labels: labels, datasets: [{ label: 'Verba Disponível', data: disponivel, backgroundColor: colors, borderRadius: 4 }] },
+                options: { 
+                    indexAxis: 'y', 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { display: false } }, 
+                    scales: { 
+                        x: { ticks: { color: '#000000', font: { family: "'Montserrat'" }, callback: v => fmtNum(v) } }, 
+                        y: { ticks: { color: '#2c3e50', font: { size: 9, family: "'Montserrat'" } } } 
+                    } 
+                }
             });
         }
-        createDisponivelChart('chartMiranteDisponivel', miranteEtapas, miranteDisponivel);
-        createDisponivelChart('chartJoaquimDisponivel', joaquimEtapas, joaquimDisponivel);
-        
-        const miranteHistoricoMeses = ['Out/23','Nov/23','Dez/23','Jan/24','Fev/24','Mar/24','Abr/24','Mai/24','Jun/24','Jul/24','Ago/24','Set/24','Out/24','Nov/24','Dez/24','Jan/25','Fev/25','Mar/25','Abr/25','Mai/25','Jun/25','Jul/25','Ago/25','Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26','Ago/26','Set/26','Out/26','Nov/26','Dez/26'];
-        const miranteHistoricoValores = [15941,10938,1000,7000,7500,9500,19220,0,27359,17200,13036,13800,16900,44080,31408,37084,142367,113630,189413,78009,87416,112178,215158,477827,531463,523136,1012576,353551,286552,165518,90625,605742,719086,605586,699564,542835,489873,12101,11211];
-        const miranteHistoricoColors = ['#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#ff9800','#ff9800','#ff9800','#ff9800','#ff9800','#ff9800','#ff9800','#ff9800'];
-        
-        const joaquimHistoricoMeses = ['Ago/23','Set/23','Out/23','Nov/23','Dez/23','Jan/24','Fev/24','Mar/24','Abr/24','Mai/24','Jun/24','Jul/24','Ago/24','Set/24','Out/24','Nov/24','Dez/24','Jan/25','Fev/25','Mar/25','Abr/25','Mai/25','Jun/25','Jul/25','Ago/25','Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26','Ago/26','Set/26','Out/26','Nov/26','Dez/26'];
-        const joaquimHistoricoValores = [9197,5000,7500,6900,0,0,0,8000,0,0,400,0,0,5000,0,2950,0,2950,85000,76195,68195,97659,265328,2102,613931,126801,846921,49210,464746,126667,162155,388593,15427,196423,549983,769441,13883,10963,10963,10423,10423];
-        const joaquimHistoricoColors = ['#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#558b2f','#ff9800','#ff9800','#ff9800','#ff9800','#ff9800','#ff9800','#ff9800','#ff9800'];
-        
-        function createColumnChart(canvasId, labels, data, colors) {
+
+        // --- LINEAR ABC ENGINE ---
+        function runABCEngine(canvasId, tableId, labels, valores) {
+            let dados = labels.map((l, i) => ({ etapa: l, valor: valores[i] })).sort((a, b) => b.valor - a.valor);
+            let total = dados.reduce((a, b) => a + b.valor, 0) || 1;
+            let acumulado = 0;
+            let pAcum = [], etapasOrd = [], valsOrd = [], classes = [];
+
+            let html = '<thead><tr><th>Etapa</th><th>Valor Desembolsado</th><th>% Ind.</th><th>Acumulado</th><th>% Acum.</th><th>Classe</th></tr></thead><tbody>';
+            
+            for (let i = 0; i < dados.length; i++) {
+                acumulado += dados[i].valor;
+                let pctInd = (dados[i].valor / total) * 100;
+                let pctAcum = (acumulado / total) * 100;
+                pAcum.push(pctAcum);
+                etapasOrd.push(dados[i].etapa);
+                valsOrd.push(dados[i].valor);
+
+                let classe = pctAcum <= 80 ? 'A' : pctAcum <= 95 ? 'B' : 'C';
+                classes.push(classe);
+                let clsColor = classe === 'A' ? 'classA' : classe === 'B' ? 'classB' : 'classC';
+
+                html += `<tr><td>${dados[i].etapa}</td><td>${fmtMoney(dados[i].valor)}</td><td>${pctInd.toFixed(1)}%</td><td>${fmtMoney(acumulado)}</td><td>${pctAcum.toFixed(1)}%</td><td><span class="status ${clsColor}">${classe}</span></td></tr>`;
+            }
+            html += '</tbody>';
+            document.getElementById(tableId).innerHTML = html;
+
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
-                data: {labels: labels, datasets: [{label: 'Desembolso', data: data, backgroundColor: colors, borderRadius: 4}]},
-                options: {responsive: true, plugins: {legend: {display: false}}, scales: {x: {ticks: {color: '#558b2f', maxRotation: 45, font: {family: "'Montserrat', sans-serif"}}}, y: {ticks: {color: '#558b2f', callback: v => fmtNum(v), font: {family: "'Montserrat', sans-serif"}}}}}
+                data: { labels: etapasOrd, datasets: [{ label: 'Valor', data: valsOrd, backgroundColor: classes.map(c => c==='A'?'#1b5e20':c==='B'?'#ffd54f':'#c8e6c9'), borderRadius: 4, yAxisID: 'y' }, { label: 'Acumulado %', data: pAcum, type: 'line', borderColor: '#d32f2f', fill: false, yAxisID: 'y1' }] },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { labels: { font: { family: "'Montserrat'" } } } },
+                    scales: { 
+                        y: { display: true, position: 'left', ticks: { font: { family: "'Montserrat'" }, callback: v => fmtNum(v) } }, 
+                        y1: { display: true, position: 'right', min: 0, max: 100, ticks: { font: { family: "'Montserrat'" }, callback: v => v + '%' }, grid: { drawOnChartArea: false } }, 
+                        x: { ticks: { maxRotation: 45, font: { size: 9, family: "'Montserrat'" } } } 
+                    } 
+                }
             });
         }
-        createColumnChart('chartMiranteHistorico', miranteHistoricoMeses, miranteHistoricoValores, miranteHistoricoColors);
-        createColumnChart('chartJoaquimHistorico', joaquimHistoricoMeses, joaquimHistoricoValores, joaquimHistoricoColors);
-        
+
+        // --- DETAILED TABLES MAPPING WITH TOTALIZATOR ---
+        function createTable(tableId, obraNome, etapas, orcado, realizado, comprometido, disponivel) {
+            const t = document.getElementById(tableId);
+            let html = '<thead><tr><th>Macro Etapa</th><th>Orçado Total</th><th>Realizado</th><th>Comprometido</th><th>Verba Disponível</th><th>% Desvio</th><th>Status</th><th>Progresso</th></tr></thead><tbody>';
+            
+            let totOrcado = 0, totRealizado = 0, totComprometido = 0, totDisponivel = 0;
+
+            for(let i=0; i<etapas.length; i++){
+                const desvio = orcado[i] > 0 ? ((comprometido[i] - orcado[i]) / orcado[i] * 100) : 0;
+                const statusClass = desvio <= 0 ? 'ok' : desvio <= 5 ? 'warn' : 'alert';
+                const statusLabel = desvio <= 0 ? 'OK' : desvio <= 5 ? 'Atenção' : 'Crítico';
+                const progress = orcado[i] > 0 ? Math.min(100, (comprometido[i]/orcado[i]*100)) : 0;
+                
+                totOrcado += orcado[i];
+                totRealizado += realizado[i];
+                totComprometido += comprometido[i];
+                totDisponivel += disponivel[i];
+
+                html += `<tr class="etapa-row" data-index="${i}"><td>${etapas[i]}</td><td>${fmtNum(orcado[i])}</td><td>${fmtNum(realizado[i])}</td><td>${fmtNum(comprometido[i])}</td><td style="color:#2c3e50; font-weight:400;">${fmtNum(disponivel[i])}</td><td>${desvio.toFixed(1)}%</td><td><span class="status ${statusClass}">${statusLabel}</span></td><td><div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div></td></tr>`;
+            }
+            
+            const totDesvio = totOrcado > 0 ? ((totComprometido - totOrcado) / totOrcado * 100) : 0;
+            const totProgress = totOrcado > 0 ? Math.min(100, (totComprometido / totOrcado * 100)) : 0;
+
+            html += `</tbody><tfoot><tr class="total-row"><td><strong>TOTAL</strong></td><td>${fmtNum(totOrcado)}</td><td>${fmtNum(totRealizado)}</td><td>${fmtNum(totComprometido)}</td><td>${fmtNum(totDisponivel)}</td><td>${totDesvio.toFixed(1)}%</td><td>—</td><td><div class="progress-bar"><div class="progress-fill" style="width:${totProgress}%"></div></div></td></tr></tfoot>`;
+            
+            t.innerHTML = html;
+            t.querySelectorAll('tbody tr').forEach(row => {
+                row.addEventListener('click', function() {
+                    const idx = parseInt(this.dataset.index, 10);
+                    openGaugeModal(obraNome, etapas[idx], orcado[idx], comprometido[idx]);
+                });
+            });
+        }
+
+        function openGaugeModal(obra, etapa, orc, comp) {
+            document.getElementById('gaugeEtapaTitle').textContent = etapa;
+            document.getElementById('gaugeObraTitle').textContent = obra;
+            document.getElementById('gaugeOrcado').textContent = orc > 0 ? fmtMoney(orc) : 'R$ 0,00';
+            document.getElementById('gaugeRealizado').textContent = fmtMoney(comp);
+            const saldo = orc - comp;
+            const sEl = document.getElementById('gaugeSaldo');
+            sEl.textContent = fmtMoney(saldo);
+            sEl.style.color = saldo < 0 ? '#c62828' : '#1b5e20';
+
+            let pct = orc > 0 ? Math.min((comp/orc)*100, 100) : 0;
+            if(gaugeChart) gaugeChart.destroy();
+            
+            gaugeChart = new Chart(document.getElementById('chartGauge'), {
+                type: 'doughnut',
+                data: { datasets: [{ data: [pct, 100 - pct], backgroundColor: [saldo < 0 ? '#d32f2f' : '#558b2f', '#e8eaed'], borderWidth: 0 }] },
+                options: { circumference: 180, rotation: -90, cutout: '75%', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } } }
+            });
+            document.getElementById('gaugePercent').textContent = (orc > 0 ? ((comp/orc)*100).toFixed(1) : '100') + '%';
+            document.getElementById('modalGauge').classList.add('active');
+        }
+
+        // --- HISTÓRICO COM RENDERIZAÇÃO CORES DINÂMICAS ---
+        function createColumnChart(canvasId, labels, data) {
+            const columnColors = labels.map(label => {
+                if(label.includes('/26')) {
+                    const mes = label.split('/')[0];
+                    const mesesFuturos = ['jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+                    if(mesesFuturos.includes(mes)) return '#f39c12';
+                }
+                return '#558b2f';
+            });
+
+            new Chart(document.getElementById(canvasId), {
+                type: 'bar',
+                data: { 
+                    labels: labels, 
+                    datasets: [{ 
+                        label: 'Desembolso Mensal', 
+                        data: data, 
+                        backgroundColor: columnColors, 
+                        borderRadius: 4 
+                    }] 
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ' Desembolso: ' + fmtMoney(context.raw);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { ticks: { font: { family: "'Montserrat'", size: 10 }, maxRotation: 45 } },
+                        y: { ticks: { font: { family: "'Montserrat'" }, callback: v => fmtNum(v) } }
+                    }
+                }
+            });
+        }
+
+        // --- INITIALIZATION ---
+        window.addEventListener('DOMContentLoaded', () => {
+            createPieChart('chartMirantePie', miranteEtapas, miranteOrcado);
+            createPieChart('chartJoaquimPie', joaquimEtapas, joaquimOrcado);
+            createBarChart('chartMiranteBar', miranteEtapas, miranteOrcado, miranteComprometido);
+            createBarChart('chartJoaquimBar', joaquimEtapas, joaquimOrcado, joaquimComprometido);
+            createDisponivelChart('chartMiranteDisponivel', miranteEtapas, miranteDisponivel);
+            createDisponivelChart('chartJoaquimDisponivel', joaquimEtapas, joaquimDisponivel);
+            
+            createTable('tableMirante', 'MIRANTE DA LAGOA', miranteEtapas, miranteOrcado, miranteRealizado, miranteComprometido, miranteDisponivel);
+            createTable('tableJoaquim', 'JOAQUIM LEME', joaquimEtapas, joaquimOrcado, joaquimRealizado, joaquimComprometido, joaquimDisponivel);
+
+            runABCEngine('chartMiranteABC', 'tableABCMirante', miranteEtapas, miranteRealizado);
+            runABCEngine('chartJoaquimABC', 'tableABCJoaquim', joaquimEtapas, joaquimRealizado);
+
+            createColumnChart('chartMiranteHistorico', mesesHistorico, desembolsosMirante);
+            createColumnChart('chartJoaquimHistorico', mesesHistorico, desembolsosJoaquim);
+        });
+
+        // --- INTERACTION TABS ---
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -755,13 +785,7 @@
                 document.getElementById('subtab-'+this.dataset.subtab).classList.add('active');
             });
         });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeGaugeModal();
-                closePhotoModal();
-            }
-        });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeGaugeModal(); closePhotoModal(); } });
     </script>
 </body>
 </html>

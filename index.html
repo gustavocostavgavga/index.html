@@ -29,17 +29,32 @@
         .tab-btn.active, .tab-btn:hover { background: #558b2f; color: #ffffff; border-color: #558b2f; box-shadow: 0 0 20px rgba(85,139,47,0.3); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+        
+        /* Sub-abas principais da obra */
         .sub-tabs { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; }
         .sub-tab-btn { background: #ffffff; border: 1px solid #c0c0c0; color: #558b2f; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 400; transition: all 0.3s; font-size: 0.85rem; }
         .sub-tab-btn.active, .sub-tab-btn:hover { background: #7cb342; color: #ffffff; border-color: #7cb342; }
         .sub-tab-content { display: none; }
         .sub-tab-content.active { display: block; }
+        
+        /* Botões internos da aba Análises */
+        .analysis-tabs-container { display: flex; gap: 10px; margin-bottom: 25px; justify-content: flex-start; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; }
+        .analysis-tab-btn { background: #f8fafc; border: 1px solid #cbd5e1; color: #64748b; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s; font-size: 0.85rem; }
+        .analysis-tab-btn.active, .analysis-tab-btn:hover { background: #1b5e20; color: #ffffff; border-color: #1b5e20; }
+        .analysis-inner-content { display: none; min-height: 200px; }
+        .analysis-inner-content.active { display: block; }
+        .empty-state { text-align: center; padding: 40px; color: #7f8c8d; background: #f9f9f9; border: 1px dashed #c0c0c0; border-radius: 8px; font-style: italic; }
+
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 25px; }
         .kpi-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 18px 16px; text-align: center; transition: all 0.3s; display: flex; flex-direction: column; justify-content: center; }
         .kpi-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(85,139,47,0.15); border-color: #558b2f; }
         .kpi-card .label { font-size: 0.75rem; color: #558b2f; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
         .kpi-card .value { font-size: 1.3rem; font-weight: 700; color: #1b5e20; }
         .kpi-card .sublabel { font-size: 0.7rem; color: #558b2f; margin-top: 8px; }
+        
+        /* Estilização para o sublabel quebrado em linhas no comprometido */
+        .kpi-card .sublabel-title { display: block; margin-bottom: 3px; font-weight: 500; color: #558b2f; white-space: nowrap; }
+        .kpi-card .sublabel-value { display: block; font-size: 0.8rem; font-weight: 700; color: #1b5e20; }
         
         /* Container do Velocímetro integrado */
         .chart-container-gauge-integrated { margin: 20px auto 0 auto; width: 100%; max-width: 440px; position: relative; border-top: 1px dashed #c0c0c0; padding-top: 20px; }
@@ -190,7 +205,10 @@
                 <div class="kpi-card">
                     <div class="label">Comprometido Atual</div>
                     <div class="value">R$ 1.496.905</div>
-                    <div class="sublabel">Desembolso + Comprometido: <strong>R$ 6.453.967</strong></div>
+                    <div class="sublabel">
+                        <span class="sublabel-title">Desemb. + Comprometido</span>
+                        <span class="sublabel-value">R$ 6.453.967</span>
+                    </div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Verba Disponível</div>
@@ -278,11 +296,28 @@
                     <div class="gallery-item" onclick="openPhotoModal('27.jpeg')"><img src="27.jpeg" alt="Foto"></div>
                 </div>
             </div>
+            
             <div class="sub-tab-content" id="subtab-analises-mirante">
                 <div class="analyses-container">
-                    <div class="abc-header"><h3>Curva ABC de Desembolsos por Etapa</h3></div>
-                    <div class="chart-container"><canvas id="chartMiranteABC"></canvas></div>
-                    <div class="table-container"><table id="tableABCMirante"></table></div>
+                    <div class="analysis-tabs-container">
+                        <button class="analysis-tab-btn active" data-antab="abc-mirante">Curva ABC</button>
+                        <button class="analysis-tab-btn" data-antab="indices-mirante">Comparação de Índices</button>
+                        <button class="analysis-tab-btn" data-antab="mov-mirante">Movimentações</button>
+                    </div>
+
+                    <div class="analysis-inner-content active" id="abc-mirante">
+                        <div class="abc-header"><h3>Curva ABC de Desembolsos por Etapa</h3></div>
+                        <div class="chart-container"><canvas id="chartMiranteABC"></canvas></div>
+                        <div class="table-container"><table id="tableABCMirante"></table></div>
+                    </div>
+                    
+                    <div class="analysis-inner-content" id="indices-mirante">
+                        <div class="empty-state">Painel de Comparação de Índices (Em breve)</div>
+                    </div>
+                    
+                    <div class="analysis-inner-content" id="mov-mirante">
+                        <div class="empty-state">Painel de Movimentações (Em breve)</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -297,7 +332,10 @@
                 <div class="kpi-card">
                     <div class="label">Comprometido Atual</div>
                     <div class="value">R$ 266.230</div>
-                    <div class="sublabel">Desembolso + Comprometido: <strong>R$ 3.732.107</strong></div>
+                    <div class="sublabel">
+                        <span class="sublabel-title">Desemb. + Comprometido</span>
+                        <span class="sublabel-value">R$ 3.732.107</span>
+                    </div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Verba Disponível</div>
@@ -381,11 +419,28 @@
                     <div class="gallery-item" onclick="openPhotoModal('DJI_0389.JPG')"><img src="DJI_0389.JPG" alt="Foto"></div>
                 </div>
             </div>
+            
             <div class="sub-tab-content" id="subtab-analises-joaquim">
                 <div class="analyses-container">
-                    <div class="abc-header"><h3>Curva ABC de Desembolsos por Etapa</h3></div>
-                    <div class="chart-container"><canvas id="chartJoaquimABC"></canvas></div>
-                    <div class="table-container"><table id="tableABCJoaquim"></table></div>
+                    <div class="analysis-tabs-container">
+                        <button class="analysis-tab-btn active" data-antab="abc-joaquim">Curva ABC</button>
+                        <button class="analysis-tab-btn" data-antab="indices-joaquim">Comparação de Índices</button>
+                        <button class="analysis-tab-btn" data-antab="mov-joaquim">Movimentações</button>
+                    </div>
+
+                    <div class="analysis-inner-content active" id="abc-joaquim">
+                        <div class="abc-header"><h3>Curva ABC de Desembolsos por Etapa</h3></div>
+                        <div class="chart-container"><canvas id="chartJoaquimABC"></canvas></div>
+                        <div class="table-container"><table id="tableABCJoaquim"></table></div>
+                    </div>
+                    
+                    <div class="analysis-inner-content" id="indices-joaquim">
+                        <div class="empty-state">Painel de Comparação de Índices (Em breve)</div>
+                    </div>
+                    
+                    <div class="analysis-inner-content" id="mov-joaquim">
+                        <div class="empty-state">Painel de Movimentações (Em breve)</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -494,7 +549,6 @@
     </div>
 
     <script>
-        // --- CONFIGURAÇÃO GLOBAL DA FONTE (MONTSERRAT DEFINITIVA) ---
         Chart.defaults.font.family = "'Montserrat', sans-serif";
 
         // --- DATA ESTRUTURADA ---
@@ -559,7 +613,7 @@
             if (gaugeChart) { gaugeChart.destroy(); gaugeChart = null; }
         }
 
-        // --- SISTEMA DE VELOCÍMETRO INTEGRADO (VISÃO GERAL) ---
+        // --- ENGINES DO VELOCÍMETRO INTEGRADO ---
         function createMainGauge(canvasId, valOrcado, valDesembolso, valComprometidoTotal) {
             const maxEscala = valOrcado / 0.75; 
             const pOrcado = 0.75; 
@@ -674,11 +728,10 @@
             });
         }
 
-        // --- DEMAIS ENGINES DE GRÁFICOS ---
+        // --- DETECÇÃO DO TEXTO CENTRAL GLOBAL (PIE GRAPHS) ---
         const centerTextPlugin = {
             id: 'centerText',
             beforeDraw: function(chart) {
-                // BLINDAGEM CONTRA NaN: Só executa se as opções do plugin contiverem o texto explicitamente
                 if (chart.config.type === 'doughnut' && chart.options.plugins && chart.options.plugins.centerText && chart.options.plugins.centerText.text !== undefined) {
                     const ctx = chart.ctx;
                     const meta = chart.getDatasetMeta(0);
@@ -796,7 +849,6 @@
             });
         }
 
-        // --- MODAL DE AVANÇO ATUALIZADO (BLINDADO CONTRA PLUGIN TEXTO FANTASMA) ---
         function openGaugeModal(obra, etapa, orc, comp) {
             document.getElementById('gaugeEtapaTitle').textContent = etapa;
             document.getElementById('gaugeObraTitle').textContent = obra;
@@ -854,7 +906,6 @@
                     plugins: {
                         legend: { display: false },
                         tooltip: { enabled: false },
-                        // Força explicitamente a ausência do plugin de texto central do Chart.js neste gráfico
                         centerText: false 
                     }
                 }
@@ -900,7 +951,7 @@
             createColumnChart('chartJoaquimHistorico', mesesHistorico, desembolsosJoaquim);
         });
 
-        // --- CONTROLE DE NAVEGAÇÃO ---
+        // --- CONTROLE DE NAVEGAÇÃO DE ABAS GERAIS E SUB-ABAS ---
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -918,6 +969,20 @@
                 document.getElementById('subtab-'+this.dataset.subtab).classList.add('active');
             });
         });
+
+        // --- CONTROLE DE NAVEGAÇÃO INTERNA DA ABA DE ANÁLISES (CORRIGIDO) ---
+        document.querySelectorAll('.analysis-tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const container = this.closest('.analyses-container');
+                container.querySelectorAll('.analysis-tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                container.querySelectorAll('.analysis-inner-content').forEach(content => content.classList.remove('active'));
+                // Seleção contextual refinada buscando o elemento específico desta sub-aba
+                container.querySelector('#' + this.dataset.antab).classList.add('active');
+            });
+        });
+
         document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeGaugeModal(); closePhotoModal(); } });
     </script>
 </body>

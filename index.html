@@ -34,12 +34,17 @@
         .sub-tab-btn.active, .sub-tab-btn:hover { background: #7cb342; color: #ffffff; border-color: #7cb342; }
         .sub-tab-content { display: none; }
         .sub-tab-content.active { display: block; }
-        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 25px; }
         .kpi-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 18px 16px; text-align: center; transition: all 0.3s; }
         .kpi-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(85,139,47,0.15); border-color: #558b2f; }
         .kpi-card .label { font-size: 0.75rem; color: #558b2f; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
         .kpi-card .value { font-size: 1.3rem; font-weight: 700; color: #1b5e20; }
         .kpi-card .sublabel { font-size: 0.7rem; color: #558b2f; margin-top: 8px; }
+        
+        /* Container do Velocímetro integrado */
+        .chart-container-gauge-integrated { margin: 20px auto 0 auto; width: 100%; max-width: 440px; position: relative; border-top: 1px dashed #c0c0c0; padding-top: 20px; }
+        .main-gauge-wrapper { position: relative; width: 100%; height: 165px; margin-top: 5px; }
+
         .chart-grid-top { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
         .chart-container-pie { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 15px; position: relative; }
         .chart-container-pie canvas { max-height: 350px; }
@@ -75,6 +80,8 @@
         .chart-grid-bottom { display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 30px; }
         @media (max-width: 992px) {
             .summary-container { grid-template-columns: 1fr !important; }
+            .summary-operator { font-size: 1.5rem !important; margin: 5px 0 !important; }
+            .executive { grid-template-columns: 1fr !important; }
         }
         @media (max-width: 768px) {
             .chart-grid-top { grid-template-columns: 1fr; }
@@ -82,7 +89,8 @@
             header h1 { font-size: 1.5rem; }
             .planejamento-container { grid-template-columns: 1fr !important; }
         }
-        .executive { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .executive { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+        .executive-column { display: flex; flex-direction: column; }
         .executive-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; }
         .executive-card h3 { color: #1b5e20; margin-bottom: 15px; font-size: 1.1rem; }
         .executive-card .kpi-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e0e0e0; }
@@ -130,11 +138,10 @@
         .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #2c3e50; }
         .legend-color { width: 20px; height: 20px; border-radius: 3px; }
         
-        /* Nova estrutura do grid de resumos inferiores expandida para 3 colunas */
-        .summary-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 20px; }
-        .summary-box { background: #ffffff; border: 2px solid #1b5e20; border-radius: 12px; padding: 18px; text-align: center; }
+        .summary-container { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 20px; flex-wrap: nowrap; }
+        .summary-box { background: #ffffff; border: 2px solid #1b5e20; border-radius: 12px; padding: 18px; text-align: center; flex: 1; min-height: 110px; display: flex; flex-direction: column; justify-content: center; }
         .summary-box .summary-title { font-size: 0.85rem; font-weight: 600; color: #1b5e20; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-        .summary-box .summary-value { font-size: 1.5rem; font-weight: 700; color: #1b5e20; }
+        .summary-box .summary-value { font-size: 1.4rem; font-weight: 700; color: #1b5e20; }
         
         .summary-box.projected { border-color: #f39c12; }
         .summary-box.projected .summary-title { color: #e67e22; }
@@ -143,6 +150,16 @@
         .summary-box.executed-projected { border-color: #1a5276; }
         .summary-box.executed-projected .summary-title { color: #2471a3; }
         .summary-box.executed-projected .summary-value { color: #1a5276; }
+
+        .summary-box.result-extrapolacao { border-color: #c62828; background: #ffebee; }
+        .summary-box.result-extrapolacao .summary-title { color: #c62828; }
+        .summary-box.result-extrapolacao .summary-value { color: #b71c1c; }
+
+        .summary-box.result-economia { border-color: #2e7d32; background: #e8f5e9; }
+        .summary-box.result-economia .summary-title { color: #2e7d32; }
+        .summary-box.result-economia .summary-value { color: #1b5e20; }
+
+        .summary-operator { font-size: 2rem; font-weight: 700; color: #7f8c8d; user-select: none; padding: 0 5px; text-align: center; }
     </style>
 </head>
 <body>
@@ -159,38 +176,19 @@
             <button class="tab-btn" data-tab="geral"><strong>VISÃO GERAL</strong></button>
         </div>
         
-        <!-- MIRANTE DA LAGOA -->
         <div class="tab-content active" id="tab-mirante">
             <div class="title-section tab-obra-header">
                 <p class="obra-entrega">Prazo final de entrega: <strong>31/07/2026</strong></p>
             </div>
             <div class="kpi-grid">
-                <div class="kpi-card">
-                    <div class="label">Orçado Total</div>
-                    <div class="value">R$ 7.859.182</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="label">Desembolso Acumulado</div>
-                    <div class="value">R$ 4.957.062</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="label">Total Comprometido</div>
-                    <div class="value">R$ 6.453.967</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="label">Verba Disponível</div>
-                    <div class="value">R$ 1.405.215</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="label">Desvio Orçamentário</div>
-                    <div class="value" style="color: #2e7d32;">-17,9%</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="label">Custo/Lote</div>
-                    <div class="value">R$ 9.155</div>
-                    <div class="sublabel">705 Lotes</div>
-                </div>
+                <div class="kpi-card"><div class="label">Orçado Total</div><div class="value">R$ 7.859.182</div></div>
+                <div class="kpi-card"><div class="label">Desembolso Acumulado</div><div class="value">R$ 4.957.062</div></div>
+                <div class="kpi-card"><div class="label">Total Comprometido</div><div class="value">R$ 1.496.905</div></div>
+                <div class="kpi-card"><div class="label">Verba Disponível</div><div class="value">R$ 1.405.215</div></div>
+                <div class="kpi-card"><div class="label">Desvio Orçamentário</div><div class="value" style="color: #2e7d32;">-17,9%</div></div>
+                <div class="kpi-card"><div class="label">Custo/Lote</div><div class="value">R$ 9.155</div><div class="sublabel">705 Lotes</div></div>
             </div>
+
             <div class="sub-tabs">
                 <button class="sub-tab-btn active" data-subtab="detalhe-mirante">Detalhamento por Etapa</button>
                 <button class="sub-tab-btn" data-subtab="historico-mirante">Fluxo de Desembolsos</button>
@@ -201,7 +199,7 @@
             <div class="sub-tab-content active" id="subtab-detalhe-mirante">
                 <div class="chart-grid-top">
                     <div class="chart-container-pie">
-                        <div class="chart-title">Distribuição percentual por etapa (Orçado)</div>
+                        <div class="chart-title">Distribuição percentual por etapa</div>
                         <canvas id="chartMirantePie"></canvas>
                     </div>
                     <div class="chart-container-disponivel">
@@ -225,18 +223,13 @@
                     <div class="chart-title">Histórico e Projeção de Desembolsos</div>
                     <canvas id="chartMiranteHistorico"></canvas>
                     <div class="summary-container">
-                        <div class="summary-box">
-                            <div class="summary-title">Valor Total Desembolsado no Período</div>
-                            <div class="summary-value">R$ 4.957.062</div>
-                        </div>
-                        <div class="summary-box projected">
-                            <div class="summary-title">Valor Total de Desembolso Projetado</div>
-                            <div class="summary-value">R$ 3.380.322,29</div>
-                        </div>
-                        <div class="summary-box executed-projected">
-                            <div class="summary-title">Valor Executado Projetado</div>
-                            <div class="summary-value">R$ 8.337.384,29</div>
-                        </div>
+                        <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 4.957.062</div></div>
+                        <div class="summary-operator">+</div>
+                        <div class="summary-box projected"><div class="summary-title">Valor Total de Desembolso Projetado</div><div class="summary-value">R$ 3.380.322,29</div></div>
+                        <div class="summary-operator">=</div>
+                        <div class="summary-box executed-projected"><div class="summary-title">Valor de Execução Projetado</div><div class="summary-value">R$ 8.337.384,29</div></div>
+                        <div class="summary-operator">|</div>
+                        <div class="summary-box result-extrapolacao"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 478.202,29</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Extrapolação</div></div>
                     </div>
                 </div>
             </div>
@@ -271,60 +264,39 @@
             </div>
             <div class="sub-tab-content" id="subtab-analises-mirante">
                 <div class="analyses-container">
-                    <div class="abc-header">
-                        <h3>Curva ABC de Desembolsos por Etapa</h3>
-                    </div>
+                    <div class="abc-header"><h3>Curva ABC de Desembolsos por Etapa</h3></div>
                     <div class="chart-container"><canvas id="chartMiranteABC"></canvas></div>
-                    <div class="table-container">
-                        <table id="tableABCMirante"></table>
-                    </div>
+                    <div class="table-container"><table id="tableABCMirante"></table></div>
                 </div>
             </div>
         </div>
         
-        <!-- JOAQUIM LEME -->
         <div class="tab-content" id="tab-joaquim">
             <div class="title-section tab-obra-header">
                 <p class="obra-entrega">Prazo final de entrega: <strong>31/08/2026</strong></p>
             </div>
             <div class="kpi-grid">
-                <div class="kpi-card">
-                    <div class="label">Orçado Total</div>
-                    <div class="value">R$ 5.019.403</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="label">Desembolso Acumulado</div>
-                    <div class="value">R$ 3.465.877</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="label">Total Comprometido</div>
-                    <div class="value">R$ 3.732.107</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="label">Verba Disponível</div>
-                    <div class="value">R$ 1.287.297</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="label">Desvio Orçamentário</div>
-                    <div class="value" style="color: #2e7d32;">-25,6%</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="label">Custo/Lote</div>
-                    <div class="value">R$ 6.479</div>
-                    <div class="sublabel">576 Lotes</div>
-                </div>
+                <div class="kpi-card"><div class="label">Orçado Total</div><div class="value">R$ 5.019.403</div></div>
+                <div class="kpi-card"><div class="label">Desembolso Acumulado</div><div class="value">R$ 3.465.877</div></div>
+                <div class="kpi-card"><div class="label">Total Comprometido</div><div class="value">R$ 266.230</div></div>
+                <div class="kpi-card"><div class="label">Verba Disponível</div><div class="value">R$ 1.287.297</div></div>
+                <div class="kpi-card"><div class="label">Desvio Orçamentário</div><div class="value" style="color: #2e7d32;">-25,6%</div></div>
+                <div class="kpi-card"><div class="label">Custo/Lote</div><div class="value">R$ 6.479</div><div class="sublabel">576 Lotes</div></div>
             </div>
-            <div class="sub-tabs">
-                <button class="sub-tab-btn active" data-subtab="detalhe-joaquim">Detalhamento por Etapa</button>
-                <button class="sub-tab-btn" data-subtab="historico-joaquim">Fluxo de Desembolsos</button>
-                <button class="sub-tab-btn" data-subtab="planejamento-joaquim">Planejamento</button>
-                <button class="sub-tab-btn" data-subtab="fotos-joaquim">Galeria de Fotos</button>
-                <button class="sub-tab-btn" data-subtab="analises-joaquim">Análises</button>
+
+            <div class="tabs-s">
+                <div class="sub-tabs">
+                    <button class="sub-tab-btn active" data-subtab="detalhe-joaquim">Detalhamento por Etapa</button>
+                    <button class="sub-tab-btn" data-subtab="historico-joaquim">Fluxo de Desembolsos</button>
+                    <button class="sub-tab-btn" data-subtab="planejamento-joaquim">Planejamento</button>
+                    <button class="sub-tab-btn" data-subtab="fotos-joaquim">Galeria de Fotos</button>
+                    <button class="sub-tab-btn" data-subtab="analises-joaquim">Análises</button>
+                </div>
             </div>
             <div class="sub-tab-content active" id="subtab-detalhe-joaquim">
                 <div class="chart-grid-top">
                     <div class="chart-container-pie">
-                        <div class="chart-title">Distribuição percentual por etapa (Orçado)</div>
+                        <div class="chart-title">Distribuição percentual por etapa</div>
                         <canvas id="chartJoaquimPie"></canvas>
                     </div>
                     <div class="chart-container-disponivel">
@@ -339,27 +311,20 @@
                     </div>
                 </div>
                 <p class="table-hint">Clique em uma etapa para visualizar o avanço (Comprometido × Orçado)</p>
-                <div class="table-container">
-                    <table id="tableJoaquim"></table>
-                </div>
+                <div class="table-container"><table id="tableJoaquim"></table></div>
             </div>
             <div class="sub-tab-content" id="subtab-historico-joaquim">
                 <div class="chart-container">
                     <div class="chart-title">Histórico e Projeção de Desembolsos</div>
                     <canvas id="chartJoaquimHistorico"></canvas>
                     <div class="summary-container">
-                        <div class="summary-box">
-                            <div class="summary-title">Valor Total Desembolsado no Período</div>
-                            <div class="summary-value">R$ 3.465.877</div>
-                        </div>
-                        <div class="summary-box projected">
-                            <div class="summary-title">Valor Total de Desembolso Projetado</div>
-                            <div class="summary-value">R$ 1.049.898,94</div>
-                        </div>
-                        <div class="summary-box executed-projected">
-                            <div class="summary-title">Valor Executado Projetado</div>
-                            <div class="summary-value">R$ 4.515.775,94</div>
-                        </div>
+                        <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 3.465.877</div></div>
+                        <div class="summary-operator">+</div>
+                        <div class="summary-box projected"><div class="summary-title">Valor Total de Desembolso Projetado</div><div class="summary-value">R$ 1.049.898,94</div></div>
+                        <div class="summary-operator">=</div>
+                        <div class="summary-box executed-projected"><div class="summary-title">Valor de Execução Projetado</div><div class="summary-value">R$ 4.515.775,94</div></div>
+                        <div class="summary-operator">|</div>
+                        <div class="summary-box result-economia"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 503.627,06</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Economia</div></div>
                     </div>
                 </div>
             </div>
@@ -390,55 +355,68 @@
             </div>
             <div class="sub-tab-content" id="subtab-analises-joaquim">
                 <div class="analyses-container">
-                    <div class="abc-header">
-                        <h3>Curva ABC de Desembolsos por Etapa</h3>
-                    </div>
+                    <div class="abc-header"><h3>Curva ABC de Desembolsos por Etapa</h3></div>
                     <div class="chart-container"><canvas id="chartJoaquimABC"></canvas></div>
-                    <div class="table-container">
-                        <table id="tableABCJoaquim"></table>
-                    </div>
+                    <div class="table-container"><table id="tableABCJoaquim"></table></div>
                 </div>
             </div>
         </div>
         
-        <!-- VISÃO GERAL -->
         <div class="tab-content" id="tab-geral">
             <div class="kpi-grid">
                 <div class="kpi-card"><div class="label">Orçado Total Operação</div><div class="value">R$ 12.878.585</div></div>
                 <div class="kpi-card"><div class="label">Realizado Total</div><div class="value">R$ 8.422.939</div></div>
-                <div class="kpi-card"><div class="label">Total Comprometido</div><div class="value">R$ 10.186.074</div></div>
+                <div class="kpi-card"><div class="label">Total Comprometido</div><div class="value">R$ 1.763.135</div></div>
                 <div class="kpi-card"><div class="label">Verba Disponível Total</div><div class="value">R$ 2.692.511</div></div>
             </div>
             <div class="executive">
-                <div class="executive-card">
-                    <h3>MIRANTE DA LAGOA</h3>
-                    <div class="kpi-item"><span class="label">Prazo final de entrega</span><span class="value">31/07/2026</span></div>
-                    <div class="kpi-item"><span class="label">Cidade</span><span class="value">Bocaiúva</span></div>
-                    <div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
-                    <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">705</span></div>
-                    <div class="kpi-item"><span class="label">Orçado</span><span class="value">R$ 7.859.182</span></div>
-                    <div class="kpi-item"><span class="label">Realizado</span><span class="value">R$ 4.957.062</span></div>
-                    <div class="kpi-item"><span class="label">Total Comprometido</span><span class="value">R$ 6.453.967</span></div>
-                    <div class="kpi-item"><span class="label">Verba Disponível</span><span class="value">R$ 1.405.215</span></div>
-                    <div class="kpi-item"><span class="label">Custo/Lote</span><span class="value">R$ 9.155</span></div>
+                <div class="executive-column">
+                    <div class="executive-card">
+                        <h3>MIRANTE DA LAGOA</h3>
+                        <div class="kpi-item"><span class="label">Prazo final de entrega</span><span class="value">31/07/2026</span></div>
+                        <div class="kpi-item"><span class="label">Cidade</span><span class="value">Bocaiúva</span></div>
+                        <div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
+                        <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">705</span></div>
+                        <div class="kpi-item"><span class="label">Orçado</span><span class="value">R$ 7.859.182</span></div>
+                        <div class="kpi-item"><span class="label">Desembolso Acumulado</span><span class="value">R$ 4.957.062</span></div>
+                        <div class="kpi-item"><span class="label">Total Comprometido</span><span class="value">R$ 1.496.905</span></div>
+                        <div class="kpi-item"><span class="label">Verba Disponível</span><span class="value">R$ 1.405.215</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote</span><span class="value">R$ 9.155</span></div>
+                        
+                        <div class="chart-container-gauge-integrated">
+                            <div class="chart-title" style="font-size: 0.95rem; margin-bottom: 5px;">Avanço Financeiro</div>
+                            <div class="main-gauge-wrapper">
+                                <canvas id="gaugeMainMirante"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="executive-card">
-                    <h3>JOAQUIM LEME</h3>
-                    <div class="kpi-item"><span class="label">Prazo final de entrega</span><span class="value">31/08/2026</span></div>
-                    <div class="kpi-item"><span class="label">Cidade</span><span class="value">Ituiutaba</span></div>
-                    <div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
-                    <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">576</span></div>
-                    <div class="kpi-item"><span class="label">Orçado</span><span class="value">R$ 5.019.403</span></div>
-                    <div class="kpi-item"><span class="label">Realizado</span><span class="value">R$ 3.465.877</span></div>
-                    <div class="kpi-item"><span class="label">Total Comprometido</span><span class="value">R$ 3.732.107</span></div>
-                    <div class="kpi-item"><span class="label">Verba Disponível</span><span class="value">R$ 1.287.297</span></div>
-                    <div class="kpi-item"><span class="label">Custo/Lote</span><span class="value">R$ 6.479</span></div>
+
+                <div class="executive-column">
+                    <div class="executive-card">
+                        <h3>JOAQUIM LEME</h3>
+                        <div class="kpi-item"><span class="label">Prazo final de entrega</span><span class="value">31/08/2026</span></div>
+                        <div class="kpi-item"><span class="label">Cidade</span><span class="value">Ituiutaba</span></div>
+                        <div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
+                        <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">576</span></div>
+                        <div class="kpi-item"><span class="label">Orçado</span><span class="value">R$ 5.019.403</span></div>
+                        <div class="kpi-item"><span class="label">Desembolso Acumulado</span><span class="value">R$ 3.465.877</span></div>
+                        <div class="kpi-item"><span class="label">Total Comprometido</span><span class="value">R$ 266.230</span></div>
+                        <div class="kpi-item"><span class="label">Verba Disponível</span><span class="value">R$ 1.287.297</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote</span><span class="value">R$ 6.479</span></div>
+                        
+                        <div class="chart-container-gauge-integrated">
+                            <div class="chart-title" style="font-size: 0.95rem; margin-bottom: 5px;">Avanço Financeiro</div>
+                            <div class="main-gauge-wrapper">
+                                <canvas id="gaugeMainJoaquim"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modais -->
     <div class="modal" id="photoGlobalModal" onclick="if(event.target===this) closePhotoModal()">
         <div class="modal-content">
             <span class="modal-close" onclick="closePhotoModal()">&times;</span>
@@ -467,6 +445,9 @@
     </div>
 
     <script>
+        // --- CONFIGURAÇÃO GLOBAL DA FONTE (MONTSERRAT DEFINITIVA) ---
+        Chart.defaults.font.family = "'Montserrat', sans-serif";
+
         // --- DATA ESTRUTURADA ---
         const miranteEtapas = ['TOPOGRAFIA E CONTROLE','MANUTENÇÕES / AS BUILTS','TERRAPLANAGEM','DRENAGEM','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','MEIO AMBIENTE','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
         const miranteOrcado = [36057.70, 234986.23, 134826.68, 278796.63, 207210.79, 645418.69, 176835.76, 313662.78, 597885.26, 2774330.81, 790022.37, 1316034.53, 94960.90, 258152.78];
@@ -480,7 +461,6 @@
         const joaquimComprometido = [0.00, 119574.27, 213214.32, 52733.62, 1061802.54, 185722.94, 26849.90, 7231.00, 0.00, 1846216.57, 20803.58, 14400.00, 0.00, 183557.87];
         const joaquimDisponivel = joaquimOrcado.map((orc, idx) => orc - joaquimComprometido[idx]);
 
-        // --- DADOS DO FLUXO ATUALIZADOS ATÉ DEZEMBRO/2026 ---
         const mesesHistorico = [
             'ago/23','set/23','out/23','nov/23','dez/23',
             'jan/24','fev/24','mar/24','abr/24','mai/24','jun/24','jul/24','ago/24','set/24','out/24','nov/24','dez/24',
@@ -505,14 +485,14 @@
             357168.57, 525167.39, 489187.97, -60089.99, -62289.99, -62829.99, -62829.99
         ];
 
-        function fmtNum(n) { 
-            return Math.ceil(n).toLocaleString('pt-BR'); 
-        }
+        function fmtNum(n) { return Math.ceil(n).toLocaleString('pt-BR'); }
+        
+        // CORREÇÃO DEFINITIVA DA FUNÇÃO DE FORMATAÇÃO DE MOEDA
         function fmtMoney(n) { 
+            if (n === null || n === undefined || isNaN(n) || String(n).includes('NaN')) return '-';
             return 'R$ ' + parseFloat(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); 
         }
 
-        // --- GLOBAL CONFIGS & MODALS ---
         let gaugeChart = null;
         function openPhotoModal(imgSrc) {
             const modal = document.getElementById('photoGlobalModal');
@@ -530,7 +510,160 @@
             if (gaugeChart) { gaugeChart.destroy(); gaugeChart = null; }
         }
 
-        // --- CHART GENERATORS ---
+        // --- SISTEMA DE VELOCÍMETRO INTERATIVO SEM DIVISÓRIAS ---
+        function createMainGauge(canvasId, valOrcado, valDesembolso, valComprometidoTotal) {
+            const maxEscala = valOrcado / 0.75; 
+            
+            const pOrcado = 0.75; 
+            const pDesembolso = Math.min(valDesembolso / maxEscala, 1.1);
+            const pComprometido = Math.min(valComprometidoTotal / maxEscala, 1.1);
+
+            const temEstouro = (pDesembolso > 0.75 || pComprometido > 0.75);
+            const corQuartaFaixa = temEstouro ? '#e53935' : '#b0bec5'; 
+
+            let hoveredNeedle = null;
+
+            const gaugePlugin = {
+                id: 'gaugeNeedlesWithLabels',
+                afterDraw: (chart) => {
+                    const { ctx } = chart;
+                    const meta = chart.getDatasetMeta(0);
+                    if (!meta.data || !meta.data[0]) return;
+                    
+                    const cx = meta.data[0].x;
+                    const cy = meta.data[0].y;
+                    const r = meta.data[0].outerRadius;
+
+                    chart.gaugeNeedlePoints = [
+                        { id: 'desembolsado', pct: pDesembolso, color: '#ff6d00', textColor: '#ff6d00', label: 'Desembolsado', valStr: fmtMoney(valDesembolso), offset: 12 },
+                        { id: 'comprometido', pct: pComprometido, color: '#81c784', textColor: '#2e7d32', label: 'Desemb. + Comprometido', valStr: fmtMoney(valComprometidoTotal), offset: 26 },
+                        { id: 'orcado', pct: pOrcado, color: '#1565c0', textColor: '#1565c0', label: 'Orçado Total', valStr: fmtMoney(valOrcado), offset: 40 }
+                    ];
+
+                    chart.gaugeNeedlePoints.forEach(needle => {
+                        const isHovered = (hoveredNeedle === needle.id);
+                        const angle = Math.PI + (needle.pct * Math.PI);
+                        
+                        ctx.save();
+                        ctx.translate(cx, cy);
+                        ctx.rotate(angle);
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(0, isHovered ? -8 : -6);       
+                        ctx.lineTo(r, isHovered ? -3 : -2);       
+                        ctx.lineTo(r, isHovered ? 3 : 2);        
+                        ctx.lineTo(0, isHovered ? 8 : 6);        
+                        ctx.fillStyle = needle.color;
+                        ctx.globalAlpha = isHovered ? 1.0 : 0.9;
+                        ctx.fill();
+                        ctx.restore();
+
+                        const textRadius = r + needle.offset; 
+                        const tx = cx + textRadius * Math.cos(angle);
+                        const ty = cy + textRadius * Math.sin(angle);
+
+                        ctx.save();
+                        ctx.font = isHovered ? "bold 10px 'Montserrat'" : "bold 9px 'Montserrat'";
+                        ctx.fillStyle = "#2c3e50";
+                        
+                        if (Math.cos(angle) > 0.1) {
+                            ctx.textAlign = "left";
+                        } else if (Math.cos(angle) < -0.1) {
+                            ctx.textAlign = "right";
+                        } else {
+                            ctx.textAlign = "center";
+                        }
+                        
+                        ctx.textBaseline = "middle";
+                        
+                        if(isHovered) {
+                            ctx.shadowColor = 'rgba(0,0,0,0.15)';
+                            ctx.shadowBlur = 4;
+                        }
+                        
+                        ctx.fillText(needle.label, tx, ty - 5);
+                        ctx.font = isHovered ? "700 10px 'Montserrat'" : "600 9px 'Montserrat'";
+                        ctx.fillStyle = needle.textColor;
+                        ctx.fillText(needle.valStr, tx, ty + 5);
+                        ctx.restore();
+                    });
+
+                    // Pivô Central de Acabamento Absoluto
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, 14, 0, 2 * Math.PI);
+                    ctx.fillStyle = '#1a5276';
+                    ctx.fill();
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.stroke();
+                    ctx.restore();
+                }
+            };
+
+            const chartInstance = new Chart(document.getElementById(canvasId), {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [25, 25, 25, 25],
+                        backgroundColor: ['#1b5e20', '#1b5e20', '#1b5e20', corQuartaFaixa],
+                        borderWidth: 0,
+                        borderColor: 'transparent'
+                    }]
+                },
+                options: {
+                    rotation: -90,
+                    circumference: 180,
+                    cutout: '72%',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: { top: 35, bottom: 5, left: 75, right: 75 } 
+                    },
+                    plugins: {
+                        tooltip: { enabled: false },
+                        legend: { display: false }
+                    },
+                    onHover: (event, activeElements) => {
+                        const canvas = event.chart.canvas;
+                        const x = event.x;
+                        const y = event.y;
+                        
+                        const meta = event.chart.getDatasetMeta(0);
+                        if (!meta.data || !meta.data[0]) return;
+                        const cx = meta.data[0].x;
+                        const cy = meta.data[0].y;
+                        
+                        const dx = x - cx;
+                        const dy = y - cy;
+                        const angleMouse = Math.atan2(dy, dx);
+                        const normAngle = angleMouse < 0 ? angleMouse + 2 * Math.PI : angleMouse;
+                        
+                        let currentHover = null;
+                        
+                        if (event.chart.gaugeNeedlePoints && y <= cy + 15) {
+                            event.chart.gaugeNeedlePoints.forEach(needle => {
+                                let targetAngle = Math.PI + (needle.pct * Math.PI);
+                                targetAngle = targetAngle < 0 ? targetAngle + 2 * Math.PI : targetAngle;
+                                
+                                if (Math.abs(normAngle - targetAngle) < 0.08) {
+                                    currentHover = needle.id;
+                                }
+                            });
+                        }
+                        
+                        if (hoveredNeedle !== currentHover) {
+                            hoveredNeedle = currentHover;
+                            canvas.style.cursor = currentHover ? 'pointer' : 'default';
+                            event.chart.draw();
+                        }
+                    }
+                },
+                plugins: [gaugePlugin]
+            });
+        }
+
+        // --- DEMAIS ENGINES DE GRÁFICOS DO SISTEMA ---
         const centerTextPlugin = {
             id: 'centerText',
             beforeDraw: function(chart) {
@@ -566,7 +699,16 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: { position: 'right', labels: { color: '#000000', font: { size: 9, family: "'Montserrat'" }, padding: 8 } },
-                        centerText: { text: totalSum }
+                        centerText: { text: totalSum },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let value = context.parsed;
+                                    let percentage = ((value / totalSum) * 100).toFixed(1) + '%';
+                                    return ` ${context.label}: ${fmtMoney(value)} (${percentage})`;
+                                }
+                            }
+                        }
                     }
                 }
             });
@@ -606,7 +748,6 @@
             });
         }
 
-        // --- LINEAR ABC ENGINE ---
         function runABCEngine(canvasId, tableId, labels, valores) {
             let dados = labels.map((l, i) => ({ etapa: l, valor: valores[i] })).sort((a, b) => b.valor - a.valor);
             let total = dados.reduce((a, b) => a + b.valor, 0) || 1;
@@ -614,7 +755,6 @@
             let pAcum = [], etapasOrd = [], valsOrd = [], classes = [];
 
             let html = '<thead><tr><th>Etapa</th><th>Valor Desembolsado</th><th>% Ind.</th><th>Acumulado</th><th>% Acum.</th><th>Classe</th></tr></thead><tbody>';
-            
             for (let i = 0; i < dados.length; i++) {
                 acumulado += dados[i].valor;
                 let pctInd = (dados[i].valor / total) * 100;
@@ -622,11 +762,9 @@
                 pAcum.push(pctAcum);
                 etapasOrd.push(dados[i].etapa);
                 valsOrd.push(dados[i].valor);
-
                 let classe = pctAcum <= 80 ? 'A' : pctAcum <= 95 ? 'B' : 'C';
                 classes.push(classe);
                 let clsColor = classe === 'A' ? 'classA' : classe === 'B' ? 'classB' : 'classC';
-
                 html += `<tr><td>${dados[i].etapa}</td><td>${fmtMoney(dados[i].valor)}</td><td>${pctInd.toFixed(1)}%</td><td>${fmtMoney(acumulado)}</td><td>${pctAcum.toFixed(1)}%</td><td><span class="status ${clsColor}">${classe}</span></td></tr>`;
             }
             html += '</tbody>';
@@ -648,11 +786,9 @@
             });
         }
 
-        // --- DETAILED TABLES MAPPING WITH TOTALIZATOR ---
         function createTable(tableId, obraNome, etapas, orcado, realizado, comprometido, disponivel) {
             const t = document.getElementById(tableId);
             let html = '<thead><tr><th>Macro Etapa</th><th>Orçado Total</th><th>Realizado</th><th>Comprometido</th><th>Verba Disponível</th><th>% Desvio</th><th>Status</th><th>Progresso</th></tr></thead><tbody>';
-            
             let totOrcado = 0, totRealizado = 0, totComprometido = 0, totDisponivel = 0;
 
             for(let i=0; i<etapas.length; i++){
@@ -668,7 +804,6 @@
 
                 html += `<tr class="etapa-row" data-index="${i}"><td>${etapas[i]}</td><td>${fmtNum(orcado[i])}</td><td>${fmtNum(realizado[i])}</td><td>${fmtNum(comprometido[i])}</td><td style="color:#2c3e50; font-weight:400;">${fmtNum(disponivel[i])}</td><td>${desvio.toFixed(1)}%</td><td><span class="status ${statusClass}">${statusLabel}</span></td><td><div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div></td></tr>`;
             }
-            
             const totDesvio = totOrcado > 0 ? ((totComprometido - totOrcado) / totOrcado * 100) : 0;
             const totProgress = totOrcado > 0 ? Math.min(100, (totComprometido / totOrcado * 100)) : 0;
 
@@ -683,29 +818,53 @@
             });
         }
 
+        // BLINDAGEM COMPLETA DENTRO DO MODAL INTERATIVO CONTRA O BUG NaN
         function openGaugeModal(obra, etapa, orc, comp) {
             document.getElementById('gaugeEtapaTitle').textContent = etapa;
             document.getElementById('gaugeObraTitle').textContent = obra;
-            document.getElementById('gaugeOrcado').textContent = orc > 0 ? fmtMoney(orc) : 'R$ 0,00';
-            document.getElementById('gaugeRealizado').textContent = fmtMoney(comp);
-            const saldo = orc - comp;
+            
+            // Tratamento rígido de entrada: se não houver orçamento válido, define como nulo
+            const orcadoValido = (isNaN(orc) || orc === null || orc === undefined || parseFloat(orc) === 0) ? null : parseFloat(orc);
+            const comprometidoValido = (isNaN(comp) || comp === null || comp === undefined) ? 0 : parseFloat(comp);
+            
+            // Renderização protegida dos textos inferiores
+            document.getElementById('gaugeOrcado').textContent = orcadoValido !== null ? fmtMoney(orcadoValido) : '-';
+            document.getElementById('gaugeRealizado').textContent = fmtMoney(comprometidoValido);
+            
+            // Cálculo do saldo blindado contra NaN
+            let saldo = null;
+            if (orcadoValido !== null) {
+                saldo = orcadoValido - comprometidoValido;
+            }
+            
             const sEl = document.getElementById('gaugeSaldo');
             sEl.textContent = fmtMoney(saldo);
-            sEl.style.color = saldo < 0 ? '#c62828' : '#1b5e20';
+            
+            if (saldo !== null) {
+                sEl.style.color = saldo < 0 ? '#c62828' : '#1b5e20';
+            } else {
+                sEl.style.color = '#2c3e50';
+            }
 
-            let pct = orc > 0 ? Math.min((comp/orc)*100, 100) : 0;
+            // Cálculo da porcentagem do velocímetro livre de divisões por zero ou NaN
+            let pct = 0;
+            if (orcadoValido !== null && orcadoValido > 0) {
+                pct = Math.min((comprometidoValido / orcadoValido) * 100, 100);
+            }
+            
             if(gaugeChart) gaugeChart.destroy();
             
             gaugeChart = new Chart(document.getElementById('chartGauge'), {
                 type: 'doughnut',
-                data: { datasets: [{ data: [pct, 100 - pct], backgroundColor: [saldo < 0 ? '#d32f2f' : '#558b2f', '#e8eaed'], borderWidth: 0 }] },
+                data: { datasets: [{ data: [pct, 100 - pct], backgroundColor: [(saldo !== null && saldo < 0) ? '#d32f2f' : '#558b2f', '#e8eaed'], borderWidth: 0 }] },
                 options: { circumference: 180, rotation: -90, cutout: '75%', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } } }
             });
-            document.getElementById('gaugePercent').textContent = (orc > 0 ? ((comp/orc)*100).toFixed(1) : '100') + '%';
+            
+            // Atualiza o indicador percentual interno textualmente
+            document.getElementById('gaugePercent').textContent = (orcadoValido !== null && orcadoValido > 0) ? pct.toFixed(1) + '%' : '-';
             document.getElementById('modalGauge').classList.add('active');
         }
 
-        // --- HISTÓRICO COM RENDERIZAÇÃO CORES DINÂMICAS ---
         function createColumnChart(canvasId, labels, data) {
             const columnColors = labels.map(label => {
                 if(label.includes('/26')) {
@@ -718,28 +877,11 @@
 
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
-                data: { 
-                    labels: labels, 
-                    datasets: [{ 
-                        label: 'Desembolso Mensal', 
-                        data: data, 
-                        backgroundColor: columnColors, 
-                        borderRadius: 4 
-                    }] 
-                },
+                data: { datasets: [{ label: 'Desembolso Mensal', data: data, backgroundColor: columnColors, borderRadius: 4 }], labels: labels },
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false, 
-                    plugins: { 
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return ' Desembolso: ' + fmtMoney(context.raw);
-                                }
-                            }
-                        }
-                    },
+                    plugins: { legend: { display: false } },
                     scales: {
                         x: { ticks: { font: { family: "'Montserrat'", size: 10 }, maxRotation: 45 } },
                         y: { ticks: { font: { family: "'Montserrat'" }, callback: v => fmtNum(v) } }
@@ -748,8 +890,12 @@
             });
         }
 
-        // --- INITIALIZATION ---
+        // --- LIFE-CYCLE INIT ---
         window.addEventListener('DOMContentLoaded', () => {
+            // Inicialização dos Velocímetros Principais Integrados
+            createMainGauge('gaugeMainMirante', 7859182, 4957062, 6453967);
+            createMainGauge('gaugeMainJoaquim', 5019403, 3465877, 3732107);
+
             createPieChart('chartMirantePie', miranteEtapas, miranteOrcado);
             createPieChart('chartJoaquimPie', joaquimEtapas, joaquimOrcado);
             createBarChart('chartMiranteBar', miranteEtapas, miranteOrcado, miranteComprometido);
@@ -767,7 +913,7 @@
             createColumnChart('chartJoaquimHistorico', mesesHistorico, desembolsosJoaquim);
         });
 
-        // --- INTERACTION TABS ---
+        // --- CONTROLE DE NAVEGAÇÃO DE ABAS ---
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));

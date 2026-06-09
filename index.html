@@ -21,9 +21,14 @@
         header .title-section { flex: 1; background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; text-align: center; }
         header h1 { font-size: 1.9rem; font-weight: 700; color: #1b5e20; letter-spacing: 1px; }
         header p { font-size: 1rem; color: #558b2f; margin-top: 8px; }
-        .tab-obra-header { margin-bottom: 25px; }
-        .tab-obra-header .obra-entrega { font-size: 1rem; color: #2c3e50; }
-        .tab-obra-header .obra-entrega strong { font-weight: 700; color: #1b5e20; }
+        
+        /* Centralização e estilização do balão de prazos */
+        .prazos-header-container { display: flex; justify-content: center; margin-bottom: 25px; }
+        .prazos-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 15px 30px; text-align: center; display: inline-block; transition: all 0.3s; }
+        .prazos-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(85,139,47,0.1); border-color: #558b2f; }
+        .prazos-card p { font-size: 0.95rem; color: #2c3e50; margin: 5px 0; }
+        .prazos-card strong { font-weight: 700; color: #1b5e20; }
+        
         .tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 25px; flex-wrap: wrap; }
         .tab-btn { background: #ffffff; border: 2px solid #c0c0c0; color: #558b2f; padding: 12px 28px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.3s; font-size: 0.95rem; }
         .tab-btn.active, .tab-btn:hover { background: #558b2f; color: #ffffff; border-color: #558b2f; box-shadow: 0 0 20px rgba(85,139,47,0.3); }
@@ -45,13 +50,21 @@
         .analysis-inner-content.active { display: block; }
         .empty-state { text-align: center; padding: 40px; color: #7f8c8d; background: #f9f9f9; border: 1px dashed #c0c0c0; border-radius: 8px; font-style: italic; }
 
-        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
         .kpi-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 18px 16px; text-align: center; transition: all 0.3s; display: flex; flex-direction: column; justify-content: center; }
         .kpi-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(85,139,47,0.15); border-color: #558b2f; }
-        .kpi-card .label { font-size: 0.75rem; color: #558b2f; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .kpi-card .label { font-size: 0.75rem; color: #558b2f; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; min-height: 28px; display: flex; align-items: center; justify-content: center; }
         .kpi-card .value { font-size: 1.3rem; font-weight: 700; color: #1b5e20; }
+        .kpi-card .value.alert-value { color: #c62828; }
         .kpi-card .sublabel { font-size: 0.7rem; color: #558b2f; margin-top: 8px; }
         
+        /* Estilização para as listas internas detalhadas nos cards de KPI */
+        .kpi-card .kpi-sublist { display: flex; flex-direction: column; gap: 5px; text-align: left; margin: 4px 0; }
+        .kpi-card .kpi-sublist-item { display: flex; justify-content: space-between; font-size: 0.75rem; color: #2c3e50; border-bottom: 1px dashed #e0e0e0; padding-bottom: 2px; }
+        .kpi-card .kpi-sublist-item:last-child { border-bottom: none; }
+        .kpi-card .kpi-sublist-item .sublist-label { font-weight: 500; color: #558b2f; }
+        .kpi-card .kpi-sublist-item .sublist-value { font-weight: 700; color: #1b5e20; }
+
         /* Estilização para o sublabel quebrado em linhas no comprometido */
         .kpi-card .sublabel-title { display: block; margin-bottom: 3px; font-weight: 500; color: #558b2f; white-space: nowrap; }
         .kpi-card .sublabel-value { display: block; font-size: 0.8rem; font-weight: 700; color: #1b5e20; }
@@ -112,6 +125,8 @@
         .executive-card .kpi-item:last-child { border: none; }
         .executive-card .kpi-item .label { color: #000000; }
         .executive-card .kpi-item .value { font-weight: 600; color: #000000; }
+        .executive-card .kpi-item .value.alert-value { color: #c62828; font-weight: 700; }
+        .executive-card .kpi-item .value.ok-value { color: #1b5e20; font-weight: 700; }
         .planejamento-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
         .planejamento-card { background: #ffffff; border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; }
         .planejamento-card h3 { color: #1b5e20; margin-bottom: 15px; font-size: 1.1rem; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; }
@@ -196,31 +211,31 @@
         </div>
         
         <div class="tab-content active" id="tab-mirante">
-            <div class="title-section tab-obra-header">
-                <p class="obra-entrega">Prazo final de entrega: <strong>31/07/2026</strong></p>
+            <div class="prazos-header-container">
+                <div class="prazos-card">
+                    <p>Prazo final de entrega: <strong>31/07/2026</strong> &nbsp;&nbsp;|&nbsp;&nbsp; Prazo previsto de entrega: <strong>31/08/2026</strong></p>
+                </div>
             </div>
             <div class="kpi-grid">
                 <div class="kpi-card"><div class="label">Orçado Total</div><div class="value">R$ 7.859.182</div></div>
-                <div class="kpi-card"><div class="label">Desembolso Acumulado</div><div class="value">R$ 4.957.062</div></div>
-                <div class="kpi-card">
-                    <div class="label">Comprometido Atual</div>
-                    <div class="value">R$ 1.496.905</div>
-                    <div class="sublabel">
-                        <span class="sublabel-title">Desemb. + Comprometido</span>
-                        <span class="sublabel-value">R$ 6.453.967</span>
-                    </div>
-                </div>
-                <div class="kpi-card">
-                    <div class="label">Verba Disponível</div>
-                    <div class="value">R$ 1.405.215</div>
-                    <div class="sublabel">A comprometer</div>
-                </div>
+                <div class="kpi-card"><div class="label">Gasto Total</div><div class="value">R$ 6.453.967</div></div>
+                <div class="kpi-card"><div class="label">Verba a Comprometer</div><div class="value">R$ 1.405.215</div></div>
+                <div class="kpi-card"><div class="label">Verba de Projeção para Conclusão</div><div class="value alert-value">⚠️ R$ 1.883.417</div></div>
                 <div class="kpi-card">
                     <div class="label">Desvio Orçamentário</div>
                     <div class="value" style="color: #2e7d32;">-17,9%</div>
                     <div class="sublabel">Recorte atual</div>
                 </div>
-                <div class="kpi-card"><div class="label">Custo/Lote</div><div class="value">R$ 9.155</div><div class="sublabel">705 Lotes</div></div>
+                <div class="kpi-card">
+                    <div class="label">Custo/Lote</div>
+                    <div class="kpi-sublist">
+                        <div class="kpi-sublist-item"><span class="sublist-label">Orçado:</span><span class="sublist-value">R$ 11.148</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 9.155</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 11.826</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">—</span></div>
+                    </div>
+                    <div class="sublabel">705 Lotes</div>
+                </div>
             </div>
 
             <div class="sub-tabs">
@@ -323,31 +338,31 @@
         </div>
         
         <div class="tab-content" id="tab-joaquim">
-            <div class="title-section tab-obra-header">
-                <p class="obra-entrega">Prazo final de entrega: <strong>31/08/2026</strong></p>
+            <div class="prazos-header-container">
+                <div class="prazos-card">
+                    <p>Prazo final de entrega: <strong>31/08/2026</strong> &nbsp;&nbsp;|&nbsp;&nbsp; Prazo previsto de entrega: <strong>30/09/2026</strong></p>
+                </div>
             </div>
             <div class="kpi-grid">
                 <div class="kpi-card"><div class="label">Orçado Total</div><div class="value">R$ 5.019.403</div></div>
-                <div class="kpi-card"><div class="label">Desembolso Acumulado</div><div class="value">R$ 3.465.877</div></div>
-                <div class="kpi-card">
-                    <div class="label">Comprometido Atual</div>
-                    <div class="value">R$ 266.230</div>
-                    <div class="sublabel">
-                        <span class="sublabel-title">Desemb. + Comprometido</span>
-                        <span class="sublabel-value">R$ 3.732.107</span>
-                    </div>
-                </div>
-                <div class="kpi-card">
-                    <div class="label">Verba Disponível</div>
-                    <div class="value">R$ 1.287.297</div>
-                    <div class="sublabel">A comprometer</div>
-                </div>
+                <div class="kpi-card"><div class="label">Gasto Total</div><div class="value">R$ 3.732.107</div></div>
+                <div class="kpi-card"><div class="label">Verba a Comprometer</div><div class="value">R$ 1.287.297</div></div>
+                <div class="kpi-card"><div class="label">Verba de Projeção para Conclusão</div><div class="value">✅ R$ 783.670</div></div>
                 <div class="kpi-card">
                     <div class="label">Desvio Orçamentário</div>
                     <div class="value" style="color: #2e7d32;">-25,6%</div>
                     <div class="sublabel">Recorte atual</div>
                 </div>
-                <div class="kpi-card"><div class="label">Custo/Lote</div><div class="value">R$ 6.479</div><div class="sublabel">576 Lotes</div></div>
+                <div class="kpi-card">
+                    <div class="label">Custo/Lote</div>
+                    <div class="kpi-sublist">
+                        <div class="kpi-sublist-item"><span class="sublist-label">Orçado:</span><span class="sublist-value">R$ 8.714</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 6.479</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 7.840</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">—</span></div>
+                    </div>
+                    <div class="sublabel">576 Lotes</div>
+                </div>
             </div>
 
             <div class="tabs-s">
@@ -355,7 +370,7 @@
                     <button class="sub-tab-btn active" data-subtab="detalhe-joaquim">Detalhamento por Etapa</button>
                     <button class="sub-tab-btn" data-subtab="historico-joaquim">Fluxo de Desembolsos</button>
                     <button class="sub-tab-btn" data-subtab="planejamento-joaquim">Planejamento</button>
-                    <button class="sub-tab-btn" data-subtab="fotos-joaquim">Galeria de Fotos</button>
+                    <button class="sub-tab-btn" data-função="fotos-joaquim" data-subtab="fotos-joaquim">Galeria de Fotos</button>
                     <button class="sub-tab-btn" data-subtab="analises-joaquim">Análises</button>
                 </div>
             </div>
@@ -446,34 +461,25 @@
         </div>
         
         <div class="tab-content" id="tab-geral">
-            <div class="kpi-grid">
-                <div class="kpi-card"><div class="label">Orçado Total Operação</div><div class="value">R$ 12.878.585</div></div>
-                <div class="kpi-card"><div class="label">Realizado Total</div><div class="value">R$ 8.422.939</div></div>
-                <div class="kpi-card">
-                    <div class="label">Comprometido Atual</div>
-                    <div class="value">R$ 1.763.135</div>
-                    <div class="sublabel">Desembolso + Comprometido: <strong>R$ 10.186.074</strong></div>
-                </div>
-                <div class="kpi-card">
-                    <div class="label">Verba Disponível Total</div>
-                    <div class="value">R$ 2.692.511</div>
-                    <div class="sublabel">A comprometer</div>
+            <div class="prazos-header-container">
+                <div class="prazos-card">
+                    <p>Mirante da Lagoa &nbsp;&raquo;&nbsp; Prazo final: <strong>31/07/2026</strong> | Prazo previsto: <strong>31/08/2026</strong></p>
+                    <p style="margin-top: 8px; border-top: 1px dashed #c0c0c0; padding-top: 8px;">Joaquim Leme &nbsp;&raquo;&nbsp; Prazo final: <strong>31/08/2026</strong> | Prazo previsto: <strong>30/09/2026</strong></p>
                 </div>
             </div>
+            
             <div class="executive">
                 <div class="executive-column">
                     <div class="executive-card">
                         <h3>MIRANTE DA LAGOA</h3>
-                        <div class="kpi-item"><span class="label">Prazo final de entrega</span><span class="value">31/07/2026</span></div>
                         <div class="kpi-item"><span class="label">Cidade</span><span class="value">Bocaiúva</span></div>
                         <div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
                         <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">705</span></div>
                         <div class="kpi-item"><span class="label">Orçado</span><span class="value">R$ 7.859.182</span></div>
-                        <div class="kpi-item"><span class="label">Desembolso Acumulado</span><span class="value">R$ 4.957.062</span></div>
-                        <div class="kpi-item"><span class="label">Comprometido Atual</span><span class="value">R$ 1.496.905</span></div>
-                        <div class="kpi-item"><span class="label">Desembolso + Comprometido</span><span class="value">R$ 6.453.967</span></div>
-                        <div class="kpi-item"><span class="label">Verba Disponível</span><span class="value">R$ 1.405.215</span></div>
-                        <div class="kpi-item"><span class="label">Custo/Lote</span><span class="value">R$ 9.155</span></div>
+                        <div class="kpi-item"><span class="label">Gasto Total</span><span class="value">R$ 6.453.967</span></div>
+                        <div class="kpi-item"><span class="label">Verba a Comprometer</span><span class="value">R$ 1.405.215</span></div>
+                        <div class="kpi-item"><span class="label">Verba de Projeção para Conclusão</span><span class="value alert-value">⚠️ R$ 1.883.417</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Atual)</span><span class="value">R$ 9.155</span></div>
                         
                         <div class="chart-container-gauge-integrated">
                             <div class="chart-title" style="font-size: 0.95rem; margin-bottom: 5px;">Avanço Financeiro</div>
@@ -487,16 +493,14 @@
                 <div class="executive-column">
                     <div class="executive-card">
                         <h3>JOAQUIM LEME</h3>
-                        <div class="kpi-item"><span class="label">Prazo final de entrega</span><span class="value">31/08/2026</span></div>
                         <div class="kpi-item"><span class="label">Cidade</span><span class="value">Ituiutaba</span></div>
                         <div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
                         <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">576</span></div>
                         <div class="kpi-item"><span class="label">Orçado</span><span class="value">R$ 5.019.403</span></div>
-                        <div class="kpi-item"><span class="label">Desembolso Acumulado</span><span class="value">R$ 3.465.877</span></div>
-                        <div class="kpi-item"><span class="label">Comprometido Atual</span><span class="value">R$ 266.230</span></div>
-                        <div class="kpi-item"><span class="label">Desembolso + Comprometido</span><span class="value">R$ 3.732.107</span></div>
-                        <div class="kpi-item"><span class="label">Verba Disponível</span><span class="value">R$ 1.287.297</span></div>
-                        <div class="kpi-item"><span class="label">Custo/Lote</span><span class="value">R$ 6.479</span></div>
+                        <div class="kpi-item"><span class="label">Gasto Total</span><span class="value">R$ 3.732.107</span></div>
+                        <div class="kpi-item"><span class="label">Verba a Comprometer</span><span class="value">R$ 1.287.297</span></div>
+                        <div class="kpi-item"><span class="label">Verba de Projeção para Conclusão</span><span class="value ok-value">✅ R$ 783.670</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Atual)</span><span class="value">R$ 6.479</span></div>
                         
                         <div class="chart-container-gauge-integrated">
                             <div class="chart-title" style="font-size: 0.95rem; margin-bottom: 5px;">Avanço Financeiro</div>
@@ -636,7 +640,7 @@
 
                     chart.gaugeNeedlePoints = [
                         { id: 'desembolsado', pct: pDesembolso, color: '#ff6d00', textColor: '#ff6d00', label: 'Desembolsado', valStr: fmtMoney(valDesembolso), offset: 12 },
-                        { id: 'comprometido', pct: pComprometido, color: '#81c784', textColor: '#2e7d32', label: 'Desemb. + Comprometido', valStr: fmtMoney(valComprometidoTotal), offset: 26 },
+                        { id: 'comprometido', pct: pComprometido, color: '#81c784', textColor: '#2e7d32', label: 'Gasto Total', valStr: fmtMoney(valComprometidoTotal), offset: 26 },
                         { id: 'orcado', pct: pOrcado, color: '#1565c0', textColor: '#1565c0', label: 'Orçado Total', valStr: fmtMoney(valOrcado), offset: 40 }
                     ];
 
@@ -970,7 +974,7 @@
             });
         });
 
-        // --- CONTROLE DE NAVEGAÇÃO INTERNA DA ABA DE ANÁLISES (CORRIGIDO) ---
+        // --- CONTROLE DE NAVEGAÇÃO INTERNA DA ABA DE ANÁLISES ---
         document.querySelectorAll('.analysis-tab-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const container = this.closest('.analyses-container');
@@ -978,7 +982,6 @@
                 this.classList.add('active');
                 
                 container.querySelectorAll('.analysis-inner-content').forEach(content => content.classList.remove('active'));
-                // Seleção contextual refinada buscando o elemento específico desta sub-aba
                 container.querySelector('#' + this.dataset.antab).classList.add('active');
             });
         });

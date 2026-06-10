@@ -195,7 +195,7 @@
         .chart-container canvas { max-height: 300px; }
         .chart-title { color: var(--title-color); font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; text-align: center; transition: color 0.4s; }
         
-        /* CORREÇÃO: Altura Fixa expandida para 680px eliminando o bug de crescimento infinito e dando excelente espessura e respiro */
+        /* CORREÇÃO: Altura Fixa aumentada consideravelmente (800px) para melhorar o espaçamento entre etapas */
         .chart-container-large { 
             background: var(--card-bg); 
             border: 2px solid var(--border-color); 
@@ -204,7 +204,7 @@
             margin-bottom: 30px; 
             position: relative; 
             transition: all 0.4s; 
-            height: 680px; 
+            height: 800px; 
             width: 100%;
         }
         .chart-container-large canvas {
@@ -250,7 +250,7 @@
             header h1 { font-size: 1.5rem; padding-right: 0; padding-left: 0; margin-top: 40px; }
             .planejamento-container { grid-template-columns: 1fr !important; }
             .mode-toggle-btn { top: 12px; right: 12px; }
-            .chart-container-large { height: 500px; } 
+            .chart-container-large { height: 600px; } /* Ajuste mobile */
         }
         .executive { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
         .executive-column { display: flex; flex-direction: column; }
@@ -750,7 +750,6 @@
                     ctx.fillText("Jun/26", jun26X, topY - 8);
                     
                     ctx.textAlign = 'right';
-                    // CORREÇÃO: Exibe apenas o mês e ano solicitado (Jul/26 ou Ago/27)
                     ctx.fillText(chart.config.options.plugins.dateLimit.finalDate, finalX, topY - 8);
                     ctx.restore();
                 }
@@ -765,10 +764,11 @@
         const miranteComprometido = [37257.72, 201591.92, 134826.68, 284987.25, 212449.72, 533313.97, 171635.74, 221077.81, 578897.30, 2741431.72, 789722.37, 218312.39, 91808.40, 236654.19];
         const miranteProjetadoFuturo = [0.00, 34875.91, 0.00, 11540.39, 22591.06, 189939.04, 9499.96, 99384.97, 21185.43, 250000.03, 600.00, 1186800.20, 15000.00, 42000.01];
         
-        // CORREÇÃO: Travando rigidamente o avanço máximo em 100 (Jun/26) para AMBOS os datasets conforme corrigido
-        const miranteFisicoRaw = [100, 90, 100, 90, 95, 90, 95, 80, 100, 80, 95, 20, 95, 80];
+        // CORREÇÃO: Dados lidos das imagens e com a barra visual cravada rigorosamente em 100%
+        const miranteFisicoRaw = [85.0, 90.0, 100.0, 90.0, 95.0, 90.0, 95.0, 80.0, 90.0, 80.0, 95.0, 20.0, 95.0, 90.0];
         const miranteFisico = miranteFisicoRaw.map(v => Math.min(100, v));
-        const miranteFinanceiroPct = miranteOrcado.map((orc, i) => orc > 0 ? Math.min(100, (miranteComprometido[i] / orc) * 100) : 0);
+        const miranteFinanceiroRaw = [103.3, 85.8, 100.0, 102.2, 102.5, 82.6, 97.1, 70.5, 96.8, 98.8, 100.0, 16.6, 96.7, 91.7];
+        const miranteFinanceiroPct = miranteFinanceiroRaw.map(v => Math.min(100, v));
 
         const joaquimEtapas = ['TOPOGRAFIA E CONTROLE','MANUTENÇÕES / AS BUILTS','DRENAGEM','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','MEIO AMBIENTE','OBRAS DE ACESSO','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
         const joaquimOrcado = [6000.00, 146722.82, 205220.00, 84333.64, 1184518.92, 320633.13, 273976.19, 104745.00, 146000.00, 1846124.81, 69219.58, 448834.00, 32000.00, 151075.26];
@@ -776,10 +776,11 @@
         const joaquimComprometido = [0.00, 119574.27, 213214.32, 52733.62, 1061802.54, 185722.94, 26849.90, 7231.00, 0.00, 1846216.57, 20803.58, 14400.00, 0.00, 183557.87];
         const joaquimProjetadoFuturo = [4500.00, 15727.72, -142994.32, 31600.02, -381940.33, 263111.06, 356841.70, 138528.00, 146000.00, -91.76, 40082.00, 434434.00, -16000.00, -106128.09];
 
-        // CORREÇÃO: Travando rigidamente o avanço máximo em 100 (Jun/26) para AMBOS os datasets conforme corrigido
-        const joaquimFisicoRaw = [0, 50, 90, 100, 80, 80, 0, 100, 80, 100, 0, 0, 0, 50];
+        // CORREÇÃO: Dados lidos das imagens e com a barra visual cravada rigorosamente em 100%
+        const joaquimFisicoRaw = [0, 90, 90, 100, 80, 80, 0, 100, 80, 100, 30, 0, 0, 70];
         const joaquimFisico = joaquimFisicoRaw.map(v => Math.min(100, v));
-        const joaquimFinanceiroPct = joaquimOrcado.map((orc, i) => orc > 0 ? Math.min(100, (joaquimComprometido[i] / orc) * 100) : 0);
+        const joaquimFinanceiroRaw = [0, 82, 104, 63, 90, 58, 10, 7, 0, 100, 30, 3, 0, 122];
+        const joaquimFinanceiroPct = joaquimFinanceiroRaw.map(v => Math.min(100, v));
 
         const miranteDisponivel = miranteOrcado.map((orc, idx) => orc - (miranteComprometido[idx] + miranteProjetadoFuturo[idx]));
         const joaquimDisponivel = joaquimOrcado.map((orc, idx) => orc - (joaquimComprometido[idx] + joaquimProjetadoFuturo[idx]));
@@ -837,8 +838,8 @@
                 applyChartThemes('light');
             }
             
-            createTable('tableMirante', 'MIRANTE DA LAGOA', miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo, miranteDisponivel);
-            createTable('tableJoaquim', 'JOAQUIM LEME', joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo, joaquimDisponivel);
+            createTable('tableMirante', 'MIRANTE DA LAGOA', miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo, miranteDisponivel, miranteFisicoRaw);
+            createTable('tableJoaquim', 'JOAQUIM LEME', joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo, joaquimDisponivel, joaquimFisicoRaw);
         }
 
         function applyChartThemes(theme) {
@@ -1062,14 +1063,15 @@
             });
         }
 
-        function createFisicoFinChart(canvasId, labels, finData, fisData, finalDateStr) {
+        // CORREÇÃO: O Tooltip lê a array com os dados puros, não limitados, garantindo a exibição real das ultrapassagens.
+        function createFisicoFinChart(canvasId, labels, finData, fisData, finDataRaw, fisDataRaw, finalDateStr) {
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
                 data: {
                     labels: labels,
                     datasets: [
-                        { label: 'Avanço Financeiro (Investido %)', data: finData, backgroundColor: '#1b5e20', borderRadius: 4, barPercentage: 0.85, categoryPercentage: 0.9 },
-                        { label: 'Avanço Físico (%)', data: fisData, backgroundColor: '#7cb342', borderRadius: 4, barPercentage: 0.85, categoryPercentage: 0.9 }
+                        { label: 'Avanço Financeiro (Investido + Projetado %)', data: finData, rawData: finDataRaw, backgroundColor: '#1b5e20', borderRadius: 4, barPercentage: 0.65, categoryPercentage: 0.8 },
+                        { label: 'Avanço Físico (%)', data: fisData, rawData: fisDataRaw, backgroundColor: '#7cb342', borderRadius: 4, barPercentage: 0.65, categoryPercentage: 0.8 }
                     ]
                 },
                 options: {
@@ -1082,7 +1084,11 @@
                         dateLimit: { enabled: true, finalDate: finalDateStr }, 
                         tooltip: {
                             callbacks: {
-                                label: (context) => ` ${context.dataset.label}: ${context.parsed.x.toFixed(1)}%` 
+                                label: (context) => {
+                                    // CORREÇÃO: Lê o valor real original que passou para a base do tooltip
+                                    const rawVal = context.dataset.rawData[context.dataIndex];
+                                    return ` ${context.dataset.label.split('(')[0].trim()}: ${rawVal.toFixed(1)}%`;
+                                }
                             }
                         }
                     },
@@ -1091,9 +1097,7 @@
                             beginAtZero: true,
                             max: 115, 
                             ticks: { 
-                                color: '#000000', 
-                                font: { family: "'Montserrat'" }, 
-                                callback: function(v) { return v <= 100 ? v + '%' : ''; } 
+                                display: false // CORREÇÃO: Escala inferior completamente removida para não confundir a leitura
                             }, 
                             grid: { color: 'rgba(0,0,0,0.1)' } 
                         },
@@ -1178,7 +1182,7 @@
             });
         }
 
-        function createTable(tableId, obraNome, etapas, orcado, Peanut, Honey, disponivel) {
+        function createTable(tableId, obraNome, etapas, orcado, Peanut, Honey, disponivel, fisicoRaw) {
             const t = document.getElementById(tableId);
             let html = '<thead><tr><th>Macro Etapa</th><th>Orçamento Total</th><th>Investimento Atual</th><th>Investimento Projetado</th><th>Saldo Disponível</th><th>% Desvio</th><th>Status</th><th>Progresso</th></tr></thead><tbody>';
             let totOrcado = 0, totComprometido = 0, totProjetadoFuturo = 0, totDisponivel = 0;
@@ -1190,7 +1194,9 @@
                 const desvio = orcado[i] > 0 ? ((eac - orcado[i]) / orcado[i] * 100) : 0;
                 const statusClass = desvio <= 0 ? 'ok' : desvio <= 5 ? 'warn' : 'alert';
                 const statusLabel = desvio <= 0 ? 'OK' : desvio <= 5 ? 'Atenção' : 'Crítico';
-                const progress = orcado[i] > 0 ? Math.min(100, (Peanut[i]/orcado[i]*100)) : 0;
+                
+                // CORREÇÃO: A barra de progresso da tabela agora espelha perfeitamente o Avanço Físico real da imagem
+                const progress = Math.min(100, fisicoRaw[i] || 0);
                 
                 totOrcado += orcado[i]; totComprometido += Peanut[i]; totProjetadoFuturo += Honey[i]; totDisponivel += disponivel[i];
                 
@@ -1198,6 +1204,8 @@
             }
             const eacTotal = totComprometido + totProjetadoFuturo;
             const totDesvio = totOrcado > 0 ? ((eacTotal - totOrcado) / totOrcado * 100) : 0;
+            
+            // Total físico é uma média ponderada baseada no Orçado x Investido geral do Dashboard
             const totProgress = totOrcado > 0 ? Math.min(100, (totComprometido / totOrcado * 100)) : 0;
             
             html += `</tbody><tfoot><tr class="total-row"><td><strong>TOTAL</strong></td><td>${fmtNum(totOrcado)}</td><td>${fmtNum(totComprometido)}</td><td>${fmtNum(totProjetadoFuturo)}</td><td style="color:var(--title-color); font-weight:700;">${fmtNum(totDisponivel)}</td><td>${totDesvio.toFixed(1)}%</td><td>—</td><td><div class="progress-bar"><div class="progress-fill" style="width:${totProgress}%"></div></div></td></tr></tfoot>`;
@@ -1304,16 +1312,16 @@
             createPieChart('chartMirantePie', miranteEtapas, miranteOrcado);
             createPieChart('chartJoaquimPie', joaquimEtapas, joaquimOrcado);
             
-            // CORREÇÃO: Passado os rótulos de data simplificados conforme solicitado
-            createFisicoFinChart('chartMiranteFisicoFin', miranteEtapas, miranteFinanceiroPct, miranteFisico, 'Jul/26');
-            createFisicoFinChart('chartJoaquimFisicoFin', joaquimEtapas, joaquimFinanceiroPct, joaquimFisico, 'Ago/27');
+            // Renderização enviando as Arrays brutas para o Tooltip e as limitadas para a renderização do tamanho da coluna
+            createFisicoFinChart('chartMiranteFisicoFin', miranteEtapas, miranteFinanceiroPct, miranteFisico, miranteFinanceiroRaw, miranteFisicoRaw, 'Jul/26');
+            createFisicoFinChart('chartJoaquimFisicoFin', joaquimEtapas, joaquimFinanceiroPct, joaquimFisico, joaquimFinanceiroRaw, joaquimFisicoRaw, 'Ago/27');
             
             createBarChart('chartMiranteBar', miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo);
             createBarChart('chartJoaquimBar', joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo);
             createDisponivelChart('chartMiranteDisponivel', miranteEtapas, miranteDisponivelGrafico);
             createDisponivelChart('chartJoaquimDisponivel', joaquimEtapas, joaquimDisponivelGrafico);
-            createTable('tableMirante', 'MIRANTE DA LAGOA', miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo, miranteDisponivel);
-            createTable('tableJoaquim', 'JOAQUIM LEME', joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo, joaquimDisponivel);
+            createTable('tableMirante', 'MIRANTE DA LAGOA', miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo, miranteDisponivel, miranteFisicoRaw);
+            createTable('tableJoaquim', 'JOAQUIM LEME', joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo, joaquimDisponivel, joaquimFisicoRaw);
             runABCEngine('chartMiranteABC', 'tableABCMirante', miranteEtapas, miranteRealizado);
             runABCEngine('chartJoaquimABC', 'tableABCJoaquim', joaquimEtapas, joaquimRealizado);
             createColumnChart('chartMiranteHistorico', mesesHistorico, desembolsosMirante);

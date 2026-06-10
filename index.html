@@ -64,6 +64,9 @@
             --toggle-btn-bg: #1b5e20;
             --toggle-btn-text: #ffffff;
             --toggle-btn-border: #1b5e20;
+            
+            /* Cor única e rígida para toda a coluna Saldo Disponível no Modo Claro */
+            --table-saldo-color: #2c3e50;
         }
 
         /* Definição das cores para o Modo Noturno (Verde Escuro) */
@@ -114,6 +117,9 @@
             --toggle-btn-bg: #1a4522;
             --toggle-btn-text: #ffffff;
             --toggle-btn-border: #a3e635;
+            
+            /* Cor única e rígida para toda a coluna Saldo Disponível no Modo Noturno */
+            --table-saldo-color: #ffffff;
         }
 
         body { 
@@ -188,6 +194,24 @@
         .chart-container { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 15px; margin-bottom: 30px; position: relative; transition: all 0.4s; }
         .chart-container canvas { max-height: 300px; }
         .chart-title { color: var(--title-color); font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; text-align: center; transition: color 0.4s; }
+        
+        /* CORREÇÃO: Altura Fixa expandida para 680px eliminando o bug de crescimento infinito e dando excelente espessura e respiro */
+        .chart-container-large { 
+            background: var(--card-bg); 
+            border: 2px solid var(--border-color); 
+            border-radius: 12px; 
+            padding: 20px 15px 15px 15px; 
+            margin-bottom: 30px; 
+            position: relative; 
+            transition: all 0.4s; 
+            height: 680px; 
+            width: 100%;
+        }
+        .chart-container-large canvas {
+            height: 100% !important;
+            width: 100% !important;
+        }
+
         .abc-container { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 30px; transition: all 0.4s; }
         .abc-header h3 { color: var(--title-color); font-size: 1.1rem; margin-bottom: 20px; transition: color 0.4s; }
         .table-container { overflow-x: auto; margin-bottom: 30px; }
@@ -200,7 +224,6 @@
         tr.etapa-row:hover { background: rgba(85,139,47,0.08); }
         tr.etapa-row td:first-child { color: var(--title-color); font-weight: 600; }
         
-        /* CORREÇÃO: Trazendo consistência global para a cor da linha de TOTAL */
         tr.total-row { background: var(--table-th-bg); font-weight: 700; border-top: 2px solid var(--border-color); transition: all 0.4s; }
         tr.total-row td { color: var(--title-color); padding: 14px 10px; border-bottom: 2px solid var(--border-color); font-weight: 700; transition: color 0.4s; }
         tr.total-row td:first-child { color: var(--title-color); }
@@ -227,6 +250,7 @@
             header h1 { font-size: 1.5rem; padding-right: 0; padding-left: 0; margin-top: 40px; }
             .planejamento-container { grid-template-columns: 1fr !important; }
             .mode-toggle-btn { top: 12px; right: 12px; }
+            .chart-container-large { height: 500px; } 
         }
         .executive { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
         .executive-column { display: flex; flex-direction: column; }
@@ -301,7 +325,7 @@
         .summary-box.result-economia .summary-title { color: var(--economy-color); transition: color 0.4s; }
         .summary-box.result-economia .summary-value { color: var(--title-color); transition: color 0.4s; }
         
-        /* CORREÇÃO: Design dos Quadros Totalizadores Exclusivamente no Modo Noturno */
+        /* Design dos Quadros Totalizadores Exclusivamente no Modo Noturno */
         body.dark-mode .summary-box { background: #1b5e20; border-color: #1b5e20; }
         body.dark-mode .summary-box.projected { background: #d35400; border-color: #d35400; }
         body.dark-mode .summary-box.executed-projected { background: #1a5276; border-color: #1a5276; }
@@ -376,6 +400,7 @@
                 <button class="sub-tab-btn" data-subtab="fotos-mirante">Galeria de Fotos</button>
                 <button class="sub-tab-btn" data-subtab="analises-mirante">Análises</button>
             </div>
+            
             <div class="sub-tab-content active" id="subtab-detalhe-mirante">
                 <div class="chart-grid-top">
                     <div class="chart-container-pie">
@@ -388,12 +413,13 @@
                     </div>
                 </div>
                 <div class="chart-grid-bottom">
-                    <div class="chart-container">
-                        <div class="chart-title">Avanço Físico-Financeiro</div>
+                    <div class="chart-container-large">
+                        <div class="chart-title" style="margin-bottom: 5px;">Avanço Físico-Financeiro</div>
                         <canvas id="chartMiranteFisicoFin"></canvas>
                     </div>
                 </div>
             </div>
+            
             <div class="sub-tab-content" id="subtab-historico-mirante">
                 <div class="chart-container" style="margin-bottom: 20px;">
                     <div class="chart-title">Histórico e Projeção de Desembolsos</div>
@@ -412,11 +438,12 @@
                     <div class="chart-title">Orçado x Projetado por Etapa</div>
                     <canvas id="chartMiranteBar"></canvas>
                 </div>
-                <p class="table-hint">Clique em uma etapa para visualizar o avanço (Investido × Orçado)</p>
+                <p class="table-hint">Clique em uma etapa para visualizar o avanço no painel flutuante</p>
                 <div class="table-container">
                     <table id="tableMirante"></table>
                 </div>
             </div>
+            
             <div class="sub-tab-content" id="subtab-planejamento-mirante">
                 <div class="planejamento-container">
                     <div class="planejamento-card">
@@ -439,6 +466,7 @@
                     </div>
                 </div>
             </div>
+            
             <div class="sub-tab-content" id="subtab-fotos-mirante">
                 <div class="gallery-container">
                     <div class="gallery-item" onclick="openPhotoModal('3.jpeg')"><img src="3.jpeg" alt="Foto"></div>
@@ -451,22 +479,12 @@
                 <div class="analyses-container">
                     <div class="analysis-tabs-container">
                         <button class="analysis-tab-btn active" data-antab="abc-mirante">Curva ABC</button>
-                        <button class="analysis-tab-btn" data-antab="indices-mirante">Comparação de Índices</button>
-                        <button class="analysis-tab-btn" data-antab="mov-mirante">Movimentações</button>
                     </div>
 
                     <div class="analysis-inner-content active" id="abc-mirante">
                         <div class="abc-header"><h3>Curva ABC de Desembolsos por Etapa</h3></div>
                         <div class="chart-container"><canvas id="chartMiranteABC"></canvas></div>
                         <div class="table-container"><table id="tableABCMirante"></table></div>
-                    </div>
-                    
-                    <div class="analysis-inner-content" id="indices-mirante">
-                        <div class="empty-state">Painel de Comparação de Índices (Em breve)</div>
-                    </div>
-                    
-                    <div class="analysis-inner-content" id="mov-mirante">
-                        <div class="empty-state">Painel de Movimentações (Em breve)</div>
                     </div>
                 </div>
             </div>
@@ -509,6 +527,7 @@
                     <button class="sub-tab-btn" data-subtab="analises-joaquim">Análises</button>
                 </div>
             </div>
+            
             <div class="sub-tab-content active" id="subtab-detalhe-joaquim">
                 <div class="chart-grid-top">
                     <div class="chart-container-pie">
@@ -521,12 +540,13 @@
                     </div>
                 </div>
                 <div class="chart-grid-bottom">
-                    <div class="chart-container">
-                        <div class="chart-title">Avanço Físico-Financeiro</div>
+                    <div class="chart-container-large">
+                        <div class="chart-title" style="margin-bottom: 5px;">Avanço Físico-Financeiro</div>
                         <canvas id="chartJoaquimFisicoFin"></canvas>
                     </div>
                 </div>
             </div>
+            
             <div class="sub-tab-content" id="subtab-historico-joaquim">
                 <div class="chart-container" style="margin-bottom: 20px;">
                     <div class="chart-title">Histórico e Projeção de Desembolsos</div>
@@ -545,9 +565,10 @@
                     <div class="chart-title">Orçado x Projetado por Etapa</div>
                     <canvas id="chartJoaquimBar"></canvas>
                 </div>
-                <p class="table-hint">Clique em uma etapa para visualizar o avanço (Investido × Orçado)</p>
+                <p class="table-hint">Clique em uma etapa para visualizar o avanço no painel flutuante</p>
                 <div class="table-container"><table id="tableJoaquim"></table></div>
             </div>
+            
             <div class="sub-tab-content" id="subtab-planejamento-joaquim">
                 <div class="planejamento-container">
                     <div class="planejamento-card">
@@ -567,6 +588,7 @@
                     </div>
                 </div>
             </div>
+            
             <div class="sub-tab-content" id="subtab-fotos-joaquim">
                 <div class="gallery-container">
                     <div class="gallery-item" onclick="openPhotoModal('DJI_0369.JPG')"><img src="DJI_0369.JPG" alt="Foto"></div>
@@ -578,22 +600,12 @@
                 <div class="analyses-container">
                     <div class="analysis-tabs-container">
                         <button class="analysis-tab-btn active" data-antab="abc-joaquim">Curva ABC</button>
-                        <button class="analysis-tab-btn" data-antab="indices-joaquim">Comparação de Índices</button>
-                        <button class="analysis-tab-btn" data-antab="mov-joaquim">Movimentações</button>
                     </div>
 
                     <div class="analysis-inner-content active" id="abc-joaquim">
                         <div class="abc-header"><h3>Curva ABC de Desembolsos por Etapa</h3></div>
                         <div class="chart-container"><canvas id="chartJoaquimABC"></canvas></div>
                         <div class="table-container"><table id="tableABCJoaquim"></table></div>
-                    </div>
-                    
-                    <div class="analysis-inner-content" id="indices-joaquim">
-                        <div class="empty-state">Painel de Comparação de Índices (Em breve)</div>
-                    </div>
-                    
-                    <div class="analysis-inner-content" id="mov-joaquim">
-                        <div class="empty-state">Painel de Movimentações (Em breve)</div>
                     </div>
                 </div>
             </div>
@@ -695,6 +707,57 @@
         Chart.defaults.font.family = "'Montserrat', sans-serif";
         Chart.register(ChartDataLabels);
 
+        // --- PLUGIN: Desenhador de limite dinâmico para o Gráfico Físico Financeiro ---
+        const dateLimitPlugin = {
+            id: 'dateLimit',
+            beforeDraw: function(chart) {
+                if (chart.config.options.plugins.dateLimit && chart.config.options.plugins.dateLimit.enabled) {
+                    const ctx = chart.ctx;
+                    const xAxis = chart.scales.x;
+                    const yAxis = chart.scales.y;
+                    const topY = yAxis.top;
+                    const bottomY = yAxis.bottom;
+                    
+                    const jun26X = xAxis.getPixelForValue(100);
+                    const finalX = xAxis.getPixelForValue(xAxis.max);
+                    
+                    const isDark = document.body.classList.contains('dark-mode');
+                    const textColor = isDark ? '#ffffff' : '#1b5e20';
+                    const lineColor = isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(27, 94, 32, 0.3)';
+
+                    ctx.save();
+                    // Linha Jun/26 (Cravada no 100% do eixo)
+                    ctx.beginPath();
+                    ctx.setLineDash([5, 5]);
+                    ctx.strokeStyle = lineColor;
+                    ctx.lineWidth = 1.5;
+                    ctx.moveTo(jun26X, topY);
+                    ctx.lineTo(jun26X, bottomY);
+                    ctx.stroke();
+
+                    // Linha Prazo Final (Cravada no Fim do Gráfico)
+                    ctx.beginPath();
+                    ctx.setLineDash([]);
+                    ctx.moveTo(finalX, topY);
+                    ctx.lineTo(finalX, bottomY);
+                    ctx.stroke();
+
+                    // Rótulos de Texto do Eixo
+                    ctx.fillStyle = textColor;
+                    ctx.font = "bold 11px 'Montserrat'";
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'bottom';
+                    ctx.fillText("Jun/26", jun26X, topY - 8);
+                    
+                    ctx.textAlign = 'right';
+                    // CORREÇÃO: Exibe apenas o mês e ano solicitado (Jul/26 ou Ago/27)
+                    ctx.fillText(chart.config.options.plugins.dateLimit.finalDate, finalX, topY - 8);
+                    ctx.restore();
+                }
+            }
+        };
+        Chart.register(dateLimitPlugin);
+
         // --- DATA ESTRUTURADA ---
         const miranteEtapas = ['TOPOGRAFIA E CONTROLE','MANUTENÇÕES / AS BUILTS','TERRAPLANAGEM','DRENAGEM','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','MEIO AMBIENTE','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
         const miranteOrcado = [36057.70, 234986.23, 134826.68, 278796.63, 207210.79, 645418.69, 176835.76, 313662.78, 597885.26, 2774330.81, 790022.37, 1316034.53, 94960.90, 258152.78];
@@ -702,8 +765,10 @@
         const miranteComprometido = [37257.72, 201591.92, 134826.68, 284987.25, 212449.72, 533313.97, 171635.74, 221077.81, 578897.30, 2741431.72, 789722.37, 218312.39, 91808.40, 236654.19];
         const miranteProjetadoFuturo = [0.00, 34875.91, 0.00, 11540.39, 22591.06, 189939.04, 9499.96, 99384.97, 21185.43, 250000.03, 600.00, 1186800.20, 15000.00, 42000.01];
         
-        const miranteFisico = [100, 90, 100, 90, 95, 90, 95, 80, 100, 80, 95, 20, 95, 80];
-        const miranteFinanceiroPct = miranteOrcado.map((orc, i) => orc > 0 ? (miranteComprometido[i] / orc) * 100 : 0);
+        // CORREÇÃO: Travando rigidamente o avanço máximo em 100 (Jun/26) para AMBOS os datasets conforme corrigido
+        const miranteFisicoRaw = [100, 90, 100, 90, 95, 90, 95, 80, 100, 80, 95, 20, 95, 80];
+        const miranteFisico = miranteFisicoRaw.map(v => Math.min(100, v));
+        const miranteFinanceiroPct = miranteOrcado.map((orc, i) => orc > 0 ? Math.min(100, (miranteComprometido[i] / orc) * 100) : 0);
 
         const joaquimEtapas = ['TOPOGRAFIA E CONTROLE','MANUTENÇÕES / AS BUILTS','DRENAGEM','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','MEIO AMBIENTE','OBRAS DE ACESSO','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
         const joaquimOrcado = [6000.00, 146722.82, 205220.00, 84333.64, 1184518.92, 320633.13, 273976.19, 104745.00, 146000.00, 1846124.81, 69219.58, 448834.00, 32000.00, 151075.26];
@@ -711,8 +776,10 @@
         const joaquimComprometido = [0.00, 119574.27, 213214.32, 52733.62, 1061802.54, 185722.94, 26849.90, 7231.00, 0.00, 1846216.57, 20803.58, 14400.00, 0.00, 183557.87];
         const joaquimProjetadoFuturo = [4500.00, 15727.72, -142994.32, 31600.02, -381940.33, 263111.06, 356841.70, 138528.00, 146000.00, -91.76, 40082.00, 434434.00, -16000.00, -106128.09];
 
-        const joaquimFisico = [0, 50, 90, 100, 80, 80, 0, 100, 80, 100, 0, 0, 0, 50];
-        const joaquimFinanceiroPct = joaquimOrcado.map((orc, i) => orc > 0 ? (joaquimComprometido[i] / orc) * 100 : 0);
+        // CORREÇÃO: Travando rigidamente o avanço máximo em 100 (Jun/26) para AMBOS os datasets conforme corrigido
+        const joaquimFisicoRaw = [0, 50, 90, 100, 80, 80, 0, 100, 80, 100, 0, 0, 0, 50];
+        const joaquimFisico = joaquimFisicoRaw.map(v => Math.min(100, v));
+        const joaquimFinanceiroPct = joaquimOrcado.map((orc, i) => orc > 0 ? Math.min(100, (joaquimComprometido[i] / orc) * 100) : 0);
 
         const miranteDisponivel = miranteOrcado.map((orc, idx) => orc - (miranteComprometido[idx] + miranteProjetadoFuturo[idx]));
         const joaquimDisponivel = joaquimOrcado.map((orc, idx) => orc - (joaquimComprometido[idx] + joaquimProjetadoFuturo[idx]));
@@ -770,7 +837,6 @@
                 applyChartThemes('light');
             }
             
-            // CORREÇÃO: Tabela redesenhada para aplicar estritamente a cor preta ou branca correspondente da nova regra na coluna Saldo
             createTable('tableMirante', 'MIRANTE DA LAGOA', miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo, miranteDisponivel);
             createTable('tableJoaquim', 'JOAQUIM LEME', joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo, joaquimDisponivel);
         }
@@ -996,33 +1062,43 @@
             });
         }
 
-        function createFisicoFinChart(canvasId, labels, finData, fisData) {
+        function createFisicoFinChart(canvasId, labels, finData, fisData, finalDateStr) {
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
                 data: {
                     labels: labels,
                     datasets: [
-                        { label: 'Avanço Financeiro (Investido %)', data: finData, backgroundColor: '#1b5e20', borderRadius: 4 },
-                        { label: 'Avanço Físico (%)', data: fisData, backgroundColor: '#7cb342', borderRadius: 4 }
+                        { label: 'Avanço Financeiro (Investido %)', data: finData, backgroundColor: '#1b5e20', borderRadius: 4, barPercentage: 0.85, categoryPercentage: 0.9 },
+                        { label: 'Avanço Físico (%)', data: fisData, backgroundColor: '#7cb342', borderRadius: 4, barPercentage: 0.85, categoryPercentage: 0.9 }
                     ]
                 },
                 options: {
+                    indexAxis: 'y', 
                     responsive: true, maintainAspectRatio: false,
+                    layout: { padding: { top: 25, right: 20 } }, 
                     plugins: {
                         legend: { labels: { font: { family: "'Montserrat'" }, color: '#000000' } },
                         datalabels: { display: false },
+                        dateLimit: { enabled: true, finalDate: finalDateStr }, 
                         tooltip: {
                             callbacks: {
-                                label: (context) => ` ${context.dataset.label}: ${context.parsed.y.toFixed(1)}%`
+                                label: (context) => ` ${context.dataset.label}: ${context.parsed.x.toFixed(1)}%` 
                             }
                         }
                     },
                     scales: {
-                        x: { ticks: { color: '#000000', maxRotation: 45, font: { size: 9, family: "'Montserrat'" } }, grid: { color: 'rgba(0,0,0,0.1)' } },
-                        y: { 
+                        x: { 
                             beginAtZero: true,
-                            ticks: { color: '#000000', font: { family: "'Montserrat'" }, callback: v => v + '%' }, 
+                            max: 115, 
+                            ticks: { 
+                                color: '#000000', 
+                                font: { family: "'Montserrat'" }, 
+                                callback: function(v) { return v <= 100 ? v + '%' : ''; } 
+                            }, 
                             grid: { color: 'rgba(0,0,0,0.1)' } 
+                        },
+                        y: { 
+                            ticks: { color: '#000000', font: { size: 9, family: "'Montserrat'" } }, grid: { display: false } 
                         }
                     }
                 }
@@ -1102,36 +1178,35 @@
             });
         }
 
-        function createTable(tableId, obraNome, etapas, orcado, comprometido, projetadoFuturo, disponivel) {
+        function createTable(tableId, obraNome, etapas, orcado, Peanut, Honey, disponivel) {
             const t = document.getElementById(tableId);
-            let html = '<thead><tr><th>Macro Etapa</th><th>Orçamento Total</th><th>Investido</th><th>Projetado</th><th>Saldo Disponível</th><th>% Desvio</th><th>Status</th><th>Progresso</th></tr></thead><tbody>';
+            let html = '<thead><tr><th>Macro Etapa</th><th>Orçamento Total</th><th>Investimento Atual</th><th>Investimento Projetado</th><th>Saldo Disponível</th><th>% Desvio</th><th>Status</th><th>Progresso</th></tr></thead><tbody>';
             let totOrcado = 0, totComprometido = 0, totProjetadoFuturo = 0, totDisponivel = 0;
             
-            // CORREÇÃO: Limpado de qualquer formatação isolada condicional
+            const saldoNumColor = getComputedStyle(document.body).getPropertyValue('--table-saldo-color').trim() || '#2c3e50';
+
             for(let i=0; i<etapas.length; i++){
-                const eac = comprometido[i] + projetadoFuturo[i]; 
+                const eac = Peanut[i] + Honey[i]; 
                 const desvio = orcado[i] > 0 ? ((eac - orcado[i]) / orcado[i] * 100) : 0;
                 const statusClass = desvio <= 0 ? 'ok' : desvio <= 5 ? 'warn' : 'alert';
                 const statusLabel = desvio <= 0 ? 'OK' : desvio <= 5 ? 'Atenção' : 'Crítico';
-                const progress = orcado[i] > 0 ? Math.min(100, (comprometido[i]/orcado[i]*100)) : 0;
+                const progress = orcado[i] > 0 ? Math.min(100, (Peanut[i]/orcado[i]*100)) : 0;
                 
-                totOrcado += orcado[i]; totComprometido += comprometido[i]; totProjetadoFuturo += projetadoFuturo[i]; totDisponivel += disponivel[i];
+                totOrcado += orcado[i]; totComprometido += Peanut[i]; totProjetadoFuturo += Honey[i]; totDisponivel += disponivel[i];
                 
-                // Agora o <td style="color:var(--table-saldo-color); font-weight:400;"> acompanha a cor da tabela em cada modo estritamente
-                html += `<tr class="etapa-row" data-index="${i}"><td>${etapas[i]}</td><td>${fmtNum(orcado[i])}</td><td>${fmtNum(comprometido[i])}</td><td>${fmtNum(projetadoFuturo[i])}</td><td style="color:var(--table-saldo-color); font-weight:400;">${fmtNum(disponivel[i])}</td><td>${desvio.toFixed(1)}%</td><td><span class="status ${statusClass}">${statusLabel}</span></td><td><div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div></td></tr>`;
+                html += `<tr class="etapa-row" data-index="${i}"><td>${etapas[i]}</td><td>${fmtNum(orcado[i])}</td><td>${fmtNum(Peanut[i])}</td><td>${fmtNum(Honey[i])}</td><td style="color:${saldoNumColor}; font-weight:400;">${fmtNum(disponivel[i])}</td><td>${desvio.toFixed(1)}%</td><td><span class="status ${statusClass}">${statusLabel}</span></td><td><div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div></td></tr>`;
             }
             const eacTotal = totComprometido + totProjetadoFuturo;
             const totDesvio = totOrcado > 0 ? ((eacTotal - totOrcado) / totOrcado * 100) : 0;
             const totProgress = totOrcado > 0 ? Math.min(100, (totComprometido / totOrcado * 100)) : 0;
             
-            // A linha de rodapé herda integralmente o color: var(--title-color) da sua classe CSS principal
-            html += `</tbody><tfoot><tr class="total-row"><td><strong>TOTAL</strong></td><td>${fmtNum(totOrcado)}</td><td>${fmtNum(totComprometido)}</td><td>${fmtNum(totProjetadoFuturo)}</td><td>${fmtNum(totDisponivel)}</td><td>${totDesvio.toFixed(1)}%</td><td>—</td><td><div class="progress-bar"><div class="progress-fill" style="width:${totProgress}%"></div></div></td></tr></tfoot>`;
+            html += `</tbody><tfoot><tr class="total-row"><td><strong>TOTAL</strong></td><td>${fmtNum(totOrcado)}</td><td>${fmtNum(totComprometido)}</td><td>${fmtNum(totProjetadoFuturo)}</td><td style="color:var(--title-color); font-weight:700;">${fmtNum(totDisponivel)}</td><td>${totDesvio.toFixed(1)}%</td><td>—</td><td><div class="progress-bar"><div class="progress-fill" style="width:${totProgress}%"></div></div></td></tr></tfoot>`;
             t.innerHTML = html;
             
             t.querySelectorAll('tbody tr').forEach(row => {
                 row.addEventListener('click', function() {
                     const idx = parseInt(this.dataset.index, 10);
-                    openGaugeModal(obraNome, etapas[idx], orcado[idx], comprometido[idx], projetadoFuturo[idx]);
+                    openGaugeModal(obraNome, etapas[idx], orcado[idx], Peanut[idx], Honey[idx]);
                 });
             });
         }
@@ -1229,8 +1304,9 @@
             createPieChart('chartMirantePie', miranteEtapas, miranteOrcado);
             createPieChart('chartJoaquimPie', joaquimEtapas, joaquimOrcado);
             
-            createFisicoFinChart('chartMiranteFisicoFin', miranteEtapas, miranteFinanceiroPct, miranteFisico);
-            createFisicoFinChart('chartJoaquimFisicoFin', joaquimEtapas, joaquimFinanceiroPct, joaquimFisico);
+            // CORREÇÃO: Passado os rótulos de data simplificados conforme solicitado
+            createFisicoFinChart('chartMiranteFisicoFin', miranteEtapas, miranteFinanceiroPct, miranteFisico, 'Jul/26');
+            createFisicoFinChart('chartJoaquimFisicoFin', joaquimEtapas, joaquimFinanceiroPct, joaquimFisico, 'Ago/27');
             
             createBarChart('chartMiranteBar', miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo);
             createBarChart('chartJoaquimBar', joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo);

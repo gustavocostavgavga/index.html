@@ -199,9 +199,12 @@
         tr.etapa-row { cursor: pointer; transition: background 0.2s; }
         tr.etapa-row:hover { background: rgba(85,139,47,0.08); }
         tr.etapa-row td:first-child { color: var(--title-color); font-weight: 600; }
+        
+        /* CORREÇÃO: Trazendo consistência global para a cor da linha de TOTAL */
         tr.total-row { background: var(--table-th-bg); font-weight: 700; border-top: 2px solid var(--border-color); transition: all 0.4s; }
-        tr.total-row td { padding: 14px 10px; border-bottom: 2px solid var(--border-color); font-weight: 700; }
+        tr.total-row td { color: var(--title-color); padding: 14px 10px; border-bottom: 2px solid var(--border-color); font-weight: 700; transition: color 0.4s; }
         tr.total-row td:first-child { color: var(--title-color); }
+        
         .table-hint { font-size: 0.75rem; color: var(--subtitle-color); text-align: center; margin: -20px 0 15px; transition: color 0.4s; }
         .status { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 500; }
         .status.ok { background: #c8e6c9; color: #1b5e20; }
@@ -297,6 +300,20 @@
         .summary-box.result-economia { border-color: var(--economy-color); background: var(--economy-bg); transition: all 0.4s; }
         .summary-box.result-economia .summary-title { color: var(--economy-color); transition: color 0.4s; }
         .summary-box.result-economia .summary-value { color: var(--title-color); transition: color 0.4s; }
+        
+        /* CORREÇÃO: Design dos Quadros Totalizadores Exclusivamente no Modo Noturno */
+        body.dark-mode .summary-box { background: #1b5e20; border-color: #1b5e20; }
+        body.dark-mode .summary-box.projected { background: #d35400; border-color: #d35400; }
+        body.dark-mode .summary-box.executed-projected { background: #1a5276; border-color: #1a5276; }
+        body.dark-mode .summary-box.result-extrapolacao { background: #c62828; border-color: #c62828; }
+        body.dark-mode .summary-box.result-economia { background: #7cb342; border-color: #7cb342; }
+
+        body.dark-mode .summary-box .summary-title,
+        body.dark-mode .summary-box .summary-value,
+        body.dark-mode .summary-box div {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+        }
 
         .summary-operator { font-size: 2rem; font-weight: 700; color: #7f8c8d; user-select: none; padding: 0 5px; text-align: center; }
 
@@ -372,17 +389,13 @@
                 </div>
                 <div class="chart-grid-bottom">
                     <div class="chart-container">
-                        <div class="chart-title">Orçado x Projetado por Etapa</div>
-                        <canvas id="chartMiranteBar"></canvas>
+                        <div class="chart-title">Avanço Físico-Financeiro</div>
+                        <canvas id="chartMiranteFisicoFin"></canvas>
                     </div>
-                </div>
-                <p class="table-hint">Clique em uma etapa para visualizar o avanço (Investido × Orçado)</p>
-                <div class="table-container">
-                    <table id="tableMirante"></table>
                 </div>
             </div>
             <div class="sub-tab-content" id="subtab-historico-mirante">
-                <div class="chart-container">
+                <div class="chart-container" style="margin-bottom: 20px;">
                     <div class="chart-title">Histórico e Projeção de Desembolsos</div>
                     <canvas id="chartMiranteHistorico"></canvas>
                     <div class="summary-container">
@@ -394,6 +407,14 @@
                         <div class="summary-operator">|</div>
                         <div class="summary-box result-extrapolacao"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 478.202,29</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Extrapolação</div></div>
                     </div>
+                </div>
+                <div class="chart-container" style="margin-bottom: 20px;">
+                    <div class="chart-title">Orçado x Projetado por Etapa</div>
+                    <canvas id="chartMiranteBar"></canvas>
+                </div>
+                <p class="table-hint">Clique em uma etapa para visualizar o avanço (Investido × Orçado)</p>
+                <div class="table-container">
+                    <table id="tableMirante"></table>
                 </div>
             </div>
             <div class="sub-tab-content" id="subtab-planejamento-mirante">
@@ -501,15 +522,13 @@
                 </div>
                 <div class="chart-grid-bottom">
                     <div class="chart-container">
-                        <div class="chart-title">Orçado x Projetado por Etapa</div>
-                        <canvas id="chartJoaquimBar"></canvas>
+                        <div class="chart-title">Avanço Físico-Financeiro</div>
+                        <canvas id="chartJoaquimFisicoFin"></canvas>
                     </div>
                 </div>
-                <p class="table-hint">Clique em uma etapa para visualizar o avanço (Investido × Orçado)</p>
-                <div class="table-container"><table id="tableJoaquim"></table></div>
             </div>
             <div class="sub-tab-content" id="subtab-historico-joaquim">
-                <div class="chart-container">
+                <div class="chart-container" style="margin-bottom: 20px;">
                     <div class="chart-title">Histórico e Projeção de Desembolsos</div>
                     <canvas id="chartJoaquimHistorico"></canvas>
                     <div class="summary-container">
@@ -522,6 +541,12 @@
                         <div class="summary-box result-economia"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 503.627,06</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Economia</div></div>
                     </div>
                 </div>
+                <div class="chart-container" style="margin-bottom: 20px;">
+                    <div class="chart-title">Orçado x Projetado por Etapa</div>
+                    <canvas id="chartJoaquimBar"></canvas>
+                </div>
+                <p class="table-hint">Clique em uma etapa para visualizar o avanço (Investido × Orçado)</p>
+                <div class="table-container"><table id="tableJoaquim"></table></div>
             </div>
             <div class="sub-tab-content" id="subtab-planejamento-joaquim">
                 <div class="planejamento-container">
@@ -677,17 +702,21 @@
         const miranteComprometido = [37257.72, 201591.92, 134826.68, 284987.25, 212449.72, 533313.97, 171635.74, 221077.81, 578897.30, 2741431.72, 789722.37, 218312.39, 91808.40, 236654.19];
         const miranteProjetadoFuturo = [0.00, 34875.91, 0.00, 11540.39, 22591.06, 189939.04, 9499.96, 99384.97, 21185.43, 250000.03, 600.00, 1186800.20, 15000.00, 42000.01];
         
+        const miranteFisico = [100, 90, 100, 90, 95, 90, 95, 80, 100, 80, 95, 20, 95, 80];
+        const miranteFinanceiroPct = miranteOrcado.map((orc, i) => orc > 0 ? (miranteComprometido[i] / orc) * 100 : 0);
+
         const joaquimEtapas = ['TOPOGRAFIA E CONTROLE','MANUTENÇÕES / AS BUILTS','DRENAGEM','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','MEIO AMBIENTE','OBRAS DE ACESSO','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
         const joaquimOrcado = [6000.00, 146722.82, 205220.00, 84333.64, 1184518.92, 320633.13, 273976.19, 104745.00, 146000.00, 1846124.81, 69219.58, 448834.00, 32000.00, 151075.26];
         const joaquimRealizado = [0.00, 117659.68, 190220.00, 49733.63, 1018739.29, 75158.33, 0.00, 7231.00, 0.00, 1835484.81, 18103.58, 14400.00, 0.00, 139146.28];
         const joaquimComprometido = [0.00, 119574.27, 213214.32, 52733.62, 1061802.54, 185722.94, 26849.90, 7231.00, 0.00, 1846216.57, 20803.58, 14400.00, 0.00, 183557.87];
         const joaquimProjetadoFuturo = [4500.00, 15727.72, -142994.32, 31600.02, -381940.33, 263111.06, 356841.70, 138528.00, 146000.00, -91.76, 40082.00, 434434.00, -16000.00, -106128.09];
 
-        // Variáveis originais de saldo para a tabela geral, deduzindo projetado futuro (total -478.202)
+        const joaquimFisico = [0, 50, 90, 100, 80, 80, 0, 100, 80, 100, 0, 0, 0, 50];
+        const joaquimFinanceiroPct = joaquimOrcado.map((orc, i) => orc > 0 ? (joaquimComprometido[i] / orc) * 100 : 0);
+
         const miranteDisponivel = miranteOrcado.map((orc, idx) => orc - (miranteComprometido[idx] + miranteProjetadoFuturo[idx]));
         const joaquimDisponivel = joaquimOrcado.map((orc, idx) => orc - (joaquimComprometido[idx] + joaquimProjetadoFuturo[idx]));
 
-        // Variáveis exclusivas para manter o gráfico de saldo disponível mostrando Orçado - Investido (Comprometido)
         const miranteDisponivelGrafico = miranteOrcado.map((orc, idx) => orc - miranteComprometido[idx]);
         const joaquimDisponivelGrafico = joaquimOrcado.map((orc, idx) => orc - joaquimComprometido[idx]);
 
@@ -723,7 +752,6 @@
         let gaugeChart = null;
         let isDarkMode = false; 
 
-        // --- CONTROLE DO MODO NOTURNO ---
         function toggleMode() {
             const body = document.body;
             const btnText = document.getElementById('modeText');
@@ -742,12 +770,11 @@
                 applyChartThemes('light');
             }
             
-            // Re-renderiza as tabelas injetando as cores dinâmicas
+            // CORREÇÃO: Tabela redesenhada para aplicar estritamente a cor preta ou branca correspondente da nova regra na coluna Saldo
             createTable('tableMirante', 'MIRANTE DA LAGOA', miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo, miranteDisponivel);
             createTable('tableJoaquim', 'JOAQUIM LEME', joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo, joaquimDisponivel);
         }
 
-        // CORREÇÃO DEFINITIVA: Utilizando Object.values() para forçar branco irrestrito em todos os plugins de todas as instâncias ativas do Chart.js
         function applyChartThemes(theme) {
             const textColor = theme === 'dark' ? '#ffffff' : '#000000';
             const datalabelColor = theme === 'dark' ? '#ffffff' : '#2c3e50';
@@ -757,24 +784,20 @@
             Chart.defaults.borderColor = gridColor;
 
             Object.values(Chart.instances).forEach(chart => {
-                // Legendas Superiores e Laterais
                 if (chart.options.plugins && chart.options.plugins.legend && chart.options.plugins.legend.labels) {
                     chart.options.plugins.legend.labels.color = textColor;
                 }
 
-                // Datalabels (Percentuais do gráfico de pizza)
                 if (chart.options.plugins && chart.options.plugins.datalabels) {
                     chart.options.plugins.datalabels.color = datalabelColor;
                 }
 
-                // Tooltips (balões de informação)
                 if (chart.options.plugins && chart.options.plugins.tooltip) {
                     chart.options.plugins.tooltip.titleColor = '#ffffff';
                     chart.options.plugins.tooltip.bodyColor = '#ffffff';
                     chart.options.plugins.tooltip.footerColor = '#ffffff';
                 }
 
-                // Todos os Eixos X, Y e Y1
                 if (chart.options.scales) {
                     Object.keys(chart.options.scales).forEach(axis => {
                         const scale = chart.options.scales[axis];
@@ -787,7 +810,6 @@
                         }
                     });
                 }
-
                 chart.update('none'); 
             });
         }
@@ -809,7 +831,6 @@
             if (gaugeChart) { gaugeChart.destroy(); gaugeChart = null; }
         }
 
-        // --- ENGINES DO VELOCÍMETRO INTEGRADO ---
         function createMainGauge(canvasId, valOrcado, valDesembolso, valComprometidoTotal) {
             const maxEscala = valOrcado / 0.75; 
             const pOrcado = 0.75; 
@@ -919,7 +940,6 @@
             });
         }
 
-        // --- DETECÇÃO DO TEXTO CENTRAL GLOBAL (PIE GRAPHS) ---
         const centerTextPlugin = {
             id: 'centerText',
             beforeDraw: function(chart) {
@@ -970,6 +990,39 @@
                                 const pct = (value / total) * 100;
                                 return pct >= 2.5 ? pct.toFixed(1) + '%' : ''; 
                             }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createFisicoFinChart(canvasId, labels, finData, fisData) {
+            new Chart(document.getElementById(canvasId), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'Avanço Financeiro (Investido %)', data: finData, backgroundColor: '#1b5e20', borderRadius: 4 },
+                        { label: 'Avanço Físico (%)', data: fisData, backgroundColor: '#7cb342', borderRadius: 4 }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { font: { family: "'Montserrat'" }, color: '#000000' } },
+                        datalabels: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => ` ${context.dataset.label}: ${context.parsed.y.toFixed(1)}%`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { ticks: { color: '#000000', maxRotation: 45, font: { size: 9, family: "'Montserrat'" } }, grid: { color: 'rgba(0,0,0,0.1)' } },
+                        y: { 
+                            beginAtZero: true,
+                            ticks: { color: '#000000', font: { family: "'Montserrat'" }, callback: v => v + '%' }, 
+                            grid: { color: 'rgba(0,0,0,0.1)' } 
                         }
                     }
                 }
@@ -1054,12 +1107,7 @@
             let html = '<thead><tr><th>Macro Etapa</th><th>Orçamento Total</th><th>Investido</th><th>Projetado</th><th>Saldo Disponível</th><th>% Desvio</th><th>Status</th><th>Progresso</th></tr></thead><tbody>';
             let totOrcado = 0, totComprometido = 0, totProjetadoFuturo = 0, totDisponivel = 0;
             
-            // CORREÇÃO: As linhas da coluna recebem Preto (#2c3e50) no Modo Claro e Branco (#ffffff) no Modo Noturno
-            const saldoNumColor = isDarkMode ? '#ffffff' : '#2c3e50';
-            
-            // CORREÇÃO: O Total da coluna recebe Verde Negrito (#1b5e20) no Modo Claro e Branco Negrito (#ffffff) no Modo Noturno
-            const totalSaldoColor = isDarkMode ? '#ffffff' : '#1b5e20';
-
+            // CORREÇÃO: Limpado de qualquer formatação isolada condicional
             for(let i=0; i<etapas.length; i++){
                 const eac = comprometido[i] + projetadoFuturo[i]; 
                 const desvio = orcado[i] > 0 ? ((eac - orcado[i]) / orcado[i] * 100) : 0;
@@ -1069,14 +1117,15 @@
                 
                 totOrcado += orcado[i]; totComprometido += comprometido[i]; totProjetadoFuturo += projetadoFuturo[i]; totDisponivel += disponivel[i];
                 
-                // Sem distinção de valor negativo para forçar a cor padrão exigida (Preto ou Branco)
-                html += `<tr class="etapa-row" data-index="${i}"><td>${etapas[i]}</td><td>${fmtNum(orcado[i])}</td><td>${fmtNum(comprometido[i])}</td><td>${fmtNum(projetadoFuturo[i])}</td><td style="color:${saldoNumColor}; font-weight:500;">${fmtNum(disponivel[i])}</td><td>${desvio.toFixed(1)}%</td><td><span class="status ${statusClass}">${statusLabel}</span></td><td><div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div></td></tr>`;
+                // Agora o <td style="color:var(--table-saldo-color); font-weight:400;"> acompanha a cor da tabela em cada modo estritamente
+                html += `<tr class="etapa-row" data-index="${i}"><td>${etapas[i]}</td><td>${fmtNum(orcado[i])}</td><td>${fmtNum(comprometido[i])}</td><td>${fmtNum(projetadoFuturo[i])}</td><td style="color:var(--table-saldo-color); font-weight:400;">${fmtNum(disponivel[i])}</td><td>${desvio.toFixed(1)}%</td><td><span class="status ${statusClass}">${statusLabel}</span></td><td><div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div></td></tr>`;
             }
             const eacTotal = totComprometido + totProjetadoFuturo;
             const totDesvio = totOrcado > 0 ? ((eacTotal - totOrcado) / totOrcado * 100) : 0;
             const totProgress = totOrcado > 0 ? Math.min(100, (totComprometido / totOrcado * 100)) : 0;
             
-            html += `</tbody><tfoot><tr class="total-row"><td><strong>TOTAL</strong></td><td>${fmtNum(totOrcado)}</td><td>${fmtNum(totComprometido)}</td><td>${fmtNum(totProjetadoFuturo)}</td><td style="color:${totalSaldoColor}; font-weight:700;">${fmtNum(totDisponivel)}</td><td>${totDesvio.toFixed(1)}%</td><td>—</td><td><div class="progress-bar"><div class="progress-fill" style="width:${totProgress}%"></div></div></td></tr></tfoot>`;
+            // A linha de rodapé herda integralmente o color: var(--title-color) da sua classe CSS principal
+            html += `</tbody><tfoot><tr class="total-row"><td><strong>TOTAL</strong></td><td>${fmtNum(totOrcado)}</td><td>${fmtNum(totComprometido)}</td><td>${fmtNum(totProjetadoFuturo)}</td><td>${fmtNum(totDisponivel)}</td><td>${totDesvio.toFixed(1)}%</td><td>—</td><td><div class="progress-bar"><div class="progress-fill" style="width:${totProgress}%"></div></div></td></tr></tfoot>`;
             t.innerHTML = html;
             
             t.querySelectorAll('tbody tr').forEach(row => {
@@ -1179,6 +1228,10 @@
             createMainGauge('gaugeMainJoaquim', 5019403, 3465877, 3732107);
             createPieChart('chartMirantePie', miranteEtapas, miranteOrcado);
             createPieChart('chartJoaquimPie', joaquimEtapas, joaquimOrcado);
+            
+            createFisicoFinChart('chartMiranteFisicoFin', miranteEtapas, miranteFinanceiroPct, miranteFisico);
+            createFisicoFinChart('chartJoaquimFisicoFin', joaquimEtapas, joaquimFinanceiroPct, joaquimFisico);
+            
             createBarChart('chartMiranteBar', miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo);
             createBarChart('chartJoaquimBar', joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo);
             createDisponivelChart('chartMiranteDisponivel', miranteEtapas, miranteDisponivelGrafico);

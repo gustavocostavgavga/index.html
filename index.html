@@ -67,6 +67,7 @@
             
             /* Cor única e rígida para toda a coluna Saldo Disponível no Modo Claro */
             --table-saldo-color: #2c3e50;
+            --update-text-color: #7f8c8d;
         }
 
         /* Definição das cores para o Modo Noturno (Verde Escuro) */
@@ -120,6 +121,7 @@
             
             /* Cor única e rígida para toda a coluna Saldo Disponível no Modo Noturno */
             --table-saldo-color: #ffffff;
+            --update-text-color: #ffffff;
         }
 
         body { 
@@ -135,9 +137,83 @@
         .dashboard { max-width: 1440px; margin: 0 auto; position: relative; }
         
         header { display: flex; align-items: center; justify-content: center; margin-bottom: 30px; gap: 20px; position: relative; }
-        header .title-section { flex: 1; background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 20px; text-align: center; position: relative; transition: all 0.4s; }
-        header h1 { font-size: 1.9rem; font-weight: 700; color: var(--title-color); letter-spacing: 1px; transition: color 0.4s; padding-right: 140px; padding-left: 140px; }
-        header p { font-size: 1rem; color: var(--subtitle-color); margin-top: 8px; transition: color 0.4s; }
+        
+        /* Ajuste do layout interno da title-section para comportar logo e metadados */
+        header .title-section { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            flex: 1; 
+            background: var(--card-bg); 
+            border: 2px solid var(--border-color); 
+            border-radius: 12px; 
+            padding: 15px 24px; 
+            position: relative; 
+            transition: all 0.4s; 
+        }
+        
+        /* Container estruturado para abrigar a logo à esquerda */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 140px;
+        }
+        .logo-container img {
+            max-height: 45px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        header h1 { 
+            flex: 1;
+            font-size: 1.75rem; 
+            font-weight: 700; 
+            color: var(--title-color); 
+            letter-spacing: 0.5px; 
+            text-align: center;
+            transition: color 0.4s; 
+            padding: 0 20px;
+            margin: 0;
+        }
+        
+        /* CORREÇÃO DO BUG: Bloco superior direito alinhado em Flexbox puro sem position absolute que sobreponha textos */
+        .header-controls-block {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 8px;
+            width: 140px;
+        }
+
+        /* O botão agora respeita o espaço em bloco sem flutuar por cima da data */
+        .mode-toggle-btn { 
+            background: var(--toggle-btn-bg); 
+            color: var(--toggle-btn-text); 
+            border: 1px solid var(--toggle-btn-border); 
+            padding: 6px 12px; 
+            border-radius: 16px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 0.72rem; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px; 
+            transition: all 0.3s; 
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1); 
+        }
+        .mode-toggle-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .mode-toggle-btn .icon { font-size: 0.85rem; }
+
+        .update-date-lbl {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--update-text-color);
+            transition: color 0.4s;
+            white-space: nowrap;
+            text-align: right;
+        }
         
         /* Centralização e estilização do balão de prazos */
         .prazos-header-container { display: flex; justify-content: center; margin-bottom: 25px; }
@@ -163,6 +239,9 @@
         .analysis-tabs-container { display: flex; gap: 10px; margin-bottom: 25px; justify-content: flex-start; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
         .analysis-tab-btn { background: var(--analysis-tab-btn-bg); border: 1px solid var(--analysis-tab-btn-border); color: var(--analysis-tab-btn-text); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.4s; font-size: 0.85rem; }
         .analysis-tab-btn.active, .analysis-tab-btn:hover { background: var(--title-color); color: var(--active-text); border-color: var(--title-color); }
+        
+        body.dark-mode .analysis-tab-btn.active { background: #1a4522; border-color: #a3e635; color: #ffffff; }
+
         .analysis-inner-content { display: none; min-height: 200px; }
         .analysis-inner-content.active { display: block; }
         .empty-state { text-align: center; padding: 40px; color: var(--empty-state-text); background: var(--empty-state-bg); border: 1px dashed var(--border-color); border-radius: 8px; font-style: italic; transition: all 0.4s; }
@@ -195,6 +274,7 @@
         .chart-container canvas { max-height: 300px; }
         .chart-title { color: var(--title-color); font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; text-align: center; transition: color 0.4s; }
         
+        /* CORREÇÃO: Altura Fixa aumentada para 850px, com barras bem dimensionadas e sem problemas de sobreposição */
         .chart-container-large { 
             background: var(--card-bg); 
             border: 2px solid var(--border-color); 
@@ -203,7 +283,7 @@
             margin-bottom: 30px; 
             position: relative; 
             transition: all 0.4s; 
-            height: 800px; 
+            height: 850px; 
             width: 100%;
         }
         .chart-container-large canvas {
@@ -246,9 +326,21 @@
         @media (max-width: 768px) {
             .chart-grid-top { grid-template-columns: 1fr; }
             .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
-            header h1 { font-size: 1.5rem; padding-right: 0; padding-left: 0; margin-top: 40px; }
+            header h1 { font-size: 1.2rem; padding: 0 10px; text-align: center; }
             .planejamento-container { grid-template-columns: 1fr !important; }
-            .mode-toggle-btn { top: 12px; right: 12px; }
+            
+            header .title-section { 
+                flex-direction: column; 
+                gap: 15px; 
+            }
+            .header-controls-block { 
+                width: 100%; 
+                align-items: center; 
+            }
+            .logo-container {
+                width: 100%;
+                justify-content: center;
+            }
             .chart-container-large { height: 600px; } 
         }
         .executive { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
@@ -339,23 +431,25 @@
         }
 
         .summary-operator { font-size: 2rem; font-weight: 700; color: #7f8c8d; user-select: none; padding: 0 5px; text-align: center; }
-
-        /* Ajuste do Botão Alternador de Modo - Menor e Integrado na Caixa de Título */
-        .mode-toggle-btn { position: absolute; top: 15px; right: 15px; background: var(--toggle-btn-bg); color: var(--toggle-btn-text); border: 1px solid var(--toggle-btn-border); padding: 6px 12px; border-radius: 16px; cursor: pointer; font-weight: 600; font-size: 0.72rem; display: flex; align-items: center; gap: 6px; transition: all 0.3s; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-        .mode-toggle-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-        .mode-toggle-btn .icon { font-size: 0.85rem; }
     </style>
 </head>
 <body>
     <div class="dashboard">
         <header>
             <div class="title-section">
-                <button class="mode-toggle-btn" id="modeToggle" onclick="toggleMode()">
-                    <span class="icon" id="modeIcon">🌙</span>
-                    <span id="modeText">Modo Noturno</span>
-                </button>
+                <div class="logo-container">
+                    <img src="logo.png" alt="Logo GRP">
+                </div>
+                
                 <h1>VISUALIZAÇÃO ESTRATÉGICA DE OBRAS - DASHBOARD GRP</h1>
-                <p>Visão Gerencial - CasaGrande Urbanismo</p>
+                
+                <div class="header-controls-block">
+                    <button class="mode-toggle-btn" id="modeToggle" onclick="toggleMode()">
+                        <span class="icon" id="modeIcon">🌙</span>
+                        <span id="modeText">Modo Noturno</span>
+                    </button>
+                    <div class="update-date-lbl">Última atualização: 10/06/2026</div>
+                </div>
             </div>
         </header>
         <div class="tabs">
@@ -367,7 +461,7 @@
         <div class="tab-content active" id="tab-mirante">
             <div class="prazos-header-container">
                 <div class="prazos-card">
-                    <p>Prazo final de entrega: <strong>31/07/2026</strong> &nbsp;&nbsp;|&nbsp;&nbsp; Prazo previsto de entrega: <strong>31/08/2026</strong></p>
+                    <p>Prazo final de entrega: <strong>31/07/2026</strong> &nbsp;&nbsp;|&nbsp;&nbsp; Prazo previsto de entrega: <strong>31/07/2026</strong></p>
                 </div>
             </div>
             <div class="kpi-grid">
@@ -434,7 +528,7 @@
                     </div>
                 </div>
                 <div class="chart-container" style="margin-bottom: 20px;">
-                    <div class="chart-title">Orçado x Projetado por Etapa</div>
+                    <div class="chart-title">Orçado x Investido x Projetado por Etapa</div>
                     <canvas id="chartMiranteBar"></canvas>
                 </div>
                 <p class="table-hint">Clique em uma etapa para visualizar o avanço no painel flutuante</p>
@@ -492,7 +586,7 @@
         <div class="tab-content" id="tab-joaquim">
             <div class="prazos-header-container">
                 <div class="prazos-card">
-                    <p>Prazo final de entrega: <strong>31/08/2026</strong> &nbsp;&nbsp;|&nbsp;&nbsp; Prazo previsto de entrega: <strong>30/09/2026</strong></p>
+                    <p>Prazo final de entrega: <strong>31/08/2026</strong> &nbsp;&nbsp;|&nbsp;&nbsp; Prazo previsto de entrega: <strong>31/08/2026</strong></p>
                 </div>
             </div>
             <div class="kpi-grid">
@@ -561,7 +655,7 @@
                     </div>
                 </div>
                 <div class="chart-container" style="margin-bottom: 20px;">
-                    <div class="chart-title">Orçado x Projetado por Etapa</div>
+                    <div class="chart-title">Orçado x Investido x Projetado por Etapa</div>
                     <canvas id="chartJoaquimBar"></canvas>
                 </div>
                 <p class="table-hint">Clique em uma etapa para visualizar o avanço no painel flutuante</p>
@@ -763,7 +857,6 @@
         const miranteComprometido = [37257.72, 201591.92, 134826.68, 284987.25, 212449.72, 533313.97, 171635.74, 221077.81, 578897.30, 2741431.72, 789722.37, 218312.39, 91808.40, 236654.19];
         const miranteProjetadoFuturo = [0.00, 34875.91, 0.00, 11540.39, 22591.06, 189939.04, 9499.96, 99384.97, 21185.43, 250000.03, 600.00, 1186800.20, 15000.00, 42000.01];
         
-        // Dados lidos das imagens e com a barra visual cravada rigorosamente em 100%
         const miranteFisicoRaw = [85.0, 90.0, 100.0, 90.0, 95.0, 90.0, 95.0, 80.0, 90.0, 80.0, 95.0, 20.0, 95.0, 90.0];
         const miranteFisico = miranteFisicoRaw.map(v => Math.min(100, v));
         const miranteFinanceiroRaw = [103.3, 85.8, 100.0, 102.2, 102.5, 82.6, 97.1, 70.5, 96.8, 98.8, 100.0, 16.6, 96.7, 91.7];
@@ -772,13 +865,10 @@
         const joaquimEtapas = ['TOPOGRAFIA E CONTROLE','MANUTENÇÕES / AS BUILTS','DRENAGEM','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','MEIO AMBIENTE','OBRAS DE ACESSO','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
         const joaquimOrcado = [6000.00, 146722.82, 205220.00, 84333.64, 1184518.92, 320633.13, 273976.19, 104745.00, 146000.00, 1846124.81, 69219.58, 448834.00, 32000.00, 151075.26];
         const joaquimRealizado = [0.00, 117659.68, 190220.00, 49733.63, 1018739.29, 75158.33, 0.00, 7231.00, 0.00, 1835484.81, 18103.58, 14400.00, 0.00, 139146.28];
-        
-        // CORREÇÃO: Arrays de Investimento Atual e Projetado do Joaquim Leme atualizadas com os dados precisos das imagens
         const joaquimComprometido = [0.00, 119575.00, 213215.00, 52734.00, 1061803.00, 185723.00, 26850.00, 7231.00, 0.00, 1846217.00, 20804.00, 14400.00, 0.00, 183558.00];
         const joaquimProjetadoFuturo = [7500.00, 38568.66, 127005.00, 31599.64, -381940.79, 6709.26, 137410.78, 56500.00, 146000.00, -92.19, 56749.58, 434434.00, 80000.00, 43221.61];
 
-        // Dados lidos das imagens e com a barra visual cravada rigorosamente em 100%
-        const joaquimFisicoRaw = [0, 50, 90, 100, 80, 80, 0, 100, 80, 100, 0, 0, 0, 50];
+        const joaquimFisicoRaw = [0, 50, 90, 100, 80, 80, 0, 100, 80, 100, 30, 0, 0, 70];
         const joaquimFisico = joaquimFisicoRaw.map(v => Math.min(100, v));
         const joaquimFinanceiroRaw = [0, 82, 104, 63, 90, 58, 10, 7, 0, 100, 30, 3, 0, 122];
         const joaquimFinanceiroPct = joaquimFinanceiroRaw.map(v => Math.min(100, v));
@@ -1064,7 +1154,6 @@
             });
         }
 
-        // --- Gráfico Físico Financeiro: Tooltip com base real (acima de 100%), barra travada e eixo numérico limpo ---
         function createFisicoFinChart(canvasId, labels, finData, fisData, finDataRaw, fisDataRaw, finalDateStr) {
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
@@ -1305,7 +1394,6 @@
 
         // --- LIFE-CYCLE INIT ---
         window.addEventListener('DOMContentLoaded', () => {
-            // CORREÇÃO: O valor do Velocímetro base para Joaquim Leme foi ajustado refletindo o aumento no Investimento Atual para 3.732.110
             createMainGauge('gaugeMainMirante', 7859182, 4957062, 6453967);
             createMainGauge('gaugeMainJoaquim', 5019403, 3465877, 3732110);
             

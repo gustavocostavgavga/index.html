@@ -261,6 +261,34 @@
         .kpi-card .kpi-sublist-item .sublist-label { font-weight: 500; color: var(--subtitle-color); transition: color 0.4s; }
         .kpi-card .kpi-sublist-item .sublist-value { font-weight: 700; color: var(--kpi-value-color); transition: color 0.4s; }
 
+        /* Estilos do Badge de Desvio */
+        .desvio-badge {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: 700;
+            margin-left: 10px;
+            display: inline-block;
+            vertical-align: middle;
+            transition: all 0.4s;
+        }
+        .desvio-badge.positive {
+            color: var(--economy-color);
+            background: var(--economy-bg);
+        }
+        .desvio-badge.negative {
+            color: var(--alert-color);
+            background: var(--alert-bg);
+        }
+        body.dark-mode .desvio-badge.positive {
+            color: #a3e635;
+            background: rgba(163, 230, 53, 0.15);
+        }
+        body.dark-mode .desvio-badge.negative {
+            color: #ff5252;
+            background: rgba(255, 82, 82, 0.15);
+        }
+
         /* Container do Velocímetro integrado */
         .chart-container-gauge-integrated { margin: 20px auto 0 auto; width: 100%; max-width: 440px; position: relative; border-top: 1px dashed var(--border-color); padding-top: 20px; transition: border 0.4s; }
         .main-gauge-wrapper { position: relative; width: 100%; height: 165px; margin-top: 5px; }
@@ -533,7 +561,7 @@
                 </div>
                 <div class="chart-grid-bottom">
                     <div class="chart-container-large">
-                        <div class="chart-title" style="margin-bottom: 5px;">Avanço Físico-Financeiro por Etapa</div>
+                        <div class="chart-title" style="margin-bottom: 5px;">Avanço Físico-Financeiro por Etapa<span id="desvioMirante"></span></div>
                         <canvas id="chartMiranteFisicoFin"></canvas>
                     </div>
                 </div>
@@ -680,7 +708,7 @@
                 </div>
                 <div class="chart-grid-bottom">
                     <div class="chart-container-large">
-                        <div class="chart-title" style="margin-bottom: 5px;">Avanço Físico-Financeiro por Etapa</div>
+                        <div class="chart-title" style="margin-bottom: 5px;">Avanço Físico-Financeiro por Etapa<span id="desvioJoaquim"></span></div>
                         <canvas id="chartJoaquimFisicoFin"></canvas>
                     </div>
                 </div>
@@ -938,7 +966,7 @@
         const joaquimComprometido = [0.00, 119575.00, 213215.00, 52734.00, 1061803.00, 185723.00, 26850.00, 7231.00, 0.00, 1846217.00, 20804.00, 14400.00, 0.00, 183558.00];
         const joaquimProjetadoFuturo = [7500.00, 38568.66, 127005.00, 31599.64, -381940.79, 6709.26, 137410.78, 56500.00, 146000.00, -92.19, 56749.58, 434434.00, 80000.00, 43221.61];
 
-        const joaquimFisicoRaw = [0, 50, 90, 100, 80, 80, 0, 100, 80, 100, 30, 0, 0, 70];
+        const joaquimFisicoRaw = [0, 90, 90, 100, 80, 80, 0, 100, 80, 100, 30, 0, 0, 70];
         const joaquimFisico = joaquimFisicoRaw.map(v => Math.min(100, v));
         const joaquimFinanceiroRaw = [0, 82, 104, 63, 90, 58, 10, 7, 0, 100, 30, 3, 0, 122];
         const joaquimFinanceiroPct = joaquimFinanceiroRaw.map(v => Math.min(100, v));
@@ -1489,6 +1517,27 @@
             });
         }
 
+        function setDesvioBadge(orcado, comprometido, fisico, elementId) {
+            let totOrc = 0;
+            let totComp = 0;
+            let totFis = 0;
+            for(let i=0; i<orcado.length; i++) {
+                totOrc += orcado[i];
+                totComp += comprometido[i];
+                totFis += orcado[i] * (fisico[i] / 100);
+            }
+            let avFin = (totComp / totOrc) * 100;
+            let avFis = (totFis / totOrc) * 100;
+            let desvio = avFis - avFin;
+            
+            let el = document.getElementById(elementId);
+            if(el) {
+                let cls = desvio >= 0 ? 'positive' : 'negative';
+                let sign = desvio > 0 ? '+' : '';
+                el.innerHTML = `<span class="desvio-badge ${cls}">Desvio: ${sign}${desvio.toFixed(2).replace('.',',')}%</span>`;
+            }
+        }
+
         // --- LIFE-CYCLE INIT ---
         window.addEventListener('DOMContentLoaded', () => {
             createMainGauge('gaugeMainMirante', 7859182, 4957062, 6453967);
@@ -1511,6 +1560,9 @@
             createColumnChart('chartMiranteHistorico', mesesHistorico, desembolsosMirante);
             createColumnChart('chartJoaquimHistorico', mesesHistorico, desembolsosJoaquim);
             
+            setDesvioBadge(miranteOrcado, miranteComprometido, miranteFisico, 'desvioMirante');
+            setDesvioBadge(joaquimOrcado, joaquimComprometido, joaquimFisico, 'desvioJoaquim');
+
             applyChartThemes('light');
         });
 

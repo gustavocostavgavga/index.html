@@ -195,7 +195,6 @@
         .chart-container canvas { max-height: 300px; }
         .chart-title { color: var(--title-color); font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; text-align: center; transition: color 0.4s; }
         
-        /* CORREÇÃO: Altura Fixa aumentada consideravelmente (800px) para melhorar o espaçamento entre etapas */
         .chart-container-large { 
             background: var(--card-bg); 
             border: 2px solid var(--border-color); 
@@ -250,7 +249,7 @@
             header h1 { font-size: 1.5rem; padding-right: 0; padding-left: 0; margin-top: 40px; }
             .planejamento-container { grid-template-columns: 1fr !important; }
             .mode-toggle-btn { top: 12px; right: 12px; }
-            .chart-container-large { height: 600px; } /* Ajuste mobile */
+            .chart-container-large { height: 600px; } 
         }
         .executive { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
         .executive-column { display: flex; flex-direction: column; }
@@ -498,9 +497,9 @@
             </div>
             <div class="kpi-grid">
                 <div class="kpi-card"><div class="label">Orçamento Total Aprovado</div><div class="value">R$ 5.019.403</div></div>
-                <div class="kpi-card"><div class="label">Investimento Atual</div><div class="value">R$ 3.732.107</div></div>
-                <div class="kpi-card"><div class="label">Saldo a Comprometer</div><div class="value">R$ 1.287.297</div></div>
-                <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 783.670</div></div>
+                <div class="kpi-card"><div class="label">Investimento Atual</div><div class="value">R$ 3.732.110</div></div>
+                <div class="kpi-card"><div class="label">Saldo a Comprometer</div><div class="value">R$ 1.287.293</div></div>
+                <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 783.666</div></div>
                 <div class="kpi-card">
                     <div class="label">Desvio Orçamentário</div>
                     <div class="value" style="color: #03a9f4;">⬇ -10,0%</div>
@@ -554,11 +553,11 @@
                     <div class="summary-container">
                         <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 3.465.877</div></div>
                         <div class="summary-operator">+</div>
-                        <div class="summary-box projected"><div class="summary-title">Valor Total de Desembolso Projetado</div><div class="summary-value">R$ 1.049.898,94</div></div>
+                        <div class="summary-box projected"><div class="summary-title">Valor Total de Desembolso Projetado</div><div class="summary-value">R$ 1.049.898,55</div></div>
                         <div class="summary-operator">=</div>
-                        <div class="summary-box executed-projected"><div class="summary-title">Valor de Execução Projetado</div><div class="summary-value">R$ 4.515.775,94</div></div>
+                        <div class="summary-box executed-projected"><div class="summary-title">Valor de Execução Projetado</div><div class="summary-value">R$ 4.515.775,55</div></div>
                         <div class="summary-operator">|</div>
-                        <div class="summary-box result-economia"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 503.627,06</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Economia</div></div>
+                        <div class="summary-box result-economia"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 503.627,45</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Economia</div></div>
                     </div>
                 </div>
                 <div class="chart-container" style="margin-bottom: 20px;">
@@ -648,9 +647,9 @@
                         <div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
                         <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">576</span></div>
                         <div class="kpi-item"><span class="label">Orçamento Total Aprovado</span><span class="value">R$ 5.019.403</span></div>
-                        <div class="kpi-item"><span class="label">Investimento Atual</span><span class="value">R$ 3.732.107</span></div>
-                        <div class="kpi-item"><span class="label">Saldo a Comprometer</span><span class="value">R$ 1.287.297</span></div>
-                        <div class="kpi-item"><span class="label">Verba Projetada para Conclusão</span><span class="value">R$ 783.670</span></div>
+                        <div class="kpi-item"><span class="label">Investimento Atual</span><span class="value">R$ 3.732.110</span></div>
+                        <div class="kpi-item"><span class="label">Saldo a Comprometer</span><span class="value">R$ 1.287.293</span></div>
+                        <div class="kpi-item"><span class="label">Verba Projetada para Conclusão</span><span class="value">R$ 783.666</span></div>
                         <div class="kpi-item"><span class="label">Custo/Lote (Atual)</span><span class="value">R$ 6.479</span></div>
                         
                         <div class="chart-container-gauge-integrated">
@@ -764,7 +763,7 @@
         const miranteComprometido = [37257.72, 201591.92, 134826.68, 284987.25, 212449.72, 533313.97, 171635.74, 221077.81, 578897.30, 2741431.72, 789722.37, 218312.39, 91808.40, 236654.19];
         const miranteProjetadoFuturo = [0.00, 34875.91, 0.00, 11540.39, 22591.06, 189939.04, 9499.96, 99384.97, 21185.43, 250000.03, 600.00, 1186800.20, 15000.00, 42000.01];
         
-        // CORREÇÃO: Dados lidos das imagens e com a barra visual cravada rigorosamente em 100%
+        // Dados lidos das imagens e com a barra visual cravada rigorosamente em 100%
         const miranteFisicoRaw = [85.0, 90.0, 100.0, 90.0, 95.0, 90.0, 95.0, 80.0, 90.0, 80.0, 95.0, 20.0, 95.0, 90.0];
         const miranteFisico = miranteFisicoRaw.map(v => Math.min(100, v));
         const miranteFinanceiroRaw = [103.3, 85.8, 100.0, 102.2, 102.5, 82.6, 97.1, 70.5, 96.8, 98.8, 100.0, 16.6, 96.7, 91.7];
@@ -773,11 +772,13 @@
         const joaquimEtapas = ['TOPOGRAFIA E CONTROLE','MANUTENÇÕES / AS BUILTS','DRENAGEM','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','MEIO AMBIENTE','OBRAS DE ACESSO','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
         const joaquimOrcado = [6000.00, 146722.82, 205220.00, 84333.64, 1184518.92, 320633.13, 273976.19, 104745.00, 146000.00, 1846124.81, 69219.58, 448834.00, 32000.00, 151075.26];
         const joaquimRealizado = [0.00, 117659.68, 190220.00, 49733.63, 1018739.29, 75158.33, 0.00, 7231.00, 0.00, 1835484.81, 18103.58, 14400.00, 0.00, 139146.28];
-        const joaquimComprometido = [0.00, 119574.27, 213214.32, 52733.62, 1061802.54, 185722.94, 26849.90, 7231.00, 0.00, 1846216.57, 20803.58, 14400.00, 0.00, 183557.87];
-        const joaquimProjetadoFuturo = [4500.00, 15727.72, -142994.32, 31600.02, -381940.33, 263111.06, 356841.70, 138528.00, 146000.00, -91.76, 40082.00, 434434.00, -16000.00, -106128.09];
+        
+        // CORREÇÃO: Arrays de Investimento Atual e Projetado do Joaquim Leme atualizadas com os dados precisos das imagens
+        const joaquimComprometido = [0.00, 119575.00, 213215.00, 52734.00, 1061803.00, 185723.00, 26850.00, 7231.00, 0.00, 1846217.00, 20804.00, 14400.00, 0.00, 183558.00];
+        const joaquimProjetadoFuturo = [7500.00, 38568.66, 127005.00, 31599.64, -381940.79, 6709.26, 137410.78, 56500.00, 146000.00, -92.19, 56749.58, 434434.00, 80000.00, 43221.61];
 
-        // CORREÇÃO: Dados lidos das imagens e com a barra visual cravada rigorosamente em 100%
-        const joaquimFisicoRaw = [0, 90, 90, 100, 80, 80, 0, 100, 80, 100, 30, 0, 0, 70];
+        // Dados lidos das imagens e com a barra visual cravada rigorosamente em 100%
+        const joaquimFisicoRaw = [0, 50, 90, 100, 80, 80, 0, 100, 80, 100, 0, 0, 0, 50];
         const joaquimFisico = joaquimFisicoRaw.map(v => Math.min(100, v));
         const joaquimFinanceiroRaw = [0, 82, 104, 63, 90, 58, 10, 7, 0, 100, 30, 3, 0, 122];
         const joaquimFinanceiroPct = joaquimFinanceiroRaw.map(v => Math.min(100, v));
@@ -1063,7 +1064,7 @@
             });
         }
 
-        // CORREÇÃO: O Tooltip lê a array com os dados puros, não limitados, garantindo a exibição real das ultrapassagens.
+        // --- Gráfico Físico Financeiro: Tooltip com base real (acima de 100%), barra travada e eixo numérico limpo ---
         function createFisicoFinChart(canvasId, labels, finData, fisData, finDataRaw, fisDataRaw, finalDateStr) {
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
@@ -1085,7 +1086,6 @@
                         tooltip: {
                             callbacks: {
                                 label: (context) => {
-                                    // CORREÇÃO: Lê o valor real original que passou para a base do tooltip
                                     const rawVal = context.dataset.rawData[context.dataIndex];
                                     return ` ${context.dataset.label.split('(')[0].trim()}: ${rawVal.toFixed(1)}%`;
                                 }
@@ -1097,7 +1097,7 @@
                             beginAtZero: true,
                             max: 115, 
                             ticks: { 
-                                display: false // CORREÇÃO: Escala inferior completamente removida para não confundir a leitura
+                                display: false 
                             }, 
                             grid: { color: 'rgba(0,0,0,0.1)' } 
                         },
@@ -1195,7 +1195,6 @@
                 const statusClass = desvio <= 0 ? 'ok' : desvio <= 5 ? 'warn' : 'alert';
                 const statusLabel = desvio <= 0 ? 'OK' : desvio <= 5 ? 'Atenção' : 'Crítico';
                 
-                // CORREÇÃO: A barra de progresso da tabela agora espelha perfeitamente o Avanço Físico real da imagem
                 const progress = Math.min(100, fisicoRaw[i] || 0);
                 
                 totOrcado += orcado[i]; totComprometido += Peanut[i]; totProjetadoFuturo += Honey[i]; totDisponivel += disponivel[i];
@@ -1205,7 +1204,6 @@
             const eacTotal = totComprometido + totProjetadoFuturo;
             const totDesvio = totOrcado > 0 ? ((eacTotal - totOrcado) / totOrcado * 100) : 0;
             
-            // Total físico é uma média ponderada baseada no Orçado x Investido geral do Dashboard
             const totProgress = totOrcado > 0 ? Math.min(100, (totComprometido / totOrcado * 100)) : 0;
             
             html += `</tbody><tfoot><tr class="total-row"><td><strong>TOTAL</strong></td><td>${fmtNum(totOrcado)}</td><td>${fmtNum(totComprometido)}</td><td>${fmtNum(totProjetadoFuturo)}</td><td style="color:var(--title-color); font-weight:700;">${fmtNum(totDisponivel)}</td><td>${totDesvio.toFixed(1)}%</td><td>—</td><td><div class="progress-bar"><div class="progress-fill" style="width:${totProgress}%"></div></div></td></tr></tfoot>`;
@@ -1307,12 +1305,13 @@
 
         // --- LIFE-CYCLE INIT ---
         window.addEventListener('DOMContentLoaded', () => {
+            // CORREÇÃO: O valor do Velocímetro base para Joaquim Leme foi ajustado refletindo o aumento no Investimento Atual para 3.732.110
             createMainGauge('gaugeMainMirante', 7859182, 4957062, 6453967);
-            createMainGauge('gaugeMainJoaquim', 5019403, 3465877, 3732107);
+            createMainGauge('gaugeMainJoaquim', 5019403, 3465877, 3732110);
+            
             createPieChart('chartMirantePie', miranteEtapas, miranteOrcado);
             createPieChart('chartJoaquimPie', joaquimEtapas, joaquimOrcado);
             
-            // Renderização enviando as Arrays brutas para o Tooltip e as limitadas para a renderização do tamanho da coluna
             createFisicoFinChart('chartMiranteFisicoFin', miranteEtapas, miranteFinanceiroPct, miranteFisico, miranteFinanceiroRaw, miranteFisicoRaw, 'Jul/26');
             createFisicoFinChart('chartJoaquimFisicoFin', joaquimEtapas, joaquimFinanceiroPct, joaquimFisico, joaquimFinanceiroRaw, joaquimFisicoRaw, 'Ago/27');
             

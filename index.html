@@ -157,10 +157,10 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            width: 140px;
+            width: 170px; /* Levemente mais largo para acomodar o crescimento */
         }
         .logo-container img {
-            max-height: 45px;
+            max-height: 60px; /* Altura aumentada conforme solicitado */
             width: auto;
             object-fit: contain;
         }
@@ -373,6 +373,27 @@
         .modal-close { position: absolute; top: -40px; right: 0; color: #ffffff; font-size: 2.5rem; cursor: pointer; line-height: 1; transition: color 0.2s; font-weight: 300; }
         .modal-close:hover { color: var(--active-hover-color); }
 
+        /* Estilos das setas do modal */
+        .modal-prev, .modal-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ffffff;
+            font-size: 3rem;
+            font-weight: 300;
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.3s, transform 0.3s;
+            z-index: 2010;
+        }
+        .modal-prev { left: -50px; }
+        .modal-next { right: -50px; }
+        .modal-prev:hover, .modal-next:hover { color: var(--active-hover-color); transform: translateY(-50%) scale(1.1); }
+        @media (max-width: 768px) {
+            .modal-prev { left: 5px; }
+            .modal-next { right: 5px; }
+        }
+
         .analyses-container { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 20px; transition: all 0.4s; }
         
         /* Modal do Gráfico de Avanço */
@@ -480,7 +501,7 @@
                         <div class="kpi-sublist-item"><span class="sublist-label">Orçado:</span><span class="sublist-value">R$ 11.148</span></div>
                         <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 9.155</span></div>
                         <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 11.826</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 17.500</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 20.426</span></div>
                     </div>
                     <div class="sublabel">705 Lotes</div>
                 </div>
@@ -562,9 +583,12 @@
             
             <div class="sub-tab-content" id="subtab-fotos-mirante">
                 <div class="gallery-container">
-                    <div class="gallery-item" onclick="openPhotoModal('3.jpeg')"><img src="3.jpeg" alt="Foto"></div>
-                    <div class="gallery-item" onclick="openPhotoModal('5.jpeg')"><img src="5.jpeg" alt="Foto"></div>
-                    <div class="gallery-item" onclick="openPhotoModal('27.jpeg')"><img src="27.jpeg" alt="Foto"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('3.jpeg', this)"><img src="3.jpeg" alt="Foto"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('5.jpeg', this)"><img src="5.jpeg" alt="Foto"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('27.jpeg', this)"><img src="27.jpeg" alt="Foto"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('8.jpg', this)"><img src="8.jpg" alt="Foto"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('9.jpg', this)"><img src="9.jpg" alt="Foto"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('33.jpg', this)"><img src="33.jpg" alt="Foto"></div>
                 </div>
             </div>
             
@@ -605,7 +629,7 @@
                         <div class="kpi-sublist-item"><span class="sublist-label">Orçado:</span><span class="sublist-value">R$ 8.714</span></div>
                         <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 6.479</span></div>
                         <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 7.840</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 14.785</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 18.497</span></div>
                     </div>
                     <div class="sublabel">576 Lotes</div>
                 </div>
@@ -684,8 +708,8 @@
             
             <div class="sub-tab-content" id="subtab-fotos-joaquim">
                 <div class="gallery-container">
-                    <div class="gallery-item" onclick="openPhotoModal('DJI_0369.JPG')"><img src="DJI_0369.JPG" alt="Foto"></div>
-                    <div class="gallery-item" onclick="openPhotoModal('DJI_0389.JPG')"><img src="DJI_0389.JPG" alt="Foto"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('DJI_0369.JPG', this)"><img src="DJI_0369.JPG" alt="Foto"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('DJI_0389.JPG', this)"><img src="DJI_0389.JPG" alt="Foto"></div>
                 </div>
             </div>
             
@@ -761,6 +785,8 @@
     <div class="modal" id="photoGlobalModal" onclick="if(event.target===this) closePhotoModal()">
         <div class="modal-content">
             <span class="modal-close" onclick="closePhotoModal()">&times;</span>
+            <span class="modal-prev" onclick="changePhoto(-1)">&#10094;</span>
+            <span class="modal-next" onclick="changePhoto(1)">&#10095;</span>
             <img id="photoGlobalImage" src="" alt="Foto ampliada">
         </div>
     </div>
@@ -910,6 +936,10 @@
 
         let gaugeChart = null;
         let isDarkMode = false; 
+        
+        // Variáveis para controle da galeria de fotos
+        let currentGalleryImages = [];
+        let currentImageIndex = 0;
 
         function toggleMode() {
             const body = document.body;
@@ -972,16 +1002,39 @@
             });
         }
 
-        function openPhotoModal(imgSrc) {
+        function openPhotoModal(imgSrc, element) {
             const modal = document.getElementById('photoGlobalModal');
             document.getElementById('photoGlobalImage').src = imgSrc;
+            
+            // Constroi o contexto da galeria para permitir navegação com as setas
+            if (element) {
+                const gallery = element.closest('.gallery-container');
+                if (gallery) {
+                    currentGalleryImages = Array.from(gallery.querySelectorAll('img')).map(img => img.getAttribute('src'));
+                    currentImageIndex = currentGalleryImages.indexOf(imgSrc);
+                    if(currentImageIndex === -1) currentImageIndex = 0;
+                }
+            }
+
             modal.style.display = 'flex';
             setTimeout(() => modal.classList.add('active'), 10);
         }
+        
         function closePhotoModal() {
             const modal = document.getElementById('photoGlobalModal');
             modal.classList.remove('active');
             setTimeout(() => modal.style.display = 'none', 300);
+        }
+        
+        function changePhoto(direction) {
+            if (currentGalleryImages.length === 0) return;
+            currentImageIndex += direction;
+            if (currentImageIndex >= currentGalleryImages.length) {
+                currentImageIndex = 0;
+            } else if (currentImageIndex < 0) {
+                currentImageIndex = currentGalleryImages.length - 1;
+            }
+            document.getElementById('photoGlobalImage').src = currentGalleryImages[currentImageIndex];
         }
         
         function closeGaugeModal() {
@@ -1447,7 +1500,12 @@
             });
         });
 
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeGaugeModal(); closePhotoModal(); } });
+        document.addEventListener('keydown', e => { 
+            if (e.key === 'Escape') { 
+                closeGaugeModal(); 
+                closePhotoModal(); 
+            } 
+        });
     </script>
 </body>
 </html>

@@ -353,7 +353,7 @@
         .vigentes-total { display: flex; justify-content: space-between; padding: 10px 0 5px 0; font-weight: 700; color: var(--title-color); font-size: 1.1rem; transition: all 0.4s; }
 
         .hierarchical-list { list-style: none; text-align: left; }
-        .hierarchical-list .level-1 { padding: 14px 0 8px 0; border-bottom: 1px dashed var(--planejamento-border); color: var(--title-color); font-weight: 600; transition: all 0.4s; font-size: 0.95rem; }
+        .hierarchical-list .level-1 { padding: 14px 0 8px 0; border-bottom: 1px dashed var(--planejamento-border); color: var(--title-color); font-weight: 600; transition: all 0.4s; font-size: 0.95rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
         .hierarchical-list .level-2 { padding: 8px 0 8px 30px; border-bottom: 1px solid var(--planejamento-border); color: var(--planejamento-list-text); font-size: 0.9rem; position: relative; transition: all 0.4s; display: flex; align-items: flex-start; gap: 12px; }
         .hierarchical-list .level-2 .enum { font-weight: 600; color: var(--subtitle-color); width: 25px; display: inline-block; flex-shrink: 0; }
         .hierarchical-list .level-2:last-child, .hierarchical-list .level-1:last-child { border-bottom: none; }
@@ -574,30 +574,32 @@
                     </div>
                     <div class="planejamento-card">
                         <h3>🕒 Próximas Ativações</h3>
+                        <div class="vigentes-header" style="display: flex; justify-content: space-between; font-weight: 700; color: var(--title-color); border-bottom: 2px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9rem;"><span>Atividades</span><span>Previsão de investimento</span></div>
                         <ul class="hierarchical-list">
-                            <li class="level-1">1) Implantação das casas de química</li>
+                            <li class="level-1"><span>1) Implantação das casas de química</span><span>R$ 189.940,00</span></li>
                             <li class="level-2"><span class="enum">1.1</span> Construção da alvenaria da casa</li>
                             <li class="level-2"><span class="enum">1.2</span> Cercamento do perímetro dos poços</li>
                             <li class="level-2"><span class="enum">1.3</span> Automação e eletrificação dos poços</li>
-                            <li class="level-1">2) Limpeza manual entorno dos marcos topográficos</li>
-                            <li class="level-1">3) Check list da topografia de entrega</li>
+                            <li class="level-1"><span>2) Limpeza manual entorno dos marcos topográficos</span><span>R$ 15.000,00</span></li>
+                            <li class="level-1"><span>3) Check list da topografia de entrega</span><span>R$ 15.000,00</span></li>
                             <li class="level-2"><span class="enum">3.1</span> Nova demarcação de marcos caídos</li>
                             <li class="level-2"><span class="enum">3.2</span> Reposição e pintura de marcos</li>
-                            <li class="level-1">4) Finalização do tratamento preliminar</li>
+                            <li class="level-1"><span>4) Finalização do tratamento preliminar</span><span>R$ 99.385,00</span></li>
                             <li class="level-2"><span class="enum">4.1</span> Instalação de grelha e comportas</li>
                             <li class="level-2"><span class="enum">4.2</span> Execução de contrapartida ao invés do poço de sucção</li>
-                            <li class="level-1">5) Paisagismo</li>
+                            <li class="level-1"><span>5) Paisagismo</span><span>R$ 60.000,00</span></li>
                             <li class="level-2"><span class="enum">5.1</span> Plantio de mudas</li>
                             <li class="level-2"><span class="enum">5.2</span> Pintura de meios-fios</li>
-                            <li class="level-1">6) Sinalização viária</li>
-                            <li class="level-1">7) Processo de entrega</li>
+                            <li class="level-1"><span>6) Sinalização viária</span><span>R$ 30.000,00</span></li>
+                            <li class="level-1"><span>7) Processo de entrega</span><span>-</span></li>
                             <li class="level-2"><span class="enum">7.1</span> Entre SAE (Água e Esgoto)</li>
                             <li class="level-2"><span class="enum">7.2</span> Entrega Prefeitura</li>
-                            <li class="level-1">8) Construção do Parque Linear</li>
+                            <li class="level-1"><span>8) Construção do Parque Linear</span><span>R$ 1.186.801,00</span></li>
                             <li class="level-2"><span class="enum">8.1</span> Terraplenagem</li>
                             <li class="level-2"><span class="enum">8.2</span> Construção de calçada e elementos de urbanismo</li>
                             <li class="level-2"><span class="enum">8.3</span> Paisagismo</li>
                         </ul>
+                        <div class="vigentes-total" style="border-top: 2px solid var(--border-color); padding-top: 10px; margin-top: 5px;"><span>TOTAL</span><span>R$ 1.596.126,00</span></div>
                     </div>
                 </div>
             </div>
@@ -721,35 +723,36 @@
                     </div>
                     <div class="planejamento-card">
                         <h3>🕒 Próximas Ativações</h3>
+                        <div class="vigentes-header" style="display: flex; justify-content: space-between; font-weight: 700; color: var(--title-color); border-bottom: 2px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9rem;"><span>Atividades</span><span>Previsão de investimento</span></div>
                         <ul class="hierarchical-list">
-                            <li class="level-1">1) Construção da rede adutora</li>
-                            <li class="level-1">2) Execução da rede de recalque de esgoto e Booster</li>
+                            <li class="level-1"><span>1) Construção da rede adutora</span><span>R$ 51.198,38</span></li>
+                            <li class="level-1"><span>2) Rede de esgoto sanitário e Booster</span><span>R$ 225.296,25</span></li>
                             <li class="level-2"><span class="enum">2.1</span> Recebimento do projeto</li>
                             <li class="level-2"><span class="enum">2.2</span> Construção da rede de recalque</li>
                             <li class="level-2"><span class="enum">2.3</span> Aquisição e instalação do Booster</li>
                             <li class="level-2"><span class="enum">2.4</span> Construção da casa de abrigo do Booster</li>
-                            <li class="level-1">3) Sistema de esgoto sanitário</li>
-                            <li class="level-2"><span class="enum">3.1</span> Construção do interceptor de esgoto</li>
-                            <li class="level-1">4) Reservatório</li>
-                            <li class="level-2"><span class="enum">4.1</span> Execução do projeto SPDA</li>
-                            <li class="level-2"><span class="enum">4.2</span> Execução do balizamento</li>
-                            <li class="level-2"><span class="enum">4.3</span> Interligação do reservatório na rede municipal</li>
-                            <li class="level-1">5) Recapeamento viário (Tapa-Buracos)</li>
-                            <li class="level-1">6) Meio-fio e sarjeta</li>
-                            <li class="level-2"><span class="enum">6.1</span> Revitalização e reparo de meios-fios</li>
-                            <li class="level-1">7) Obra de acesso</li>
-                            <li class="level-2"><span class="enum">7.1</span> Construção do acesso ao empreendimento</li>
-                            <li class="level-1">8) Paisagismo e praças</li>
-                            <li class="level-2"><span class="enum">8.1</span> Execução do paisagismo de canteiros</li>
-                            <li class="level-2"><span class="enum">8.2</span> Construção de praça na rotatória</li>
-                            <li class="level-1">9) Sinalização viária</li>
-                            <li class="level-2"><span class="enum">9.1</span> Estudo e contratação de projeto</li>
-                            <li class="level-2"><span class="enum">9.2</span> Execução da sinalização</li>
-                            <li class="level-1">10) Processo de entrega</li>
-                            <li class="level-2"><span class="enum">10.1</span> Entrega SAE (Água e Esgoto)</li>
-                            <li class="level-2"><span class="enum">10.2</span> Entrega Secretaria de Obras (Drenagem)</li>
-                            <li class="level-2"><span class="enum">10.3</span> Entrega Prefeitura</li>
+                            <li class="level-2"><span class="enum">2.5</span> Construção do interceptor de esgoto</li>
+                            <li class="level-1"><span>3) Reservatório</span><span>R$ 35.000,00</span></li>
+                            <li class="level-2"><span class="enum">3.1</span> Execução do projeto SPDA</li>
+                            <li class="level-2"><span class="enum">3.2</span> Execução do balizamento</li>
+                            <li class="level-2"><span class="enum">3.3</span> Interligação do reservatório na rede municipal</li>
+                            <li class="level-1"><span>4) Recapeamento viário (Tapa-Buracos)</span><span>R$ 146.000,00</span></li>
+                            <li class="level-1"><span>5) Meio-fio e sarjeta</span><span>R$ 56.500,00</span></li>
+                            <li class="level-2"><span class="enum">5.1</span> Revitalização e reparo de meios-fios</li>
+                            <li class="level-1"><span>6) Obra de acesso</span><span>R$ 435.000,00</span></li>
+                            <li class="level-2"><span class="enum">6.1</span> Construção do acesso ao empreendimento</li>
+                            <li class="level-1"><span>7) Paisagismo e praças</span><span>R$ 56.750,00</span></li>
+                            <li class="level-2"><span class="enum">7.1</span> Execução do paisagismo de canteiros</li>
+                            <li class="level-2"><span class="enum">7.2</span> Construção de praça na rotatória</li>
+                            <li class="level-1"><span>8) Sinalização viária</span><span>R$ 20.000,00</span></li>
+                            <li class="level-2"><span class="enum">8.1</span> Estudo e contratação de projeto</li>
+                            <li class="level-2"><span class="enum">8.2</span> Execução da sinalização</li>
+                            <li class="level-1"><span>9) Processo de entrega</span><span>-</span></li>
+                            <li class="level-2"><span class="enum">9.1</span> Entrega SAE (Água e Esgoto)</li>
+                            <li class="level-2"><span class="enum">9.2</span> Entrega Secretaria de Obras (Drenagem)</li>
+                            <li class="level-2"><span class="enum">9.3</span> Entrega Prefeitura</li>
                         </ul>
+                        <div class="vigentes-total" style="border-top: 2px solid var(--border-color); padding-top: 10px; margin-top: 5px;"><span>TOTAL</span><span>R$ 1.025.744,63</span></div>
                     </div>
                 </div>
             </div>
@@ -878,9 +881,9 @@
         </div>
     </div>
 
-    <div class="modal gauge-modal" id="modalFinancialInfo" onclick="if(event.target===this) this.classList.remove('active')">
+    <div class="modal gauge-modal" id="modalFinancialInfo" onclick="if(event.target===this) closeAllModals()">
         <div class="gauge-modal-box" style="max-width: 400px; padding: 25px;">
-            <span class="gauge-modal-close" onclick="document.getElementById('modalFinancialInfo').classList.remove('active')">&times;</span>
+            <span class="gauge-modal-close" onclick="closeAllModals()">&times;</span>
             <span class="modal-prev" onclick="navigateModal(-1)" style="left: -40px; font-size: 2.5rem;">&#10094;</span>
             <span class="modal-next" onclick="navigateModal(1)" style="right: -40px; font-size: 2.5rem;">&#10095;</span>
             <h3 id="finInfoEtapaTitle" style="margin-bottom: 20px;">Etapa</h3>
@@ -902,9 +905,9 @@
         </div>
     </div>
 
-    <div class="modal gauge-modal" id="modalPendencias" onclick="if(event.target===this) this.classList.remove('active')">
+    <div class="modal gauge-modal" id="modalPendencias" onclick="if(event.target===this) closeAllModals()">
         <div class="gauge-modal-box" style="max-width: 450px; padding: 25px; text-align: left;">
-            <span class="gauge-modal-close" onclick="document.getElementById('modalPendencias').classList.remove('active')">&times;</span>
+            <span class="gauge-modal-close" onclick="closeAllModals()">&times;</span>
             <span class="modal-prev" onclick="navigateModal(-1)" style="left: -40px; font-size: 2.5rem;">&#10094;</span>
             <span class="modal-next" onclick="navigateModal(1)" style="right: -40px; font-size: 2.5rem;">&#10095;</span>
             <h3 id="pendenciasEtapaTitle" style="margin-bottom: 5px; text-align: center; color: var(--title-color);">Etapa</h3>
@@ -915,9 +918,9 @@
         </div>
     </div>
 
-    <div class="modal gauge-modal" id="modalResumoPendencias" onclick="if(event.target===this) this.classList.remove('active')">
+    <div class="modal gauge-modal" id="modalResumoPendencias" onclick="if(event.target===this) closeAllModals()">
         <div class="gauge-modal-box" style="max-width: 600px; padding: 25px; text-align: left; max-height: 90vh; display: flex; flex-direction: column;">
-            <span class="gauge-modal-close" onclick="document.getElementById('modalResumoPendencias').classList.remove('active')">&times;</span>
+            <span class="gauge-modal-close" onclick="closeAllModals()">&times;</span>
             <h3 style="margin-bottom: 5px; text-align: center; color: var(--title-color);">Resumo de Pendências</h3>
             <p id="resumoObraTitle" style="text-align: center; font-size: 0.8rem; color: var(--subtitle-color); margin-bottom: 20px; font-weight: 600;"></p>
             
@@ -951,7 +954,6 @@
                     const lineColor = isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(27, 94, 32, 0.3)';
 
                     ctx.save();
-                    // Linha Jun/26 (Cravada no 100% do eixo)
                     ctx.beginPath();
                     ctx.setLineDash([5, 5]);
                     ctx.strokeStyle = lineColor;
@@ -960,14 +962,12 @@
                     ctx.lineTo(jun26X, bottomY);
                     ctx.stroke();
 
-                    // Linha Prazo Final (Cravada no Fim do Gráfico)
                     ctx.beginPath();
                     ctx.setLineDash([]);
                     ctx.moveTo(finalX, topY);
                     ctx.lineTo(finalX, bottomY);
                     ctx.stroke();
 
-                    // Rótulos de Texto do Eixo
                     ctx.fillStyle = textColor;
                     ctx.font = "bold 11px 'Montserrat'";
                     ctx.textAlign = 'center';
@@ -982,7 +982,6 @@
         };
         Chart.register(dateLimitPlugin);
 
-        // --- MATRIZ DE PENDÊNCIAS FÍSICAS CIRURGICAMENTE ATUALIZADA (SEM NÚMEROS) ---
         const pendenciasMirante = {
             'TOPOGRAFIA E CONTROLE': ['Entrega do georreferenciamento.', 'Apoio em medições restantes e controle tecnológico.'],
             'MANUTENÇÕES / AS BUILTS': ['Execução de As-Builts, impressões e cópias.'],
@@ -1017,12 +1016,10 @@
             'INDIRETO DE OBRAS': ['Custo de encarregado.', 'Vigilância patrimonial.', 'Deslocamentos, alimentação e hospedagem.', 'Vigente até o final das obras.']
         };
 
-        // --- MAPAS DE CONTROLE (Estado da Navegação do Gráfico) ---
         let currentChartObra = null;
         let currentChartIndex = 0;
         let currentChartModalType = null;
         
-        // --- DATA ESTRUTURADA ---
         const miranteEtapas = ['TOPOGRAFIA E CONTROLE','MANUTENÇÕES / AS BUILTS','TERRAPLANAGEM','DRENAGEM','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','MEIO AMBIENTE','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
         const miranteOrcado = [36057.70, 234986.23, 134826.68, 278796.63, 207210.79, 645418.69, 176835.76, 313662.78, 597885.26, 2774330.81, 790022.37, 1316034.53, 94960.90, 258152.78];
         const miranteRealizado = [36657.72, 155560.32, 134826.68, 269217.91, 214556.85, 531064.04, 168759.29, 169211.11, 543203.95, 1581431.74, 645422.37, 208403.22, 91808.40, 206938.45];
@@ -1079,6 +1076,7 @@
         ];
 
         function fmtNum(n) { return Math.ceil(n).toLocaleString('pt-BR'); }
+        
         function fmtMoney(n) { 
             if (n === null || n === undefined || isNaN(n) || String(n).includes('NaN')) return 'R$ 0,00';
             return 'R$ ' + parseFloat(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); 
@@ -1178,6 +1176,14 @@
         
         function closeGaugeModal() {
             document.getElementById('modalGauge').classList.remove('active');
+            if (gaugeChart) { gaugeChart.destroy(); gaugeChart = null; }
+        }
+
+        function closeAllModals() {
+            document.getElementById('modalGauge').classList.remove('active');
+            document.getElementById('modalFinancialInfo').classList.remove('active');
+            document.getElementById('modalPendencias').classList.remove('active');
+            document.getElementById('modalResumoPendencias').classList.remove('active');
             if (gaugeChart) { gaugeChart.destroy(); gaugeChart = null; }
         }
 
@@ -1443,10 +1449,11 @@
                         }
                     },
                     onClick: (event, elements, chart) => {
+                        const obraId = chart.canvas.id.includes('Mirante') ? 'mirante' : 'joaquim';
+                        
                         if (elements.length > 0) {
                             const datasetIndex = elements[0].datasetIndex;
                             const index = elements[0].index;
-                            const obraId = chart.canvas.id.includes('Mirante') ? 'mirante' : 'joaquim';
                             
                             currentChartObra = obraId;
                             currentChartIndex = index;
@@ -1462,8 +1469,12 @@
                             }
                         }
                     },
-                    onHover: (e, elements) => {
-                        e.native.target.style.cursor = (elements.length > 0 && (elements[0].datasetIndex === 0 || elements[0].datasetIndex === 1)) ? 'pointer' : 'default';
+                    onHover: (e, elements, chart) => {
+                        let isPointer = false;
+                        if (elements.length > 0 && (elements[0].datasetIndex === 0 || elements[0].datasetIndex === 1)) {
+                            isPointer = true;
+                        }
+                        e.native.target.style.cursor = isPointer ? 'pointer' : 'default';
                     },
                     scales: {
                         x: { 
@@ -1755,11 +1766,7 @@
 
         document.addEventListener('keydown', e => { 
             if (e.key === 'Escape') { 
-                closeGaugeModal(); 
-                closePhotoModal(); 
-                document.getElementById('modalFinancialInfo').classList.remove('active');
-                document.getElementById('modalPendencias').classList.remove('active');
-                document.getElementById('modalResumoPendencias').classList.remove('active');
+                closeAllModals();
             } 
         });
     </script>

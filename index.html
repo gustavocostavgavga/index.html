@@ -297,6 +297,25 @@
         }
         .chart-container-large canvas { height: 100% !important; width: 100% !important; }
 
+        .resumo-btn {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            background: var(--tab-btn-bg);
+            color: var(--tab-btn-text);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+        .resumo-btn:hover { background: var(--active-hover-color); color: var(--active-text); border-color: var(--active-hover-color); }
+        body.dark-mode .resumo-btn { background: var(--tab-btn-bg); color: var(--tab-btn-text); border-color: var(--border-color); }
+        body.dark-mode .resumo-btn:hover { background: var(--active-hover-color); color: var(--active-text); }
+
         .abc-container { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 30px; transition: all 0.4s; }
         .abc-header h3 { color: var(--title-color); font-size: 1.1rem; margin-bottom: 20px; transition: color 0.4s; }
         .table-container { overflow-x: auto; margin-bottom: 30px; }
@@ -353,6 +372,7 @@
             .chart-container-large { height: 600px; } 
             .vigentes-item, .hierarchical-list .level-1, .hierarchical-list .level-2 { font-size: 0.85rem; }
             .vigentes-total { font-size: 1rem; }
+            .resumo-btn { position: relative; right: 0; top: 0; margin-bottom: 15px; display: block; width: 100%; }
         }
         
         .executive { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
@@ -510,6 +530,7 @@
                 </div>
                 <div class="chart-grid-bottom">
                     <div class="chart-container-large">
+                        <button class="resumo-btn" onclick="openResumoPendencias('mirante')">📋 Resumo de Pendências</button>
                         <div class="chart-title" style="margin-bottom: 5px;">Avanço Físico-Financeiro por Etapa<span id="desvioMirante"></span></div>
                         <canvas id="chartMiranteFisicoFin"></canvas>
                     </div>
@@ -659,6 +680,7 @@
                 </div>
                 <div class="chart-grid-bottom">
                     <div class="chart-container-large">
+                        <button class="resumo-btn" onclick="openResumoPendencias('joaquim')">📋 Resumo de Pendências</button>
                         <div class="chart-title" style="margin-bottom: 5px;">Avanço Físico-Financeiro por Etapa<span id="desvioJoaquim"></span></div>
                         <canvas id="chartJoaquimFisicoFin"></canvas>
                     </div>
@@ -706,25 +728,27 @@
                             <li class="level-2"><span class="enum">2.2</span> Construção da rede de recalque</li>
                             <li class="level-2"><span class="enum">2.3</span> Aquisição e instalação do Booster</li>
                             <li class="level-2"><span class="enum">2.4</span> Construção da casa de abrigo do Booster</li>
-                            <li class="level-1">3) Reservatório</li>
-                            <li class="level-2"><span class="enum">3.1</span> Execução do projeto SPDA</li>
-                            <li class="level-2"><span class="enum">3.2</span> Execução do balizamento</li>
-                            <li class="level-2"><span class="enum">3.3</span> Interligação do reservatório na rede municipal</li>
-                            <li class="level-1">4) Recapeamento viário (Tapa-Buracos)</li>
-                            <li class="level-1">5) Meio-fio e sarjeta</li>
-                            <li class="level-2"><span class="enum">5.1</span> Revitalização e reparo de meios-fios</li>
-                            <li class="level-1">6) Obra de acesso</li>
-                            <li class="level-2"><span class="enum">6.1</span> Construção do acesso ao empreendimento</li>
-                            <li class="level-1">7) Paisagismo e praças</li>
-                            <li class="level-2"><span class="enum">7.1</span> Execução do paisagismo de canteiros</li>
-                            <li class="level-2"><span class="enum">7.2</span> Construção de praça na rotatória</li>
-                            <li class="level-1">8) Sinalização viária</li>
-                            <li class="level-2"><span class="enum">8.1</span> Estudo e contratação de projeto</li>
-                            <li class="level-2"><span class="enum">8.2</span> Execução da sinalização</li>
-                            <li class="level-1">9) Processo de entrega</li>
-                            <li class="level-2"><span class="enum">9.1</span> Entrega SAE (Água e Esgoto)</li>
-                            <li class="level-2"><span class="enum">9.2</span> Entrega Secretaria de Obras (Drenagem)</li>
-                            <li class="level-2"><span class="enum">9.3</span> Entrega Prefeitura</li>
+                            <li class="level-1">3) Sistema de esgoto sanitário</li>
+                            <li class="level-2"><span class="enum">3.1</span> Construção do interceptor de esgoto</li>
+                            <li class="level-1">4) Reservatório</li>
+                            <li class="level-2"><span class="enum">4.1</span> Execução do projeto SPDA</li>
+                            <li class="level-2"><span class="enum">4.2</span> Execução do balizamento</li>
+                            <li class="level-2"><span class="enum">4.3</span> Interligação do reservatório na rede municipal</li>
+                            <li class="level-1">5) Recapeamento viário (Tapa-Buracos)</li>
+                            <li class="level-1">6) Meio-fio e sarjeta</li>
+                            <li class="level-2"><span class="enum">6.1</span> Revitalização e reparo de meios-fios</li>
+                            <li class="level-1">7) Obra de acesso</li>
+                            <li class="level-2"><span class="enum">7.1</span> Construção do acesso ao empreendimento</li>
+                            <li class="level-1">8) Paisagismo e praças</li>
+                            <li class="level-2"><span class="enum">8.1</span> Execução do paisagismo de canteiros</li>
+                            <li class="level-2"><span class="enum">8.2</span> Construção de praça na rotatória</li>
+                            <li class="level-1">9) Sinalização viária</li>
+                            <li class="level-2"><span class="enum">9.1</span> Estudo e contratação de projeto</li>
+                            <li class="level-2"><span class="enum">9.2</span> Execução da sinalização</li>
+                            <li class="level-1">10) Processo de entrega</li>
+                            <li class="level-2"><span class="enum">10.1</span> Entrega SAE (Água e Esgoto)</li>
+                            <li class="level-2"><span class="enum">10.2</span> Entrega Secretaria de Obras (Drenagem)</li>
+                            <li class="level-2"><span class="enum">10.3</span> Entrega Prefeitura</li>
                         </ul>
                     </div>
                 </div>
@@ -857,6 +881,8 @@
     <div class="modal gauge-modal" id="modalFinancialInfo" onclick="if(event.target===this) this.classList.remove('active')">
         <div class="gauge-modal-box" style="max-width: 400px; padding: 25px;">
             <span class="gauge-modal-close" onclick="document.getElementById('modalFinancialInfo').classList.remove('active')">&times;</span>
+            <span class="modal-prev" onclick="navigateModal(-1)" style="left: -40px; font-size: 2.5rem;">&#10094;</span>
+            <span class="modal-next" onclick="navigateModal(1)" style="right: -40px; font-size: 2.5rem;">&#10095;</span>
             <h3 id="finInfoEtapaTitle" style="margin-bottom: 20px;">Etapa</h3>
             
             <div class="gauge-details" style="grid-template-columns: 1fr; gap: 10px;">
@@ -879,11 +905,26 @@
     <div class="modal gauge-modal" id="modalPendencias" onclick="if(event.target===this) this.classList.remove('active')">
         <div class="gauge-modal-box" style="max-width: 450px; padding: 25px; text-align: left;">
             <span class="gauge-modal-close" onclick="document.getElementById('modalPendencias').classList.remove('active')">&times;</span>
+            <span class="modal-prev" onclick="navigateModal(-1)" style="left: -40px; font-size: 2.5rem;">&#10094;</span>
+            <span class="modal-next" onclick="navigateModal(1)" style="right: -40px; font-size: 2.5rem;">&#10095;</span>
             <h3 id="pendenciasEtapaTitle" style="margin-bottom: 5px; text-align: center; color: var(--title-color);">Etapa</h3>
             <p style="text-align: center; font-size: 0.8rem; color: var(--subtitle-color); margin-bottom: 20px; font-weight: 600;">PENDÊNCIAS</p>
             
             <ul class="hierarchical-list" id="pendenciasList" style="max-height: 350px; overflow-y: auto; padding-right: 5px;">
                 </ul>
+        </div>
+    </div>
+
+    <div class="modal gauge-modal" id="modalResumoPendencias" onclick="if(event.target===this) this.classList.remove('active')">
+        <div class="gauge-modal-box" style="max-width: 600px; padding: 25px; text-align: left; max-height: 90vh; display: flex; flex-direction: column;">
+            <span class="gauge-modal-close" onclick="document.getElementById('modalResumoPendencias').classList.remove('active')">&times;</span>
+            <h3 style="margin-bottom: 5px; text-align: center; color: var(--title-color);">Resumo de Pendências</h3>
+            <p id="resumoObraTitle" style="text-align: center; font-size: 0.8rem; color: var(--subtitle-color); margin-bottom: 20px; font-weight: 600;"></p>
+            
+            <div style="overflow-y: auto; padding-right: 10px; flex: 1;">
+                <ul class="hierarchical-list" id="resumoPendenciasList">
+                    </ul>
+            </div>
         </div>
     </div>
 
@@ -941,42 +982,46 @@
         };
         Chart.register(dateLimitPlugin);
 
-        // --- MATRIZ DE PENDÊNCIAS FÍSICAS (Altere ou adicione as etapas conforme necessário com base na imagem) ---
-        // Exemplo: 'NOME EXATO DA ETAPA': ['1) Pendência um...', '2) Pendência dois...']
+        // --- MATRIZ DE PENDÊNCIAS FÍSICAS CIRURGICAMENTE ATUALIZADA (SEM NÚMEROS) ---
         const pendenciasMirante = {
-            'TOPOGRAFIA E CONTROLE': ['1) Entrega do georreferenciamento;', '2) Apoio em medições restantes e controle tecnológico.'],
-            'MANUTENÇÕES / AS BUILTS': ['Execução de As-Builts, impressões e cópias'],
+            'TOPOGRAFIA E CONTROLE': ['Entrega do georreferenciamento.', 'Apoio em medições restantes e controle tecnológico.'],
+            'MANUTENÇÕES / AS BUILTS': ['Execução de As-Builts, impressões e cópias.'],
             'TERRAPLANAGEM': ['-'],
-            'DRENAGEM': ['Construção de alas dissipadoras na lagoa artificial'],
-            'REDE DE ÁGUA POTÁVEL': ['Execução de testes na rede'],
-            'RESERVATÓRIO / ADUTORA': ['Eletrificação e automação dos poços tubulares'],
-            'SISTEMA DE ESGOTO SANITÁRIO': ['Execução de testes na rede'],
-            'ESTAÇÃO ELEVATÓRIA DE ESGOTO': ['1) Instalação de grade e comportas no tratamento preliminar;', '2) Execução de contrapartida (Revitalização da área).'],
-            'GUIAS E SARJETAS': ['Eventuais reparos após recapeamento viário'],
-            'PAVIMENTAÇÃO TOTAL': ['Recapeamento viário e pavimentação nova em pontos específicos'],
-            'ELETRIFICAÇÃO': ['Eletrificação dos poços tubulares'],
-            'MEIO AMBIENTE': ['1) Paisagismo;', '2) Construção do parque linear;', '3) Pintura dos meios-fios;', '4) Sinalização viária.'],
-            'TOPOGRAFIA DE ENTREGA': ['Check list de marcos topográficos'],
-            'INDIRETO DE OBRAS': ['Vigente até o final das obras']
+            'DRENAGEM': ['Construção de alas dissipadoras na lagoa artificial.'],
+            'REDE DE ÁGUA POTÁVEL': ['Execução de testes na rede.'],
+            'RESERVATÓRIO / ADUTORA': ['Eletrificação e automação dos poços tubulares.', 'Cercamento e construção de casas de química.'],
+            'SISTEMA DE ESGOTO SANITÁRIO': ['Execução de testes na rede.'],
+            'ESTAÇÃO ELEVATÓRIA DE ESGOTO': ['Instalação de grade e comportas no tratamento preliminar.', 'Execução de contrapartida (Revitalização da área).'],
+            'GUIAS E SARJETAS': ['Eventuais reparos após recapeamento viário.'],
+            'PAVIMENTAÇÃO TOTAL': ['Recapeamento viário e pavimentação nova em pontos específicos.'],
+            'ELETRIFICAÇÃO': ['Eletrificação dos poços tubulares.'],
+            'MEIO AMBIENTE': ['Paisagismo.', 'Construção do parque linear.', 'Pintura dos meios-fios.', 'Sinalização viária.'],
+            'TOPOGRAFIA DE ENTREGA': ['Check list de marcos topográficos danificados.'],
+            'INDIRETO DE OBRAS': ['Custo de encarregado.', 'Vigilância patrimonial.', 'Deslocamentos, alimentação e hospedagem.', 'Vigente até o final das obras.']
         };
 
         const pendenciasJoaquim = {
             'TOPOGRAFIA E CONTROLE': ['-'],
-            'MANUTENÇÕES / AS BUILTS': ['Execução de As-Builts, impressões e cópias'],
-            'DRENAGEM': ['Construção de dissipador'],
-            'REDE DE ÁGUA POTÁVEL': ['-'],
-            'RESERVATÓRIO / ADUTORA': ['Construção da rede adutora'],
-            'SISTEMA DE ESGOTO SANITÁRIO': ['Construção do interceptor de esgoto'],
-            'ESTAÇÃO ELEVATÓRIA DE ESGOTO': ['1) Construção da linha de recalque;', '2) Instalação do Booster e construção do abrigo. Obs: Aguardando aprovação do projeto.'],
-            'GUIAS E SARJETAS': ['-'],
-            'PAVIMENTAÇÃO TOTAL': ['Recapeamento (Tapa-Buracos)'],
+            'MANUTENÇÕES / AS BUILTS': ['Execução de As-Builts, impressões e cópias.'],
+            'DRENAGEM': ['Construção de dissipador.'],
+            'REDE DE ÁGUA POTÁVEL': ['Sondagem de ramais dos lotes.'],
+            'RESERVATÓRIO / ADUTORA': ['Construção da rede adutora.', 'Execução do projeto SPDA.', 'Execução do balizamento.'],
+            'SISTEMA DE ESGOTO SANITÁRIO': ['Construção do interceptor de esgoto.', 'Sondagem de ramais dos lotes.'],
+            'ESTAÇÃO ELEVATÓRIA DE ESGOTO': ['Construção da linha de recalque.', 'Instalação do Booster e construção do abrigo. Obs: Aguardando aprovação do projeto.'],
+            'GUIAS E SARJETAS': ['Construção de guias do acesso.', 'Revitalização e reparos nos meios-fios.'],
+            'PAVIMENTAÇÃO TOTAL': ['Recapeamento (Tapa-Buracos).'],
             'ELETRIFICAÇÃO': ['-'],
-            'MEIO AMBIENTE': ['1) Construção de praça;', '2) Pintura de meios-fios;', '3) Execução de paisagismo;', '4) Sinalização viária.'],
-            'OBRAS DE ACESSO': ['Execução do acesso'],
+            'MEIO AMBIENTE': ['Construção de praça.', 'Pintura de meios-fios.', 'Execução de paisagismo.', 'Sinalização viária.'],
+            'OBRAS DE ACESSO': ['Execução do acesso.'],
             'TOPOGRAFIA DE ENTREGA': ['-'],
-            'INDIRETO DE OBRAS': ['Vigente até o final das obras']
+            'INDIRETO DE OBRAS': ['Custo de encarregado.', 'Vigilância patrimonial.', 'Deslocamentos, alimentação e hospedagem.', 'Vigente até o final das obras.']
         };
 
+        // --- MAPAS DE CONTROLE (Estado da Navegação do Gráfico) ---
+        let currentChartObra = null;
+        let currentChartIndex = 0;
+        let currentChartModalType = null;
+        
         // --- DATA ESTRUTURADA ---
         const miranteEtapas = ['TOPOGRAFIA E CONTROLE','MANUTENÇÕES / AS BUILTS','TERRAPLANAGEM','DRENAGEM','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','MEIO AMBIENTE','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
         const miranteOrcado = [36057.70, 234986.23, 134826.68, 278796.63, 207210.79, 645418.69, 176835.76, 313662.78, 597885.26, 2774330.81, 790022.37, 1316034.53, 94960.90, 258152.78];
@@ -995,10 +1040,15 @@
         const joaquimComprometido = [0.00, 119575.00, 213215.00, 52734.00, 1061803.00, 185723.00, 26850.00, 7231.00, 0.00, 1846217.00, 20804.00, 14400.00, 0.00, 183558.00];
         const joaquimProjetadoFuturo = [7500.00, 38568.66, 127005.00, 31599.64, -381940.79, 6709.26, 137410.78, 56500.00, 146000.00, -92.19, 56749.58, 434434.00, 80000.00, 43221.61];
 
-        const joaquimFisicoRaw = [0, 90, 90, 100, 80, 80, 0, 100, 80, 100, 30, 0, 0, 70];
+        const joaquimFisicoRaw = [0, 90, 90, 90, 80, 80, 0, 80, 80, 100, 30, 0, 0, 70];
         const joaquimFisico = joaquimFisicoRaw.map(v => Math.min(100, v));
         const joaquimFinanceiroRaw = [0, 82, 104, 63, 90, 58, 10, 7, 0, 100, 30, 3, 0, 122];
         const joaquimFinanceiroPct = joaquimFinanceiroRaw.map(v => Math.min(100, v));
+
+        const dataMaps = {
+            'mirante': { labels: miranteEtapas, orcado: miranteOrcado, investido: miranteComprometido, pendencias: pendenciasMirante },
+            'joaquim': { labels: joaquimEtapas, orcado: joaquimOrcado, investido: joaquimComprometido, pendencias: pendenciasJoaquim }
+        };
 
         const miranteDisponivel = miranteOrcado.map((orc, idx) => orc - (miranteComprometido[idx] + miranteProjetadoFuturo[idx]));
         const joaquimDisponivel = joaquimOrcado.map((orc, idx) => orc - (joaquimComprometido[idx] + joaquimProjetadoFuturo[idx]));
@@ -1029,7 +1079,6 @@
         ];
 
         function fmtNum(n) { return Math.ceil(n).toLocaleString('pt-BR'); }
-        
         function fmtMoney(n) { 
             if (n === null || n === undefined || isNaN(n) || String(n).includes('NaN')) return 'R$ 0,00';
             return 'R$ ' + parseFloat(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); 
@@ -1037,8 +1086,6 @@
 
         let gaugeChart = null;
         let isDarkMode = false; 
-        
-        // Variáveis para controle da galeria de fotos
         let currentGalleryImages = [];
         let currentImageIndex = 0;
 
@@ -1076,24 +1123,20 @@
                 if (chart.options.plugins && chart.options.plugins.legend && chart.options.plugins.legend.labels) {
                     chart.options.plugins.legend.labels.color = textColor;
                 }
-
                 if (chart.options.plugins && chart.options.plugins.datalabels) {
                     chart.options.plugins.datalabels.color = datalabelColor;
                 }
-
                 if (chart.options.plugins && chart.options.plugins.tooltip) {
                     chart.options.plugins.tooltip.titleColor = '#ffffff';
                     chart.options.plugins.tooltip.bodyColor = '#ffffff';
                     chart.options.plugins.tooltip.footerColor = '#ffffff';
                 }
-
                 if (chart.options.scales) {
                     Object.keys(chart.options.scales).forEach(axis => {
                         const scale = chart.options.scales[axis];
                         if (scale) {
                             if (!scale.ticks) scale.ticks = {};
                             scale.ticks.color = textColor;
-                            
                             if (!scale.grid) scale.grid = {};
                             scale.grid.color = gridColor;
                         }
@@ -1106,7 +1149,6 @@
         function openPhotoModal(imgSrc, element) {
             const modal = document.getElementById('photoGlobalModal');
             document.getElementById('photoGlobalImage').src = imgSrc;
-            
             if (element) {
                 const gallery = element.closest('.gallery-container');
                 if (gallery) {
@@ -1115,17 +1157,14 @@
                     if(currentImageIndex === -1) currentImageIndex = 0;
                 }
             }
-
             modal.style.display = 'flex';
             setTimeout(() => modal.classList.add('active'), 10);
         }
-        
         function closePhotoModal() {
             const modal = document.getElementById('photoGlobalModal');
             modal.classList.remove('active');
             setTimeout(() => modal.style.display = 'none', 300);
         }
-        
         function changePhoto(direction) {
             if (currentGalleryImages.length === 0) return;
             currentImageIndex += direction;
@@ -1142,35 +1181,73 @@
             if (gaugeChart) { gaugeChart.destroy(); gaugeChart = null; }
         }
 
-        function showFinancialInfoModal(etapa, orcado, investido) {
-            document.getElementById('finInfoEtapaTitle').textContent = etapa;
-            document.getElementById('finInfoOrcado').textContent = fmtMoney(orcado);
-            document.getElementById('finInfoInvestido').textContent = fmtMoney(investido);
+        function updateChartModal() {
+            const data = dataMaps[currentChartObra];
+            const etapa = data.labels[currentChartIndex];
             
-            let percentual = orcado > 0 ? ((investido / orcado) * 100).toFixed(1) + '%' : '0.0%';
-            document.getElementById('finInfoPercent').textContent = percentual;
-            
-            document.getElementById('modalFinancialInfo').classList.add('active');
+            if (currentChartModalType === 'financial') {
+                const orcado = data.orcado[currentChartIndex];
+                const investido = data.investido[currentChartIndex];
+                document.getElementById('finInfoEtapaTitle').textContent = etapa;
+                document.getElementById('finInfoOrcado').textContent = fmtMoney(orcado);
+                document.getElementById('finInfoInvestido').textContent = fmtMoney(investido);
+                
+                let percentual = orcado > 0 ? ((investido / orcado) * 100).toFixed(1) + '%' : '0.0%';
+                document.getElementById('finInfoPercent').textContent = percentual;
+            } else if (currentChartModalType === 'physical') {
+                document.getElementById('pendenciasEtapaTitle').textContent = etapa;
+                const listEl = document.getElementById('pendenciasList');
+                listEl.innerHTML = '';
+                
+                const pendencias = data.pendencias[etapa] || ['Sem pendências especificadas.'];
+                pendencias.forEach(p => {
+                    let text = p.trim();
+                    if (!text.endsWith('.') && text !== '-') text += '.';
+                    const li = document.createElement('li');
+                    li.className = 'level-2';
+                    li.style.borderBottom = '1px solid var(--planejamento-border)';
+                    li.style.padding = '10px 0';
+                    li.innerHTML = `<span class="enum" style="color: var(--subtitle-color); font-weight: bold;">&bull;</span> ${text}`;
+                    listEl.appendChild(li);
+                });
+            }
         }
 
-        function showPendenciasModal(obraId, etapa) {
-            document.getElementById('pendenciasEtapaTitle').textContent = etapa;
-            const listEl = document.getElementById('pendenciasList');
+        function navigateModal(dir) {
+            if (!currentChartObra) return;
+            const data = dataMaps[currentChartObra];
+            currentChartIndex += dir;
+            if (currentChartIndex < 0) currentChartIndex = data.labels.length - 1;
+            if (currentChartIndex >= data.labels.length) currentChartIndex = 0;
+            updateChartModal();
+        }
+
+        function openResumoPendencias(obraId) {
+            const data = dataMaps[obraId];
+            document.getElementById('resumoObraTitle').textContent = obraId === 'mirante' ? 'MIRANTE DA LAGOA' : 'JOAQUIM LEME';
+            const listEl = document.getElementById('resumoPendenciasList');
             listEl.innerHTML = '';
             
-            const dict = obraId === 'mirante' ? pendenciasMirante : pendenciasJoaquim;
-            const pendencias = dict[etapa] || ['1) Sem pendências especificadas.'];
-            
-            pendencias.forEach(p => {
-                const li = document.createElement('li');
-                li.className = 'level-2';
-                li.style.borderBottom = '1px solid var(--planejamento-border)';
-                li.style.padding = '10px 0';
-                li.innerHTML = `<span class="enum" style="color: var(--subtitle-color); font-weight: bold;">&bull;</span> ${p}`;
-                listEl.appendChild(li);
+            data.labels.forEach(etapa => {
+                const pList = data.pendencias[etapa];
+                if (pList && pList.length > 0 && pList[0] !== '-') {
+                    const liHeader = document.createElement('li');
+                    liHeader.className = 'level-1';
+                    liHeader.style.marginTop = '10px';
+                    liHeader.textContent = etapa;
+                    listEl.appendChild(liHeader);
+                    
+                    pList.forEach(p => {
+                        let text = p.trim();
+                        if (!text.endsWith('.') && text !== '-') text += '.';
+                        const li = document.createElement('li');
+                        li.className = 'level-2';
+                        li.innerHTML = `<span class="enum" style="color: var(--subtitle-color); font-weight: bold;">&bull;</span> ${text}`;
+                        listEl.appendChild(li);
+                    });
+                }
             });
-            
-            document.getElementById('modalPendencias').classList.add('active');
+            document.getElementById('modalResumoPendencias').classList.add('active');
         }
 
         function createMainGauge(canvasId, valOrcado, valDesembolso, valComprometidoTotal) {
@@ -1369,17 +1446,19 @@
                         if (elements.length > 0) {
                             const datasetIndex = elements[0].datasetIndex;
                             const index = elements[0].index;
-                            const etapaNome = labels[index];
+                            const obraId = chart.canvas.id.includes('Mirante') ? 'mirante' : 'joaquim';
+                            
+                            currentChartObra = obraId;
+                            currentChartIndex = index;
                             
                             if (datasetIndex === 0) {
-                                // Barra de Finanças clicada
-                                const valOrcado = chart.config.data.datasets[0].orcadoData[index];
-                                const valInvestido = chart.config.data.datasets[0].investidoData[index];
-                                showFinancialInfoModal(etapaNome, valOrcado, valInvestido);
+                                currentChartModalType = 'financial';
+                                updateChartModal();
+                                document.getElementById('modalFinancialInfo').classList.add('active');
                             } else if (datasetIndex === 1) {
-                                // Barra de Físico clicada
-                                const obraId = chart.canvas.id.includes('Mirante') ? 'mirante' : 'joaquim';
-                                showPendenciasModal(obraId, etapaNome);
+                                currentChartModalType = 'physical';
+                                updateChartModal();
+                                document.getElementById('modalPendencias').classList.add('active');
                             }
                         }
                     },
@@ -1680,6 +1759,7 @@
                 closePhotoModal(); 
                 document.getElementById('modalFinancialInfo').classList.remove('active');
                 document.getElementById('modalPendencias').classList.remove('active');
+                document.getElementById('modalResumoPendencias').classList.remove('active');
             } 
         });
     </script>

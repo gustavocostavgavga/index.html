@@ -136,7 +136,6 @@
         }
 
         /* INÍCIO DAS INJEÇÕES DA CAPA E BOTÕES FLUTUANTES */
-        
         .home-page {
             display: flex;
             flex-direction: column;
@@ -148,7 +147,6 @@
             border-radius: 12px;
             padding: 40px 20px;
             position: relative;
-            /* Margem fina e minimalista */
             border: 1px solid rgba(85, 139, 47, 0.3);
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
             transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease;
@@ -187,7 +185,7 @@
             object-fit: contain;
         }
 
-        /* Título - Borda minimalista constante, sem brilho no texto, efeito hover apenas na caixa */
+        /* Título com Borda Permanente e Animação apenas no contêiner */
         .home-title-container {
             border: 2px solid var(--active-color);
             padding: 20px 40px;
@@ -344,7 +342,7 @@
             padding: 20px;
             min-height: 400px;
         }
-        /* FIM DAS INJEÇÕES DA CAPA, PDF, SOBRE E PROJETOS */
+        /* FIM DAS INJEÇÕES DA CAPA E NOVOS COMPONENTES */
 
         .dashboard { max-width: 1440px; margin: 0 auto; position: relative; }
         
@@ -688,6 +686,7 @@
             <div class="home-btn-group">
                 <button class="home-btn" onclick="goToDashboard('mirante')">Mirante da Lagoa</button>
                 <button class="home-btn" onclick="goToDashboard('joaquim')">Joaquim Leme</button>
+                <button class="home-btn" onclick="goToDashboard('geral')">Visão Geral</button>
             </div>
         </div>
 
@@ -1228,7 +1227,6 @@
         Chart.defaults.font.family = "'Montserrat', sans-serif";
         Chart.register(ChartDataLabels);
 
-        // --- PLUGIN: Desenhador de limite dinâmico para o Gráfico Físico Financeiro ---
         const dateLimitPlugin = {
             id: 'dateLimit',
             beforeDraw: function(chart) {
@@ -2008,59 +2006,173 @@
         }
 
         // --- FUNÇÕES INJETADAS DE EXPORTAÇÃO DE PDF E NAVEGAÇÃO ---
+        window.lastActiveObra = 'mirante';
+
+        function updatePdfButtonVisibility() {
+            const dashboard = document.getElementById('dashboard-view');
+            const btnPdf = document.getElementById('btn-export-pdf');
+            
+            if (dashboard.style.display === 'none') {
+                btnPdf.style.display = 'none';
+                return;
+            }
+            
+            const activeMain = document.querySelector('.tab-btn.active');
+            if (!activeMain) return;
+            
+            const tab = activeMain.dataset.tab;
+            
+            if (tab === 'geral') {
+                btnPdf.style.display = 'block';
+            } else if (tab === 'mirante' || tab === 'joaquim') {
+                const activeSub = document.querySelector(`#tab-${tab} .sub-tab-btn.active`);
+                if (activeSub) {
+                    const subtab = activeSub.dataset.subtab;
+                    if (subtab.includes('detalhe') || subtab.includes('historico') || subtab.includes('planejamento')) {
+                        btnPdf.style.display = 'block';
+                    } else {
+                        btnPdf.style.display = 'none';
+                    }
+                }
+            }
+        }
+
         function exportToPDF() {
-            // Oculta os botões flutuantes para não saírem no PDF
             const btnVoltar = document.getElementById('btn-voltar');
             const btnPdf = document.getElementById('btn-export-pdf');
             btnVoltar.style.display = 'none';
             btnPdf.style.display = 'none';
 
-            const element = document.getElementById('dashboard-view');
-            
-            // Força um leve delay para garantir a renderização antes de capturar a tela
-            setTimeout(() => {
-                const opt = {
-                    margin:       0.2,
-                    filename:     'Dashboard_Obras.pdf',
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { scale: 2, useCORS: true, logging: false },
-                    jsPDF:        { unit: 'in', format: 'a3', orientation: 'landscape' }
-                };
+            const dashboard = document.getElementById('dashboard-view');
+            const activeObra = window.lastActiveObra || 'mirante';
 
-                try {
-                    html2pdf().set(opt).from(element).save()
-                        .then(() => {
-                            console.log("PDF gerado com sucesso.");
-                        })
-                        .catch(err => {
-                            console.error("Erro na geração do PDF:", err);
-                            alert("Não foi possível gerar o PDF. Dica: Se o arquivo estiver aberto localmente (file://), pode ocorrer um bloqueio de segurança do navegador. Tente abrir usando um servidor local (localhost).");
-                        })
-                        .finally(() => {
-                            // Independente de dar erro ou não, os botões retornam
-                            btnVoltar.style.display = 'block';
-                            btnPdf.style.display = 'block';
-                        });
-                } catch (e) {
-                    console.error("Erro crítico ao tentar usar html2pdf:", e);
-                    btnVoltar.style.display = 'block';
-                    btnPdf.style.display = 'block';
-                    alert("A biblioteca de PDF falhou ao iniciar. Verifique sua conexão com a internet.");
+            // Salva estados originais para restaurar depois
+            const originalDashDisplay = dashboard.style.display;
+            const header = dashboard.querySelector('header');
+            const tabs = dashboard.querySelector('.tabs');
+            const subTabs = dashboard.querySelectorAll('.sub-tabs');
+            
+            const originalHeaderDisplay = header.style.display;
+            const originalTabsDisplay = tabs.style.display;
+
+            // Oculta topo para o relatório
+            header.style.display = 'none';
+            tabs.style.display = 'none';
+            subTabs.forEach(st => st.style.display = 'none');
+
+            // Armazena estilos originais das abas principais
+            const allTabContents = dashboard.querySelectorAll('.tab-content');
+            const originalTabStyles = [];
+            allTabContents.forEach(tc => {
+                originalTabStyles.push({ el: tc, display: tc.style.display, className: tc.className });
+                tc.style.display = 'none';
+            });
+
+            // Mostra apenas o conteúdo da Obra Atual
+            const activeTab = document.getElementById('tab-' + activeObra);
+            activeTab.style.display = 'block';
+
+            // Armazena estilos das sub-abas
+            const allSubTabs = activeTab.querySelectorAll('.sub-tab-content');
+            const originalSubStyles = [];
+            allSubTabs.forEach(stc => {
+                originalSubStyles.push({ el: stc, display: stc.style.display, className: stc.className });
+                stc.style.display = 'none';
+            });
+
+            // Mostra exatamente as sessões pedidas e na ordem certa (o fluxo normal do HTML já dita a ordem correta)
+            const stDetalhe = document.getElementById(`subtab-detalhe-${activeObra}`);
+            const stHistorico = document.getElementById(`subtab-historico-${activeObra}`);
+            const stPlanejamento = document.getElementById(`subtab-planejamento-${activeObra}`);
+            
+            if(stDetalhe) { stDetalhe.style.display = 'block'; stDetalhe.style.marginBottom = '30px'; }
+            if(stHistorico) { stHistorico.style.display = 'block'; stHistorico.style.marginBottom = '30px'; }
+            if(stPlanejamento) { stPlanejamento.style.display = 'block'; stPlanejamento.style.marginBottom = '30px'; }
+
+            // Adiciona a Visão Geral ao final
+            const geralTab = document.getElementById('tab-geral');
+            geralTab.style.display = 'block';
+            geralTab.style.marginTop = '20px';
+
+            // Força recalculo do Chart.js
+            window.dispatchEvent(new Event('resize'));
+
+            const opt = {
+                margin:       0.2,
+                filename:     `Dashboard_${activeObra.toUpperCase()}_Relatorio.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                /* allowTaint: true permite ignorar o erro do Canvas em arquivos locais */
+                html2canvas:  { scale: 2, useCORS: true, allowTaint: true, logging: false },
+                jsPDF:        { unit: 'in', format: 'a3', orientation: 'landscape' }
+            };
+
+            function restoreDashboard() {
+                header.style.display = originalHeaderDisplay;
+                tabs.style.display = originalTabsDisplay;
+                subTabs.forEach(st => st.style.display = '');
+
+                allTabContents.forEach((tc, idx) => {
+                    tc.style.display = originalTabStyles[idx].display;
+                    tc.className = originalTabStyles[idx].className;
+                });
+
+                allSubTabs.forEach((stc, idx) => {
+                    stc.style.display = originalSubStyles[idx].display;
+                    stc.className = originalSubStyles[idx].className;
+                });
+
+                const activeMainBtn = document.querySelector('.tab-btn.active');
+                if(activeMainBtn) activeMainBtn.click();
+                const activeSubBtn = document.querySelector('.tab-content.active .sub-tab-btn.active');
+                if(activeSubBtn) activeSubBtn.click();
+
+                btnVoltar.style.display = 'block';
+                updatePdfButtonVisibility();
+                window.dispatchEvent(new Event('resize'));
+            }
+
+            // Fallback de Segurança: Se o gerador de PDF travar silenciosamente, restaura a tela.
+            let isResolved = false;
+            setTimeout(() => {
+                if (!isResolved) {
+                    restoreDashboard();
+                    alert("A exportação do PDF foi bloqueada pelo navegador.\n\nIsso ocorre porque você abriu o arquivo diretamente (file://) e o navegador bloqueia a leitura das imagens por segurança (CORS).\n\nPara resolver isso e fazer o download funcionar, abra este arquivo HTML através de um Servidor Local (Ex: Extensão 'Live Server' no VS Code).");
                 }
-            }, 100);
+            }, 8000);
+
+            // Timeout generoso para evitar falha no redimensionamento do canvas antes da captura
+            setTimeout(() => {
+                try {
+                    html2pdf().set(opt).from(dashboard).save()
+                    .then(() => {
+                        isResolved = true;
+                        restoreDashboard();
+                    })
+                    .catch(err => {
+                        isResolved = true;
+                        console.error("Erro interno do html2pdf:", err);
+                        restoreDashboard();
+                    });
+                } catch (e) {
+                    isResolved = true;
+                    console.error("Erro fatal no html2pdf:", e);
+                    restoreDashboard();
+                }
+            }, 800);
         }
 
         function goToDashboard(tabName) {
             document.getElementById('home-page').style.display = 'none';
             document.getElementById('dashboard-view').style.display = 'block';
             document.getElementById('btn-voltar').style.display = 'block';
-            document.getElementById('btn-export-pdf').style.display = 'block';
             
             const tabBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
             if (tabBtn) tabBtn.click();
             
-            // Força a renderização correta dos gráficos ao abrir a aba
-            setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
+            setTimeout(() => {
+                window.dispatchEvent(new Event('resize'));
+                updatePdfButtonVisibility();
+            }, 100);
         }
 
         function goToHome() {
@@ -2070,7 +2182,7 @@
             document.getElementById('home-page').style.display = 'flex';
         }
 
-        // Script para a interatividade visual dos botões de PROJETOS
+        // Script para interatividade dos botões de PROJETOS
         document.querySelectorAll('.projeto-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const parent = this.closest('.projetos-sidebar');
@@ -2081,9 +2193,9 @@
 
         // --- LIFE-CYCLE INIT ---
         window.addEventListener('DOMContentLoaded', () => {
-            // Inicializar Data da Capa
+            // Inicializar Data da Capa com "Última atualização:"
             const today = new Date();
-            document.getElementById('home-date').textContent = 'Data: ' + today.toLocaleDateString('pt-BR');
+            document.getElementById('home-date').textContent = 'Última atualização: ' + today.toLocaleDateString('pt-BR');
 
             createMainGauge('gaugeMainMirante', 7859182, 4957062, 6453967);
             createMainGauge('gaugeMainJoaquim', 5019403, 3465877, 3732110);
@@ -2111,13 +2223,17 @@
             applyChartThemes('light');
         });
 
-        // --- CONTROLE DE NAVEGAÇÃO DE ABAS GERAIS E SUB-ABAS ---
+        // --- CONTROLE DE NAVEGAÇÃO DE ABAS GERAIS E SUB-ABAS (Atualizado com controle de PDF) ---
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', function() {
+                if (this.dataset.tab === 'mirante' || this.dataset.tab === 'joaquim') {
+                    window.lastActiveObra = this.dataset.tab;
+                }
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
                 document.getElementById('tab-'+this.dataset.tab).classList.add('active');
+                updatePdfButtonVisibility();
             });
         });
         document.querySelectorAll('.sub-tab-btn').forEach(btn => {
@@ -2127,6 +2243,7 @@
                 this.classList.add('active');
                 parent.querySelectorAll('.sub-tab-content').forEach(tc => tc.classList.remove('active'));
                 document.getElementById('subtab-'+this.dataset.subtab).classList.add('active');
+                updatePdfButtonVisibility();
             });
         });
 

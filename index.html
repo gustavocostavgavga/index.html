@@ -10,7 +10,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        /* Aplicação global e irrestrita da fonte Montserrat */
         * { 
             margin: 0; 
             padding: 0; 
@@ -18,9 +17,7 @@
             font-family: 'Montserrat', sans-serif !important;
         }
 
-        /* Variáveis de cores para os modos Claro e Noturno (Tons de Verde) */
         :root {
-            /* Modo Claro Original */
             --bg-color-1: #f0f2f5;
             --bg-color-2: #e8eaed;
             --bg-color-3: #f0f2f5;
@@ -51,8 +48,6 @@
             --empty-state-bg: #f9f9f9;
             --empty-state-text: #7f8c8d;
             --center-text-base: #558b2f;
-
-            /* Ativos (Verdes Originais Mantidos) */
             --active-color: #558b2f;
             --active-hover-color: #7cb342;
             --active-text: #ffffff;
@@ -60,20 +55,14 @@
             --alert-bg: #ffebee;
             --economy-color: #2e7d32;
             --economy-bg: #e8f5e9;
-
-            /* Estilo do botão de alternância (Modo Claro) */
             --toggle-btn-bg: #1b5e20;
             --toggle-btn-text: #ffffff;
             --toggle-btn-border: #1b5e20;
-            
-            /* Cor única e rígida para toda a coluna Saldo Disponível no Modo Claro */
             --table-saldo-color: #2c3e50;
             --update-text-color: #7f8c8d;
         }
 
-        /* Definição das cores para o Modo Noturno (Verde Escuro) */
         body.dark-mode {
-            /* Fundo com degradê de verde escuro profundo */
             --bg-color-1: #051007; 
             --bg-color-2: #0a1f0d; 
             --bg-color-3: #0c2610; 
@@ -83,8 +72,6 @@
             --title-color: #ffffff; 
             --subtitle-color: #a3e635; 
             --kpi-value-color: #ffffff; 
-            
-            /* Abas e Botões em Modo Noturno */
             --tab-btn-bg: #1a4522; 
             --tab-btn-text: #c5e1a5; 
             --sub-tab-btn-bg: #1a4522; 
@@ -93,34 +80,22 @@
             --analysis-tab-btn-bg: #0f2d16; 
             --analysis-tab-btn-text: #a3e635; 
             --analysis-tab-btn-border: #1f5027; 
-
-            /* Tabelas em Modo Noturno */
             --table-th-bg: #0c2610; 
             --table-td-text: #ffffff; 
             --table-border: #1f5027; 
             --table-row-hover: #163a1e; 
-
-            /* Planejamento em Modo Noturno */
             --planejamento-list-text: #e0e0e0;
             --planejamento-border: #1f5027;
-
-            /* Modal e Gauge em Modo Noturno */
             --modal-bg: #112d16;
             --gauge-label-color: #a3e635; 
             --gauge-value-color: #ffffff; 
             --gauge-fill-base: #23572e; 
-
-            /* Outros elementos */
             --empty-state-bg: #0f2d16;
             --empty-state-text: #a3e635;
             --center-text-base: #ffffff; 
-
-            /* Estilo do botão de alternância (Modo Noturno) */
             --toggle-btn-bg: #1a4522;
             --toggle-btn-text: #ffffff;
             --toggle-btn-border: #a3e635;
-            
-            /* Cor única e rígida para toda a coluna Saldo Disponível no Modo Noturno */
             --table-saldo-color: #ffffff;
             --update-text-color: #ffffff;
         }
@@ -135,7 +110,7 @@
             transition: background 0.4s ease, color 0.4s ease; 
         }
 
-        /* INÍCIO DAS INJEÇÕES DA CAPA E BOTÕES FLUTUANTES */
+        /* INÍCIO DAS INJEÇÕES DA CAPA COM FUNDO DE IMAGEM E QUADROS */
         .home-page {
             display: flex;
             flex-direction: column;
@@ -143,19 +118,25 @@
             justify-content: flex-start;
             min-height: calc(100vh - 40px);
             background-color: #e0e0e0; 
-            color: #1b5e20; 
             border-radius: 12px;
             padding: 40px 20px;
             position: relative;
             border: 1px solid rgba(85, 139, 47, 0.3);
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease;
+            transition: background-color 0.4s ease, border 0.4s ease;
+            
+            /* Imagem de Fundo */
+            background-image: url('DJI_0369.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            overflow: hidden;
         }
 
         body.dark-mode .home-page {
-            background-color: transparent; 
-            color: #ffffff; 
-            border: 1px solid rgba(163, 230, 53, 0.3);
+            /* Imagem de Fundo escurecida no modo noturno */
+            background-image: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('DJI_0369.jpg');
+            border-color: rgba(163, 230, 53, 0.3);
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
 
@@ -176,24 +157,40 @@
             gap: 6px; 
             transition: all 0.3s; 
             box-shadow: 0 2px 6px rgba(0,0,0,0.1); 
+            z-index: 10;
         }
 
+        /* Classe genérica para os Quadros que "cortam" o fundo */
+        .home-frame {
+            background-color: var(--card-bg);
+            border: 2px solid var(--active-color);
+            border-radius: 16px;
+            padding: 20px 40px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        body.dark-mode .home-frame {
+            border-color: var(--subtitle-color);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+        }
+
+        .home-logo-frame {
+            padding: 10px 20px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
         .home-logo {
             max-height: 80px;
-            margin-top: 20px;
-            margin-bottom: 40px;
             object-fit: contain;
         }
 
-        /* Título com Borda Permanente e Animação apenas no contêiner */
         .home-title-container {
-            border: 2px solid var(--active-color);
-            padding: 20px 40px;
-            border-radius: 16px;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            margin-bottom: 30px;
             cursor: default;
-            margin-bottom: 50px;
-            background: transparent;
         }
         .home-title {
             font-size: 2.5rem;
@@ -204,32 +201,29 @@
         }
         .home-title-container:hover {
             transform: translateY(-8px);
-            background: rgba(85, 139, 47, 0.05);
             box-shadow: 0 10px 25px rgba(85, 139, 47, 0.15);
         }
-
-        body.dark-mode .home-title-container {
-            border-color: var(--subtitle-color);
-        }
         body.dark-mode .home-title-container:hover {
-            background: rgba(163, 230, 53, 0.05);
             box-shadow: 0 10px 25px rgba(163, 230, 53, 0.15);
         }
 
+        .home-access-frame {
+            padding: 20px 40px;
+            margin-bottom: 30px;
+        }
         .home-subtitle {
             font-size: 1.2rem;
-            font-weight: normal;
+            font-weight: bold;
             margin-bottom: 20px;
             text-align: center;
+            color: var(--title-color);
         }
-
         .home-btn-group {
             display: flex;
             gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
         }
-
         .home-btn {
             background-color: #558b2f; 
             color: #ffffff;
@@ -242,22 +236,26 @@
             transition: transform 0.3s, opacity 0.3s;
             box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
-
         .home-btn:hover {
             transform: translateY(-2px);
             opacity: 0.9;
         }
 
+        .home-footer-frame {
+            padding: 10px 30px;
+            margin-top: auto; 
+        }
         .home-date {
-            margin-top: auto;
-            font-weight: normal; 
+            font-weight: bold; 
             font-size: 1rem;
+            color: var(--title-color);
+            margin: 0;
         }
 
-        #btn-voltar {
+        /* Botões Flutuantes PDF e Voltar */
+        #btn-voltar, #btn-export-pdf {
             position: fixed;
             bottom: 25px;
-            right: 25px;
             background-color: #558b2f; 
             color: #ffffff;
             font-weight: bold;
@@ -271,31 +269,9 @@
             transition: all 0.3s;
             display: none; 
         }
-
-        #btn-voltar:hover {
-            transform: scale(1.05);
-            background-color: #7cb342;
-        }
-
-        #btn-export-pdf {
-            position: fixed;
-            bottom: 25px;
-            left: 25px;
-            background-color: #558b2f; 
-            color: #ffffff;
-            font-weight: bold;
-            font-size: 0.9rem;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            z-index: 9999;
-            transition: all 0.3s;
-            display: none; 
-        }
-
-        #btn-export-pdf:hover {
+        #btn-voltar { right: 25px; }
+        #btn-export-pdf { left: 25px; }
+        #btn-voltar:hover, #btn-export-pdf:hover {
             transform: scale(1.05);
             background-color: #7cb342;
         }
@@ -673,15 +649,15 @@
             <span id="homeModeText">Modo Noturno</span>
         </button>
 
-        <div class="home-logo-container">
+        <div class="home-frame home-logo-frame">
             <img src="Logo GRP_png_Transparente.png" alt="Logo GRP" class="home-logo">
         </div>
         
-        <div class="home-title-container">
+        <div class="home-frame home-title-container">
             <h1 class="home-title">VISUALIZAÇÃO ESTRATÉGICA DE OBRAS</h1>
         </div>
         
-        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1;">
+        <div class="home-frame home-access-frame">
             <p class="home-subtitle">Acessar empreendimentos:</p>
             <div class="home-btn-group">
                 <button class="home-btn" onclick="goToDashboard('mirante')">Mirante da Lagoa</button>
@@ -690,7 +666,9 @@
             </div>
         </div>
 
-        <p class="home-date" id="home-date"></p>
+        <div class="home-frame home-footer-frame">
+            <p class="home-date" id="home-date"></p>
+        </div>
     </div>
 
     <button id="btn-export-pdf" onclick="exportToPDF()">Exportar em PDF</button>
@@ -890,7 +868,7 @@
                         <button class="projeto-btn">ELÉTRICA</button>
                     </div>
                     <div class="projetos-content">
-                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1065,7 +1043,7 @@
                         <button class="projeto-btn">ELÉTRICA</button>
                     </div>
                     <div class="projetos-content">
-                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1382,7 +1360,6 @@
             const body = document.body;
             const btnText = document.getElementById('modeText');
             const btnIcon = document.getElementById('modeIcon');
-            
             const homeBtnText = document.getElementById('homeModeText');
             const homeBtnIcon = document.getElementById('homeModeIcon');
 
@@ -2005,7 +1982,6 @@
             }
         }
 
-        // --- FUNÇÕES INJETADAS DE EXPORTAÇÃO DE PDF E NAVEGAÇÃO ---
         window.lastActiveObra = 'mirante';
 
         function updatePdfButtonVisibility() {
@@ -2046,7 +2022,6 @@
             const dashboard = document.getElementById('dashboard-view');
             const activeObra = window.lastActiveObra || 'mirante';
 
-            // Salva estados originais para restaurar depois
             const originalDashDisplay = dashboard.style.display;
             const header = dashboard.querySelector('header');
             const tabs = dashboard.querySelector('.tabs');
@@ -2055,12 +2030,10 @@
             const originalHeaderDisplay = header.style.display;
             const originalTabsDisplay = tabs.style.display;
 
-            // Oculta topo para o relatório
             header.style.display = 'none';
             tabs.style.display = 'none';
             subTabs.forEach(st => st.style.display = 'none');
 
-            // Armazena estilos originais das abas principais
             const allTabContents = dashboard.querySelectorAll('.tab-content');
             const originalTabStyles = [];
             allTabContents.forEach(tc => {
@@ -2068,11 +2041,9 @@
                 tc.style.display = 'none';
             });
 
-            // Mostra apenas o conteúdo da Obra Atual
             const activeTab = document.getElementById('tab-' + activeObra);
             activeTab.style.display = 'block';
 
-            // Armazena estilos das sub-abas
             const allSubTabs = activeTab.querySelectorAll('.sub-tab-content');
             const originalSubStyles = [];
             allSubTabs.forEach(stc => {
@@ -2080,7 +2051,6 @@
                 stc.style.display = 'none';
             });
 
-            // Mostra exatamente as sessões pedidas e na ordem certa (o fluxo normal do HTML já dita a ordem correta)
             const stDetalhe = document.getElementById(`subtab-detalhe-${activeObra}`);
             const stHistorico = document.getElementById(`subtab-historico-${activeObra}`);
             const stPlanejamento = document.getElementById(`subtab-planejamento-${activeObra}`);
@@ -2089,19 +2059,16 @@
             if(stHistorico) { stHistorico.style.display = 'block'; stHistorico.style.marginBottom = '30px'; }
             if(stPlanejamento) { stPlanejamento.style.display = 'block'; stPlanejamento.style.marginBottom = '30px'; }
 
-            // Adiciona a Visão Geral ao final
             const geralTab = document.getElementById('tab-geral');
             geralTab.style.display = 'block';
             geralTab.style.marginTop = '20px';
 
-            // Força recalculo do Chart.js
             window.dispatchEvent(new Event('resize'));
 
             const opt = {
                 margin:       0.2,
                 filename:     `Dashboard_${activeObra.toUpperCase()}_Relatorio.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
-                /* allowTaint: true permite ignorar o erro do Canvas em arquivos locais */
                 html2canvas:  { scale: 2, useCORS: true, allowTaint: true, logging: false },
                 jsPDF:        { unit: 'in', format: 'a3', orientation: 'landscape' }
             };
@@ -2131,16 +2098,14 @@
                 window.dispatchEvent(new Event('resize'));
             }
 
-            // Fallback de Segurança: Se o gerador de PDF travar silenciosamente, restaura a tela.
             let isResolved = false;
             setTimeout(() => {
                 if (!isResolved) {
                     restoreDashboard();
-                    alert("A exportação do PDF foi bloqueada pelo navegador.\n\nIsso ocorre porque você abriu o arquivo diretamente (file://) e o navegador bloqueia a leitura das imagens por segurança (CORS).\n\nPara resolver isso e fazer o download funcionar, abra este arquivo HTML através de um Servidor Local (Ex: Extensão 'Live Server' no VS Code).");
+                    alert("A exportação do PDF falhou.\nDica: Tente abrir o arquivo em um Servidor Local (Ex: Extensão 'Live Server' no VS Code) para evitar bloqueios de segurança (CORS) com as imagens.");
                 }
             }, 8000);
 
-            // Timeout generoso para evitar falha no redimensionamento do canvas antes da captura
             setTimeout(() => {
                 try {
                     html2pdf().set(opt).from(dashboard).save()
@@ -2150,12 +2115,12 @@
                     })
                     .catch(err => {
                         isResolved = true;
-                        console.error("Erro interno do html2pdf:", err);
+                        console.error("Erro interno:", err);
                         restoreDashboard();
                     });
                 } catch (e) {
                     isResolved = true;
-                    console.error("Erro fatal no html2pdf:", e);
+                    console.error("Erro fatal:", e);
                     restoreDashboard();
                 }
             }, 800);
@@ -2182,7 +2147,6 @@
             document.getElementById('home-page').style.display = 'flex';
         }
 
-        // Script para interatividade dos botões de PROJETOS
         document.querySelectorAll('.projeto-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const parent = this.closest('.projetos-sidebar');
@@ -2191,9 +2155,7 @@
             });
         });
 
-        // --- LIFE-CYCLE INIT ---
         window.addEventListener('DOMContentLoaded', () => {
-            // Inicializar Data da Capa com "Última atualização:"
             const today = new Date();
             document.getElementById('home-date').textContent = 'Última atualização: ' + today.toLocaleDateString('pt-BR');
 
@@ -2223,7 +2185,6 @@
             applyChartThemes('light');
         });
 
-        // --- CONTROLE DE NAVEGAÇÃO DE ABAS GERAIS E SUB-ABAS (Atualizado com controle de PDF) ---
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 if (this.dataset.tab === 'mirante' || this.dataset.tab === 'joaquim') {
@@ -2247,7 +2208,6 @@
             });
         });
 
-        // --- CONTROLE DE NAVEGAÇÃO INTERNA DA ABA DE ANÁLISES ---
         document.querySelectorAll('.analysis-tab-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const container = this.closest('.analyses-container');

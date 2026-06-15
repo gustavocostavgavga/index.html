@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         /* Aplicação global e irrestrita da fonte Montserrat */
         * { 
@@ -133,6 +134,217 @@
             -moz-osx-font-smoothing: grayscale; 
             transition: background 0.4s ease, color 0.4s ease; 
         }
+
+        /* INÍCIO DAS INJEÇÕES DA CAPA E BOTÕES FLUTUANTES */
+        
+        .home-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: calc(100vh - 40px);
+            background-color: #e0e0e0; 
+            color: #1b5e20; 
+            border-radius: 12px;
+            padding: 40px 20px;
+            position: relative;
+            /* Margem fina e minimalista */
+            border: 1px solid rgba(85, 139, 47, 0.3);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease;
+        }
+
+        body.dark-mode .home-page {
+            background-color: transparent; 
+            color: #ffffff; 
+            border: 1px solid rgba(163, 230, 53, 0.3);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .home-btn-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--toggle-btn-bg); 
+            color: var(--toggle-btn-text); 
+            border: 1px solid var(--toggle-btn-border); 
+            padding: 8px 16px; 
+            border-radius: 16px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 0.8rem; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px; 
+            transition: all 0.3s; 
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1); 
+        }
+
+        .home-logo {
+            max-height: 80px;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            object-fit: contain;
+        }
+
+        /* Título - Borda minimalista constante, sem brilho no texto, efeito hover apenas na caixa */
+        .home-title-container {
+            border: 2px solid var(--active-color);
+            padding: 20px 40px;
+            border-radius: 16px;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: default;
+            margin-bottom: 50px;
+            background: transparent;
+        }
+        .home-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 0;
+            color: var(--title-color);
+        }
+        .home-title-container:hover {
+            transform: translateY(-8px);
+            background: rgba(85, 139, 47, 0.05);
+            box-shadow: 0 10px 25px rgba(85, 139, 47, 0.15);
+        }
+
+        body.dark-mode .home-title-container {
+            border-color: var(--subtitle-color);
+        }
+        body.dark-mode .home-title-container:hover {
+            background: rgba(163, 230, 53, 0.05);
+            box-shadow: 0 10px 25px rgba(163, 230, 53, 0.15);
+        }
+
+        .home-subtitle {
+            font-size: 1.2rem;
+            font-weight: normal;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .home-btn-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .home-btn {
+            background-color: #558b2f; 
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s, opacity 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .home-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .home-date {
+            margin-top: auto;
+            font-weight: normal; 
+            font-size: 1rem;
+        }
+
+        #btn-voltar {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: #558b2f; 
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 0.9rem;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 9999;
+            transition: all 0.3s;
+            display: none; 
+        }
+
+        #btn-voltar:hover {
+            transform: scale(1.05);
+            background-color: #7cb342;
+        }
+
+        #btn-export-pdf {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            background-color: #558b2f; 
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 0.9rem;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 9999;
+            transition: all 0.3s;
+            display: none; 
+        }
+
+        #btn-export-pdf:hover {
+            transform: scale(1.05);
+            background-color: #7cb342;
+        }
+
+        /* Estilização da aba PROJETOS */
+        .projetos-container {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            min-height: 400px;
+            margin-top: 15px;
+        }
+        .projetos-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 250px;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+        }
+        .projeto-btn {
+            background: var(--table-th-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color-base);
+            padding: 12px 15px;
+            text-align: left;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        .projeto-btn:hover, .projeto-btn.active {
+            background: var(--active-color);
+            color: var(--active-text);
+            border-color: var(--active-color);
+        }
+        .projetos-content {
+            flex: 1;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 400px;
+        }
+        /* FIM DAS INJEÇÕES DA CAPA, PDF, SOBRE E PROJETOS */
 
         .dashboard { max-width: 1440px; margin: 0 auto; position: relative; }
         
@@ -456,7 +668,36 @@
     </style>
 </head>
 <body>
-    <div class="dashboard">
+
+    <div id="home-page" class="home-page">
+        <button class="home-btn-toggle" onclick="toggleMode()">
+            <span class="icon" id="homeModeIcon">🌙</span>
+            <span id="homeModeText">Modo Noturno</span>
+        </button>
+
+        <div class="home-logo-container">
+            <img src="Logo GRP_png_Transparente.png" alt="Logo GRP" class="home-logo">
+        </div>
+        
+        <div class="home-title-container">
+            <h1 class="home-title">VISUALIZAÇÃO ESTRATÉGICA DE OBRAS</h1>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1;">
+            <p class="home-subtitle">Acessar empreendimentos:</p>
+            <div class="home-btn-group">
+                <button class="home-btn" onclick="goToDashboard('mirante')">Mirante da Lagoa</button>
+                <button class="home-btn" onclick="goToDashboard('joaquim')">Joaquim Leme</button>
+            </div>
+        </div>
+
+        <p class="home-date" id="home-date"></p>
+    </div>
+
+    <button id="btn-export-pdf" onclick="exportToPDF()">Exportar em PDF</button>
+    <button id="btn-voltar" onclick="goToHome()">Voltar para a página inicial</button>
+
+    <div id="dashboard-view" class="dashboard" style="display: none;">
         <header>
             <div class="title-section">
                 <div class="logo-container">
@@ -515,6 +756,8 @@
                 <button class="sub-tab-btn" data-subtab="planejamento-mirante">Planejamento</button>
                 <button class="sub-tab-btn" data-subtab="fotos-mirante">Galeria de Fotos</button>
                 <button class="sub-tab-btn" data-subtab="analises-mirante">Análises</button>
+                <button class="sub-tab-btn" data-subtab="sobre-mirante">Sobre</button>
+                <button class="sub-tab-btn" data-subtab="projetos-mirante">Projetos</button>
             </div>
             
             <div class="sub-tab-content active" id="subtab-detalhe-mirante">
@@ -628,6 +871,30 @@
                     </div>
                 </div>
             </div>
+
+            <div class="sub-tab-content" id="subtab-sobre-mirante">
+                <div class="empty-state">
+                    Conteúdo em branco para inserção futura.
+                </div>
+            </div>
+
+            <div class="sub-tab-content" id="subtab-projetos-mirante">
+                <div class="projetos-container">
+                    <div class="projetos-sidebar">
+                        <button class="projeto-btn active">URBANÍSTICO</button>
+                        <button class="projeto-btn">PLANIALTIMÉTRICO</button>
+                        <button class="projeto-btn">TERRAPLENAGEM</button>
+                        <button class="projeto-btn">DRENAGEM</button>
+                        <button class="projeto-btn">ÁGUA</button>
+                        <button class="projeto-btn">ESGOTO</button>
+                        <button class="projeto-btn">PAVIMENTAÇÃO</button>
+                        <button class="projeto-btn">ELÉTRICA</button>
+                    </div>
+                    <div class="projetos-content">
+                        </div>
+                </div>
+            </div>
+
         </div>
         
         <div class="tab-content" id="tab-joaquim">
@@ -666,6 +933,8 @@
                     <button class="sub-tab-btn" data-subtab="planejamento-joaquim">Planejamento</button>
                     <button class="sub-tab-btn" data-subtab="fotos-joaquim">Galeria de Fotos</button>
                     <button class="sub-tab-btn" data-subtab="analises-joaquim">Análises</button>
+                    <button class="sub-tab-btn" data-subtab="sobre-joaquim">Sobre</button>
+                    <button class="sub-tab-btn" data-subtab="projetos-joaquim">Projetos</button>
                 </div>
             </div>
             
@@ -777,6 +1046,30 @@
                     </div>
                 </div>
             </div>
+
+            <div class="sub-tab-content" id="subtab-sobre-joaquim">
+                <div class="empty-state">
+                    Conteúdo em branco para inserção futura.
+                </div>
+            </div>
+
+            <div class="sub-tab-content" id="subtab-projetos-joaquim">
+                <div class="projetos-container">
+                    <div class="projetos-sidebar">
+                        <button class="projeto-btn active">URBANÍSTICO</button>
+                        <button class="projeto-btn">PLANIALTIMÉTRICO</button>
+                        <button class="projeto-btn">TERRAPLENAGEM</button>
+                        <button class="projeto-btn">DRENAGEM</button>
+                        <button class="projeto-btn">ÁGUA</button>
+                        <button class="projeto-btn">ESGOTO</button>
+                        <button class="projeto-btn">PAVIMENTAÇÃO</button>
+                        <button class="projeto-btn">ELÉTRICA</button>
+                    </div>
+                    <div class="projetos-content">
+                        </div>
+                </div>
+            </div>
+
         </div>
         
         <div class="tab-content" id="tab-geral">
@@ -1091,17 +1384,25 @@
             const body = document.body;
             const btnText = document.getElementById('modeText');
             const btnIcon = document.getElementById('modeIcon');
+            
+            const homeBtnText = document.getElementById('homeModeText');
+            const homeBtnIcon = document.getElementById('homeModeIcon');
+
             isDarkMode = !isDarkMode;
 
             if (isDarkMode) {
                 body.classList.add('dark-mode');
-                btnText.textContent = 'Modo Claro';
-                btnIcon.textContent = '☀️';
+                if(btnText) btnText.textContent = 'Modo Claro';
+                if(btnIcon) btnIcon.textContent = '☀️';
+                if(homeBtnText) homeBtnText.textContent = 'Modo Claro';
+                if(homeBtnIcon) homeBtnIcon.textContent = '☀️';
                 applyChartThemes('dark');
             } else {
                 body.classList.remove('dark-mode');
-                btnText.textContent = 'Modo Noturno';
-                btnIcon.textContent = '🌙';
+                if(btnText) btnText.textContent = 'Modo Noturno';
+                if(btnIcon) btnIcon.textContent = '🌙';
+                if(homeBtnText) homeBtnText.textContent = 'Modo Noturno';
+                if(homeBtnIcon) homeBtnIcon.textContent = '🌙';
                 applyChartThemes('light');
             }
             
@@ -1706,8 +2007,84 @@
             }
         }
 
+        // --- FUNÇÕES INJETADAS DE EXPORTAÇÃO DE PDF E NAVEGAÇÃO ---
+        function exportToPDF() {
+            // Oculta os botões flutuantes para não saírem no PDF
+            const btnVoltar = document.getElementById('btn-voltar');
+            const btnPdf = document.getElementById('btn-export-pdf');
+            btnVoltar.style.display = 'none';
+            btnPdf.style.display = 'none';
+
+            const element = document.getElementById('dashboard-view');
+            
+            // Força um leve delay para garantir a renderização antes de capturar a tela
+            setTimeout(() => {
+                const opt = {
+                    margin:       0.2,
+                    filename:     'Dashboard_Obras.pdf',
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { scale: 2, useCORS: true, logging: false },
+                    jsPDF:        { unit: 'in', format: 'a3', orientation: 'landscape' }
+                };
+
+                try {
+                    html2pdf().set(opt).from(element).save()
+                        .then(() => {
+                            console.log("PDF gerado com sucesso.");
+                        })
+                        .catch(err => {
+                            console.error("Erro na geração do PDF:", err);
+                            alert("Não foi possível gerar o PDF. Dica: Se o arquivo estiver aberto localmente (file://), pode ocorrer um bloqueio de segurança do navegador. Tente abrir usando um servidor local (localhost).");
+                        })
+                        .finally(() => {
+                            // Independente de dar erro ou não, os botões retornam
+                            btnVoltar.style.display = 'block';
+                            btnPdf.style.display = 'block';
+                        });
+                } catch (e) {
+                    console.error("Erro crítico ao tentar usar html2pdf:", e);
+                    btnVoltar.style.display = 'block';
+                    btnPdf.style.display = 'block';
+                    alert("A biblioteca de PDF falhou ao iniciar. Verifique sua conexão com a internet.");
+                }
+            }, 100);
+        }
+
+        function goToDashboard(tabName) {
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('dashboard-view').style.display = 'block';
+            document.getElementById('btn-voltar').style.display = 'block';
+            document.getElementById('btn-export-pdf').style.display = 'block';
+            
+            const tabBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+            if (tabBtn) tabBtn.click();
+            
+            // Força a renderização correta dos gráficos ao abrir a aba
+            setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
+        }
+
+        function goToHome() {
+            document.getElementById('dashboard-view').style.display = 'none';
+            document.getElementById('btn-voltar').style.display = 'none';
+            document.getElementById('btn-export-pdf').style.display = 'none';
+            document.getElementById('home-page').style.display = 'flex';
+        }
+
+        // Script para a interatividade visual dos botões de PROJETOS
+        document.querySelectorAll('.projeto-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const parent = this.closest('.projetos-sidebar');
+                parent.querySelectorAll('.projeto-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
         // --- LIFE-CYCLE INIT ---
         window.addEventListener('DOMContentLoaded', () => {
+            // Inicializar Data da Capa
+            const today = new Date();
+            document.getElementById('home-date').textContent = 'Data: ' + today.toLocaleDateString('pt-BR');
+
             createMainGauge('gaugeMainMirante', 7859182, 4957062, 6453967);
             createMainGauge('gaugeMainJoaquim', 5019403, 3465877, 3732110);
             

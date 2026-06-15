@@ -8,8 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
+        /* Aplicação global e irrestrita da fonte Montserrat */
         * { 
             margin: 0; 
             padding: 0; 
@@ -17,7 +17,9 @@
             font-family: 'Montserrat', sans-serif !important;
         }
 
+        /* Variáveis de cores para os modos Claro e Noturno (Tons de Verde) */
         :root {
+            /* Modo Claro Original */
             --bg-color-1: #f0f2f5;
             --bg-color-2: #e8eaed;
             --bg-color-3: #f0f2f5;
@@ -48,6 +50,8 @@
             --empty-state-bg: #f9f9f9;
             --empty-state-text: #7f8c8d;
             --center-text-base: #558b2f;
+
+            /* Ativos (Verdes Originais Mantidos) */
             --active-color: #558b2f;
             --active-hover-color: #7cb342;
             --active-text: #ffffff;
@@ -55,14 +59,20 @@
             --alert-bg: #ffebee;
             --economy-color: #2e7d32;
             --economy-bg: #e8f5e9;
+
+            /* Estilo do botão de alternância (Modo Claro) */
             --toggle-btn-bg: #1b5e20;
             --toggle-btn-text: #ffffff;
             --toggle-btn-border: #1b5e20;
+            
+            /* Cor única e rígida para toda a coluna Saldo Disponível no Modo Claro */
             --table-saldo-color: #2c3e50;
             --update-text-color: #7f8c8d;
         }
 
+        /* Definição das cores para o Modo Noturno (Verde Escuro) */
         body.dark-mode {
+            /* Fundo com degradê de verde escuro profundo */
             --bg-color-1: #051007; 
             --bg-color-2: #0a1f0d; 
             --bg-color-3: #0c2610; 
@@ -72,6 +82,8 @@
             --title-color: #ffffff; 
             --subtitle-color: #a3e635; 
             --kpi-value-color: #ffffff; 
+            
+            /* Abas e Botões em Modo Noturno */
             --tab-btn-bg: #1a4522; 
             --tab-btn-text: #c5e1a5; 
             --sub-tab-btn-bg: #1a4522; 
@@ -80,22 +92,34 @@
             --analysis-tab-btn-bg: #0f2d16; 
             --analysis-tab-btn-text: #a3e635; 
             --analysis-tab-btn-border: #1f5027; 
+
+            /* Tabelas em Modo Noturno */
             --table-th-bg: #0c2610; 
             --table-td-text: #ffffff; 
             --table-border: #1f5027; 
             --table-row-hover: #163a1e; 
+
+            /* Planejamento em Modo Noturno */
             --planejamento-list-text: #e0e0e0;
             --planejamento-border: #1f5027;
+
+            /* Modal e Gauge em Modo Noturno */
             --modal-bg: #112d16;
             --gauge-label-color: #a3e635; 
             --gauge-value-color: #ffffff; 
             --gauge-fill-base: #23572e; 
+
+            /* Outros elementos */
             --empty-state-bg: #0f2d16;
             --empty-state-text: #a3e635;
             --center-text-base: #ffffff; 
+
+            /* Estilo do botão de alternância (Modo Noturno) */
             --toggle-btn-bg: #1a4522;
             --toggle-btn-text: #ffffff;
             --toggle-btn-border: #a3e635;
+            
+            /* Cor única e rígida para toda a coluna Saldo Disponível no Modo Noturno */
             --table-saldo-color: #ffffff;
             --update-text-color: #ffffff;
         }
@@ -110,7 +134,7 @@
             transition: background 0.4s ease, color 0.4s ease; 
         }
 
-        /* INÍCIO DAS INJEÇÕES DA CAPA COM FUNDO DE IMAGEM E QUADROS */
+        /* INÍCIO DAS INJEÇÕES DA CAPA E BOTÕES FLUTUANTES */
         .home-page {
             display: flex;
             flex-direction: column;
@@ -125,7 +149,7 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
             transition: background-color 0.4s ease, border 0.4s ease;
             
-            /* Imagem de Fundo */
+            /* Imagem de Fundo Corrigida */
             background-image: url('DJI_0369.jpg');
             background-size: cover;
             background-position: center;
@@ -213,7 +237,7 @@
         }
         .home-subtitle {
             font-size: 1.2rem;
-            font-weight: bold;
+            font-weight: normal; /* Modificado: removido o negrito */
             margin-bottom: 20px;
             text-align: center;
             color: var(--title-color);
@@ -252,10 +276,11 @@
             margin: 0;
         }
 
-        /* Botões Flutuantes PDF e Voltar */
-        #btn-voltar, #btn-export-pdf {
+        /* Botão Flutuante Voltar */
+        #btn-voltar {
             position: fixed;
             bottom: 25px;
+            right: 25px;
             background-color: #558b2f; 
             color: #ffffff;
             font-weight: bold;
@@ -269,9 +294,7 @@
             transition: all 0.3s;
             display: none; 
         }
-        #btn-voltar { right: 25px; }
-        #btn-export-pdf { left: 25px; }
-        #btn-voltar:hover, #btn-export-pdf:hover {
+        #btn-voltar:hover {
             transform: scale(1.05);
             background-color: #7cb342;
         }
@@ -506,7 +529,8 @@
         .abc-header h3 { color: var(--title-color); font-size: 1.1rem; margin-bottom: 20px; transition: color 0.4s; }
         .table-container { overflow-x: auto; margin-bottom: 30px; }
         table { width: 100%; border-collapse: collapse; font-size: 0.8rem; transition: color 0.4s; }
-        th { background: var(--table-th-bg); color: var(--title-color); padding: 12px 10px; text-align: center; font-weight: 600; border-bottom: 2px solid var(--border-color); transition: all 0.4s; }
+        th { background: var(--table-th-bg); color: var(--title-color); padding: 12px 10px; text-align: center; font-weight: 600; border-bottom: 2px solid var(--border-color); transition: all 0.4s; user-select: none; }
+        th:hover { background: var(--border-color); }
         td { padding: 10px; border-bottom: 1px solid var(--table-border); color: var(--table-td-text); text-align: center; transition: all 0.4s; }
         td:first-child { text-align: left; }
         tr:hover { background: var(--table-row-hover); }
@@ -671,7 +695,6 @@
         </div>
     </div>
 
-    <button id="btn-export-pdf" onclick="exportToPDF()">Exportar em PDF</button>
     <button id="btn-voltar" onclick="goToHome()">Voltar para a página inicial</button>
 
     <div id="dashboard-view" class="dashboard" style="display: none;">
@@ -1840,11 +1863,36 @@
             });
         }
 
+        // NOVO: Função de Ordenação Injetada
+        let sortDirections = {};
+        function sortTable(tableId, colIndex) {
+            const table = document.getElementById(tableId);
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr.etapa-row'));
+            
+            const isAsc = !sortDirections[tableId + '-' + colIndex];
+            sortDirections[tableId + '-' + colIndex] = isAsc;
+            
+            rows.sort((a, b) => {
+                let cellA = a.children[colIndex].textContent.trim();
+                let cellB = b.children[colIndex].textContent.trim();
+                
+                // Limpeza de caracteres para conversão numérica (R$, %, pontos de milhar, etc)
+                let valA = parseFloat(cellA.replace(/[R$\s%]/g, '').replace(/\./g, '').replace(',', '.')) || 0;
+                let valB = parseFloat(cellB.replace(/[R$\s%]/g, '').replace(/\./g, '').replace(',', '.')) || 0;
+                
+                return isAsc ? (valA - valB) : (valB - valA);
+            });
+            
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Tabela alterada apenas na inserção das tags de cabeçalho clicáveis (onclick="sortTable...")
         function createTable(tableId, obraNome, etapas, orcado, Peanut, Honey, disponivel, fisicoRaw) {
             const t = document.getElementById(tableId);
-            let html = '<thead><tr><th>Macro Etapa</th><th>Orçamento Total</th><th>Investimento Atual</th><th>Investimento Projetado</th><th>Saldo Disponível</th><th>% Desvio</th><th>Status</th><th>Progresso</th></tr></thead><tbody>';
-            let totOrcado = 0, totComprometido = 0, totProjetadoFuturo = 0, totDisponivel = 0;
+            let html = '<thead><tr><th>Macro Etapa</th><th onclick="sortTable(\'' + tableId + '\', 1)" style="cursor:pointer;" title="Clique para ordenar">Orçamento Total ↕</th><th onclick="sortTable(\'' + tableId + '\', 2)" style="cursor:pointer;" title="Clique para ordenar">Investimento Atual ↕</th><th onclick="sortTable(\'' + tableId + '\', 3)" style="cursor:pointer;" title="Clique para ordenar">Investimento Projetado ↕</th><th onclick="sortTable(\'' + tableId + '\', 4)" style="cursor:pointer;" title="Clique para ordenar">Saldo Disponível ↕</th><th onclick="sortTable(\'' + tableId + '\', 5)" style="cursor:pointer;" title="Clique para ordenar">% Desvio ↕</th><th>Status</th><th>Progresso</th></tr></thead><tbody>';
             
+            let totOrcado = 0, totComprometido = 0, totProjetadoFuturo = 0, totDisponivel = 0;
             const saldoNumColor = getComputedStyle(document.body).getPropertyValue('--table-saldo-color').trim() || '#2c3e50';
 
             for(let i=0; i<etapas.length; i++){
@@ -1861,7 +1909,6 @@
             }
             const eacTotal = totComprometido + totProjetadoFuturo;
             const totDesvio = totOrcado > 0 ? ((eacTotal - totOrcado) / totOrcado * 100) : 0;
-            
             const totProgress = totOrcado > 0 ? Math.min(100, (totComprometido / totOrcado * 100)) : 0;
             
             html += `</tbody><tfoot><tr class="total-row"><td><strong>TOTAL</strong></td><td>${fmtNum(totOrcado)}</td><td>${fmtNum(totComprometido)}</td><td>${fmtNum(totProjetadoFuturo)}</td><td style="color:var(--title-color); font-weight:700;">${fmtNum(totDisponivel)}</td><td>${totDesvio.toFixed(1)}%</td><td>—</td><td><div class="progress-bar"><div class="progress-fill" style="width:${totProgress}%"></div></div></td></tr></tfoot>`;
@@ -1982,150 +2029,6 @@
             }
         }
 
-        window.lastActiveObra = 'mirante';
-
-        function updatePdfButtonVisibility() {
-            const dashboard = document.getElementById('dashboard-view');
-            const btnPdf = document.getElementById('btn-export-pdf');
-            
-            if (dashboard.style.display === 'none') {
-                btnPdf.style.display = 'none';
-                return;
-            }
-            
-            const activeMain = document.querySelector('.tab-btn.active');
-            if (!activeMain) return;
-            
-            const tab = activeMain.dataset.tab;
-            
-            if (tab === 'geral') {
-                btnPdf.style.display = 'block';
-            } else if (tab === 'mirante' || tab === 'joaquim') {
-                const activeSub = document.querySelector(`#tab-${tab} .sub-tab-btn.active`);
-                if (activeSub) {
-                    const subtab = activeSub.dataset.subtab;
-                    if (subtab.includes('detalhe') || subtab.includes('historico') || subtab.includes('planejamento')) {
-                        btnPdf.style.display = 'block';
-                    } else {
-                        btnPdf.style.display = 'none';
-                    }
-                }
-            }
-        }
-
-        function exportToPDF() {
-            const btnVoltar = document.getElementById('btn-voltar');
-            const btnPdf = document.getElementById('btn-export-pdf');
-            btnVoltar.style.display = 'none';
-            btnPdf.style.display = 'none';
-
-            const dashboard = document.getElementById('dashboard-view');
-            const activeObra = window.lastActiveObra || 'mirante';
-
-            const originalDashDisplay = dashboard.style.display;
-            const header = dashboard.querySelector('header');
-            const tabs = dashboard.querySelector('.tabs');
-            const subTabs = dashboard.querySelectorAll('.sub-tabs');
-            
-            const originalHeaderDisplay = header.style.display;
-            const originalTabsDisplay = tabs.style.display;
-
-            header.style.display = 'none';
-            tabs.style.display = 'none';
-            subTabs.forEach(st => st.style.display = 'none');
-
-            const allTabContents = dashboard.querySelectorAll('.tab-content');
-            const originalTabStyles = [];
-            allTabContents.forEach(tc => {
-                originalTabStyles.push({ el: tc, display: tc.style.display, className: tc.className });
-                tc.style.display = 'none';
-            });
-
-            const activeTab = document.getElementById('tab-' + activeObra);
-            activeTab.style.display = 'block';
-
-            const allSubTabs = activeTab.querySelectorAll('.sub-tab-content');
-            const originalSubStyles = [];
-            allSubTabs.forEach(stc => {
-                originalSubStyles.push({ el: stc, display: stc.style.display, className: stc.className });
-                stc.style.display = 'none';
-            });
-
-            const stDetalhe = document.getElementById(`subtab-detalhe-${activeObra}`);
-            const stHistorico = document.getElementById(`subtab-historico-${activeObra}`);
-            const stPlanejamento = document.getElementById(`subtab-planejamento-${activeObra}`);
-            
-            if(stDetalhe) { stDetalhe.style.display = 'block'; stDetalhe.style.marginBottom = '30px'; }
-            if(stHistorico) { stHistorico.style.display = 'block'; stHistorico.style.marginBottom = '30px'; }
-            if(stPlanejamento) { stPlanejamento.style.display = 'block'; stPlanejamento.style.marginBottom = '30px'; }
-
-            const geralTab = document.getElementById('tab-geral');
-            geralTab.style.display = 'block';
-            geralTab.style.marginTop = '20px';
-
-            window.dispatchEvent(new Event('resize'));
-
-            const opt = {
-                margin:       0.2,
-                filename:     `Dashboard_${activeObra.toUpperCase()}_Relatorio.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, allowTaint: true, logging: false },
-                jsPDF:        { unit: 'in', format: 'a3', orientation: 'landscape' }
-            };
-
-            function restoreDashboard() {
-                header.style.display = originalHeaderDisplay;
-                tabs.style.display = originalTabsDisplay;
-                subTabs.forEach(st => st.style.display = '');
-
-                allTabContents.forEach((tc, idx) => {
-                    tc.style.display = originalTabStyles[idx].display;
-                    tc.className = originalTabStyles[idx].className;
-                });
-
-                allSubTabs.forEach((stc, idx) => {
-                    stc.style.display = originalSubStyles[idx].display;
-                    stc.className = originalSubStyles[idx].className;
-                });
-
-                const activeMainBtn = document.querySelector('.tab-btn.active');
-                if(activeMainBtn) activeMainBtn.click();
-                const activeSubBtn = document.querySelector('.tab-content.active .sub-tab-btn.active');
-                if(activeSubBtn) activeSubBtn.click();
-
-                btnVoltar.style.display = 'block';
-                updatePdfButtonVisibility();
-                window.dispatchEvent(new Event('resize'));
-            }
-
-            let isResolved = false;
-            setTimeout(() => {
-                if (!isResolved) {
-                    restoreDashboard();
-                    alert("A exportação do PDF falhou.\nDica: Tente abrir o arquivo em um Servidor Local (Ex: Extensão 'Live Server' no VS Code) para evitar bloqueios de segurança (CORS) com as imagens.");
-                }
-            }, 8000);
-
-            setTimeout(() => {
-                try {
-                    html2pdf().set(opt).from(dashboard).save()
-                    .then(() => {
-                        isResolved = true;
-                        restoreDashboard();
-                    })
-                    .catch(err => {
-                        isResolved = true;
-                        console.error("Erro interno:", err);
-                        restoreDashboard();
-                    });
-                } catch (e) {
-                    isResolved = true;
-                    console.error("Erro fatal:", e);
-                    restoreDashboard();
-                }
-            }, 800);
-        }
-
         function goToDashboard(tabName) {
             document.getElementById('home-page').style.display = 'none';
             document.getElementById('dashboard-view').style.display = 'block';
@@ -2136,14 +2039,12 @@
             
             setTimeout(() => {
                 window.dispatchEvent(new Event('resize'));
-                updatePdfButtonVisibility();
             }, 100);
         }
 
         function goToHome() {
             document.getElementById('dashboard-view').style.display = 'none';
             document.getElementById('btn-voltar').style.display = 'none';
-            document.getElementById('btn-export-pdf').style.display = 'none';
             document.getElementById('home-page').style.display = 'flex';
         }
 
@@ -2172,8 +2073,11 @@
             createBarChart('chartJoaquimBar', joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo);
             createDisponivelChart('chartMiranteDisponivel', miranteEtapas, miranteDisponivelGrafico);
             createDisponivelChart('chartJoaquimDisponivel', joaquimEtapas, joaquimDisponivelGrafico);
+            
+            // Note que as chamadas da createTable já recebem as propriedades atualizadas nativamente.
             createTable('tableMirante', 'MIRANTE DA LAGOA', miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo, miranteDisponivel, miranteFisicoRaw);
             createTable('tableJoaquim', 'JOAQUIM LEME', joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo, joaquimDisponivel, joaquimFisicoRaw);
+            
             runABCEngine('chartMiranteABC', 'tableABCMirante', miranteEtapas, miranteRealizado);
             runABCEngine('chartJoaquimABC', 'tableABCJoaquim', joaquimEtapas, joaquimRealizado);
             createColumnChart('chartMiranteHistorico', mesesHistorico, desembolsosMirante);
@@ -2194,9 +2098,9 @@
                 this.classList.add('active');
                 document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
                 document.getElementById('tab-'+this.dataset.tab).classList.add('active');
-                updatePdfButtonVisibility();
             });
         });
+
         document.querySelectorAll('.sub-tab-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const parent = this.closest('.tab-content');
@@ -2204,7 +2108,6 @@
                 this.classList.add('active');
                 parent.querySelectorAll('.sub-tab-content').forEach(tc => tc.classList.remove('active'));
                 document.getElementById('subtab-'+this.dataset.subtab).classList.add('active');
-                updatePdfButtonVisibility();
             });
         });
 

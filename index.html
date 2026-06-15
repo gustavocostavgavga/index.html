@@ -8,6 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+
     <style>
         /* Aplicação global e irrestrita da fonte Montserrat */
         * { 
@@ -143,7 +148,7 @@
             min-height: calc(100vh - 40px);
             
             /* Imagem de Fundo com overlay de opacidade mediana (Modo Claro) */
-            background-image: linear-gradient(rgba(240, 242, 245, 0.65), rgba(240, 242, 245, 0.65)), url('DJI_0369.JPG');
+            background-image: linear-gradient(rgba(240, 242, 245, 0.65), rgba(240, 242, 245, 0.65)), url('DJI_0369.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -159,7 +164,7 @@
 
         body.dark-mode .home-page {
             /* Imagem de Fundo escurecida para opacidade mediana (Modo Noturno) */
-            background-image: linear-gradient(rgba(5, 16, 7, 0.8), rgba(5, 16, 7, 0.8)), url('DJI_0369.JPG');
+            background-image: linear-gradient(rgba(5, 16, 7, 0.8), rgba(5, 16, 7, 0.8)), url('DJI_0369.jpg');
             border-color: rgba(163, 230, 53, 0.3);
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
@@ -237,7 +242,7 @@
         }
         .home-subtitle {
             font-size: 1.2rem;
-            font-weight: normal; /* Sem negrito conforme pedido */
+            font-weight: normal; 
             margin-bottom: 20px;
             text-align: center;
             color: var(--title-color);
@@ -299,12 +304,11 @@
             background-color: #7cb342;
         }
 
-        /* Estilização da aba PROJETOS */
+        /* Estilização da aba PROJETOS COM MENU DE EDIÇÃO */
         .projetos-container {
             display: flex;
             gap: 20px;
             align-items: flex-start;
-            min-height: 400px;
             margin-top: 15px;
         }
         .projetos-sidebar {
@@ -333,13 +337,117 @@
             color: var(--active-text);
             border-color: var(--active-color);
         }
+        
+        /* Área de conteúdo dos projetos e menu de edição de PDF */
         .projetos-content {
             flex: 1;
             background: var(--card-bg);
             border: 2px solid var(--border-color);
             border-radius: 12px;
+            height: 700px; /* Altura fixa para permitir scroll interno */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Mantém a toolbar fixa no topo dentro da caixa */
+        }
+        .pdf-toolbar {
+            display: flex;
+            gap: 6px; /* Reduzido para caber melhor */
+            padding: 10px 15px; /* Reduzido para caber melhor */
+            background: var(--table-th-bg);
+            border-bottom: 2px solid var(--border-color);
+            align-items: center;
+            flex-wrap: nowrap; /* Modificado: Impede que os botões quebrem a linha */
+            overflow-x: auto; /* Adicionado: Permite scroll horizontal se a tela for muito pequena */
+            white-space: nowrap;
+            z-index: 10;
+        }
+        .pdf-tool-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color-base);
+            padding: 6px 10px; /* Reduzido para caber melhor */
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem; /* Reduzido para caber melhor */
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap; /* Garante que o texto do botão não quebre linha */
+        }
+        .pdf-tool-btn.active, .pdf-tool-btn:hover {
+            background: var(--active-color);
+            color: var(--active-text);
+            border-color: var(--active-color);
+        }
+        .pdf-tool-separator {
+            width: 2px;
+            height: 24px;
+            background: var(--border-color);
+            margin: 0 2px; /* Reduzido para caber melhor */
+            flex-shrink: 0;
+        }
+        
+        /* Adições para os mini-menus de cores */
+        .tool-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .color-picker-menu {
+            display: flex;
+            gap: 6px;
+        }
+        .color-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s;
+        }
+        .color-dot:hover {
+            transform: scale(1.1);
+        }
+        .color-dot.active {
+            border-color: var(--text-color-base);
+            box-shadow: 0 0 4px rgba(0,0,0,0.3);
+        }
+        body.dark-mode .color-dot.active {
+            border-color: #ffffff;
+        }
+
+        .pdf-viewer-area {
+            flex: 1;
+            position: relative;
+            overflow: auto; /* Permite scroll no pdf futuro */
+            background: var(--bg-color-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
-            min-height: 400px;
+        }
+        
+        /* Nova estruturação para os Canvas de PDF */
+        .pdf-canvas-wrapper {
+            position: relative;
+            transform-origin: top left;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: none;
+        }
+        .pdf-bg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        .pdf-fabric-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
         }
         /* FIM DAS INJEÇÕES DA CAPA E NOVOS COMPONENTES */
 
@@ -716,8 +824,8 @@
             </div>
         </header>
         <div class="tabs">
-            <button class="tab-btn active" data-tab="mirante"><strong>MIRANTE DA LAGOA</strong></button>
-            <button class="tab-btn" data-tab="joaquim"><strong>JOAQUIM LEME</strong></button>
+            <button class="tab-btn active" data-tab="mirante" onclick="setActiveObraPdf('mirante')"><strong>MIRANTE DA LAGOA</strong></button>
+            <button class="tab-btn" data-tab="joaquim" onclick="setActiveObraPdf('joaquim')"><strong>JOAQUIM LEME</strong></button>
             <button class="tab-btn" data-tab="geral"><strong>VISÃO GERAL</strong></button>
         </div>
         
@@ -881,16 +989,52 @@
             <div class="sub-tab-content" id="subtab-projetos-mirante">
                 <div class="projetos-container">
                     <div class="projetos-sidebar">
-                        <button class="projeto-btn active">URBANÍSTICO</button>
-                        <button class="projeto-btn">PLANIALTIMÉTRICO</button>
-                        <button class="projeto-btn">TERRAPLENAGEM</button>
-                        <button class="projeto-btn">DRENAGEM</button>
-                        <button class="projeto-btn">ÁGUA</button>
-                        <button class="projeto-btn">ESGOTO</button>
-                        <button class="projeto-btn">PAVIMENTAÇÃO</button>
-                        <button class="projeto-btn">ELÉTRICA</button>
+                        <button class="projeto-btn active" onclick="loadPDF('URBANÍSTICO_MIRANTEDALAGOA.pdf', this)">URBANÍSTICO</button>
+                        <button class="projeto-btn" onclick="loadPDF('DRENAGEM_MIRANTEDALAGOA.pdf', this)">DRENAGEM</button>
+                        <button class="projeto-btn" onclick="loadPDF('ÁGUA_MIRANTEDALAGOA.pdf', this)">ÁGUA</button>
+                        <button class="projeto-btn" onclick="loadPDF('ADUTORA_MIRANTEDALAGOA.pdf', this)">ADUTORA DE ÁGUA</button>
+                        <button class="projeto-btn" onclick="loadPDF('ESGOTO_MIRANTEDALAGOA.pdf', this)">ESGOTO</button>
+                        <button class="projeto-btn" onclick="loadPDF('PAVIMENTAÇÃO_MIRANTEDALAGOA.pdf', this)">PAVIMENTAÇÃO</button>
+                        <button class="projeto-btn" onclick="loadPDF('ELÉTRICA_MIRANTEDALAGOA.pdf', this)">ELÉTRICA</button>
                     </div>
                     <div class="projetos-content">
+                        <div class="pdf-toolbar">
+                            <button class="pdf-tool-btn" title="Zoom In" onclick="zoomPDF(0.2)">🔍 Zoom +</button>
+                            <button class="pdf-tool-btn" title="Zoom Out" onclick="zoomPDF(-0.2)">🔍 Zoom -</button>
+                            <div class="pdf-tool-separator"></div>
+                            <button class="pdf-tool-btn tool-mode active" title="Mover / Arrastar" onclick="setTool('pan', this)">✋ Arraste</button>
+                            <button class="pdf-tool-btn tool-mode" title="Adicionar Marcador (Alfinete)" onclick="setTool('marker', this)">📍 Marcador</button>
+                            
+                            <div class="tool-wrapper">
+                                <button class="pdf-tool-btn tool-mode" title="Gerar Seta" onclick="setTool('arrow', this)">↗️ Seta</button>
+                                <div class="color-picker-menu">
+                                    <span class="color-dot active" style="background-color: #e53935;" onclick="selectColor('#e53935', this, event)"></span>
+                                    <span class="color-dot" style="background-color: #1e88e5;" onclick="selectColor('#1e88e5', this, event)"></span>
+                                    <span class="color-dot" style="background-color: #43a047;" onclick="selectColor('#43a047', this, event)"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="tool-wrapper">
+                                <button class="pdf-tool-btn tool-mode" title="Pincel Livre" onclick="setTool('brush', this)">🖌️ Pincel</button>
+                                <div class="color-picker-menu">
+                                    <span class="color-dot active" style="background-color: #e53935;" onclick="selectColor('#e53935', this, event)"></span>
+                                    <span class="color-dot" style="background-color: #1e88e5;" onclick="selectColor('#1e88e5', this, event)"></span>
+                                    <span class="color-dot" style="background-color: #43a047;" onclick="selectColor('#43a047', this, event)"></span>
+                                </div>
+                            </div>
+
+                            <div class="pdf-tool-separator"></div>
+                            <button class="pdf-tool-btn" title="Desfazer (CTRL+Z)" onclick="undoPdfAction()">↩️ Desfazer</button>
+                            <button class="pdf-tool-btn" title="Refazer (CTRL+Y)" onclick="redoPdfAction()">↪️ Refazer</button>
+                            <button class="pdf-tool-btn" title="Limpar Tudo (Reset)" style="color: #c62828;" onclick="clearPdfCanvas()">🗑️ Reset</button>
+                        </div>
+                        <div class="pdf-viewer-area" id="viewer-area-mirante">
+                            <div id="pdf-container-mirante" class="pdf-canvas-wrapper">
+                                <canvas id="pdf-bg-mirante" class="pdf-bg-canvas"></canvas>
+                                <canvas id="pdf-fabric-mirante" class="pdf-fabric-canvas"></canvas>
+                            </div>
+                            <div class="empty-state" id="empty-state-mirante">Projeto não selecionado ou aguardando upload do PDF.</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1056,16 +1200,51 @@
             <div class="sub-tab-content" id="subtab-projetos-joaquim">
                 <div class="projetos-container">
                     <div class="projetos-sidebar">
-                        <button class="projeto-btn active">URBANÍSTICO</button>
-                        <button class="projeto-btn">PLANIALTIMÉTRICO</button>
-                        <button class="projeto-btn">TERRAPLENAGEM</button>
-                        <button class="projeto-btn">DRENAGEM</button>
-                        <button class="projeto-btn">ÁGUA</button>
-                        <button class="projeto-btn">ESGOTO</button>
-                        <button class="projeto-btn">PAVIMENTAÇÃO</button>
-                        <button class="projeto-btn">ELÉTRICA</button>
+                        <button class="projeto-btn active" onclick="loadPDF('URBANÍSTICO_JOAQUIMLEME.pdf', this)">URBANÍSTICO</button>
+                        <button class="projeto-btn" onclick="loadPDF('DRENAGEM_JOAQUIMLEME.pdf', this)">DRENAGEM</button>
+                        <button class="projeto-btn" onclick="loadPDF('ÁGUA_JOAQUIMLEME.pdf', this)">ÁGUA</button>
+                        <button class="projeto-btn" onclick="loadPDF('ESGOTO_JOAQUIMLEME.pdf', this)">ESGOTO</button>
+                        <button class="projeto-btn" onclick="loadPDF('PAVIMENTAÇÃO_JOAQUIMLEME.pdf', this)">PAVIMENTAÇÃO</button>
+                        <button class="projeto-btn" onclick="loadPDF('ELÉTRICA_JOAQUIMLEME.pdf', this)">ELÉTRICA</button>
                     </div>
                     <div class="projetos-content">
+                        <div class="pdf-toolbar">
+                            <button class="pdf-tool-btn" title="Zoom In" onclick="zoomPDF(0.2)">🔍 Zoom +</button>
+                            <button class="pdf-tool-btn" title="Zoom Out" onclick="zoomPDF(-0.2)">🔍 Zoom -</button>
+                            <div class="pdf-tool-separator"></div>
+                            <button class="pdf-tool-btn tool-mode active" title="Mover / Arrastar" onclick="setTool('pan', this)">✋ Arraste</button>
+                            <button class="pdf-tool-btn tool-mode" title="Adicionar Marcador (Alfinete)" onclick="setTool('marker', this)">📍 Marcador</button>
+                            
+                            <div class="tool-wrapper">
+                                <button class="pdf-tool-btn tool-mode" title="Gerar Seta" onclick="setTool('arrow', this)">↗️ Seta</button>
+                                <div class="color-picker-menu">
+                                    <span class="color-dot active" style="background-color: #e53935;" onclick="selectColor('#e53935', this, event)"></span>
+                                    <span class="color-dot" style="background-color: #1e88e5;" onclick="selectColor('#1e88e5', this, event)"></span>
+                                    <span class="color-dot" style="background-color: #43a047;" onclick="selectColor('#43a047', this, event)"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="tool-wrapper">
+                                <button class="pdf-tool-btn tool-mode" title="Pincel Livre" onclick="setTool('brush', this)">🖌️ Pincel</button>
+                                <div class="color-picker-menu">
+                                    <span class="color-dot active" style="background-color: #e53935;" onclick="selectColor('#e53935', this, event)"></span>
+                                    <span class="color-dot" style="background-color: #1e88e5;" onclick="selectColor('#1e88e5', this, event)"></span>
+                                    <span class="color-dot" style="background-color: #43a047;" onclick="selectColor('#43a047', this, event)"></span>
+                                </div>
+                            </div>
+
+                            <div class="pdf-tool-separator"></div>
+                            <button class="pdf-tool-btn" title="Desfazer (CTRL+Z)" onclick="undoPdfAction()">↩️ Desfazer</button>
+                            <button class="pdf-tool-btn" title="Refazer (CTRL+Y)" onclick="redoPdfAction()">↪️ Refazer</button>
+                            <button class="pdf-tool-btn" title="Limpar Tudo (Reset)" style="color: #c62828;" onclick="clearPdfCanvas()">🗑️ Reset</button>
+                        </div>
+                        <div class="pdf-viewer-area" id="viewer-area-joaquim">
+                            <div id="pdf-container-joaquim" class="pdf-canvas-wrapper">
+                                <canvas id="pdf-bg-joaquim" class="pdf-bg-canvas"></canvas>
+                                <canvas id="pdf-fabric-joaquim" class="pdf-fabric-canvas"></canvas>
+                            </div>
+                            <div class="empty-state" id="empty-state-joaquim">Projeto não selecionado ou aguardando upload do PDF.</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1863,7 +2042,7 @@
             });
         }
 
-        // Variável de estado para ordenação das colunas
+        // --- SISTEMA DE ORDENAÇÃO DE TABELA INJETADO ---
         let sortDirections = {};
         
         function sortTable(tableId, colIndex) {
@@ -1871,7 +2050,6 @@
             const tbody = table.querySelector('tbody');
             const rows = Array.from(tbody.querySelectorAll('tr.etapa-row'));
             
-            // Alternar direção: ascendente/descendente
             const isAsc = !sortDirections[tableId + '-' + colIndex];
             sortDirections[tableId + '-' + colIndex] = isAsc;
             
@@ -1879,7 +2057,6 @@
                 let cellA = a.children[colIndex].textContent.trim();
                 let cellB = b.children[colIndex].textContent.trim();
                 
-                // Converter string formatada (R$, %, pontos) em float
                 let valA = parseFloat(cellA.replace(/[R$\s%]/g, '').replace(/\./g, '').replace(',', '.')) || 0;
                 let valB = parseFloat(cellB.replace(/[R$\s%]/g, '').replace(/\./g, '').replace(',', '.')) || 0;
                 
@@ -1891,19 +2068,14 @@
 
         function createTable(tableId, obraNome, etapas, orcado, Peanut, Honey, disponivel, fisicoRaw) {
             const t = document.getElementById(tableId);
-            
-            // Títulos das colunas substituídos para possuir a função de clique `sortTable`
-            let html = '<thead><tr>' +
-                       '<th>Macro Etapa</th>' +
+            let html = '<thead><tr><th>Macro Etapa</th>' +
                        '<th onclick="sortTable(\'' + tableId + '\', 1)" style="cursor:pointer;" title="Clique para ordenar">Orçamento Total ↕</th>' +
                        '<th onclick="sortTable(\'' + tableId + '\', 2)" style="cursor:pointer;" title="Clique para ordenar">Investimento Atual ↕</th>' +
                        '<th onclick="sortTable(\'' + tableId + '\', 3)" style="cursor:pointer;" title="Clique para ordenar">Investimento Projetado ↕</th>' +
                        '<th onclick="sortTable(\'' + tableId + '\', 4)" style="cursor:pointer;" title="Clique para ordenar">Saldo Disponível ↕</th>' +
                        '<th onclick="sortTable(\'' + tableId + '\', 5)" style="cursor:pointer;" title="Clique para ordenar">% Desvio ↕</th>' +
-                       '<th>Status</th>' +
-                       '<th>Progresso</th>' +
-                       '</tr></thead><tbody>';
-            
+                       '<th>Status</th><th>Progresso</th></tr></thead><tbody>';
+                       
             let totOrcado = 0, totComprometido = 0, totProjetadoFuturo = 0, totDisponivel = 0;
             const saldoNumColor = getComputedStyle(document.body).getPropertyValue('--table-saldo-color').trim() || '#2c3e50';
 
@@ -1921,7 +2093,6 @@
             }
             const eacTotal = totComprometido + totProjetadoFuturo;
             const totDesvio = totOrcado > 0 ? ((eacTotal - totOrcado) / totOrcado * 100) : 0;
-            
             const totProgress = totOrcado > 0 ? Math.min(100, (totComprometido / totOrcado * 100)) : 0;
             
             html += `</tbody><tfoot><tr class="total-row"><td><strong>TOTAL</strong></td><td>${fmtNum(totOrcado)}</td><td>${fmtNum(totComprometido)}</td><td>${fmtNum(totProjetadoFuturo)}</td><td style="color:var(--title-color); font-weight:700;">${fmtNum(totDisponivel)}</td><td>${totDesvio.toFixed(1)}%</td><td>—</td><td><div class="progress-bar"><div class="progress-fill" style="width:${totProgress}%"></div></div></td></tr></tfoot>`;
@@ -2061,13 +2232,265 @@
             document.getElementById('home-page').style.display = 'flex';
         }
 
-        document.querySelectorAll('.projeto-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const parent = this.closest('.projetos-sidebar');
-                parent.querySelectorAll('.projeto-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
+        // ==========================================
+        // LÓGICA DE PDF E DESENHO (FABRIC.JS + PDF.JS)
+        // ==========================================
+        
+        let activeObraPdf = 'mirante';
+        let pdfDocs = { 'mirante': null, 'joaquim': null };
+        let fabricCanvases = { 'mirante': null, 'joaquim': null };
+        let currentZoom = { 'mirante': 1.5, 'joaquim': 1.5 };
+        
+        let activeTool = 'pan';
+        let activeColor = '#e53935';
+        
+        let isDrawingLine = false;
+        let tempLine, tempArrowHead;
+        
+        let historyMap = {
+            'mirante': { states: [], index: -1 },
+            'joaquim': { states: [], index: -1 }
+        };
+
+        function setActiveObraPdf(obra) {
+            activeObraPdf = obra;
+        }
+
+        function setTool(tool, btn) {
+            activeTool = tool;
+            const toolbar = btn.closest('.pdf-toolbar');
+            toolbar.querySelectorAll('.tool-mode').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const fCanvas = fabricCanvases[activeObraPdf];
+            if(!fCanvas) return;
+            
+            if(tool === 'brush') {
+                fCanvas.isDrawingMode = true;
+                fCanvas.freeDrawingBrush.color = activeColor;
+                fCanvas.freeDrawingBrush.width = 4;
+            } else {
+                fCanvas.isDrawingMode = false;
+            }
+            
+            fCanvas.selection = (tool === 'pan' ? false : true);
+        }
+
+        function selectColor(color, element, event) {
+            if(event) event.stopPropagation(); 
+            activeColor = color;
+            const wrapper = element.closest('.color-picker-menu');
+            wrapper.querySelectorAll('.color-dot').forEach(dot => dot.classList.remove('active'));
+            element.classList.add('active');
+            
+            const fCanvas = fabricCanvases[activeObraPdf];
+            if(fCanvas && activeTool === 'brush') {
+                fCanvas.freeDrawingBrush.color = activeColor;
+            }
+        }
+
+        async function loadPDF(url, btnElement) {
+            const parent = btnElement.closest('.projetos-sidebar');
+            parent.querySelectorAll('.projeto-btn').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            const viewerId = activeObraPdf === 'mirante' ? 'viewer-area-mirante' : 'viewer-area-joaquim';
+            const emptyStateId = activeObraPdf === 'mirante' ? 'empty-state-mirante' : 'empty-state-joaquim';
+            const containerId = activeObraPdf === 'mirante' ? 'pdf-container-mirante' : 'pdf-container-joaquim';
+            
+            document.getElementById(emptyStateId).style.display = 'none';
+            document.getElementById(containerId).style.display = 'block';
+
+            try {
+                const loadingTask = pdfjsLib.getDocument(url);
+                const pdf = await loadingTask.promise;
+                pdfDocs[activeObraPdf] = pdf;
+                
+                await renderCurrentPage();
+            } catch(e) {
+                console.error("Erro ao carregar PDF:", e);
+                document.getElementById(emptyStateId).style.display = 'block';
+                document.getElementById(emptyStateId).textContent = "PDF não encontrado (" + url + "). Hospede-o no mesmo diretório.";
+                document.getElementById(containerId).style.display = 'none';
+            }
+        }
+
+        async function renderCurrentPage() {
+            const pdf = pdfDocs[activeObraPdf];
+            if (!pdf) return;
+
+            const page = await pdf.getPage(1);
+            const zoom = currentZoom[activeObraPdf];
+            const viewport = page.getViewport({ scale: zoom });
+
+            const bgCanvasId = activeObraPdf === 'mirante' ? 'pdf-bg-mirante' : 'pdf-bg-joaquim';
+            const bgCanvas = document.getElementById(bgCanvasId);
+            const context = bgCanvas.getContext('2d');
+            
+            bgCanvas.height = viewport.height;
+            bgCanvas.width = viewport.width;
+
+            const containerId = activeObraPdf === 'mirante' ? 'pdf-container-mirante' : 'pdf-container-joaquim';
+            const container = document.getElementById(containerId);
+            container.style.width = viewport.width + 'px';
+            container.style.height = viewport.height + 'px';
+
+            const renderContext = { canvasContext: context, viewport: viewport };
+            await page.render(renderContext).promise;
+
+            setupFabricCanvas(viewport.width, viewport.height);
+        }
+
+        function setupFabricCanvas(width, height) {
+            const fabCanvasId = activeObraPdf === 'mirante' ? 'pdf-fabric-mirante' : 'pdf-fabric-joaquim';
+            
+            if (fabricCanvases[activeObraPdf]) {
+                const existing = fabricCanvases[activeObraPdf];
+                existing.setWidth(width);
+                existing.setHeight(height);
+                existing.setZoom(currentZoom[activeObraPdf] / 1.5); 
+                return;
+            }
+
+            const canvas = new fabric.Canvas(fabCanvasId, {
+                width: width,
+                height: height,
+                isDrawingMode: (activeTool === 'brush')
             });
-        });
+            
+            if(activeTool === 'brush') {
+                canvas.freeDrawingBrush.color = activeColor;
+                canvas.freeDrawingBrush.width = 4;
+            }
+
+            // Salva estado inicial
+            historyMap[activeObraPdf].states.push(JSON.stringify(canvas.toJSON()));
+            historyMap[activeObraPdf].index = 0;
+
+            canvas.on('path:created', function() { saveHistory(); });
+            canvas.on('object:modified', function() { saveHistory(); });
+
+            canvas.on('mouse:down', function(o) {
+                if (activeTool === 'pan') {
+                    this.isDragging = true;
+                    this.lastPosX = o.e.clientX;
+                    this.lastPosY = o.e.clientY;
+                } 
+                else if (activeTool === 'marker') {
+                    const pointer = canvas.getPointer(o.e);
+                    const text = new fabric.Text('📍', { 
+                        left: pointer.x, top: pointer.y, 
+                        fontSize: 24, originX: 'center', originY: 'bottom' 
+                    });
+                    canvas.add(text);
+                    saveHistory();
+                }
+                else if (activeTool === 'arrow') {
+                    isDrawingLine = true;
+                    const pointer = canvas.getPointer(o.e);
+                    const points = [pointer.x, pointer.y, pointer.x, pointer.y];
+                    
+                    tempLine = new fabric.Line(points, {
+                        strokeWidth: 3, fill: activeColor, stroke: activeColor,
+                        originX: 'center', originY: 'center', selectable: false, evented: false
+                    });
+                    
+                    tempArrowHead = new fabric.Triangle({
+                        width: 15, height: 15, fill: activeColor, 
+                        left: pointer.x, top: pointer.y,
+                        originX: 'center', originY: 'center', selectable: false, evented: false, angle: 90
+                    });
+                    
+                    canvas.add(tempLine, tempArrowHead);
+                }
+            });
+
+            canvas.on('mouse:move', function(o) {
+                if (this.isDragging && activeTool === 'pan') {
+                    const e = o.e;
+                    const viewerId = activeObraPdf === 'mirante' ? 'viewer-area-mirante' : 'viewer-area-joaquim';
+                    const wrapper = document.getElementById(viewerId);
+                    wrapper.scrollLeft -= (e.clientX - this.lastPosX);
+                    wrapper.scrollTop -= (e.clientY - this.lastPosY);
+                    this.lastPosX = e.clientX;
+                    this.lastPosY = e.clientY;
+                }
+                else if (isDrawingLine && activeTool === 'arrow') {
+                    const pointer = canvas.getPointer(o.e);
+                    tempLine.set({ x2: pointer.x, y2: pointer.y });
+                    tempArrowHead.set({ left: pointer.x, top: pointer.y });
+                    
+                    const dx = pointer.x - tempLine.x1;
+                    const dy = pointer.y - tempLine.y1;
+                    const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                    tempArrowHead.set({ angle: angle + 90 });
+                    canvas.renderAll();
+                }
+            });
+
+            canvas.on('mouse:up', function(o) {
+                if (activeTool === 'pan') {
+                    this.isDragging = false;
+                }
+                else if (activeTool === 'arrow' && isDrawingLine) {
+                    isDrawingLine = false;
+                    tempLine.setCoords();
+                    tempArrowHead.setCoords();
+                    saveHistory();
+                }
+            });
+
+            fabricCanvases[activeObraPdf] = canvas;
+        }
+
+        async function zoomPDF(delta) {
+            if (!pdfDocs[activeObraPdf]) return;
+            currentZoom[activeObraPdf] += delta;
+            if (currentZoom[activeObraPdf] < 0.5) currentZoom[activeObraPdf] = 0.5;
+            if (currentZoom[activeObraPdf] > 4.0) currentZoom[activeObraPdf] = 4.0;
+            
+            await renderCurrentPage();
+        }
+
+        function saveHistory() {
+            const canvas = fabricCanvases[activeObraPdf];
+            if(!canvas) return;
+            const h = historyMap[activeObraPdf];
+            h.states.splice(h.index + 1);
+            h.states.push(JSON.stringify(canvas.toJSON()));
+            h.index++;
+        }
+
+        function undoPdfAction() {
+            const canvas = fabricCanvases[activeObraPdf];
+            if(!canvas) return;
+            const h = historyMap[activeObraPdf];
+            if(h.index > 0) {
+                h.index--;
+                canvas.loadFromJSON(h.states[h.index], canvas.renderAll.bind(canvas));
+            }
+        }
+
+        function redoPdfAction() {
+            const canvas = fabricCanvases[activeObraPdf];
+            if(!canvas) return;
+            const h = historyMap[activeObraPdf];
+            if(h.index < h.states.length - 1) {
+                h.index++;
+                canvas.loadFromJSON(h.states[h.index], canvas.renderAll.bind(canvas));
+            }
+        }
+
+        function clearPdfCanvas() {
+            const canvas = fabricCanvases[activeObraPdf];
+            if(!canvas) return;
+            canvas.clear();
+            saveHistory();
+        }
+
+        // ==========================================
+        // EVENTOS DOMContentLoaded
+        // ==========================================
 
         window.addEventListener('DOMContentLoaded', () => {
             const today = new Date();

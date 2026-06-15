@@ -147,8 +147,8 @@
             justify-content: flex-start;
             min-height: calc(100vh - 40px);
             
-            /* Imagem de Fundo com overlay de opacidade mediana (Modo Claro) */
-            background-image: linear-gradient(rgba(240, 242, 245, 0.65), rgba(240, 242, 245, 0.65)), url('DJI_0369.jpg');
+            /* Imagem de Fundo com overlay de opacidade mediana (Ajuste Maiúscula: .JPG) */
+            background-image: linear-gradient(rgba(240, 242, 245, 0.65), rgba(240, 242, 245, 0.65)), url('DJI_0369.JPG');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -163,8 +163,8 @@
         }
 
         body.dark-mode .home-page {
-            /* Imagem de Fundo escurecida para opacidade mediana (Modo Noturno) */
-            background-image: linear-gradient(rgba(5, 16, 7, 0.8), rgba(5, 16, 7, 0.8)), url('DJI_0369.jpg');
+            /* Imagem de Fundo escurecida para opacidade mediana (Ajuste Maiúscula: .JPG) */
+            background-image: linear-gradient(rgba(5, 16, 7, 0.8), rgba(5, 16, 7, 0.8)), url('DJI_0369.JPG');
             border-color: rgba(163, 230, 53, 0.3);
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
@@ -344,20 +344,20 @@
             background: var(--card-bg);
             border: 2px solid var(--border-color);
             border-radius: 12px;
-            height: 700px; /* Altura fixa para permitir scroll interno */
+            height: 700px; 
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* Mantém a toolbar fixa no topo dentro da caixa */
+            overflow: hidden; 
         }
         .pdf-toolbar {
             display: flex;
-            gap: 6px; /* Reduzido para caber melhor */
-            padding: 10px 15px; /* Reduzido para caber melhor */
+            gap: 6px; 
+            padding: 10px 15px; 
             background: var(--table-th-bg);
             border-bottom: 2px solid var(--border-color);
             align-items: center;
-            flex-wrap: nowrap; /* Modificado: Impede que os botões quebrem a linha */
-            overflow-x: auto; /* Adicionado: Permite scroll horizontal se a tela for muito pequena */
+            flex-wrap: nowrap; 
+            overflow-x: auto; 
             white-space: nowrap;
             z-index: 10;
         }
@@ -365,16 +365,16 @@
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             color: var(--text-color-base);
-            padding: 6px 10px; /* Reduzido para caber melhor */
+            padding: 6px 10px; 
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 0.85rem; /* Reduzido para caber melhor */
+            font-size: 0.85rem; 
             transition: all 0.3s;
             display: flex;
             align-items: center;
             gap: 4px;
-            white-space: nowrap; /* Garante que o texto do botão não quebre linha */
+            white-space: nowrap; 
         }
         .pdf-tool-btn.active, .pdf-tool-btn:hover {
             background: var(--active-color);
@@ -385,7 +385,7 @@
             width: 2px;
             height: 24px;
             background: var(--border-color);
-            margin: 0 2px; /* Reduzido para caber melhor */
+            margin: 0 2px; 
             flex-shrink: 0;
         }
         
@@ -422,32 +422,17 @@
         .pdf-viewer-area {
             flex: 1;
             position: relative;
-            overflow: auto; /* Permite scroll no pdf futuro */
+            overflow: hidden; 
             background: var(--bg-color-1);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
         }
         
-        /* Nova estruturação para os Canvas de PDF */
         .pdf-canvas-wrapper {
-            position: relative;
-            transform-origin: top left;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            width: 100%;
+            height: 100%;
             display: none;
-        }
-        .pdf-bg-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
-        .pdf-fabric-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 2;
         }
         /* FIM DAS INJEÇÕES DA CAPA E NOVOS COMPONENTES */
 
@@ -999,9 +984,6 @@
                     </div>
                     <div class="projetos-content">
                         <div class="pdf-toolbar">
-                            <button class="pdf-tool-btn" title="Zoom In" onclick="zoomPDF(0.2)">🔍 Zoom +</button>
-                            <button class="pdf-tool-btn" title="Zoom Out" onclick="zoomPDF(-0.2)">🔍 Zoom -</button>
-                            <div class="pdf-tool-separator"></div>
                             <button class="pdf-tool-btn tool-mode active" title="Mover / Arrastar" onclick="setTool('pan', this)">✋ Arraste</button>
                             <button class="pdf-tool-btn tool-mode" title="Adicionar Marcador (Alfinete)" onclick="setTool('marker', this)">📍 Marcador</button>
                             
@@ -1030,8 +1012,7 @@
                         </div>
                         <div class="pdf-viewer-area" id="viewer-area-mirante">
                             <div id="pdf-container-mirante" class="pdf-canvas-wrapper">
-                                <canvas id="pdf-bg-mirante" class="pdf-bg-canvas"></canvas>
-                                <canvas id="pdf-fabric-mirante" class="pdf-fabric-canvas"></canvas>
+                                <canvas id="pdf-fabric-mirante"></canvas>
                             </div>
                             <div class="empty-state" id="empty-state-mirante">Projeto não selecionado ou aguardando upload do PDF.</div>
                         </div>
@@ -1209,9 +1190,6 @@
                     </div>
                     <div class="projetos-content">
                         <div class="pdf-toolbar">
-                            <button class="pdf-tool-btn" title="Zoom In" onclick="zoomPDF(0.2)">🔍 Zoom +</button>
-                            <button class="pdf-tool-btn" title="Zoom Out" onclick="zoomPDF(-0.2)">🔍 Zoom -</button>
-                            <div class="pdf-tool-separator"></div>
                             <button class="pdf-tool-btn tool-mode active" title="Mover / Arrastar" onclick="setTool('pan', this)">✋ Arraste</button>
                             <button class="pdf-tool-btn tool-mode" title="Adicionar Marcador (Alfinete)" onclick="setTool('marker', this)">📍 Marcador</button>
                             
@@ -1240,8 +1218,7 @@
                         </div>
                         <div class="pdf-viewer-area" id="viewer-area-joaquim">
                             <div id="pdf-container-joaquim" class="pdf-canvas-wrapper">
-                                <canvas id="pdf-bg-joaquim" class="pdf-bg-canvas"></canvas>
-                                <canvas id="pdf-fabric-joaquim" class="pdf-fabric-canvas"></canvas>
+                                <canvas id="pdf-fabric-joaquim"></canvas>
                             </div>
                             <div class="empty-state" id="empty-state-joaquim">Projeto não selecionado ou aguardando upload do PDF.</div>
                         </div>
@@ -2239,7 +2216,6 @@
         let activeObraPdf = 'mirante';
         let pdfDocs = { 'mirante': null, 'joaquim': null };
         let fabricCanvases = { 'mirante': null, 'joaquim': null };
-        let currentZoom = { 'mirante': 1.5, 'joaquim': 1.5 };
         
         let activeTool = 'pan';
         let activeColor = '#e53935';
@@ -2268,7 +2244,7 @@
             if(tool === 'brush') {
                 fCanvas.isDrawingMode = true;
                 fCanvas.freeDrawingBrush.color = activeColor;
-                fCanvas.freeDrawingBrush.width = 4;
+                fCanvas.freeDrawingBrush.width = 5;
             } else {
                 fCanvas.isDrawingMode = false;
             }
@@ -2306,7 +2282,19 @@
                 const pdf = await loadingTask.promise;
                 pdfDocs[activeObraPdf] = pdf;
                 
-                await renderCurrentPage();
+                const page = await pdf.getPage(1);
+                // Renderização da imagem em alta qualidade base (o scroll de zoom trabalhará sobre isso)
+                const viewport = page.getViewport({ scale: 2.0 }); 
+                
+                const tempCanvas = document.createElement('canvas');
+                const context = tempCanvas.getContext('2d');
+                tempCanvas.width = viewport.width;
+                tempCanvas.height = viewport.height;
+                
+                await page.render({ canvasContext: context, viewport: viewport }).promise;
+                
+                setupFabricCanvas(viewport.width, viewport.height, tempCanvas);
+                
             } catch(e) {
                 console.error("Erro ao carregar PDF:", e);
                 document.getElementById(emptyStateId).style.display = 'block';
@@ -2315,141 +2303,141 @@
             }
         }
 
-        async function renderCurrentPage() {
-            const pdf = pdfDocs[activeObraPdf];
-            if (!pdf) return;
-
-            const page = await pdf.getPage(1);
-            const zoom = currentZoom[activeObraPdf];
-            const viewport = page.getViewport({ scale: zoom });
-
-            const bgCanvasId = activeObraPdf === 'mirante' ? 'pdf-bg-mirante' : 'pdf-bg-joaquim';
-            const bgCanvas = document.getElementById(bgCanvasId);
-            const context = bgCanvas.getContext('2d');
-            
-            bgCanvas.height = viewport.height;
-            bgCanvas.width = viewport.width;
-
-            const containerId = activeObraPdf === 'mirante' ? 'pdf-container-mirante' : 'pdf-container-joaquim';
-            const container = document.getElementById(containerId);
-            container.style.width = viewport.width + 'px';
-            container.style.height = viewport.height + 'px';
-
-            const renderContext = { canvasContext: context, viewport: viewport };
-            await page.render(renderContext).promise;
-
-            setupFabricCanvas(viewport.width, viewport.height);
-        }
-
-        function setupFabricCanvas(width, height) {
+        function setupFabricCanvas(width, height, bgCanvasEl) {
             const fabCanvasId = activeObraPdf === 'mirante' ? 'pdf-fabric-mirante' : 'pdf-fabric-joaquim';
-            
-            if (fabricCanvases[activeObraPdf]) {
-                const existing = fabricCanvases[activeObraPdf];
-                existing.setWidth(width);
-                existing.setHeight(height);
-                existing.setZoom(currentZoom[activeObraPdf] / 1.5); 
-                return;
-            }
+            const containerId = activeObraPdf === 'mirante' ? 'pdf-container-mirante' : 'pdf-container-joaquim';
+            const wrapper = document.getElementById(containerId);
 
-            const canvas = new fabric.Canvas(fabCanvasId, {
-                width: width,
-                height: height,
-                isDrawingMode: (activeTool === 'brush')
-            });
+            let canvas = fabricCanvases[activeObraPdf];
             
-            if(activeTool === 'brush') {
+            if (!canvas) {
+                // Cria o canvas e preenche toda a caixa
+                canvas = new fabric.Canvas(fabCanvasId, {
+                    width: wrapper.clientWidth,
+                    height: wrapper.clientHeight,
+                    isDrawingMode: (activeTool === 'brush')
+                });
+                fabricCanvases[activeObraPdf] = canvas;
+                
                 canvas.freeDrawingBrush.color = activeColor;
-                canvas.freeDrawingBrush.width = 4;
+                canvas.freeDrawingBrush.width = 5;
+
+                // Evento de Zoom Exclusivo por Rolar do Mouse (Scroll)
+                canvas.on('mouse:wheel', function(opt) {
+                    var delta = opt.e.deltaY;
+                    var zoom = canvas.getZoom();
+                    zoom *= 0.999 ** delta;
+                    if (zoom > 10) zoom = 10;
+                    if (zoom < 0.05) zoom = 0.05;
+                    
+                    canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
+                    opt.e.preventDefault();
+                    opt.e.stopPropagation();
+                });
+
+                canvas.on('mouse:down', function(opt) {
+                    var evt = opt.e;
+                    if (activeTool === 'pan') {
+                        this.isDragging = true;
+                        this.selection = false;
+                        this.lastPosX = evt.clientX;
+                        this.lastPosY = evt.clientY;
+                    }
+                    else if (activeTool === 'marker') {
+                        const pointer = canvas.getPointer(evt);
+                        const text = new fabric.Text('📍', { 
+                            left: pointer.x, top: pointer.y, 
+                            fontSize: 40, originX: 'center', originY: 'bottom' 
+                        });
+                        canvas.add(text);
+                        saveHistory();
+                    }
+                    else if (activeTool === 'arrow') {
+                        isDrawingLine = true;
+                        const pointer = canvas.getPointer(evt);
+                        const points = [pointer.x, pointer.y, pointer.x, pointer.y];
+                        
+                        tempLine = new fabric.Line(points, {
+                            strokeWidth: 5, fill: activeColor, stroke: activeColor,
+                            originX: 'center', originY: 'center', selectable: false, evented: false
+                        });
+                        
+                        tempArrowHead = new fabric.Triangle({
+                            width: 15, height: 15, fill: activeColor, 
+                            left: pointer.x, top: pointer.y,
+                            originX: 'center', originY: 'center', selectable: false, evented: false, angle: 90
+                        });
+                        
+                        canvas.add(tempLine, tempArrowHead);
+                    }
+                });
+
+                canvas.on('mouse:move', function(opt) {
+                    if (this.isDragging && activeTool === 'pan') {
+                        var e = opt.e;
+                        var vpt = this.viewportTransform;
+                        vpt[4] += e.clientX - this.lastPosX;
+                        vpt[5] += e.clientY - this.lastPosY;
+                        this.requestRenderAll();
+                        this.lastPosX = e.clientX;
+                        this.lastPosY = e.clientY;
+                    }
+                    else if (isDrawingLine && activeTool === 'arrow') {
+                        const pointer = canvas.getPointer(opt.e);
+                        tempLine.set({ x2: pointer.x, y2: pointer.y });
+                        tempArrowHead.set({ left: pointer.x, top: pointer.y });
+                        
+                        const dx = pointer.x - tempLine.x1;
+                        const dy = pointer.y - tempLine.y1;
+                        const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                        tempArrowHead.set({ angle: angle + 90 });
+                        canvas.renderAll();
+                    }
+                });
+
+                canvas.on('mouse:up', function(opt) {
+                    if (activeTool === 'pan') {
+                        this.setViewportTransform(this.viewportTransform);
+                        this.isDragging = false;
+                        this.selection = true;
+                    }
+                    else if (activeTool === 'arrow' && isDrawingLine) {
+                        isDrawingLine = false;
+                        tempLine.setCoords();
+                        tempArrowHead.setCoords();
+                        saveHistory();
+                    }
+                });
+                
+                canvas.on('path:created', function() { saveHistory(); });
+                canvas.on('object:modified', function() { saveHistory(); });
+            } else {
+                canvas.setWidth(wrapper.clientWidth);
+                canvas.setHeight(wrapper.clientHeight);
+                canvas.clear();
             }
 
-            // Salva estado inicial
-            historyMap[activeObraPdf].states.push(JSON.stringify(canvas.toJSON()));
-            historyMap[activeObraPdf].index = 0;
-
-            canvas.on('path:created', function() { saveHistory(); });
-            canvas.on('object:modified', function() { saveHistory(); });
-
-            canvas.on('mouse:down', function(o) {
-                if (activeTool === 'pan') {
-                    this.isDragging = true;
-                    this.lastPosX = o.e.clientX;
-                    this.lastPosY = o.e.clientY;
-                } 
-                else if (activeTool === 'marker') {
-                    const pointer = canvas.getPointer(o.e);
-                    const text = new fabric.Text('📍', { 
-                        left: pointer.x, top: pointer.y, 
-                        fontSize: 24, originX: 'center', originY: 'bottom' 
-                    });
-                    canvas.add(text);
-                    saveHistory();
-                }
-                else if (activeTool === 'arrow') {
-                    isDrawingLine = true;
-                    const pointer = canvas.getPointer(o.e);
-                    const points = [pointer.x, pointer.y, pointer.x, pointer.y];
-                    
-                    tempLine = new fabric.Line(points, {
-                        strokeWidth: 3, fill: activeColor, stroke: activeColor,
-                        originX: 'center', originY: 'center', selectable: false, evented: false
-                    });
-                    
-                    tempArrowHead = new fabric.Triangle({
-                        width: 15, height: 15, fill: activeColor, 
-                        left: pointer.x, top: pointer.y,
-                        originX: 'center', originY: 'center', selectable: false, evented: false, angle: 90
-                    });
-                    
-                    canvas.add(tempLine, tempArrowHead);
-                }
-            });
-
-            canvas.on('mouse:move', function(o) {
-                if (this.isDragging && activeTool === 'pan') {
-                    const e = o.e;
-                    const viewerId = activeObraPdf === 'mirante' ? 'viewer-area-mirante' : 'viewer-area-joaquim';
-                    const wrapper = document.getElementById(viewerId);
-                    wrapper.scrollLeft -= (e.clientX - this.lastPosX);
-                    wrapper.scrollTop -= (e.clientY - this.lastPosY);
-                    this.lastPosX = e.clientX;
-                    this.lastPosY = e.clientY;
-                }
-                else if (isDrawingLine && activeTool === 'arrow') {
-                    const pointer = canvas.getPointer(o.e);
-                    tempLine.set({ x2: pointer.x, y2: pointer.y });
-                    tempArrowHead.set({ left: pointer.x, top: pointer.y });
-                    
-                    const dx = pointer.x - tempLine.x1;
-                    const dy = pointer.y - tempLine.y1;
-                    const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-                    tempArrowHead.set({ angle: angle + 90 });
-                    canvas.renderAll();
-                }
-            });
-
-            canvas.on('mouse:up', function(o) {
-                if (activeTool === 'pan') {
-                    this.isDragging = false;
-                }
-                else if (activeTool === 'arrow' && isDrawingLine) {
-                    isDrawingLine = false;
-                    tempLine.setCoords();
-                    tempArrowHead.setCoords();
-                    saveHistory();
-                }
-            });
-
-            fabricCanvases[activeObraPdf] = canvas;
-        }
-
-        async function zoomPDF(delta) {
-            if (!pdfDocs[activeObraPdf]) return;
-            currentZoom[activeObraPdf] += delta;
-            if (currentZoom[activeObraPdf] < 0.5) currentZoom[activeObraPdf] = 0.5;
-            if (currentZoom[activeObraPdf] > 4.0) currentZoom[activeObraPdf] = 4.0;
+            // Atribui o PDF como Background do Canvas
+            var bgImage = new fabric.Image(bgCanvasEl);
+            bgImage.set({ originX: 'left', originY: 'top', left: 0, top: 0 });
+            canvas.setBackgroundImage(bgImage, canvas.renderAll.bind(canvas));
             
-            await renderCurrentPage();
+            // INTELIGÊNCIA: Calcula exatamente o zoom para fazer caber toda a tela de imediato
+            const scaleX = wrapper.clientWidth / width;
+            const scaleY = wrapper.clientHeight / height;
+            // Usa 0.95 para dar 5% de respiro nas bordas visuais
+            const fitScale = Math.min(scaleX, scaleY) * 0.95; 
+            
+            canvas.setZoom(fitScale);
+            
+            // Centraliza o PDF carregado no meio do Quadro de Visualização
+            const vpt = canvas.viewportTransform;
+            vpt[4] = (wrapper.clientWidth - (width * fitScale)) / 2;
+            vpt[5] = (wrapper.clientHeight - (height * fitScale)) / 2;
+            canvas.setViewportTransform(vpt);
+
+            historyMap[activeObraPdf].states = [JSON.stringify(canvas.toJSON())];
+            historyMap[activeObraPdf].index = 0;
         }
 
         function saveHistory() {

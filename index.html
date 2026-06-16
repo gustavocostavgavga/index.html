@@ -1254,7 +1254,7 @@
                         <button class="projeto-btn active" onclick="loadPDF('URBANÍSTICO_JOAQUIMLEME.pdf', this)">URBANÍSTICO</button>
                         <button class="projeto-btn" onclick="loadPDF('DRENAGEM_JOAQUIMLEME.pdf', this)">DRENAGEM</button>
                         <button class="projeto-btn" onclick="loadPDF('ÁGUA_JOAQUIMLEME.pdf', this)">ÁGUA</button>
-                        <button class="projeto-btn" onclick="loadPDF('ProjetoEsgoto_JoaquimLeme_Ituiutaba-Model.pdf', this)">ESGOTO</button>
+                        <button class="projeto-btn" onclick="loadPDF('ESGOTO_JOAQUIMLEME.pdf', this)">ESGOTO</button>
                         <button class="projeto-btn" onclick="loadPDF('PAVIMENTAÇÃO_JOAQUIMLEME.pdf', this)">PAVIMENTAÇÃO</button>
                         <button class="projeto-btn" onclick="loadPDF('ELÉTRICA_JOAQUIMLEME.pdf', this)">ELÉTRICA</button>
                     </div>
@@ -2426,18 +2426,43 @@
                 const pdf = await loadingTask.promise;
                 pdfDocs[activeObraPdf] = pdf;
                 
-                const page = await pdf.getPage(1);
-                // Renderização da imagem em alta qualidade base (o scroll de zoom trabalhará sobre isso)
-                const viewport = page.getViewport({ scale: 4.0 }); 
-                
+                // Aumentando a escala para altíssima resolução no esgoto, e mantendo 4x nos outros
+                const renderScale = (url === 'ESGOTO_JOAQUIMLEME.pdf') ? 7.0 : 4.0;
+
+                let totalHeight = 0;
+                let maxWidth = 0;
+                const pagesData = [];
+
+                // Coletar dimensões de todas as páginas do PDF
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const viewport = page.getViewport({ scale: renderScale });
+                    pagesData.push({ page, viewport });
+                    totalHeight += viewport.height;
+                    if (viewport.width > maxWidth) maxWidth = viewport.width;
+                }
+
+                // Criar o canvas principal que vai juntar as páginas
                 const tempCanvas = document.createElement('canvas');
+                tempCanvas.width = maxWidth;
+                tempCanvas.height = totalHeight;
                 const context = tempCanvas.getContext('2d');
-                tempCanvas.width = viewport.width;
-                tempCanvas.height = viewport.height;
+
+                // Renderizar cada página e desenhar no canvas principal de forma sequencial (Multi-páginas)
+                let currentY = 0;
+                for (let i = 0; i < pagesData.length; i++) {
+                    const { page, viewport } = pagesData[i];
+                    const pageCanvas = document.createElement('canvas');
+                    pageCanvas.width = viewport.width;
+                    pageCanvas.height = viewport.height;
+                    const pageCtx = pageCanvas.getContext('2d');
+
+                    await page.render({ canvasContext: pageCtx, viewport: viewport }).promise;
+                    context.drawImage(pageCanvas, 0, currentY);
+                    currentY += viewport.height;
+                }
                 
-                await page.render({ canvasContext: context, viewport: viewport }).promise;
-                
-                setupFabricCanvas(viewport.width, viewport.height, tempCanvas);
+                setupFabricCanvas(maxWidth, totalHeight, tempCanvas);
                 
             } catch(e) {
                 console.error("Erro ao carregar PDF:", e);

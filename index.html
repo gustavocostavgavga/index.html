@@ -1064,6 +1064,15 @@
                             </div>
                             
                             <div class="tool-wrapper">
+                                <button class="pdf-tool-btn tool-mode" title="Área (Polígono)" onclick="setTool('polygon', this)">📐 Área</button>
+                                <div class="color-picker-menu">
+                                    <span class="color-dot active" style="background-color: #e53935;" onclick="selectColor('#e53935', this, event)"></span>
+                                    <span class="color-dot" style="background-color: #1e88e5;" onclick="selectColor('#1e88e5', this, event)"></span>
+                                    <span class="color-dot" style="background-color: #43a047;" onclick="selectColor('#43a047', this, event)"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="tool-wrapper">
                                 <button class="pdf-tool-btn tool-mode" title="Pincel Livre" onclick="setTool('brush', this)">🖌️ Pincel</button>
                                 <div class="color-picker-menu">
                                     <span class="color-dot active" style="background-color: #e53935;" onclick="selectColor('#e53935', this, event)"></span>
@@ -1227,7 +1236,7 @@
                             <li class="level-2"><span class="enum">8.1</span> Estudo e contratação de projeto</li>
                             <li class="level-2"><span class="enum">8.2</span> Execução da sinalização</li>
                             <li class="level-1"><span>9) Processo de entrega</span><span>-</span></li>
-                            <li class="level-2"><span class="enum">9.1</span> Entrega SAE (Água e Esgoto)</li>
+                            <li class="level-2"><span class="enum">9.1</span> Entre SAE (Água e Esgoto)</li>
                             <li class="level-2"><span class="enum">9.2</span> Entrega Secretaria de Obras (Drenagem)</li>
                             <li class="level-2"><span class="enum">9.3</span> Entrega Prefeitura</li>
                         </ul>
@@ -1274,6 +1283,15 @@
                             
                             <div class="tool-wrapper">
                                 <button class="pdf-tool-btn tool-mode" title="Gerar Seta" onclick="setTool('arrow', this)">↗️ Seta</button>
+                                <div class="color-picker-menu">
+                                    <span class="color-dot active" style="background-color: #e53935;" onclick="selectColor('#e53935', this, event)"></span>
+                                    <span class="color-dot" style="background-color: #1e88e5;" onclick="selectColor('#1e88e5', this, event)"></span>
+                                    <span class="color-dot" style="background-color: #43a047;" onclick="selectColor('#43a047', this, event)"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="tool-wrapper">
+                                <button class="pdf-tool-btn tool-mode" title="Área (Polígono)" onclick="setTool('polygon', this)">📐 Área</button>
                                 <div class="color-picker-menu">
                                     <span class="color-dot active" style="background-color: #e53935;" onclick="selectColor('#e53935', this, event)"></span>
                                     <span class="color-dot" style="background-color: #1e88e5;" onclick="selectColor('#1e88e5', this, event)"></span>
@@ -2302,6 +2320,12 @@
         let isDrawingLine = false;
         let tempLine, tempArrowHead;
         
+        // --- NOVA LÓGICA POLÍGONO ---
+        let polyPoints = [];
+        let polyLines = [];
+        let polyCircles = [];
+        let dynamicLine = null;
+
         let historyMap = {
             'mirante': { states: [], index: -1 },
             'joaquim': { states: [], index: -1 }
@@ -2311,7 +2335,48 @@
             activeObraPdf = obra;
         }
 
+        function hexToRgba(hex, alpha) {
+            var r = parseInt(hex.slice(1, 3), 16),
+                g = parseInt(hex.slice(3, 5), 16),
+                b = parseInt(hex.slice(5, 7), 16);
+            return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
+        }
+        
+        function resetPolygonTemp(canvas) {
+            polyCircles.forEach(c => canvas.remove(c));
+            polyLines.forEach(l => canvas.remove(l));
+            if (dynamicLine) canvas.remove(dynamicLine);
+            polyPoints = [];
+            polyLines = [];
+            polyCircles = [];
+            dynamicLine = null;
+            canvas.renderAll();
+        }
+
+        function finishPolygon(canvas) {
+            if (polyPoints.length < 3) {
+                resetPolygonTemp(canvas);
+                return;
+            }
+            let rgbaColor = hexToRgba(activeColor, 0.4);
+            let polygon = new fabric.Polygon(polyPoints, {
+                fill: rgbaColor,
+                stroke: activeColor,
+                strokeWidth: 3,
+                selectable: true,
+                objectCaching: false
+            });
+            canvas.add(polygon);
+            resetPolygonTemp(canvas);
+            saveHistory();
+        }
+
         function setTool(tool, btn) {
+            if (activeTool === 'polygon' && tool !== 'polygon') {
+                const fCanvas = fabricCanvases[activeObraPdf];
+                if(fCanvas) resetPolygonTemp(fCanvas);
+            }
+
             activeTool = tool;
             const toolbar = btn.closest('.pdf-toolbar');
             toolbar.querySelectorAll('.tool-mode').forEach(b => b.classList.remove('active'));
@@ -2449,6 +2514,46 @@
                         
                         canvas.add(tempLine, tempArrowHead);
                     }
+                    else if (activeTool === 'polygon') {
+                        const pointer = canvas.getPointer(evt);
+                        
+                        if (polyPoints.length > 2) {
+                            const firstPoint = polyPoints[0];
+                            const dist = Math.hypot(pointer.x - firstPoint.x, pointer.y - firstPoint.y);
+                            if (dist < 20) {
+                                finishPolygon(canvas);
+                                return;
+                            }
+                        }
+
+                        polyPoints.push({x: pointer.x, y: pointer.y});
+                        
+                        let circle = new fabric.Circle({
+                            radius: 5, fill: activeColor, left: pointer.x, top: pointer.y,
+                            originX: 'center', originY: 'center', selectable: false, evented: false
+                        });
+                        polyCircles.push(circle);
+                        canvas.add(circle);
+
+                        if (polyPoints.length > 1) {
+                            let prev = polyPoints[polyPoints.length - 2];
+                            let line = new fabric.Line([prev.x, prev.y, pointer.x, pointer.y], {
+                                strokeWidth: 3, stroke: activeColor, selectable: false, evented: false
+                            });
+                            polyLines.push(line);
+                            canvas.add(line);
+                        }
+
+                        if (!dynamicLine) {
+                            dynamicLine = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
+                                strokeWidth: 3, stroke: activeColor, selectable: false, evented: false, opacity: 0.5, strokeDashArray: [5, 5]
+                            });
+                            canvas.add(dynamicLine);
+                        } else {
+                            dynamicLine.set({x1: pointer.x, y1: pointer.y, x2: pointer.x, y2: pointer.y});
+                            canvas.bringToFront(dynamicLine);
+                        }
+                    }
                 });
 
                 canvas.on('mouse:move', function(opt) {
@@ -2470,6 +2575,11 @@
                         const dy = pointer.y - tempLine.y1;
                         const angle = Math.atan2(dy, dx) * 180 / Math.PI;
                         tempArrowHead.set({ angle: angle + 90 });
+                        canvas.renderAll();
+                    }
+                    else if (activeTool === 'polygon' && polyPoints.length > 0 && dynamicLine) {
+                        const pointer = canvas.getPointer(opt.e);
+                        dynamicLine.set({x2: pointer.x, y2: pointer.y});
                         canvas.renderAll();
                     }
                 });
@@ -2560,8 +2670,7 @@
         // ==========================================
 
         window.addEventListener('DOMContentLoaded', () => {
-            const today = new Date();
-            document.getElementById('home-date').textContent = 'Última atualização: ' + today.toLocaleDateString('pt-BR');
+            document.getElementById('home-date').textContent = 'Última atualização: 16/06/2026';
 
             createMainGauge('gaugeMainMirante', 7859182, 4957062, 6453967);
             createMainGauge('gaugeMainJoaquim', 5019403, 3465877, 3732110);

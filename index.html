@@ -921,7 +921,7 @@
                 <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 8.337.384</div></div>
                 <div class="kpi-card">
                     <div class="label">Desvio Orçamentário</div>
-                    <div class="value" style="color: var(--alert-color);">⬆ +6,1%</div>
+                    <div class="value" id="kpiDesvioMirante"></div>
                     <div class="sublabel" style="text-transform: none; letter-spacing: 0;">(R$ 8.337.384 / R$ 7.859.182) - 1</div>
                 </div>
                 <div class="kpi-card">
@@ -959,7 +959,7 @@
                 <div class="chart-grid-bottom">
                     <div class="chart-container-large">
                         <button class="resumo-btn" onclick="openResumoPendencias('mirante')">📋 Resumo de Pendências</button>
-                        <div class="chart-title" style="margin-bottom: 5px;">Avanço Físico-Financeiro por Etapa<span id="desvioMirante"></span></div>
+                        <div class="chart-title" style="margin-bottom: 5px;">Avanço Físico-Financeiro por Etapa</div>
                         <canvas id="chartMiranteFisicoFin"></canvas>
                     </div>
                 </div>
@@ -1104,15 +1104,6 @@
                             </div>
                             
                             <div class="tool-wrapper">
-                                <button class="pdf-tool-btn tool-mode" title="Régua/Medição" onclick="setTool('ruler', this)">📏 Medir</button>
-                                <div class="color-picker-menu">
-                                    <span class="color-dot active" style="background-color: #e53935;" onclick="selectColor('#e53935', this, event)"></span>
-                                    <span class="color-dot" style="background-color: #1e88e5;" onclick="selectColor('#1e88e5', this, event)"></span>
-                                    <span class="color-dot" style="background-color: #43a047;" onclick="selectColor('#43a047', this, event)"></span>
-                                </div>
-                            </div>
-                            
-                            <div class="tool-wrapper">
                                 <button class="pdf-tool-btn tool-mode" title="Área (Polígono)" onclick="setTool('polygon', this)">📐 Área</button>
                                 <div class="color-picker-menu">
                                     <span class="color-dot active" style="background-color: #e53935;" onclick="selectColor('#e53935', this, event)"></span>
@@ -1181,7 +1172,7 @@
                 <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 4.515.776</div></div>
                 <div class="kpi-card">
                     <div class="label">Desvio Orçamentário</div>
-                    <div class="value" style="color: #03a9f4;">⬇ -10,0%</div>
+                    <div class="value" id="kpiDesvioJoaquim"></div>
                     <div class="sublabel" style="text-transform: none; letter-spacing: 0;">(R$ 4.515.776 / R$ 5.019.403) - 1</div>
                 </div>
                 <div class="kpi-card">
@@ -1221,7 +1212,7 @@
                 <div class="chart-grid-bottom">
                     <div class="chart-container-large">
                         <button class="resumo-btn" onclick="openResumoPendencias('joaquim')">📋 Resumo de Pendências</button>
-                        <div class="chart-title" style="margin-bottom: 5px;">Avanço Físico-Financeiro por Etapa<span id="desvioJoaquim"></span></div>
+                        <div class="chart-title" style="margin-bottom: 5px;">Avanço Físico-Financeiro por Etapa</div>
                         <canvas id="chartJoaquimFisicoFin"></canvas>
                     </div>
                 </div>
@@ -1354,15 +1345,6 @@
 
                             <div class="tool-wrapper">
                                 <button class="pdf-tool-btn tool-mode" title="Gerar Seta" onclick="setTool('arrow', this)">↗️ Seta</button>
-                                <div class="color-picker-menu">
-                                    <span class="color-dot active" style="background-color: #e53935;" onclick="selectColor('#e53935', this, event)"></span>
-                                    <span class="color-dot" style="background-color: #1e88e5;" onclick="selectColor('#1e88e5', this, event)"></span>
-                                    <span class="color-dot" style="background-color: #43a047;" onclick="selectColor('#43a047', this, event)"></span>
-                                </div>
-                            </div>
-                            
-                            <div class="tool-wrapper">
-                                <button class="pdf-tool-btn tool-mode" title="Régua/Medição" onclick="setTool('ruler', this)">📏 Medir</button>
                                 <div class="color-picker-menu">
                                     <span class="color-dot active" style="background-color: #e53935;" onclick="selectColor('#e53935', this, event)"></span>
                                     <span class="color-dot" style="background-color: #1e88e5;" onclick="selectColor('#1e88e5', this, event)"></span>
@@ -2103,7 +2085,6 @@
             });
         }
 
-        // FUNÇÃO ATUALIZADA: Gráfico Vertical, Preenchimento Físico e Meta Final
         function createFisicoFinChart(canvasId, labels, finData, fisData, finDataRaw, fisDataRaw, orcado, investido, finalDateStr) {
             const isDark = document.body.classList.contains('dark-mode');
             const bgRestante = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)';
@@ -2218,7 +2199,7 @@
                                 return item.datasetIndex === 0; 
                             }
                         },
-                        tooltip: { enabled: false }, // Tooltip de mouse completamente desabilitado
+                        tooltip: { enabled: false }, 
                         dateLimit: { enabled: true, finalDate: finalDateStr }
                     },
                     onClick: (event, elements, chart) => {
@@ -2247,7 +2228,7 @@
                         y: { 
                             stacked: true,
                             beginAtZero: true,
-                            max: 140, // Espaço ajustado para caber os textos longos em Reais sem cortar
+                            max: 140, 
                             ticks: { display: false }, 
                             grid: { display: false } 
                         }
@@ -2364,7 +2345,6 @@
                        '<th>Status</th><th>Progresso</th></tr></thead><tbody>';
                        
             let totOrcado = 0, totComprometido = 0, totProjetadoFuturo = 0, totDisponivel = 0;
-            const saldoNumColor = getComputedStyle(document.body).getPropertyValue('--table-saldo-color').trim() || '#2c3e50';
 
             for(let i=0; i<etapas.length; i++){
                 const eac = Peanut[i] + Honey[i]; 
@@ -2376,7 +2356,7 @@
                 
                 totOrcado += orcado[i]; totComprometido += Peanut[i]; totProjetadoFuturo += Honey[i]; totDisponivel += disponivel[i];
                 
-                html += `<tr class="etapa-row" data-index="${i}"><td>${etapas[i]}</td><td>${fmtNum(orcado[i])}</td><td>${fmtNum(Peanut[i])}</td><td>${fmtNum(Honey[i])}</td><td style="color:${saldoNumColor}; font-weight:400;">${fmtNum(disponivel[i])}</td><td>${desvio.toFixed(1)}%</td><td><span class="status ${statusClass}">${statusLabel}</span></td><td><div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div></td></tr>`;
+                html += `<tr class="etapa-row" data-index="${i}"><td>${etapas[i]}</td><td>${fmtNum(orcado[i])}</td><td>${fmtNum(Peanut[i])}</td><td>${fmtNum(Honey[i])}</td><td style="color:var(--table-saldo-color); font-weight:400;">${fmtNum(disponivel[i])}</td><td>${desvio.toFixed(1)}%</td><td><span class="status ${statusClass}">${statusLabel}</span></td><td><div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div></td></tr>`;
             }
             const eacTotal = totComprometido + totProjetadoFuturo;
             const totDesvio = totOrcado > 0 ? ((eacTotal - totOrcado) / totOrcado * 100) : 0;
@@ -2490,9 +2470,13 @@
             
             let el = document.getElementById(elementId);
             if(el) {
-                let cls = desvio <= 0 ? 'positive' : 'negative';
-                let sign = desvio > 0 ? '+' : '';
-                el.innerHTML = `<span class="desvio-badge ${cls}">Desvio projetado: ${sign}${desvio.toFixed(1).replace('.',',')}%</span>`;
+                if (desvio > 0) {
+                    el.style.color = 'var(--alert-color)';
+                    el.innerHTML = `⬆ +${desvio.toFixed(1).replace('.', ',')}%`;
+                } else {
+                    el.style.color = '#03a9f4';
+                    el.innerHTML = `⬇ ${desvio.toFixed(1).replace('.', ',')}%`;
+                }
             }
         }
 
@@ -2526,7 +2510,7 @@
         let activeTool = 'pan';
         let activeColor = '#e53935';
         let activeIcon = '📍';
-        const PIXEL_TO_METER = 0.05; 
+        const PIXEL_TO_METER = 0.052; // Fator de escala (ajuste para calibrar a área do PDF)
         
         let isDrawingLine = false;
         let isDrawingCircle = false;
@@ -2551,14 +2535,6 @@
                 g = parseInt(hex.slice(3, 5), 16),
                 b = parseInt(hex.slice(5, 7), 16);
             return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
-        }
-
-        function calcLineLength(pts) {
-            let len = 0;
-            for(let i=1; i<pts.length; i++) {
-                len += Math.hypot(pts[i].x - pts[i-1].x, pts[i].y - pts[i-1].y);
-            }
-            return len * PIXEL_TO_METER;
         }
 
         function calcPolygonArea(pts) {
@@ -2618,34 +2594,8 @@
             saveHistory();
         }
 
-        function finishRuler(canvas) {
-            if(polyPoints.length < 2) {
-                resetPolygonTemp(canvas);
-                return;
-            }
-            let polyline = new fabric.Polyline(polyPoints, {
-                fill: 'transparent',
-                stroke: activeColor,
-                strokeWidth: 3,
-                selectable: true,
-                objectCaching: false
-            });
-            
-            let length = calcLineLength(polyPoints);
-            let lastPt = polyPoints[polyPoints.length-1];
-            
-            let text = new fabric.Text(length.toFixed(2) + ' m', {
-                left: lastPt.x, top: lastPt.y - 20, fontSize: 16, fill: '#000', originX: 'center', originY: 'center', textBackgroundColor: 'rgba(255,255,255,0.7)'
-            });
-            
-            let group = new fabric.Group([polyline, text], { selectable: true });
-            canvas.add(group);
-            resetPolygonTemp(canvas);
-            saveHistory();
-        }
-
         function setTool(tool, btn, iconSymbol = null) {
-            if ((activeTool === 'polygon' || activeTool === 'ruler') && (tool !== 'polygon' && tool !== 'ruler')) {
+            if (activeTool === 'polygon' && tool !== 'polygon') {
                 const fCanvas = fabricCanvases[activeObraPdf];
                 if(fCanvas) resetPolygonTemp(fCanvas);
             }
@@ -2760,6 +2710,7 @@
             let canvas = fabricCanvases[activeObraPdf];
             
             if (!canvas) {
+                // Cria o canvas e preenche toda a caixa
                 canvas = new fabric.Canvas(fabCanvasId, {
                     width: wrapper.clientWidth,
                     height: wrapper.clientHeight,
@@ -2793,14 +2744,17 @@
                         this.lastPosY = evt.clientY;
                     }
                     else if (activeTool === 'icon') {
+                        if (opt.target) return; // Se clicou em objeto existente, apenas o seleciona
                         const text = new fabric.Text(activeIcon, { 
                             left: pointer.x, top: pointer.y, 
                             fontSize: 40, originX: 'center', originY: 'bottom' 
                         });
                         canvas.add(text);
+                        canvas.setActiveObject(text);
                         saveHistory();
                     }
                     else if (activeTool === 'text') {
+                        if (opt.target && opt.target.type === 'i-text') return; // Permite editar texto existente
                         const text = new fabric.IText('Texto', {
                             left: pointer.x, top: pointer.y, fontFamily: 'Montserrat', fill: '#000000', fontSize: 24, textBackgroundColor: 'rgba(255,255,255,0.7)'
                         });
@@ -2836,13 +2790,13 @@
                         
                         canvas.add(tempLine, tempArrowHead);
                     }
-                    else if (activeTool === 'polygon' || activeTool === 'ruler') {
-                        if (polyPoints.length > 0) {
-                            const lastPoint = polyPoints[polyPoints.length - 1];
-                            const dist = Math.hypot(pointer.x - lastPoint.x, pointer.y - lastPoint.y);
+                    else if (activeTool === 'polygon') {
+                        
+                        if (polyPoints.length > 2) {
+                            const firstPoint = polyPoints[0];
+                            const dist = Math.hypot(pointer.x - firstPoint.x, pointer.y - firstPoint.y);
                             if (dist < 20) {
-                                if(activeTool === 'polygon') finishPolygon(canvas);
-                                else finishRuler(canvas);
+                                finishPolygon(canvas);
                                 return;
                             }
                         }
@@ -2904,7 +2858,7 @@
                         tempCircle.set({ radius: radius });
                         canvas.renderAll();
                     }
-                    else if ((activeTool === 'polygon' || activeTool === 'ruler') && polyPoints.length > 0 && dynamicLine) {
+                    else if (activeTool === 'polygon' && polyPoints.length > 0 && dynamicLine) {
                         const pointer = canvas.getPointer(opt.e);
                         dynamicLine.set({x2: pointer.x, y2: pointer.y});
                         canvas.renderAll();
@@ -2940,7 +2894,9 @@
                 canvas.setHeight(wrapper.clientHeight);
                 const objs = canvas.getObjects();
                 for(let i=objs.length-1; i>=0; i--) {
-                    canvas.remove(objs[i]);
+                    if(objs[i].get('type') !== 'image') {
+                        canvas.remove(objs[i]);
+                    }
                 }
             }
 

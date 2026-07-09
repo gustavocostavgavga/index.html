@@ -2537,25 +2537,6 @@
             return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
         }
 
-        function calcPolygonArea(pts) {
-            let area = 0;
-            for(let i=0, j=pts.length-1; i<pts.length; j=i++) {
-                area += (pts[j].x + pts[i].x) * (pts[j].y - pts[i].y);
-            }
-            return Math.abs(area / 2) * (PIXEL_TO_METER * PIXEL_TO_METER);
-        }
-
-        function getBoundingBoxCenter(pts) {
-            let minX=Infinity, maxX=-Infinity, minY=Infinity, maxY=-Infinity;
-            pts.forEach(p => {
-                if(p.x < minX) minX = p.x;
-                if(p.x > maxX) maxX = p.x;
-                if(p.y < minY) minY = p.y;
-                if(p.y > maxY) maxY = p.y;
-            });
-            return { x: (minX+maxX)/2, y: (minY+maxY)/2 };
-        }
-        
         function resetPolygonTemp(canvas) {
             polyCircles.forEach(c => canvas.remove(c));
             polyLines.forEach(l => canvas.remove(l));
@@ -2581,15 +2562,7 @@
                 objectCaching: false
             });
             
-            let area = calcPolygonArea(polyPoints);
-            let center = getBoundingBoxCenter(polyPoints);
-            
-            let text = new fabric.Text(area.toFixed(2) + ' m²', {
-                left: center.x, top: center.y, fontSize: 16, fill: '#000', originX: 'center', originY: 'center', textBackgroundColor: 'rgba(255,255,255,0.7)'
-            });
-            
-            let group = new fabric.Group([polygon, text], { selectable: true });
-            canvas.add(group);
+            canvas.add(polygon);
             resetPolygonTemp(canvas);
             saveHistory();
         }

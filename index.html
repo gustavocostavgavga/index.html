@@ -612,7 +612,7 @@
         .analysis-inner-content.active { display: block; }
         .empty-state { text-align: center; padding: 40px; color: var(--empty-state-text); background: var(--empty-state-bg); border: 1px dashed var(--border-color); border-radius: 8px; font-style: italic; transition: all 0.4s; }
 
-        .kpi-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-bottom: 25px; }
+        .kpi-grid { display: grid; gap: 10px; margin-bottom: 25px; }
         .kpi-card { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 12px 10px; text-align: center; transition: all 0.4s; display: flex; flex-direction: column; justify-content: center; }
         .kpi-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(85,139,47,0.15); border-color: var(--active-color); }
         .kpi-card .label { font-size: 0.65rem; color: var(--subtitle-color); text-transform: uppercase; letter-spacing: 0px; margin-bottom: 8px; font-weight: 700; min-height: 28px; display: flex; align-items: center; justify-content: center; transition: color 0.4s; line-height: 1.2; }
@@ -693,7 +693,7 @@
         .abc-header h3 { color: var(--title-color); font-size: 1.1rem; margin-bottom: 20px; transition: color 0.4s; }
         .table-container { overflow-x: auto; margin-bottom: 30px; }
         table { width: 100%; border-collapse: collapse; font-size: 0.8rem; transition: color 0.4s; }
-        th { background: var(--table-th-bg); color: var(--title-color); padding: 12px 10px; text-align: center; font-weight: 600; border-bottom: 2px solid var(--border-color); transition: all 0.4s; user-select: none; }
+        th { background: var(--table-th-bg); color: var(--title-color); padding: 12px 15px; text-align: center; font-weight: 600; border-bottom: 2px solid var(--border-color); transition: all 0.4s; user-select: none; font-size: 0.75rem; line-height: 1.3; }
         th:hover { background: var(--border-color); }
         td { padding: 10px; border-bottom: 1px solid var(--table-border); color: var(--table-td-text); text-align: center; transition: all 0.4s; }
         td:first-child { text-align: left; }
@@ -913,23 +913,30 @@
                 </div>
             </div>
             
-            <div class="kpi-grid">
+            <div class="kpi-grid" style="grid-template-columns: repeat(7, 1fr);">
                 <div class="kpi-card"><div class="label">Orçamento Total Aprovado</div><div class="value">R$ 7.859.182</div></div>
-                <div class="kpi-card"><div class="label">Investimento Atual</div><div class="value">R$ 6.453.967</div></div>
-                <div class="kpi-card"><div class="label">Saldo a Comprometer</div><div class="value">R$ 1.405.215</div></div>
-                <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 1.883.417</div></div>
-                <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 8.337.384</div></div>
+                <div class="kpi-card"><div class="label">Investimento Atual</div><div class="value">R$ 5.357.842</div></div>
+                <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 2.617.578</div></div>
+                <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 7.975.420</div></div>
                 <div class="kpi-card">
                     <div class="label">Desvio Orçamentário</div>
                     <div class="value" id="kpiDesvioMirante"></div>
-                    <div class="sublabel" style="text-transform: none; letter-spacing: 0;">(R$ 8.337.384 / R$ 7.859.182) - 1</div>
+                    <div class="sublabel" style="text-transform: none; letter-spacing: 0;">(R$ 7.975.420 / R$ 7.859.182) - 1</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Visão Gerencial Sienge</div>
+                    <div class="kpi-sublist" style="margin-top: 0;">
+                        <div class="kpi-sublist-item"><span class="sublist-label">Comprometido:</span><span class="sublist-value">R$ 1.449.081</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">+ Projetado:</span><span class="sublist-value">R$ 1.168.497</span></div>
+                        <div class="kpi-sublist-item" style="border-top: 1px dashed var(--border-color); padding-top: 4px; margin-top: 2px;"><span class="sublist-label" style="font-weight: 700; color: var(--title-color);">(=) Conclusão:</span><span class="sublist-value" style="color: var(--title-color);">R$ 2.617.578</span></div>
+                    </div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Custo/Lote</div>
                     <div class="kpi-sublist">
                         <div class="kpi-sublist-item"><span class="sublist-label">Orçado:</span><span class="sublist-value">R$ 11.148</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 9.155</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 11.826</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 7.600</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 11.313</span></div>
                         <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 32.252</span></div>
                     </div>
                 </div>
@@ -970,13 +977,13 @@
                     <div class="chart-title">Histórico e Projeção de Desembolsos</div>
                     <canvas id="chartMiranteHistorico"></canvas>
                     <div class="summary-container">
-                        <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 4.957.062</div></div>
+                        <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 5.357.842,03</div></div>
                         <div class="summary-operator">+</div>
-                        <div class="summary-box projected"><div class="summary-title">Valor Total de Desembolso Projetado</div><div class="summary-value">R$ 3.380.322,29</div></div>
+                        <div class="summary-box projected"><div class="summary-title">Valor Total de Desembolso Projetado</div><div class="summary-value">R$ 2.617.577,90</div></div>
                         <div class="summary-operator">=</div>
-                        <div class="summary-box executed-projected"><div class="summary-title">Valor de Execução Projetado</div><div class="summary-value">R$ 8.337.384,29</div></div>
+                        <div class="summary-box executed-projected"><div class="summary-title">Valor de Execução Projetado</div><div class="summary-value">R$ 7.975.419,93</div></div>
                         <div class="summary-operator">|</div>
-                        <div class="summary-box result-extrapolacao"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 478.202,29</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Extrapolação</div></div>
+                        <div class="summary-box result-extrapolacao"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 116.238,03</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Extrapolação</div></div>
                     </div>
                 </div>
                 <div class="chart-container" style="margin-bottom: 20px;">
@@ -1164,7 +1171,7 @@
                 </div>
             </div>
             
-            <div class="kpi-grid">
+            <div class="kpi-grid" style="grid-template-columns: repeat(7, 1fr);">
                 <div class="kpi-card"><div class="label">Orçamento Total Aprovado</div><div class="value">R$ 5.019.403</div></div>
                 <div class="kpi-card"><div class="label">Investimento Atual</div><div class="value">R$ 3.732.110</div></div>
                 <div class="kpi-card"><div class="label">Saldo a Comprometer</div><div class="value">R$ 1.287.293</div></div>
@@ -1395,7 +1402,7 @@
                         
                         <h4>Ituiutaba em Números</h4>
                         <p>Ituiutaba possui uma população estimada em aproximadamente 105 mil habitantes e uma área territorial superior a 2.600 km², consolidando-se como um importante polo regional de serviços, comércio e agronegócio. O município apresenta elevados índices de desenvolvimento e exerce influência econômica sobre diversas cidades do Pontal do Triângulo Mineiro.</p>
-                        <p>Inserida em uma região estratégica do estado, Ituiutaba beneficia-se da proximidade com importantes centros econômicos, como Uberlândia, um dos maiores polos logísticos e empresariais do Brasil. Essa localização favorece a integração regional, o fluxo de pessoas e mercadorias, a geração de empregos e a expansão de novos empreendimentos residenciais e comerciais.</p>
+                        <p>Inserida em uma região estratégica do estado, Ituiutaba beneficia-se da proximidade com importantes centros econômicos, বহুম Uberlândia, um dos maiores polos logísticos e empresariais do Brasil. Essa localização favorece a integração regional, o fluxo de pessoas e mercadorias, a geração de empregos e a expansão de novos empreendimentos residenciais e comerciais.</p>
                         <p>O crescimento populacional, a expansão urbana planejada e a demanda crescente por novas áreas residenciais têm impulsionado o desenvolvimento imobiliário da região, fortalecendo o potencial de valorização dos empreendimentos localizados em áreas estratégicas da cidade.</p>
                         <p>Com 576 lotes, o Loteamento Joaquim Leme foi concebido para oferecer infraestrutura urbana de qualidade, contribuindo para a expansão ordenada do município e acompanhando o desenvolvimento econômico e imobiliário de Ituiutaba. Sua localização privilegiada, próxima ao Aeroporto Municipal e ao bairro Lagoa Azul II, proporciona fácil acesso aos principais pontos da cidade e reforça seu potencial de valorização a longo prazo.</p>
                     </div>
@@ -1423,14 +1430,18 @@
                         <div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
                         <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">705</span></div>
                         <div class="kpi-item"><span class="label">Orçamento Total Aprovado</span><span class="value">R$ 7.859.182</span></div>
-                        <div class="kpi-item"><span class="label">Investimento Atual</span><span class="value">R$ 6.453.967</span></div>
-                        <div class="kpi-item"><span class="label">Saldo a Comprometer</span><span class="value">R$ 1.405.215</span></div>
-                        <div class="kpi-item"><span class="label">Verba Projetada para Conclusão</span><span class="value">R$ 1.883.417</span></div>
-                        <div class="kpi-item"><span class="label">Valor de Execução Projetado</span><span class="value">R$ 8.337.384</span></div>
+                        <div class="kpi-item"><span class="label">Investimento Atual</span><span class="value">R$ 5.357.842</span></div>
+                        <div class="kpi-item"><span class="label">Verba Projetada para Conclusão</span><span class="value">R$ 2.617.578</span></div>
+                        <div class="kpi-item"><span class="label">Valor de Execução Projetado</span><span class="value">R$ 7.975.420</span></div>
                         <div class="kpi-item"><span class="label">Custo/Lote (Orçado)</span><span class="value">R$ 11.148</span></div>
-                        <div class="kpi-item"><span class="label">Custo/Lote (Atual)</span><span class="value">R$ 9.155</span></div>
-                        <div class="kpi-item"><span class="label">Custo/Lote (Projetado)</span><span class="value">R$ 11.826</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Atual)</span><span class="value">R$ 7.600</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Projetado)</span><span class="value">R$ 11.313</span></div>
                         <div class="kpi-item"><span class="label">Custo/Lote (Global)</span><span class="value">R$ 32.252</span></div>
+
+                        <div class="kpi-item" style="background-color: var(--economy-bg); padding: 12px; border-radius: 8px; margin-top: 15px; border: 1px solid var(--economy-color); flex-direction: column; align-items: center; justify-content: center; gap: 4px;">
+                            <span style="color: var(--economy-color); font-weight: 500; font-size: 0.8rem; text-align: center;">Desembolso Total (R$ 5.357.842) + Verba Comprometida ERP (R$ 1.450.655)</span>
+                            <span style="color: var(--title-color); font-weight: 700; font-size: 0.95rem; text-align: center;">= Desembolso + Comprometido: R$ 6.808.497</span>
+                        </div>
                         
                         <div class="chart-container-gauge-integrated">
                             <div class="chart-title" style="font-size: 0.95rem; margin-bottom: 5px;">Avanço Financeiro</div>
@@ -1469,6 +1480,7 @@
         </div>
     </div>
 
+    <!-- Modais Anteriores -->
     <div class="modal" id="photoGlobalModal" onclick="if(event.target===this) closePhotoModal()">
         <div class="modal-content">
             <span class="modal-close" onclick="closePhotoModal()">&times;</span>
@@ -1559,6 +1571,38 @@
             <div style="overflow-y: auto; padding-right: 10px; flex: 1;">
                 <ul class="hierarchical-list" id="resumoPendenciasList">
                     </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOVO MODAL: Detalhamento do Comprometido + Projetado -->
+    <div class="modal gauge-modal" id="modalBreakdownProjetado" onclick="if(event.target===this) closeAllModals()">
+        <div class="gauge-modal-box" style="max-width: 800px; padding: 25px; text-align: left; max-height: 90vh; display: flex; flex-direction: column;">
+            <span class="gauge-modal-close" onclick="closeAllModals()">&times;</span>
+            <h3 style="margin-bottom: 5px; text-align: center; color: var(--title-color);">Gestão de verba por etapa via Sienge</h3>
+            <p style="text-align: center; font-size: 0.8rem; color: var(--subtitle-color); margin-bottom: 20px; font-weight: 600;">MIRANTE DA LAGOA</p>
+            
+            <div class="table-container" style="overflow-y: auto; flex: 1; margin-bottom: 0;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem;">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; font-size: 0.75rem;">Etapa</th>
+                            <th style="text-align: center; font-size: 0.75rem;">Valor Apropriado (Comprometido)</th>
+                            <th style="text-align: center; font-size: 0.75rem;">Valor Projetado</th>
+                            <th style="text-align: center; font-size: 0.75rem;">Total<br>(Comprometido + Projetado)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="breakdownTableBody">
+                    </tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td style="text-align: left;"><strong>TOTAL</strong></td>
+                            <td id="breakdownTotComp" style="text-align: center; color: var(--title-color);"></td>
+                            <td id="breakdownTotProj" style="text-align: center; color: var(--title-color);"></td>
+                            <td id="breakdownTotGeral" style="text-align: center; color: var(--title-color);"></td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
     </div>
@@ -1669,9 +1713,10 @@
         
         const miranteEtapas = ['TOPOGRAFIA E CONTROLE','MANUTENÇÕES / AS BUILTS','TERRAPLANAGEM','DRENAGEM','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','MEIO AMBIENTE','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
         const miranteOrcado = [36057.70, 234986.23, 134826.68, 278796.63, 207210.79, 645418.69, 176835.76, 313662.78, 597885.26, 2774330.81, 790022.37, 1316034.53, 94960.90, 258152.78];
-        const miranteRealizado = [36657.72, 155560.32, 134826.68, 269217.91, 214556.85, 531064.04, 168759.29, 169211.11, 543203.95, 1581431.74, 645422.37, 208403.22, 91808.40, 206938.45];
-        const miranteComprometido = [37257.72, 201591.92, 134826.68, 284987.25, 212449.72, 533313.97, 171635.74, 221077.81, 578897.30, 2741431.72, 789722.37, 218312.39, 91808.40, 236654.19];
-        const miranteProjetadoFuturo = [0.00, 34875.91, 0.00, 11540.39, 22591.06, 189939.04, 9499.96, 99384.97, 21185.43, 250000.03, 600.00, 1186800.20, 15000.00, 42000.01];
+        const miranteRealizado = [37257.72, 196972.82, 134826.68, 269217.91, 230858.08, 534839.04, 171635.73, 172527.84, 543203.95, 1863431.74, 645422.37, 246423.89, 91808.40, 219415.86];
+        const miranteComprometido = [...miranteRealizado];
+        const miranteProjetadoFuturo = [0.00, 42688.94, 0.00, 15000.00, 38500.00, 183038.97, 14000.00, 149593.28, 52393.84, 1128000.00, 144300.00, 778949.39, 15000.00, 56113.50];
+        const miranteValorApropriado = [0.00, 17900.00, 0.00, 3459.29, 0.01, 0.00, 0.00, 48549.98, 35693.34, 1128000.00, 144300.00, 35616.39, 15000.00, 20562.34];
         
         const miranteFisicoRaw = [85.0, 90.0, 100.0, 90.0, 95.0, 90.0, 95.0, 80.0, 90.0, 80.0, 95.0, 20.0, 95.0, 90.0];
 
@@ -1706,7 +1751,7 @@
             0, 0, 15941, 10938, 1000, 7000, 7500, 9500, 19220, 0, 27359, 17200, 13036, 13800, 16900, 44080, 31408, 
             37084, 142367, 113630, 189413, 78009, 87416, 112178, 215158, 477827, 531463, 523136, 1012576, 
             353551, 286552, 165518, 90625, 305676,
-            847473.81, 719920.00, 693672.72, 600280.99, 485263.72, 18533.52, 15177.52
+            400779.98, 944007.20, 713709.42, 490733.11, 437770.69, 19123.74, 12233.74
         ];
         
         const desembolsosJoaquim = [
@@ -1829,7 +1874,47 @@
             document.getElementById('modalFinancialInfo').classList.remove('active');
             document.getElementById('modalPendencias').classList.remove('active');
             document.getElementById('modalResumoPendencias').classList.remove('active');
+            document.getElementById('modalBreakdownProjetado').classList.remove('active');
             if (gaugeChart) { gaugeChart.destroy(); gaugeChart = null; }
+        }
+
+        function openBreakdownModal(obra) {
+            if (obra !== 'MIRANTE DA LAGOA') return;
+            const tbody = document.getElementById('breakdownTableBody');
+            tbody.innerHTML = '';
+            
+            let totComp = 0;
+            let totProj = 0;
+            let totGeral = 0;
+            
+            miranteEtapas.forEach((etapa, i) => {
+                const comp = miranteValorApropriado[i];
+                const geral = miranteProjetadoFuturo[i];
+                const proj = geral - comp;
+                
+                totComp += comp;
+                totProj += proj;
+                totGeral += geral;
+                
+                const compStr = 'R$ ' + Math.round(comp).toLocaleString('pt-BR');
+                const projStr = 'R$ ' + Math.round(proj).toLocaleString('pt-BR');
+                const geralStr = 'R$ ' + Math.round(geral).toLocaleString('pt-BR');
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="text-align: left; font-weight: 600; color: var(--title-color); border-bottom: 1px solid var(--table-border); padding: 8px;">${etapa}</td>
+                        <td style="border-bottom: 1px solid var(--table-border); padding: 8px;">${compStr}</td>
+                        <td style="border-bottom: 1px solid var(--table-border); padding: 8px;">${projStr}</td>
+                        <td style="font-weight: 700; border-bottom: 1px solid var(--table-border); padding: 8px;">${geralStr}</td>
+                    </tr>
+                `;
+            });
+            
+            document.getElementById('breakdownTotComp').textContent = 'R$ ' + Math.round(totComp).toLocaleString('pt-BR');
+            document.getElementById('breakdownTotProj').textContent = 'R$ ' + Math.round(totProj).toLocaleString('pt-BR');
+            document.getElementById('breakdownTotGeral').textContent = 'R$ ' + Math.round(totGeral).toLocaleString('pt-BR');
+            
+            document.getElementById('modalBreakdownProjetado').classList.add('active');
         }
 
         function updateChartModal() {
@@ -1920,13 +2005,16 @@
             document.getElementById('modalResumoPendencias').classList.add('active');
         }
 
-        function createMainGauge(canvasId, valOrcado, valDesembolso, valComprometidoTotal) {
+        function createMainGauge(canvasId, valOrcado, valDesembolso, valComprometidoTotal, customLabels = null) {
             const maxEscala = valOrcado / 0.75; 
             const pOrcado = 0.75; 
             const pDesembolso = Math.min(valDesembolso / maxEscala, 1.1);
             const pComprometido = Math.min(valComprometidoTotal / maxEscala, 1.1);
             const temEstouro = (pDesembolso > 0.75 || pComprometido > 0.75);
             const corQuartaFaixa = temEstouro ? '#e53935' : '#b0bec5'; 
+            
+            const lblDes = (customLabels && customLabels.desembolso) ? customLabels.desembolso : 'Desembolsado';
+            const lblComp = (customLabels && customLabels.comprometido) ? customLabels.comprometido : 'Investimento Atual';
 
             let hoveredNeedle = null;
 
@@ -1943,8 +2031,8 @@
                     const currentTextBase = getComputedStyle(document.body).getPropertyValue('--text-color-base').trim();
 
                     chart.gaugeNeedlePoints = [
-                        { id: 'desembolsado', pct: pDesembolso, color: '#ff6d00', textColor: '#ff6d00', label: 'Desembolsado', valStr: fmtMoney(valDesembolso), offset: 12 },
-                        { id: 'comprometido', pct: pComprometido, color: '#81c784', textColor: '#2e7d32', label: 'Investimento Atual', valStr: fmtMoney(valComprometidoTotal), offset: 26 },
+                        { id: 'desembolsado', pct: pDesembolso, color: '#ff6d00', textColor: '#ff6d00', label: lblDes, valStr: fmtMoney(valDesembolso), offset: 12 },
+                        { id: 'comprometido', pct: pComprometido, color: '#81c784', textColor: '#2e7d32', label: lblComp, valStr: fmtMoney(valComprometidoTotal), offset: 26 },
                         { id: 'orcado', pct: pOrcado, color: '#1565c0', textColor: '#1565c0', label: 'Orçamento Total', valStr: fmtMoney(valOrcado), offset: 40 }
                     ];
 
@@ -2339,7 +2427,7 @@
             let html = '<thead><tr><th>Macro Etapa</th>' +
                        '<th onclick="sortTable(\'' + tableId + '\', 1)" style="cursor:pointer;" title="Clique para ordenar">Orçamento Total ↕</th>' +
                        '<th onclick="sortTable(\'' + tableId + '\', 2)" style="cursor:pointer;" title="Clique para ordenar">Investimento Atual ↕</th>' +
-                       '<th onclick="sortTable(\'' + tableId + '\', 3)" style="cursor:pointer;" title="Clique para ordenar">Investimento Projetado ↕</th>' +
+                       '<th onclick="sortTable(\'' + tableId + '\', 3)" style="cursor:pointer; white-space: nowrap; padding: 10px 15px;" title="Clique para ordenar">Comprometido + Projetado ↕</th>' +
                        '<th onclick="sortTable(\'' + tableId + '\', 4)" style="cursor:pointer;" title="Clique para ordenar">Saldo Disponível ↕</th>' +
                        '<th onclick="sortTable(\'' + tableId + '\', 5)" style="cursor:pointer;" title="Clique para ordenar">% Desvio ↕</th>' +
                        '<th>Status</th><th>Progresso</th></tr></thead><tbody>';
@@ -2362,7 +2450,12 @@
             const totDesvio = totOrcado > 0 ? ((eacTotal - totOrcado) / totOrcado * 100) : 0;
             const totProgress = totOrcado > 0 ? Math.min(100, (totComprometido / totOrcado * 100)) : 0;
             
-            html += `</tbody><tfoot><tr class="total-row"><td><strong>TOTAL</strong></td><td>${fmtNum(totOrcado)}</td><td>${fmtNum(totComprometido)}</td><td>${fmtNum(totProjetadoFuturo)}</td><td style="color:var(--title-color); font-weight:700;">${fmtNum(totDisponivel)}</td><td>${totDesvio.toFixed(1)}%</td><td>—</td><td><div class="progress-bar"><div class="progress-fill" style="width:${totProgress}%"></div></div></td></tr></tfoot>`;
+            const isClickable = obraNome === 'MIRANTE DA LAGOA';
+            const tdContent = isClickable 
+                ? `<div onclick="openBreakdownModal('${obraNome}')" style="cursor: pointer; display: inline-block; border: 2px solid var(--title-color); border-radius: 50px; padding: 4px 15px; color: var(--title-color); font-weight: 700; transition: all 0.3s; background-color: transparent;" onmouseover="this.style.backgroundColor='var(--active-color)'; this.style.color='#fff'; this.style.borderColor='var(--active-color)';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--title-color)'; this.style.borderColor='var(--title-color)';">${fmtNum(totProjetadoFuturo)}</div>`
+                : fmtNum(totProjetadoFuturo);
+
+            html += `</tbody><tfoot><tr class="total-row"><td><strong>TOTAL</strong></td><td>${fmtNum(totOrcado)}</td><td>${fmtNum(totComprometido)}</td><td style="text-align: center; padding: 6px;" title="${isClickable ? 'Clique para ver o detalhamento' : ''}">${tdContent}</td><td style="color:var(--title-color); font-weight:700;">${fmtNum(totDisponivel)}</td><td>${totDesvio.toFixed(1)}%</td><td>—</td><td><div class="progress-bar"><div class="progress-fill" style="width:${totProgress}%"></div></div></td></tr></tfoot>`;
             t.innerHTML = html;
             
             t.querySelectorAll('tbody tr').forEach(row => {
@@ -2440,7 +2533,7 @@
             const columnColors = labels.map(label => {
                 if(label.includes('/26')) {
                     const mes = label.split('/')[0];
-                    const mesesFuturos = ['jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+                    const mesesFuturos = ['jul', 'ago', 'set', 'out', 'nov', 'dez'];
                     if(mesesFuturos.includes(mes)) return '#f39c12';
                 }
                 return '#558b2f';
@@ -2975,7 +3068,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             document.getElementById('home-date').textContent = 'Última atualização: 16/06/2026';
 
-            createMainGauge('gaugeMainMirante', 7859182, 4957062, 6453967);
+            createMainGauge('gaugeMainMirante', 7859182, 5357842.03, 6808497.40, { desembolso: 'Desembolso Total', comprometido: 'Desembolso + Comprometido' });
             createMainGauge('gaugeMainJoaquim', 5019403, 3465877, 3732110);
             
             createPieChart('chartMirantePie', miranteEtapas, miranteOrcado);
@@ -3004,7 +3097,12 @@
             createColumnChart('chartMiranteHistorico', mesesHistorico, desembolsosMirante);
             createColumnChart('chartJoaquimHistorico', mesesHistorico, desembolsosJoaquim);
             
-            setDesvioBadge(miranteOrcado, miranteComprometido, miranteProjetadoFuturo, 'kpiDesvioMirante');
+            let desvioMiranteCalc = ((7975420 / 7859182) - 1) * 100;
+            let elMirante = document.getElementById('kpiDesvioMirante');
+            if (elMirante) {
+                elMirante.style.color = 'var(--alert-color)';
+                elMirante.innerHTML = `⬆ +${desvioMiranteCalc.toFixed(1).replace('.', ',')}%`;
+            }
             setDesvioBadge(joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo, 'kpiDesvioJoaquim');
 
             applyChartThemes('light');

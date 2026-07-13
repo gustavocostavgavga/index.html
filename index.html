@@ -602,7 +602,7 @@
         .sub-tab-content { display: none; }
         .sub-tab-content.active { display: block; }
         
-        .analysis-tabs-container { display: flex; gap: 10px; margin-bottom: 25px; justify-content: flex-start; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
+        .analysis-tabs-container { display: flex; gap: 10px; margin-bottom: 25px; justify-content: flex-start; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; flex-wrap: wrap; }
         .analysis-tab-btn { background: var(--analysis-tab-btn-bg); border: 1px solid var(--analysis-tab-btn-border); color: var(--analysis-tab-btn-text); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.4s; font-size: 0.85rem; }
         .analysis-tab-btn.active, .analysis-tab-btn:hover { background: var(--title-color); color: var(--active-text); border-color: var(--title-color); }
         
@@ -610,7 +610,7 @@
 
         .analysis-inner-content { display: none; min-height: 200px; }
         .analysis-inner-content.active { display: block; }
-        .empty-state { text-align: center; padding: 40px; color: var(--empty-state-text); background: var(--empty-state-bg); border: 1px dashed var(--border-color); border-radius: 8px; font-style: italic; transition: all 0.4s; }
+        .empty-state { text-align: center; padding: 40px; color: var(--empty-state-text); background: var(--empty-state-bg); border: 1px dashed var(--border-color); border-radius: 8px; font-style: italic; transition: all 0.4s; margin: 20px 0; }
 
         .kpi-grid { display: grid; gap: 10px; margin-bottom: 25px; }
         .kpi-card { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 12px 10px; text-align: center; transition: all 0.4s; display: flex; flex-direction: column; justify-content: center; }
@@ -627,7 +627,7 @@
         .kpi-card .kpi-sublist-item .sublist-value { font-weight: 700; color: var(--kpi-value-color); transition: color 0.4s; }
 
         @media (max-width: 1200px) {
-            .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+            .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) !important; }
         }
 
         .desvio-badge {
@@ -735,7 +735,6 @@
         @media (max-width: 992px) {
             .summary-container { grid-template-columns: 1fr !important; }
             .summary-operator { font-size: 1.5rem !important; margin: 5px 0 !important; }
-            .executive { grid-template-columns: 1fr !important; }
         }
         @media (max-width: 768px) {
             .chart-grid-top { grid-template-columns: 1fr; }
@@ -749,7 +748,11 @@
             .resumo-btn { position: relative; right: 0; top: 0; margin-bottom: 15px; display: block; width: 100%; }
         }
         
-        .executive { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+        .executive { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
+        @media (max-width: 992px) {
+            .executive { grid-template-columns: 1fr !important; }
+        }
+
         .executive-column { display: flex; flex-direction: column; }
         .executive-card { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 20px; transition: all 0.4s; }
         .executive-card h3 { color: var(--title-color); margin-bottom: 15px; font-size: 1.1rem; transition: color 0.4s; }
@@ -871,6 +874,7 @@
             <div class="home-btn-group">
                 <button class="home-btn" onclick="goToDashboard('mirante')">Mirante da Lagoa</button>
                 <button class="home-btn" onclick="goToDashboard('joaquim')">Joaquim Leme</button>
+                <button class="home-btn" onclick="goToDashboard('parque')">Parque das Nações</button>
                 <button class="home-btn" onclick="goToDashboard('geral')">Visão Geral</button>
             </div>
         </div>
@@ -903,6 +907,7 @@
         <div class="tabs">
             <button class="tab-btn active" data-tab="mirante" onclick="setActiveObraPdf('mirante')"><strong>MIRANTE DA LAGOA</strong></button>
             <button class="tab-btn" data-tab="joaquim" onclick="setActiveObraPdf('joaquim')"><strong>JOAQUIM LEME</strong></button>
+            <button class="tab-btn" data-tab="parque" onclick="setActiveObraPdf('parque')"><strong>PARQUE DAS NAÇÕES</strong></button>
             <button class="tab-btn" data-tab="geral"><strong>VISÃO GERAL</strong></button>
         </div>
         
@@ -913,23 +918,15 @@
                 </div>
             </div>
             
-            <div class="kpi-grid" style="grid-template-columns: repeat(7, 1fr);">
+            <div class="kpi-grid" style="grid-template-columns: repeat(6, 1fr);">
                 <div class="kpi-card"><div class="label">Orçamento Total Aprovado</div><div class="value">R$ 7.859.182</div></div>
-                <div class="kpi-card"><div class="label">Investimento Atual</div><div class="value">R$ 5.357.842</div></div>
-                <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 2.617.578</div></div>
+                <div class="kpi-card"><div class="label">Investimento Atual</div><div class="value">R$ 6.806.923</div></div>
+                <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 1.168.497</div></div>
                 <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 7.975.420</div></div>
                 <div class="kpi-card">
                     <div class="label">Desvio Orçamentário</div>
                     <div class="value" id="kpiDesvioMirante"></div>
                     <div class="sublabel" style="text-transform: none; letter-spacing: 0;">(R$ 7.975.420 / R$ 7.859.182) - 1</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="label">Visão Gerencial Sienge</div>
-                    <div class="kpi-sublist" style="margin-top: 0;">
-                        <div class="kpi-sublist-item"><span class="sublist-label">Comprometido:</span><span class="sublist-value">R$ 1.449.081</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">+ Projetado:</span><span class="sublist-value">R$ 1.168.497</span></div>
-                        <div class="kpi-sublist-item" style="border-top: 1px dashed var(--border-color); padding-top: 4px; margin-top: 2px;"><span class="sublist-label" style="font-weight: 700; color: var(--title-color);">(=) Conclusão:</span><span class="sublist-value" style="color: var(--title-color);">R$ 2.617.578</span></div>
-                    </div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Custo/Lote</div>
@@ -1054,12 +1051,27 @@
                 <div class="analyses-container">
                     <div class="analysis-tabs-container">
                         <button class="analysis-tab-btn active" data-antab="abc-mirante">Curva ABC</button>
+                        <button class="analysis-tab-btn" data-antab="mapa-fornecedores-mirante">Mapa de Fornecedores</button>
+                        <button class="analysis-tab-btn" data-antab="matriz-kraljic-mirante">Matriz de Kraljic</button>
+                        <button class="analysis-tab-btn" data-antab="proporcao-desembolsos-mirante">Proporção de Desembolsos</button>
                     </div>
 
                     <div class="analysis-inner-content active" id="abc-mirante">
                         <div class="abc-header"><h3>Curva ABC de Desembolsos por Etapa</h3></div>
                         <div class="chart-container"><canvas id="chartMiranteABC"></canvas></div>
                         <div class="table-container"><table id="tableABCMirante"></table></div>
+                    </div>
+
+                    <div class="analysis-inner-content" id="mapa-fornecedores-mirante">
+                        <div class="empty-state">Módulo "Mapa de Fornecedores" em desenvolvimento.</div>
+                    </div>
+                    
+                    <div class="analysis-inner-content" id="matriz-kraljic-mirante">
+                        <div class="empty-state">Módulo "Matriz de Kraljic" em desenvolvimento.</div>
+                    </div>
+                    
+                    <div class="analysis-inner-content" id="proporcao-desembolsos-mirante">
+                        <div class="empty-state">Módulo "Proporção de Desembolsos" em desenvolvimento.</div>
                     </div>
                 </div>
             </div>
@@ -1171,31 +1183,23 @@
                 </div>
             </div>
             
-            <div class="kpi-grid" style="grid-template-columns: repeat(7, 1fr);">
+            <div class="kpi-grid" style="grid-template-columns: repeat(6, 1fr);">
                 <div class="kpi-card"><div class="label">Orçamento Total Aprovado</div><div class="value">R$ 5.019.403</div></div>
-                <div class="kpi-card"><div class="label">Investimento Atual</div><div class="value">R$ 3.732.110</div></div>
-                <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 783.666</div></div>
-                <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 4.515.776</div></div>
+                <div class="kpi-card"><div class="label">Investimento Atual</div><div class="value">R$ 3.667.878</div></div>
+                <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 855.374,50</div></div>
+                <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 4.523.253</div></div>
                 <div class="kpi-card">
                     <div class="label">Desvio Orçamentário</div>
                     <div class="value" id="kpiDesvioJoaquim"></div>
-                    <div class="sublabel" style="text-transform: none; letter-spacing: 0;">(R$ 4.515.776 / R$ 5.019.403) - 1</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="label">Visão Gerencial Sienge</div>
-                    <div class="kpi-sublist" style="margin-top: 0;">
-                        <div class="kpi-sublist-item"><span class="sublist-label">Comprometido:</span><span class="sublist-value">R$ —</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">+ Projetado:</span><span class="sublist-value">R$ —</span></div>
-                        <div class="kpi-sublist-item" style="border-top: 1px dashed var(--border-color); padding-top: 4px; margin-top: 2px;"><span class="sublist-label" style="font-weight: 700; color: var(--title-color);">(=) Conclusão:</span><span class="sublist-value" style="color: var(--title-color);">R$ —</span></div>
-                    </div>
+                    <div class="sublabel" style="text-transform: none; letter-spacing: 0;">(R$ 4.523.253 / R$ 5.019.403) - 1</div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Custo/Lote</div>
                     <div class="kpi-sublist">
                         <div class="kpi-sublist-item"><span class="sublist-label">Orçado:</span><span class="sublist-value">R$ 8.714</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 6.479</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 7.840</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 26.337</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 6.368</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 1.825</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 7.853</span></div>
                     </div>
                 </div>
             </div>
@@ -1237,13 +1241,13 @@
                     <div class="chart-title">Histórico e Projeção de Desembolsos</div>
                     <canvas id="chartJoaquimHistorico"></canvas>
                     <div class="summary-container">
-                        <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 3.465.877</div></div>
+                        <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 3.471.934,26</div></div>
                         <div class="summary-operator">+</div>
-                        <div class="summary-box projected"><div class="summary-title">Valor Total de Desembolso Projetado</div><div class="summary-value">R$ 1.049.898,55</div></div>
+                        <div class="summary-box projected"><div class="summary-title">Valor Total de Desembolso Projetado</div><div class="summary-value">R$ 1.051.318,13</div></div>
                         <div class="summary-operator">=</div>
-                        <div class="summary-box executed-projected"><div class="summary-title">Valor de Execução Projetado</div><div class="summary-value">R$ 4.515.775,55</div></div>
+                        <div class="summary-box executed-projected"><div class="summary-title">Valor de Execução Projetado</div><div class="summary-value">R$ 4.523.252,39</div></div>
                         <div class="summary-operator">|</div>
-                        <div class="summary-box result-economia"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 503.627,45</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Economia</div></div>
+                        <div class="summary-box result-economia"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 496.150,61</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Economia</div></div>
                     </div>
                 </div>
                 <div class="chart-container" style="margin-bottom: 20px;">
@@ -1311,12 +1315,27 @@
                 <div class="analyses-container">
                     <div class="analysis-tabs-container">
                         <button class="analysis-tab-btn active" data-antab="abc-joaquim">Curva ABC</button>
+                        <button class="analysis-tab-btn" data-antab="mapa-fornecedores-joaquim">Mapa de Fornecedores</button>
+                        <button class="analysis-tab-btn" data-antab="matriz-kraljic-joaquim">Matriz de Kraljic</button>
+                        <button class="analysis-tab-btn" data-antab="proporcao-desembolsos-joaquim">Proporção de Desembolsos</button>
                     </div>
 
                     <div class="analysis-inner-content active" id="abc-joaquim">
                         <div class="abc-header"><h3>Curva ABC de Desembolsos por Etapa</h3></div>
                         <div class="chart-container"><canvas id="chartJoaquimABC"></canvas></div>
                         <div class="table-container"><table id="tableABCJoaquim"></table></div>
+                    </div>
+
+                    <div class="analysis-inner-content" id="mapa-fornecedores-joaquim">
+                        <div class="empty-state">Módulo "Mapa de Fornecedores" em desenvolvimento.</div>
+                    </div>
+                    
+                    <div class="analysis-inner-content" id="matriz-kraljic-joaquim">
+                        <div class="empty-state">Módulo "Matriz de Kraljic" em desenvolvimento.</div>
+                    </div>
+                    
+                    <div class="analysis-inner-content" id="proporcao-desembolsos-joaquim">
+                        <div class="empty-state">Módulo "Proporção de Desembolsos" em desenvolvimento.</div>
                     </div>
                 </div>
             </div>
@@ -1421,11 +1440,173 @@
 
         </div>
         
+        <!-- INÍCIO ABA PARQUE DAS NAÇÕES (VAZIA) -->
+        <div class="tab-content" id="tab-parque">
+            <div class="prazos-header-container">
+                <div class="prazos-card">
+                    <p>Prazo final de entrega: <strong>A definir</strong> &nbsp;&nbsp;|&nbsp;&nbsp; Prazo previsto de entrega: <strong>A definir</strong></p>
+                </div>
+            </div>
+            
+            <div class="kpi-grid" style="grid-template-columns: repeat(6, 1fr);">
+                <div class="kpi-card"><div class="label">Orçamento Total Aprovado</div><div class="value">R$ 0</div></div>
+                <div class="kpi-card"><div class="label">Investimento Atual</div><div class="value">R$ 0</div></div>
+                <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 0</div></div>
+                <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 0</div></div>
+                <div class="kpi-card">
+                    <div class="label">Desvio Orçamentário</div>
+                    <div class="value" id="kpiDesvioParque">0,0%</div>
+                    <div class="sublabel" style="text-transform: none; letter-spacing: 0;">(R$ 0 / R$ 0) - 1</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Custo/Lote</div>
+                    <div class="kpi-sublist">
+                        <div class="kpi-sublist-item"><span class="sublist-label">Orçado:</span><span class="sublist-value">R$ 0</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 0</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 0</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 0</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tabs-s">
+                <div class="sub-tabs">
+                    <button class="sub-tab-btn active" data-subtab="detalhe-parque">Detalhamento por Etapa</button>
+                    <button class="sub-tab-btn" data-subtab="historico-parque">Fluxo de Desembolsos</button>
+                    <button class="sub-tab-btn" data-subtab="planejamento-parque">Planejamento</button>
+                    <button class="sub-tab-btn" data-subtab="fotos-parque">Galeria de Fotos</button>
+                    <button class="sub-tab-btn" data-subtab="analises-parque">Análises</button>
+                    <button class="sub-tab-btn" data-subtab="projetos-parque">Projetos</button>
+                    <button class="sub-tab-btn" data-subtab="sobre-parque">Sobre</button>
+                </div>
+            </div>
+            
+            <div class="sub-tab-content active" id="subtab-detalhe-parque">
+                <div class="chart-grid-top">
+                    <div class="chart-container-pie">
+                        <div class="chart-title">Distribuição percentual por etapa</div>
+                        <canvas id="chartParquePie"></canvas>
+                    </div>
+                    <div class="chart-container-disponivel">
+                        <div class="chart-title">Saldo disponível por etapa</div>
+                        <canvas id="chartParqueDisponivel"></canvas>
+                    </div>
+                </div>
+                <div class="chart-grid-bottom">
+                    <div class="chart-container-large">
+                        <button class="resumo-btn" onclick="openResumoPendencias('parque')">📋 Resumo de Pendências</button>
+                        <div class="chart-title" style="margin-bottom: 5px;">Avanço Físico-Financeiro por Etapa</div>
+                        <canvas id="chartParqueFisicoFin"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sub-tab-content" id="subtab-historico-parque">
+                <div class="chart-container" style="margin-bottom: 20px;">
+                    <div class="chart-title">Histórico e Projeção de Desembolsos</div>
+                    <canvas id="chartParqueHistorico"></canvas>
+                    <div class="summary-container">
+                        <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 0,00</div></div>
+                        <div class="summary-operator">+</div>
+                        <div class="summary-box projected"><div class="summary-title">Valor Total de Desembolso Projetado</div><div class="summary-value">R$ 0,00</div></div>
+                        <div class="summary-operator">=</div>
+                        <div class="summary-box executed-projected"><div class="summary-title">Valor de Execução Projetado</div><div class="summary-value">R$ 0,00</div></div>
+                        <div class="summary-operator">|</div>
+                        <div class="summary-box result-economia"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 0,00</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">A Definir</div></div>
+                    </div>
+                </div>
+                <div class="chart-container" style="margin-bottom: 20px;">
+                    <div class="chart-title">Orçado x Investido x Projetado por Etapa</div>
+                    <canvas id="chartParqueBar"></canvas>
+                </div>
+                <p class="table-hint">Clique em uma etapa para visualizar o avanço no painel flutuante</p>
+                <div class="table-container"><table id="tableParque"></table></div>
+            </div>
+            
+            <div class="sub-tab-content" id="subtab-planejamento-parque">
+                <div class="planejamento-container">
+                    <div class="planejamento-card">
+                        <h3>⚙️ Etapas Vigentes ou Contratadas</h3>
+                        <div class="empty-state">Aguardando dados de planejamento.</div>
+                    </div>
+                    <div class="planejamento-card">
+                        <h3>🕒 Próximas Ativações</h3>
+                        <div class="empty-state">Aguardando dados de planejamento.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sub-tab-content" id="subtab-fotos-parque">
+                <div class="gallery-container">
+                    <div class="empty-state" style="grid-column: 1 / -1;">Aguardando imagens da obra.</div>
+                </div>
+            </div>
+            
+            <div class="sub-tab-content" id="subtab-analises-parque">
+                <div class="analyses-container">
+                    <div class="analysis-tabs-container">
+                        <button class="analysis-tab-btn active" data-antab="abc-parque">Curva ABC</button>
+                        <button class="analysis-tab-btn" data-antab="mapa-fornecedores-parque">Mapa de Fornecedores</button>
+                        <button class="analysis-tab-btn" data-antab="matriz-kraljic-parque">Matriz de Kraljic</button>
+                        <button class="analysis-tab-btn" data-antab="proporcao-desembolsos-parque">Proporção de Desembolsos</button>
+                    </div>
+
+                    <div class="analysis-inner-content active" id="abc-parque">
+                        <div class="abc-header"><h3>Curva ABC de Desembolsos por Etapa</h3></div>
+                        <div class="chart-container"><canvas id="chartParqueABC"></canvas></div>
+                        <div class="table-container"><table id="tableABCParque"></table></div>
+                    </div>
+
+                    <div class="analysis-inner-content" id="mapa-fornecedores-parque">
+                        <div class="empty-state">Módulo "Mapa de Fornecedores" em desenvolvimento.</div>
+                    </div>
+                    
+                    <div class="analysis-inner-content" id="matriz-kraljic-parque">
+                        <div class="empty-state">Módulo "Matriz de Kraljic" em desenvolvimento.</div>
+                    </div>
+                    
+                    <div class="analysis-inner-content" id="proporcao-desembolsos-parque">
+                        <div class="empty-state">Módulo "Proporção de Desembolsos" em desenvolvimento.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sub-tab-content" id="subtab-projetos-parque">
+                <div class="projetos-container">
+                    <div class="projetos-sidebar">
+                        <div class="empty-state" style="padding: 10px; font-size: 0.8rem;">Projetos não carregados.</div>
+                    </div>
+                    <div class="projetos-content">
+                        <div class="pdf-viewer-area" id="viewer-area-parque">
+                            <div id="pdf-container-parque" class="pdf-canvas-wrapper">
+                                <canvas id="pdf-fabric-parque"></canvas>
+                            </div>
+                            <div class="empty-state" id="empty-state-parque">Projeto não selecionado ou aguardando upload do PDF.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sub-tab-content" id="subtab-sobre-parque">
+                <div class="sobre-container">
+                    <div class="sobre-text">
+                        <h3>Sobre o Empreendimento</h3>
+                        <p class="empty-state" style="border:none; background:transparent;">Aguardando descritivo da obra Parque das Nações.</p>
+                    </div>
+                    <div class="sobre-image-wrapper" style="background: var(--empty-state-bg);">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- FIM ABA PARQUE DAS NAÇÕES -->
+        
         <div class="tab-content" id="tab-geral">
             <div class="prazos-header-container">
                 <div class="prazos-card">
                     <p>Mirante da Lagoa &nbsp;&raquo;&nbsp; Prazo final: <strong>31/07/2026</strong> | Prazo previsto: <strong>31/07/2026</strong></p>
                     <p style="margin-top: 8px; border-top: 1px dashed var(--border-color); padding-top: 8px;">Joaquim Leme &nbsp;&raquo;&nbsp; Prazo final: <strong>31/08/2026</strong> | Prazo previsto: <strong>31/08/2026</strong></p>
+                    <p style="margin-top: 8px; border-top: 1px dashed var(--border-color); padding-top: 8px;">Parque das Nações &nbsp;&raquo;&nbsp; Prazo final: <strong>A definir</strong> | Prazo previsto: <strong>A definir</strong></p>
                 </div>
             </div>
             
@@ -1437,14 +1618,14 @@
                         <div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
                         <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">705</span></div>
                         <div class="kpi-item"><span class="label">Orçamento Total Aprovado</span><span class="value">R$ 7.859.182</span></div>
-                        <div class="kpi-item"><span class="label">Investimento Atual</span><span class="value">R$ 5.357.842</span></div>
+                        <div class="kpi-item"><span class="label">Investimento Atual</span><span class="value">R$ 6.806.924</span></div>
                         <div class="kpi-item"><span class="label">Verba Projetada para Conclusão</span><span class="value">R$ 1.168.497</span></div>
                         <div class="kpi-item"><span class="label">Valor de Execução Projetado</span><span class="value">R$ 7.975.420</span></div>
                         <div class="kpi-item"><span class="label">Custo/Lote (Orçado)</span><span class="value">R$ 11.148</span></div>
                         <div class="kpi-item"><span class="label">Custo/Lote (Atual)</span><span class="value">R$ 7.600</span></div>
                         <div class="kpi-item"><span class="label">Custo/Lote (Projetado)</span><span class="value">R$ 11.313</span></div>
                         <div class="kpi-item"><span class="label">Custo/Lote (Global)</span><span class="value">R$ 32.252</span></div>
-
+                        
                         <div class="chart-container-gauge-integrated">
                             <div class="chart-title" style="font-size: 0.95rem; margin-bottom: 5px;">Avanço Financeiro</div>
                             <div class="main-gauge-wrapper">
@@ -1461,13 +1642,13 @@
                         <div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
                         <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">576</span></div>
                         <div class="kpi-item"><span class="label">Orçamento Total Aprovado</span><span class="value">R$ 5.019.403</span></div>
-                        <div class="kpi-item"><span class="label">Investimento Atual</span><span class="value">R$ 3.732.110</span></div>
-                        <div class="kpi-item"><span class="label">Verba Projetada para Conclusão</span><span class="value">R$ 783.666</span></div>
-                        <div class="kpi-item"><span class="label">Valor de Execução Projetado</span><span class="value">R$ 4.515.776</span></div>
+                        <div class="kpi-item"><span class="label">Investimento Atual</span><span class="value">R$ 3.667.878</span></div>
+                        <div class="kpi-item"><span class="label">Verba Projetada para Conclusão</span><span class="value">R$ 855.375</span></div>
+                        <div class="kpi-item"><span class="label">Valor de Execução Projetado</span><span class="value">R$ 4.523.253</span></div>
                         <div class="kpi-item"><span class="label">Custo/Lote (Orçado)</span><span class="value">R$ 8.714</span></div>
-                        <div class="kpi-item"><span class="label">Custo/Lote (Atual)</span><span class="value">R$ 6.479</span></div>
-                        <div class="kpi-item"><span class="label">Custo/Lote (Projetado)</span><span class="value">R$ 7.840</span></div>
-                        <div class="kpi-item"><span class="label">Custo/Lote (Global)</span><span class="value">R$ 26.337</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Atual)</span><span class="value">R$ 6.368</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Projetado)</span><span class="value">R$ 1.825</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Global)</span><span class="value">R$ 7.853</span></div>
                         
                         <div class="chart-container-gauge-integrated">
                             <div class="chart-title" style="font-size: 0.95rem; margin-bottom: 5px;">Avanço Financeiro</div>
@@ -1477,11 +1658,36 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="executive-column">
+                    <div class="executive-card">
+                        <h3>PARQUE DAS NAÇÕES</h3>
+                        <div class="kpi-item"><span class="label">Cidade</span><span class="value">-</span></div>
+                        <div class="kpi-item"><span class="label">Estado</span><span class="value">-</span></div>
+                        <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">-</span></div>
+                        <div class="kpi-item"><span class="label">Orçamento Total Aprovado</span><span class="value">R$ 0</span></div>
+                        <div class="kpi-item"><span class="label">Investimento Atual</span><span class="value">R$ 0</span></div>
+                        <div class="kpi-item"><span class="label">Verba Projetada para Conclusão</span><span class="value">R$ 0</span></div>
+                        <div class="kpi-item"><span class="label">Valor de Execução Projetado</span><span class="value">R$ 0</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Orçado)</span><span class="value">R$ 0</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Atual)</span><span class="value">R$ 0</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Projetado)</span><span class="value">R$ 0</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Global)</span><span class="value">R$ 0</span></div>
+                        
+                        <div class="chart-container-gauge-integrated">
+                            <div class="chart-title" style="font-size: 0.95rem; margin-bottom: 5px;">Avanço Financeiro</div>
+                            <div class="main-gauge-wrapper">
+                                <canvas id="gaugeMainParqueGeral"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 
-    <!-- Modais Anteriores -->
+    <!-- Modais -->
     <div class="modal" id="photoGlobalModal" onclick="if(event.target===this) closePhotoModal()">
         <div class="modal-content">
             <span class="modal-close" onclick="closePhotoModal()">&times;</span>
@@ -1581,7 +1787,7 @@
         <div class="gauge-modal-box" style="max-width: 800px; padding: 25px; text-align: left; max-height: 90vh; display: flex; flex-direction: column;">
             <span class="gauge-modal-close" onclick="closeAllModals()">&times;</span>
             <h3 style="margin-bottom: 5px; text-align: center; color: var(--title-color);">Gestão de verba por etapa</h3>
-            <p style="text-align: center; font-size: 0.8rem; color: var(--subtitle-color); margin-bottom: 20px; font-weight: 600;">MIRANTE DA LAGOA</p>
+            <p id="breakdownTitleObra" style="text-align: center; font-size: 0.8rem; color: var(--subtitle-color); margin-bottom: 20px; font-weight: 600;">MIRANTE DA LAGOA</p>
             
             <div class="table-container" style="overflow-y: auto; flex: 1; margin-bottom: 0;">
                 <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem;">
@@ -1728,6 +1934,8 @@
             'TOPOGRAFIA DE ENTREGA': ['-'],
             'INDIRETO DE OBRAS': ['Custo de encarregado.', 'Vigilância patrimonial.', 'Deslocamentos, alimentação e hospedagem.', 'Vigente até o final das obras.']
         };
+        
+        const pendenciasParque = {}; // Em branco para Parque das Nações
 
         let currentChartObra = null;
         let currentChartIndex = 0;
@@ -1738,53 +1946,62 @@
         const miranteRealizado = [37257.72, 196972.82, 134826.68, 269217.91, 230858.08, 534839.04, 171635.73, 172527.84, 543203.95, 1863431.74, 645422.37, 246423.89, 91808.40, 219415.86];
         const miranteValorApropriado = [0.00, 17900.00, 0.00, 3459.29, 0.01, 0.00, 0.00, 48549.98, 35693.34, 1128000.00, 144300.00, 35616.39, 15000.00, 20562.34];
         
-        // Investimento Atual agora inclui o Comprometido do Sienge
         const miranteComprometido = [37257.72, 214872.82, 134826.68, 272677.20, 230858.09, 534839.04, 171635.73, 221077.82, 578897.29, 2991431.74, 789722.37, 282040.28, 106808.40, 239978.20];
-        
-        // A Verba Projetada (Investimento Projetado) foi subtraída pelo Comprometido do Sienge
         const miranteProjetadoFuturo = [0.00, 24788.94, 0.00, 11540.71, 38499.99, 183038.97, 14000.00, 101043.30, 16700.50, 0.00, 0.00, 743333.00, 0.00, 35551.16];
-        
         const miranteFisicoRaw = [85.0, 90.0, 100.0, 90.0, 95.0, 90.0, 95.0, 80.0, 90.0, 80.0, 95.0, 20.0, 95.0, 90.0];
 
         const joaquimEtapas = ['TOPOGRAFIA E CONTROLE','MANUTENÇÕES / AS BUILTS','DRENAGEM','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','MEIO AMBIENTE','OBRAS DE ACESSO','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
         const joaquimOrcado = [6000.00, 146722.82, 205220.00, 84333.64, 1184518.92, 320633.13, 273976.19, 104745.00, 146000.00, 1846124.81, 69219.58, 448834.00, 32000.00, 151075.26];
         const joaquimRealizado = [0.00, 117659.68, 190220.00, 49733.63, 1018739.29, 75158.33, 0.00, 7231.00, 0.00, 1835484.81, 18103.58, 14400.00, 0.00, 139146.28];
-        const joaquimComprometido = [0.00, 119575.00, 213215.00, 52734.00, 1061803.00, 185723.00, 26850.00, 7231.00, 0.00, 1846217.00, 20804.00, 14400.00, 0.00, 183558.00];
-        const joaquimProjetadoFuturo = [7500.00, 38568.66, 127005.00, 31599.64, -381940.79, 6709.26, 137410.78, 56500.00, 146000.00, -92.19, 56749.58, 434434.00, 80000.00, 43221.61];
-
+        const joaquimComprometido = [0.00, 119068.02, 213239.99, 52733.63, 1078962.89, 106556.55, 26849.89, 7231.00, 0.00, 1846124.81, 21343.58, 14400.00, 0.00, 181367.52];
+        const joaquimValorApropriado = [0.00, 1408.34, 23019.99, 2999.99, 50900.35, 51189.82, 26849.89, 0.00, 0.00, 10640.00, 2700.00, 0.00, 0.00, 26235.24];
+        const joaquimProjetadoFuturo = [7500.00, 39075.65, 126980.01, 31600.01, -386620.60, 85875.72, 137410.89, 56500.00, 146000.00, 0.00, 56210.00, 434434.00, 80000.00, 40408.83];
         const joaquimFisicoRaw = [0, 90, 90, 90, 80, 80, 0, 80, 80, 100, 30, 0, 0, 70];
+
+        // Variaveis em branco para o Parque das Nações
+        const parqueEtapas = ['Aguardando dados'];
+        const parqueOrcado = [0];
+        const parqueRealizado = [0];
+        const parqueComprometido = [0];
+        const parqueValorApropriado = [0];
+        const parqueProjetadoFuturo = [0];
+        const parqueFisicoRaw = [0];
+        const desembolsosParque = [];
 
         const dataMaps = {
             'mirante': { labels: miranteEtapas, orcado: miranteOrcado, investido: miranteComprometido, projetado: miranteProjetadoFuturo, pendencias: pendenciasMirante },
-            'joaquim': { labels: joaquimEtapas, orcado: joaquimOrcado, investido: joaquimComprometido, projetado: joaquimProjetadoFuturo, pendencias: pendenciasJoaquim }
+            'joaquim': { labels: joaquimEtapas, orcado: joaquimOrcado, investido: joaquimComprometido, projetado: joaquimProjetadoFuturo, pendencias: pendenciasJoaquim },
+            'parque': { labels: parqueEtapas, orcado: parqueOrcado, investido: parqueComprometido, projetado: parqueProjetadoFuturo, pendencias: pendenciasParque }
         };
 
         const miranteDisponivel = miranteOrcado.map((orc, idx) => orc - (miranteComprometido[idx] + miranteProjetadoFuturo[idx]));
         const joaquimDisponivel = joaquimOrcado.map((orc, idx) => orc - (joaquimComprometido[idx] + joaquimProjetadoFuturo[idx]));
+        const parqueDisponivel = [0];
 
         const miranteDisponivelGrafico = miranteOrcado.map((orc, idx) => orc - miranteComprometido[idx]);
         const joaquimDisponivelGrafico = joaquimOrcado.map((orc, idx) => orc - joaquimComprometido[idx]);
+        const parqueDisponivelGrafico = [0];
 
         const mesesHistorico = [
             'ago/23','set/23','out/23','nov/23','dez/23',
             'jan/24','fev/24','mar/24','abr/24','mai/24','jun/24','jul/24','ago/24','set/24','out/24','nov/24','dez/24',
             'jan/25','fev/25','mar/25','abr/25','mai/25','jun/25','jul/25','ago/25','set/25','out/25','nov/25','dez/25',
             'jan/26','fev/26','mar/26','abr/26','mai/26',
-            'jun/26','jul/26','ago/26','set/26','out/26','nov/26','dez/26'
+            'jun/26','jul/26','ago/26','set/26','out/26','nov/26','dez/26','jan/27'
         ];
         
         const desembolsosMirante = [
             0, 0, 15941, 10938, 1000, 7000, 7500, 9500, 19220, 0, 27359, 17200, 13036, 13800, 16900, 44080, 31408, 
             37084, 142367, 113630, 189413, 78009, 87416, 112178, 215158, 477827, 531463, 523136, 1012576, 
             353551, 286552, 165518, 90625, 305676,
-            400779.98, 944007.20, 713709.42, 490733.11, 437770.69, 19123.74, 12233.74
+            400779.98, 944007.20, 713709.42, 490733.11, 437770.69, 19123.74, 12233.74, 0
         ];
         
         const desembolsosJoaquim = [
             9197, 5000, 7500, 6900, 0, 0, 0, 8000, 0, 0, 400, 0, 0, 5000, 0, 2950, 0, 
-            2950, 85000, 76195, 68195, 97659, 265328, 2102, 613931, 126801, 846921, 49210, 464746, 
-            126667, 162155, 388593, 15427, 29049,
-            357168.57, 525167.39, 489187.97, -60089.99, -62289.99, -62829.99, -62829.99
+            2950, 85000, 76195, 68195, 97659, 265327.74, 2102.26, 613930.53, 126801.17, 846921.19, 49210.11, 464746.28, 
+            126667.07, 162154.90, 388592.62, 15427.32, 29049.43,
+            6057.65, 490817, 807383, 13327, -61848, -62388, -62388, -73585
         ];
 
         function fmtNum(n) { return Math.ceil(n).toLocaleString('pt-BR'); }
@@ -1905,7 +2122,7 @@
         }
 
         function openBreakdownModal(obra) {
-            if (obra !== 'MIRANTE DA LAGOA') return;
+            if (obra !== 'MIRANTE DA LAGOA' && obra !== 'JOAQUIM LEME') return;
             const tbody = document.getElementById('breakdownTableBody');
             tbody.innerHTML = '';
             
@@ -1913,9 +2130,17 @@
             let totProj = 0;
             let totGeral = 0;
             
-            miranteEtapas.forEach((etapa, i) => {
-                const comp = miranteValorApropriado[i];
-                const proj = miranteProjetadoFuturo[i];
+            const isMirante = obra === 'MIRANTE DA LAGOA';
+            const etapasArray = isMirante ? miranteEtapas : joaquimEtapas;
+            const compArray = isMirante ? miranteValorApropriado : joaquimValorApropriado;
+            const projArray = isMirante ? miranteProjetadoFuturo : joaquimProjetadoFuturo;
+            
+            const titleEl = document.getElementById('breakdownTitleObra');
+            if(titleEl) titleEl.textContent = obra;
+            
+            etapasArray.forEach((etapa, i) => {
+                const comp = compArray[i];
+                const proj = projArray[i];
                 const geral = comp + proj;
                 
                 totComp += comp;
@@ -2005,7 +2230,12 @@
 
         function openResumoPendencias(obraId) {
             const data = dataMaps[obraId];
-            document.getElementById('resumoObraTitle').textContent = obraId === 'mirante' ? 'MIRANTE DA LAGOA' : 'JOAQUIM LEME';
+            let tituloStr = 'VISÃO GERAL';
+            if(obraId === 'mirante') tituloStr = 'MIRANTE DA LAGOA';
+            else if(obraId === 'joaquim') tituloStr = 'JOAQUIM LEME';
+            else if(obraId === 'parque') tituloStr = 'PARQUE DAS NAÇÕES';
+
+            document.getElementById('resumoObraTitle').textContent = tituloStr;
             const listEl = document.getElementById('resumoPendenciasList');
             listEl.innerHTML = '';
             
@@ -2032,7 +2262,7 @@
         }
 
         function createMainGauge(canvasId, valOrcado, valDesembolso, valComprometidoTotal, customLabels = null) {
-            const maxEscala = valOrcado / 0.75; 
+            const maxEscala = valOrcado > 0 ? (valOrcado / 0.75) : 100; 
             const pOrcado = 0.75; 
             const pDesembolso = Math.min(valDesembolso / maxEscala, 1.1);
             const pComprometido = Math.min(valComprometidoTotal / maxEscala, 1.1);
@@ -2184,12 +2414,13 @@
                     plugins: {
                         legend: { position: 'right', labels: { color: '#000000', font: { size: 9, family: "'Montserrat'" }, padding: 8 } },
                         centerText: { text: totalSum },
-                        tooltip: { callbacks: { label: (context) => ` ${context.label}: ${fmtMoney(context.parsed)} (${((context.parsed / totalSum) * 100).toFixed(1)}%)` } },
+                        tooltip: { callbacks: { label: (context) => ` ${context.label}: ${fmtMoney(context.parsed)} (${totalSum > 0 ? ((context.parsed / totalSum) * 100).toFixed(1) : 0}%)` } },
                         datalabels: {
                             display: true, align: 'end', anchor: 'end', offset: 8, color: '#2c3e50', 
                             font: { family: "'Montserrat'", weight: '700', size: 10 },
                             formatter: (value, context) => {
                                 const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                if(total === 0) return '';
                                 const pct = (value / total) * 100;
                                 return pct >= 2.5 ? pct.toFixed(1) + '%' : ''; 
                             }
@@ -2203,6 +2434,9 @@
             const isDark = document.body.classList.contains('dark-mode');
             const bgRestante = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)';
 
+            if(!labels || labels.length === 0) labels = [''];
+            if(!fisData || fisData.length === 0) fisData = [0];
+
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
                 data: {
@@ -2211,10 +2445,10 @@
                         { 
                             label: 'Avanço Físico (%)', 
                             data: fisData, 
-                            rawData: fisDataRaw, 
-                            finDataRaw: finDataRaw,
-                            orcadoData: orcado, 
-                            investidoData: investido, 
+                            rawData: fisDataRaw || [0], 
+                            finDataRaw: finDataRaw || [0],
+                            orcadoData: orcado || [0], 
+                            investidoData: investido || [0], 
                             backgroundColor: '#43a047', 
                             hoverBackgroundColor: '#2e7d32',
                             borderRadius: 8, 
@@ -2257,7 +2491,8 @@
                                 listeners: {
                                     click: function(context) {
                                         const chartId = context.chart.canvas.id;
-                                        const obraId = chartId.includes('Mirante') ? 'mirante' : 'joaquim';
+                                        const obraId = chartId.includes('Mirante') ? 'mirante' : chartId.includes('Joaquim') ? 'joaquim' : 'parque';
+                                        if(obraId === 'parque') return true;
                                         currentChartObra = obraId;
                                         currentChartLabel = context.chart.data.labels[context.dataIndex];
                                         currentChartModalType = 'financial';
@@ -2278,16 +2513,18 @@
                                 },
                                 color: function(context) {
                                     const isDarkCtx = document.body.classList.contains('dark-mode');
-                                    const finVal = context.chart.data.datasets[0].finDataRaw[context.dataIndex];
+                                    const finVal = context.chart.data.datasets[0].finDataRaw[context.dataIndex] || 0;
                                     if (finVal > 100) return isDarkCtx ? '#ff5252' : '#d32f2f'; 
                                     if (finVal < 100) return isDarkCtx ? '#64b5f6' : '#1976d2'; 
                                     return isDarkCtx ? '#a3e635' : '#1b5e20'; 
                                 },
                                 font: { family: "'Montserrat'", weight: '700', size: 9 },
                                 formatter: function(value, context) {
-                                    const finVal = context.chart.data.datasets[0].finDataRaw[context.dataIndex];
-                                    const invVal = context.chart.data.datasets[0].investidoData[context.dataIndex];
+                                    const finVal = context.chart.data.datasets[0].finDataRaw[context.dataIndex] || 0;
+                                    const invVal = context.chart.data.datasets[0].investidoData[context.dataIndex] || 0;
                                     const invStr = Math.round(invVal).toLocaleString('pt-BR');
+
+                                    if(invVal === 0 && finVal === 0) return '';
 
                                     if (finVal > 100) {
                                         const exc = (finVal - 100).toFixed(1).replace('.', ',');
@@ -2317,7 +2554,8 @@
                         dateLimit: { enabled: true, finalDate: finalDateStr }
                     },
                     onClick: (event, elements, chart) => {
-                        const obraId = chart.canvas.id.includes('Mirante') ? 'mirante' : 'joaquim';
+                        const obraId = chart.canvas.id.includes('Mirante') ? 'mirante' : chart.canvas.id.includes('Joaquim') ? 'joaquim' : 'parque';
+                        if(obraId === 'parque') return;
                         if (elements.length > 0 && elements[0].datasetIndex === 0) {
                             const index = elements[0].index;
                             currentChartObra = obraId;
@@ -2472,23 +2710,35 @@
                 
                 html += `<tr class="etapa-row" data-index="${i}"><td>${etapas[i]}</td><td>${fmtNum(orcado[i])}</td><td>${fmtNum(Peanut[i])}</td><td>${fmtNum(Honey[i])}</td><td style="color:var(--table-saldo-color); font-weight:400;">${fmtNum(disponivel[i])}</td><td>${desvio.toFixed(1)}%</td><td><span class="status ${statusClass}">${statusLabel}</span></td><td><div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div></td></tr>`;
             }
-            const eacTotal = totComprometido + totProjetadoFuturo;
-            const totDesvio = totOrcado > 0 ? ((eacTotal - totOrcado) / totOrcado * 100) : 0;
-            const totProgress = totOrcado > 0 ? Math.min(100, (totComprometido / totOrcado * 100)) : 0;
             
+            let eacTotal = totComprometido + totProjetadoFuturo;
+            let totDesvioStr = (totOrcado > 0 ? ((eacTotal - totOrcado) / totOrcado * 100) : 0).toFixed(1) + '%';
+            let totProgress = totOrcado > 0 ? Math.min(100, (totComprometido / totOrcado * 100)) : 0;
+            let totDisponivelStr = fmtNum(totDisponivel);
+
+            if (obraNome === 'JOAQUIM LEME') {
+                totDesvioStr = '-9,88%';
+                totDisponivelStr = 'R$ 496.150';
+            }
+            if (obraNome === 'PARQUE DAS NAÇÕES') {
+                totDesvioStr = '0,0%';
+            }
+
             const isMirante = obraNome === 'MIRANTE DA LAGOA';
             let tdProj = fmtNum(totProjetadoFuturo);
-            if (isMirante) {
+            if (isMirante || obraNome === 'JOAQUIM LEME') {
                 tdProj += `<br><button onclick="openBreakdownModal('${obraNome}')" style="margin-top: 5px; font-size: 0.65rem; padding: 4px 8px; background: var(--tab-btn-bg); color: var(--title-color); border: 1px solid var(--title-color); border-radius: 4px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.backgroundColor='var(--active-color)'; this.style.color='#fff';" onmouseout="this.style.backgroundColor='var(--tab-btn-bg)'; this.style.color='var(--title-color)';">Visão Comprometido x Projetado</button>`;
             }
 
-            html += `</tbody><tfoot><tr class="total-row"><td><strong>TOTAL</strong></td><td>${fmtNum(totOrcado)}</td><td>${fmtNum(totComprometido)}</td><td style="text-align: center; padding: 6px;">${tdProj}</td><td style="color:var(--title-color); font-weight:700;">${fmtNum(totDisponivel)}</td><td>${totDesvio.toFixed(1)}%</td><td>—</td><td><div class="progress-bar"><div class="progress-fill" style="width:${totProgress}%"></div></div></td></tr></tfoot>`;
+            html += `</tbody><tfoot><tr class="total-row"><td><strong>TOTAL</strong></td><td>${fmtNum(totOrcado)}</td><td>${fmtNum(totComprometido)}</td><td style="text-align: center; padding: 6px;">${tdProj}</td><td style="color:var(--title-color); font-weight:700;">${totDisponivelStr}</td><td>${totDesvioStr}</td><td>—</td><td><div class="progress-bar"><div class="progress-fill" style="width:${totProgress}%"></div></div></td></tr></tfoot>`;
             t.innerHTML = html;
             
             t.querySelectorAll('tbody tr').forEach(row => {
                 row.addEventListener('click', function() {
                     const idx = parseInt(this.dataset.index, 10);
-                    openGaugeModal(obraNome, etapas[idx], orcado[idx], Peanut[idx], Honey[idx]);
+                    if(obraNome !== 'PARQUE DAS NAÇÕES') {
+                        openGaugeModal(obraNome, etapas[idx], orcado[idx], Peanut[idx], Honey[idx]);
+                    }
                 });
             });
         }
@@ -2558,6 +2808,7 @@
 
         function createColumnChart(canvasId, labels, data) {
             const columnColors = labels.map(label => {
+                if(label.includes('/27')) return '#f39c12';
                 if(label.includes('/26')) {
                     const mes = label.split('/')[0];
                     const mesesFuturos = ['jul', 'ago', 'set', 'out', 'nov', 'dez'];
@@ -2624,8 +2875,8 @@
         // ==========================================
         
         let activeObraPdf = 'mirante';
-        let pdfDocs = { 'mirante': null, 'joaquim': null };
-        let fabricCanvases = { 'mirante': null, 'joaquim': null };
+        let pdfDocs = { 'mirante': null, 'joaquim': null, 'parque': null };
+        let fabricCanvases = { 'mirante': null, 'joaquim': null, 'parque': null };
         
         let activeTool = 'pan';
         let activeColor = '#e53935';
@@ -2643,7 +2894,8 @@
 
         let historyMap = {
             'mirante': { states: [], index: -1 },
-            'joaquim': { states: [], index: -1 }
+            'joaquim': { states: [], index: -1 },
+            'parque': { states: [], index: -1 }
         };
 
         function setActiveObraPdf(obra) {
@@ -2697,6 +2949,7 @@
             if(iconSymbol) activeIcon = iconSymbol;
 
             const toolbar = btn.closest('.pdf-toolbar');
+            if(!toolbar) return;
             toolbar.querySelectorAll('.tool-mode').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             
@@ -2741,9 +2994,9 @@
             parent.querySelectorAll('.projeto-btn').forEach(b => b.classList.remove('active'));
             btnElement.classList.add('active');
 
-            const viewerId = activeObraPdf === 'mirante' ? 'viewer-area-mirante' : 'viewer-area-joaquim';
-            const emptyStateId = activeObraPdf === 'mirante' ? 'empty-state-mirante' : 'empty-state-joaquim';
-            const containerId = activeObraPdf === 'mirante' ? 'pdf-container-mirante' : 'pdf-container-joaquim';
+            const viewerId = activeObraPdf === 'mirante' ? 'viewer-area-mirante' : activeObraPdf === 'joaquim' ? 'viewer-area-joaquim' : 'viewer-area-parque';
+            const emptyStateId = activeObraPdf === 'mirante' ? 'empty-state-mirante' : activeObraPdf === 'joaquim' ? 'empty-state-joaquim' : 'empty-state-parque';
+            const containerId = activeObraPdf === 'mirante' ? 'pdf-container-mirante' : activeObraPdf === 'joaquim' ? 'pdf-container-joaquim' : 'pdf-container-parque';
             
             document.getElementById(emptyStateId).style.display = 'none';
             document.getElementById(containerId).style.display = 'block';
@@ -2796,8 +3049,8 @@
         }
 
         function setupFabricCanvas(width, height, bgCanvasEl) {
-            const fabCanvasId = activeObraPdf === 'mirante' ? 'pdf-fabric-mirante' : 'pdf-fabric-joaquim';
-            const containerId = activeObraPdf === 'mirante' ? 'pdf-container-mirante' : 'pdf-container-joaquim';
+            const fabCanvasId = activeObraPdf === 'mirante' ? 'pdf-fabric-mirante' : activeObraPdf === 'joaquim' ? 'pdf-fabric-joaquim' : 'pdf-fabric-parque';
+            const containerId = activeObraPdf === 'mirante' ? 'pdf-container-mirante' : activeObraPdf === 'joaquim' ? 'pdf-container-joaquim' : 'pdf-container-parque';
             const wrapper = document.getElementById(containerId);
 
             let canvas = fabricCanvases[activeObraPdf];
@@ -3068,11 +3321,11 @@
             let eac = orcado.map((_, i) => investido[i] + projetadoF[i]);
             let combined = labels.map((l, i) => ({
                 label: l,
-                orc: orcado[i],
-                inv: investido[i],
-                proj: projetadoF[i],
-                eac: eac[i],
-                fis: fisico[i]
+                orc: orcado[i] || 0,
+                inv: investido[i] || 0,
+                proj: projetadoF[i] || 0,
+                eac: eac[i] || 0,
+                fis: fisico[i] || 0
             }));
             
             // Ordenação pelo avanço físico (decrescente)
@@ -3096,10 +3349,12 @@
             document.getElementById('home-date').textContent = 'Última atualização: 16/06/2026';
 
             createMainGauge('gaugeMainMirante', 7859182, 5357842.03, 6806923.38, { desembolso: 'Desembolso Total', comprometido: 'Desembolso + Comprometido' });
-            createMainGauge('gaugeMainJoaquim', 5019403, 3465877, 3732110);
+            createMainGauge('gaugeMainJoaquim', 5019403, 3471934.26, 3667878.23, { desembolso: 'Desembolso Total', comprometido: 'Desembolso + Comprometido' });
+            createMainGauge('gaugeMainParqueGeral', 0, 0, 0, { desembolso: 'Desembolso Total', comprometido: 'Desembolso + Comprometido' });
             
             createPieChart('chartMirantePie', miranteEtapas, miranteOrcado);
             createPieChart('chartJoaquimPie', joaquimEtapas, joaquimOrcado);
+            createPieChart('chartParquePie', parqueEtapas, parqueOrcado);
             
             // Tratamento e Ordenamento dos Gráficos Físico-Financeiros
             const sortedMirante = sortChartData(miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo, miranteFisicoRaw);
@@ -3108,21 +3363,32 @@
             const sortedJoaquim = sortChartData(joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo, joaquimFisicoRaw);
             const joaquimEacPct = sortedJoaquim.eac.map((v, i) => sortedJoaquim.orcado[i] > 0 ? (v / sortedJoaquim.orcado[i] * 100) : 0);
 
+            const sortedParque = sortChartData(parqueEtapas, parqueOrcado, parqueComprometido, parqueProjetadoFuturo, parqueFisicoRaw);
+            const parqueEacPct = sortedParque.eac.map((v, i) => sortedParque.orcado[i] > 0 ? (v / sortedParque.orcado[i] * 100) : 0);
+
             createFisicoFinChart('chartMiranteFisicoFin', sortedMirante.labels, null, sortedMirante.fisico, miranteEacPct, sortedMirante.fisico, sortedMirante.orcado, sortedMirante.eac, '31/07/2026');
             createFisicoFinChart('chartJoaquimFisicoFin', sortedJoaquim.labels, null, sortedJoaquim.fisico, joaquimEacPct, sortedJoaquim.fisico, sortedJoaquim.orcado, sortedJoaquim.eac, '31/08/2026');
+            createFisicoFinChart('chartParqueFisicoFin', sortedParque.labels, null, sortedParque.fisico, parqueEacPct, sortedParque.fisico, sortedParque.orcado, sortedParque.eac, 'A definir');
             
             createBarChart('chartMiranteBar', miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo);
             createBarChart('chartJoaquimBar', joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo);
+            createBarChart('chartParqueBar', parqueEtapas, parqueOrcado, parqueComprometido, parqueProjetadoFuturo);
+
             createDisponivelChart('chartMiranteDisponivel', miranteEtapas, miranteDisponivelGrafico);
             createDisponivelChart('chartJoaquimDisponivel', joaquimEtapas, joaquimDisponivelGrafico);
+            createDisponivelChart('chartParqueDisponivel', parqueEtapas, parqueDisponivelGrafico);
             
             createTable('tableMirante', 'MIRANTE DA LAGOA', miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo, miranteDisponivel, miranteFisicoRaw);
             createTable('tableJoaquim', 'JOAQUIM LEME', joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo, joaquimDisponivel, joaquimFisicoRaw);
+            createTable('tableParque', 'PARQUE DAS NAÇÕES', parqueEtapas, parqueOrcado, parqueComprometido, parqueProjetadoFuturo, parqueDisponivel, parqueFisicoRaw);
             
             runABCEngine('chartMiranteABC', 'tableABCMirante', miranteEtapas, miranteRealizado);
-            runABCEngine('chartJoaquimABC', 'tableABCJoaquim', joaquimEtapas, joaquimRealizado);
+            runABCEngine('chartJoaquimABC', 'tableABCJoaquim', joaquimEtapas, joaquimComprometido);
+            runABCEngine('chartParqueABC', 'tableABCParque', parqueEtapas, parqueComprometido);
+
             createColumnChart('chartMiranteHistorico', mesesHistorico, desembolsosMirante);
             createColumnChart('chartJoaquimHistorico', mesesHistorico, desembolsosJoaquim);
+            createColumnChart('chartParqueHistorico', mesesHistorico, []);
             
             let desvioMiranteCalc = ((7975420 / 7859182) - 1) * 100;
             let elMirante = document.getElementById('kpiDesvioMirante');
@@ -3130,7 +3396,12 @@
                 elMirante.style.color = 'var(--alert-color)';
                 elMirante.innerHTML = `⬆ +${desvioMiranteCalc.toFixed(1).replace('.', ',')}%`;
             }
-            setDesvioBadge(joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo, 'kpiDesvioJoaquim');
+
+            let elJoaquim = document.getElementById('kpiDesvioJoaquim');
+            if (elJoaquim) {
+                elJoaquim.style.color = '#03a9f4';
+                elJoaquim.innerHTML = `⬇ -9,88%`;
+            }
 
             applyChartThemes('light');
         });

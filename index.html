@@ -1165,7 +1165,7 @@
                         <h4>Bocaiúva em Números</h4>
                         <p>Localizada na região Norte de Minas Gerais, Bocaiúva possui uma população estimada em aproximadamente 50 mil habitantes e uma área territorial superior a 3.200 km².</p>
                         <p>Inserida em um importante eixo de desenvolvimento regional, Bocaiúva possui acesso facilitado por relevantes corredores rodoviários, com destaque para a BR-135, que conecta o município a centros econômicos como Belo Horizonte, Montes Claros e demais cidades do estado. Essa localização estratégica favorece o escoamento da produção agrícola e industrial, amplia a mobilidade regional, estimula a atração de novos investimentos e contribui para o crescimento urbano planejado e sustentável.</p>
-                        <p>Com 705 lotes, o Mirante da Lagoa foi concebido para oferecer infraestrutura urbana de qualidade, promovendo organização territorial, desenvolvimento sustentável e potencial de valorização a longo prazo. O empreendimento acompanha a expansão natural do município e busca contribuir para o desenvolvimento ordenado da cidade, criando novas oportunidades de moradia, investimento e geração de valor para a região.</p>
+                        <p>Com 705 lotes, o Mirante da Lagoa foi concebido para oferecer infraestrutura urbana de qualidade, promovendo organização territorial, desenvolvimento sustentável e potencial de valorização a longo prazo. O empreendimento acompanha a expansão natural do município e busca contribuir para o desenvolvimento ordenado da cidade, criando novas oportunidades de moradia, investmento e geração de valor para a região.</p>
                     </div>
                     <div class="sobre-image-wrapper">
                         <img src="27.jpeg" alt="Mirante da Lagoa">
@@ -2861,9 +2861,7 @@
             t.querySelectorAll('tbody tr').forEach(row => {
                 row.addEventListener('click', function() {
                     const idx = parseInt(this.dataset.index, 10);
-                    if(obraNome !== 'PARQUE DAS NAÇÕES') {
-                        openGaugeModal(obraNome, etapas[idx], orcado[idx], Peanut[idx], Honey[idx]);
-                    }
+                    openGaugeModal(obraNome, etapas[idx], orcado[idx], Peanut[idx], Honey[idx]);
                 });
             });
         }

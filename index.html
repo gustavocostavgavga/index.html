@@ -1504,7 +1504,7 @@
                     <div class="summary-container">
                         <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 416.895,93</div></div>
                         <div class="summary-operator">+</div>
-                        <div class="summary-box projected"><div class="summary-title">Valor Total de Desembolso Projetado</div><div class="summary-value">R$ 5.273.637,07</div></div>
+                        <div class="summary-box projected"><div class="summary-title">Valor Total de Desembolso Projetado</div><div class="summary-value">R$ 5.463.212,15</div></div>
                         <div class="summary-operator">=</div>
                         <div class="summary-box executed-projected"><div class="summary-title">Valor de Execução Projetado</div><div class="summary-value">R$ 5.880.108,08</div></div>
                         <div class="summary-operator">|</div>
@@ -1778,7 +1778,7 @@
         </div>
     </div>
 
-    <!-- NOVO MODAL: Detalhamento do Comprometido + Projetado -->
+    <!-- MODAL: Detalhamento do Comprometido + Projetado -->
     <div class="modal gauge-modal" id="modalBreakdownProjetado" onclick="if(event.target===this) closeAllModals()">
         <div class="gauge-modal-box" style="max-width: 800px; padding: 25px; text-align: left; max-height: 90vh; display: flex; flex-direction: column;">
             <span class="gauge-modal-close" onclick="closeAllModals()">&times;</span>
@@ -1810,12 +1810,45 @@
         </div>
     </div>
 
+    <!-- NOVO MODAL: Detalhamento do Desembolso x Comprometido -->
+    <div class="modal gauge-modal" id="modalDesembolsoComprometido" onclick="if(event.target===this) closeAllModals()">
+        <div class="gauge-modal-box" style="max-width: 800px; padding: 25px; text-align: left; max-height: 90vh; display: flex; flex-direction: column;">
+            <span class="gauge-modal-close" onclick="closeAllModals()">&times;</span>
+            <h3 style="margin-bottom: 5px; text-align: center; color: var(--title-color);">Visão Desembolso x Comprometido</h3>
+            <p id="desembolsoTitleObra" style="text-align: center; font-size: 0.8rem; color: var(--subtitle-color); margin-bottom: 20px; font-weight: 600;">MIRANTE DA LAGOA</p>
+            
+            <div class="table-container" style="overflow-y: auto; flex: 1; margin-bottom: 0;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem;">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; font-size: 0.75rem;">Etapa</th>
+                            <th onclick="sortDesembolsoTable(1)" style="text-align: center; font-size: 0.75rem; cursor: pointer;" title="Clique para ordenar">Desembolso ↕</th>
+                            <th onclick="sortDesembolsoTable(2)" style="text-align: center; font-size: 0.75rem; cursor: pointer;" title="Clique para ordenar">Valor Apropriado (Comprometido) ↕</th>
+                            <th onclick="sortDesembolsoTable(3)" style="text-align: center; font-size: 0.75rem; cursor: pointer;" title="Clique para ordenar">Total<br>(Desembolso + Comprometido) ↕</th>
+                        </tr>
+                    </thead>
+                    <tbody id="desembolsoTableBody">
+                    </tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td style="text-align: left;"><strong>TOTAL</strong></td>
+                            <td id="desembolsoTotDes" style="text-align: center; color: var(--title-color);"></td>
+                            <td id="desembolsoTotComp" style="text-align: center; color: var(--title-color);"></td>
+                            <td id="desembolsoTotGeral" style="text-align: center; color: var(--title-color);"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <script>
         Chart.defaults.font.family = "'Montserrat', sans-serif";
         Chart.register(ChartDataLabels);
 
         let currentChartLabel = null;
         let modalSortDirections = {};
+        let desembolsoSortDirections = {};
 
         function sortModalTable(colIndex) {
             const tbody = document.getElementById('breakdownTableBody');
@@ -1823,6 +1856,26 @@
             
             const isAsc = !modalSortDirections[colIndex];
             modalSortDirections[colIndex] = isAsc;
+            
+            rows.sort((a, b) => {
+                let cellA = a.children[colIndex].textContent.trim();
+                let cellB = b.children[colIndex].textContent.trim();
+                
+                let valA = parseFloat(cellA.replace(/[R$\s%]/g, '').replace(/\./g, '').replace(',', '.')) || 0;
+                let valB = parseFloat(cellB.replace(/[R$\s%]/g, '').replace(/\./g, '').replace(',', '.')) || 0;
+                
+                return isAsc ? (valA - valB) : (valB - valA);
+            });
+            
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function sortDesembolsoTable(colIndex) {
+            const tbody = document.getElementById('desembolsoTableBody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            const isAsc = !desembolsoSortDirections[colIndex];
+            desembolsoSortDirections[colIndex] = isAsc;
             
             rows.sort((a, b) => {
                 let cellA = a.children[colIndex].textContent.trim();
@@ -1955,7 +2008,6 @@
         const miranteOrcado = [36057.70, 234986.23, 134826.68, 278796.63, 207210.79, 645418.69, 176835.76, 313662.78, 597885.26, 2774330.81, 790022.37, 1316034.53, 94960.90, 258152.78];
         const miranteRealizado = [37257.72, 196972.82, 134826.68, 269217.91, 230858.08, 534839.04, 171635.73, 172527.84, 543203.95, 1863431.74, 645422.37, 246423.89, 91808.40, 219415.86];
         const miranteValorApropriado = [0.00, 17900.00, 0.00, 3459.29, 0.01, 0.00, 0.00, 48549.98, 35693.34, 1128000.00, 144300.00, 35616.39, 15000.00, 20562.34];
-        
         const miranteComprometido = [37257.72, 214872.82, 134826.68, 272677.20, 230858.09, 534839.04, 171635.73, 221077.82, 578897.29, 2991431.74, 789722.37, 282040.28, 106808.40, 239978.20];
         const miranteProjetadoFuturo = [0.00, 24788.94, 0.00, 11540.71, 38499.99, 183038.97, 14000.00, 101043.30, 16700.50, 0.00, 0.00, 743333.00, 0.00, 35551.16];
         const miranteFisicoRaw = [85.0, 90.0, 100.0, 90.0, 95.0, 90.0, 95.0, 80.0, 90.0, 80.0, 95.0, 20.0, 95.0, 90.0];
@@ -1971,7 +2023,7 @@
         const parqueEtapas = ['TOPOGRAFIA E CONTROLE', 'MANUTENÇÕES / AS BUILTS', 'TERRAPLANAGEM', 'DRENAGEM', 'ÁGUA POTÁVEL', 'RESERVATÓRIO / ADUTORA', 'ESGOTO SANITÁRIO', 'GUIAS E SARJETAS', 'PAVIMENTAÇÃO VIÁRIA', 'MEIO AMBIENTE / PRAÇAS', 'OBRA DE ACESSO', 'TOPOGRAFIA DE ENTREGA', 'INDIRETO DE OBRAS'];
         const parqueOrcado = [20800.00, 186643.30, 50400.00, 523908.31, 106623.00, 134625.00, 200000.00, 466961.10, 2977569.12, 59674.90, 915450.00, 66600.00, 142862.13];
         const parqueComprometido = [7300.00, 93973.30, 0.00, 460306.64, 0.00, 0.00, 0.00, 0.00, 0.00, 555.90, 16010.00, 0.00, 28325.17];
-        const parqueValorApropriado = [7300.00, 93973.30, 0.00, 460306.64, 0.00, 0.00, 0.00, 0.00, 0.00, 555.90, 16010.00, 0.00, 28325.17];
+        const parqueValorApropriado = [0.00, 0.00, 0.00, 189575.08, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00];
         const parqueProjetadoFuturo = [13500.00, 92670.00, 50400.00, 98763.85, 106623.00, 134625.00, 200000.00, 466961.10, 2977569.12, 59235.00, 899440.00, 66600.00, 107250.00];
         const parqueFisicoRaw = [35.1, 50.3, 0.0, 60.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.9, 1.7, 0.0, 19.8];
         const desembolsosParque = [
@@ -2134,6 +2186,7 @@
             document.getElementById('modalPendencias').classList.remove('active');
             document.getElementById('modalResumoPendencias').classList.remove('active');
             document.getElementById('modalBreakdownProjetado').classList.remove('active');
+            document.getElementById('modalDesembolsoComprometido').classList.remove('active');
             if (gaugeChart) { gaugeChart.destroy(); gaugeChart = null; }
         }
 
@@ -2183,6 +2236,55 @@
             document.getElementById('breakdownTotGeral').textContent = 'R$ ' + Math.round(totGeral).toLocaleString('pt-BR');
             
             document.getElementById('modalBreakdownProjetado').classList.add('active');
+        }
+
+        function openDesembolsoModal(obra) {
+            if (obra !== 'MIRANTE DA LAGOA' && obra !== 'JOAQUIM LEME' && obra !== 'PARQUE DAS NAÇÕES') return;
+            const tbody = document.getElementById('desembolsoTableBody');
+            tbody.innerHTML = '';
+            
+            let totDes = 0;
+            let totComp = 0;
+            let totGeral = 0;
+            
+            const isMirante = obra === 'MIRANTE DA LAGOA';
+            const isJoaquim = obra === 'JOAQUIM LEME';
+            const etapasArray = isMirante ? miranteEtapas : isJoaquim ? joaquimEtapas : parqueEtapas;
+            const invAtualArray = isMirante ? miranteComprometido : isJoaquim ? joaquimComprometido : parqueComprometido;
+            const aprArray = isMirante ? miranteValorApropriado : isJoaquim ? joaquimValorApropriado : parqueValorApropriado;
+            
+            const titleEl = document.getElementById('desembolsoTitleObra');
+            if(titleEl) titleEl.textContent = obra;
+            
+            etapasArray.forEach((etapa, i) => {
+                const invAtual = invAtualArray[i] || 0;
+                const apr = aprArray[i] || 0;
+                const des = invAtual - apr;
+                const geral = des + apr; 
+                
+                totDes += des;
+                totComp += apr;
+                totGeral += geral;
+                
+                const desStr = 'R$ ' + Math.round(des).toLocaleString('pt-BR');
+                const aprStr = 'R$ ' + Math.round(apr).toLocaleString('pt-BR');
+                const geralStr = 'R$ ' + Math.round(geral).toLocaleString('pt-BR');
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="text-align: left; font-weight: 600; color: var(--title-color); border-bottom: 1px solid var(--table-border); padding: 8px;">${etapa}</td>
+                        <td style="border-bottom: 1px solid var(--table-border); padding: 8px;">${desStr}</td>
+                        <td style="border-bottom: 1px solid var(--table-border); padding: 8px;">${aprStr}</td>
+                        <td style="font-weight: 700; border-bottom: 1px solid var(--table-border); padding: 8px;">${geralStr}</td>
+                    </tr>
+                `;
+            });
+            
+            document.getElementById('desembolsoTotDes').textContent = 'R$ ' + Math.round(totDes).toLocaleString('pt-BR');
+            document.getElementById('desembolsoTotComp').textContent = 'R$ ' + Math.round(totComp).toLocaleString('pt-BR');
+            document.getElementById('desembolsoTotGeral').textContent = 'R$ ' + Math.round(totGeral).toLocaleString('pt-BR');
+            
+            document.getElementById('modalDesembolsoComprometido').classList.add('active');
         }
 
         function updateChartModal() {
@@ -2743,12 +2845,17 @@
             }
 
             const isMirante = obraNome === 'MIRANTE DA LAGOA';
+            let tdInvAtual = fmtNum(totComprometido);
+            if (isMirante || obraNome === 'JOAQUIM LEME' || obraNome === 'PARQUE DAS NAÇÕES') {
+                tdInvAtual += `<br><button onclick="openDesembolsoModal('${obraNome}')" style="margin-top: 5px; font-size: 0.65rem; padding: 4px 8px; background: var(--tab-btn-bg); color: var(--title-color); border: 1px solid var(--title-color); border-radius: 4px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.backgroundColor='var(--active-color)'; this.style.color='#fff';" onmouseout="this.style.backgroundColor='var(--tab-btn-bg)'; this.style.color='var(--title-color)';">Visão Desembolso x Comprometido</button>`;
+            }
+
             let tdProj = fmtNum(totProjetadoFuturo);
             if (isMirante || obraNome === 'JOAQUIM LEME' || obraNome === 'PARQUE DAS NAÇÕES') {
                 tdProj += `<br><button onclick="openBreakdownModal('${obraNome}')" style="margin-top: 5px; font-size: 0.65rem; padding: 4px 8px; background: var(--tab-btn-bg); color: var(--title-color); border: 1px solid var(--title-color); border-radius: 4px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.backgroundColor='var(--active-color)'; this.style.color='#fff';" onmouseout="this.style.backgroundColor='var(--tab-btn-bg)'; this.style.color='var(--title-color)';">Visão Comprometido x Projetado</button>`;
             }
 
-            html += `</tbody><tfoot><tr class="total-row"><td><strong>TOTAL</strong></td><td>${fmtNum(totOrcado)}</td><td>${fmtNum(totComprometido)}</td><td style="text-align: center; padding: 6px;">${tdProj}</td><td style="color:var(--title-color); font-weight:700;">${totDisponivelStr}</td><td>${totDesvioStr}</td><td>—</td><td><div class="progress-bar"><div class="progress-fill" style="width:${totProgress}%"></div></div></td></tr></tfoot>`;
+            html += `</tbody><tfoot><tr class="total-row"><td><strong>TOTAL</strong></td><td>${fmtNum(totOrcado)}</td><td style="text-align: center; padding: 6px;">${tdInvAtual}</td><td style="text-align: center; padding: 6px;">${tdProj}</td><td style="color:var(--title-color); font-weight:700;">${totDisponivelStr}</td><td>${totDesvioStr}</td><td>—</td><td><div class="progress-bar"><div class="progress-fill" style="width:${totProgress}%"></div></div></td></tr></tfoot>`;
             t.innerHTML = html;
             
             t.querySelectorAll('tbody tr').forEach(row => {
@@ -3404,8 +3511,11 @@
             runABCEngine('chartJoaquimABC', 'tableABCJoaquim', joaquimEtapas, joaquimComprometido);
             runABCEngine('chartParqueABC', 'tableABCParque', parqueEtapas, parqueComprometido);
 
-            createColumnChart('chartMiranteHistorico', mesesHistorico, desembolsosMirante);
-            createColumnChart('chartJoaquimHistorico', mesesHistorico, desembolsosJoaquim);
+            // Mirante da Lagoa: Ago/23 até Dez/26 (41 meses)
+            createColumnChart('chartMiranteHistorico', mesesHistorico.slice(0, 41), desembolsosMirante.slice(0, 41));
+            // Joaquim Leme: Ago/23 até Jan/27 (42 meses)
+            createColumnChart('chartJoaquimHistorico', mesesHistorico.slice(0, 42), desembolsosJoaquim.slice(0, 42));
+            // Parque das Nações: Mantém como está (Ago/23 até Mai/27)
             createColumnChart('chartParqueHistorico', mesesHistorico, desembolsosParque);
             
             let desvioMiranteCalc = ((7975420 / 7859182) - 1) * 100;

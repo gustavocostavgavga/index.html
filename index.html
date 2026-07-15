@@ -1165,7 +1165,7 @@
                         <h4>Bocaiúva em Números</h4>
                         <p>Localizada na região Norte de Minas Gerais, Bocaiúva possui uma população estimada em aproximadamente 50 mil habitantes e uma área territorial superior a 3.200 km².</p>
                         <p>Inserida em um importante eixo de desenvolvimento regional, Bocaiúva possui acesso facilitado por relevantes corredores rodoviários, com destaque para a BR-135, que conecta o município a centros econômicos como Belo Horizonte, Montes Claros e demais cidades do estado. Essa localização estratégica favorece o escoamento da produção agrícola e industrial, amplia a mobilidade regional, estimula a atração de novos investimentos e contribui para o crescimento urbano planejado e sustentável.</p>
-                        <p>Com 705 lotes, o Mirante da Lagoa foi concebido para oferecer infraestrutura urbana de qualidade, promovendo organização territorial, desenvolvimento sustentável e potencial de valorização a longo prazo. O empreendimento acompanha a expansão natural do município e busca contribuir para o desenvolvimento ordenado da cidade, criando novas oportunidades de moradia, investmento e geração de valor para a região.</p>
+                        <p>Com 705 lotes, o Mirante da Lagoa foi concebido para oferecer infraestrutura urbana de qualidade, promovendo organização territorial, desenvolvimento sustentável e potencial de valorização a longo prazo. O empreendimento acompanha a expansão natural do município e busca contribuir para o desenvolvimento ordenado da cidade, criando novas oportunidades de moradia, investimento e geração de valor para a região.</p>
                     </div>
                     <div class="sobre-image-wrapper">
                         <img src="27.jpeg" alt="Mirante da Lagoa">
@@ -1291,7 +1291,7 @@
                             <li class="level-2"><span class="enum">7.1</span> Estudo e contratação de projeto</li>
                             <li class="level-2"><span class="enum">7.2</span> Execução da sinalização</li>
                             <li class="level-1"><span>8) Processo de entrega</span><span>-</span></li>
-                            <li class="level-2"><span class="enum">8.1</span> Entrega SAE (Água e Esgoto)</li>
+                            <li class="level-2"><span class="enum">8.1</span> Entre SAE (Água e Esgoto)</li>
                             <li class="level-2"><span class="enum">8.2</span> Entrega Secretaria de Obras (Drenagem)</li>
                             <li class="level-2"><span class="enum">8.3</span> Entrega Prefeitura</li>
                         </ul>
@@ -1570,9 +1570,73 @@
             <div class="sub-tab-content" id="subtab-projetos-parque">
                 <div class="projetos-container">
                     <div class="projetos-sidebar">
-                        <div class="empty-state" style="padding: 10px; font-size: 0.8rem;">Projetos não carregados.</div>
+                        <button class="projeto-btn active" onclick="loadPDF('URBANÍSTICO_PARQUEDASNACOES.pdf', this)">URBANÍSTICO</button>
+                        <button class="projeto-btn" onclick="loadPDF('ÁGUA_PARQUEDASNACOES.pdf', this)">ÁGUA</button>
+                        <button class="projeto-btn" onclick="loadPDF('DRENAGEM_PARQUEDASNACOES.pdf', this)">DRENAGEM</button>
+                        <button class="projeto-btn" onclick="loadPDF('ESGOTO_PARQUEDASNACOES.pdf', this)">ESGOTO</button>
+                        <button class="projeto-btn" onclick="loadPDF('PAVIMENTAÇÃO_PARQUEDASNACOES.pdf', this)">PAVIMENTAÇÃO</button>
+                        <button class="projeto-btn" onclick="loadPDF('ELÉTRICA_PARQUEDASNACOES.pdf', this)">ELÉTRICA</button>
                     </div>
                     <div class="projetos-content">
+                        <div class="pdf-toolbar">
+                            <button class="pdf-tool-btn tool-mode active" title="Mover / Arrastar" onclick="setTool('pan', this)">✋ Arraste</button>
+                            
+                            <div class="tool-wrapper">
+                                <button class="pdf-tool-btn tool-mode" title="Inserir Ícones" onclick="setTool('icon', this, '📍')">📌 Ícones</button>
+                                <div class="color-picker-menu">
+                                    <span class="icon-dot active" onclick="selectIcon('📍', this, event)">📍</span>
+                                    <span class="icon-dot" onclick="selectIcon('✅', this, event)">✅</span>
+                                    <span class="icon-dot" onclick="selectIcon('❌', this, event)">❌</span>
+                                    <span class="icon-dot" onclick="selectIcon('⚠️', this, event)">⚠️</span>
+                                    <span class="icon-dot" onclick="selectIcon('❓', this, event)">❓</span>
+                                </div>
+                            </div>
+                            
+                            <button class="pdf-tool-btn tool-mode" title="Caixa de Texto" onclick="setTool('text', this)">📝 Texto</button>
+                            
+                            <div class="tool-wrapper">
+                                <button class="pdf-tool-btn tool-mode" title="Círculo" onclick="setTool('circle', this)">⭕ Círculo</button>
+                                <div class="color-picker-menu">
+                                    <span class="color-dot active" style="background-color: #e53935;" onclick="selectColor('#e53935', this, event)"></span>
+                                    <span class="color-dot" style="background-color: #1e88e5;" onclick="selectColor('#1e88e5', this, event)"></span>
+                                    <span class="color-dot" style="background-color: #43a047;" onclick="selectColor('#43a047', this, event)"></span>
+                                </div>
+                            </div>
+
+                            <div class="tool-wrapper">
+                                <button class="pdf-tool-btn tool-mode" title="Gerar Seta" onclick="setTool('arrow', this)">↗️ Seta</button>
+                                <div class="color-picker-menu">
+                                    <span class="color-dot active" style="background-color: #e53935;" onclick="selectColor('#e53935', this, event)"></span>
+                                    <span class="color-dot" style="background-color: #1e88e5;" onclick="selectColor('#1e88e5', this, event)"></span>
+                                    <span class="color-dot" style="background-color: #43a047;" onclick="selectColor('#43a047', this, event)"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="tool-wrapper">
+                                <button class="pdf-tool-btn tool-mode" title="Área (Polígono)" onclick="setTool('polygon', this)">📐 Área</button>
+                                <div class="color-picker-menu">
+                                    <span class="color-dot active" style="background-color: #e53935;" onclick="selectColor('#e53935', this, event)"></span>
+                                    <span class="color-dot" style="background-color: #1e88e5;" onclick="selectColor('#1e88e5', this, event)"></span>
+                                    <span class="color-dot" style="background-color: #43a047;" onclick="selectColor('#43a047', this, event)"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="tool-wrapper">
+                                <button class="pdf-tool-btn tool-mode" title="Pincel Livre" onclick="setTool('brush', this)">🖌️ Pincel</button>
+                                <div class="color-picker-menu">
+                                    <span class="color-dot active" style="background-color: #e53935;" onclick="selectColor('#e53935', this, event)"></span>
+                                    <span class="color-dot" style="background-color: #1e88e5;" onclick="selectColor('#1e88e5', this, event)"></span>
+                                    <span class="color-dot" style="background-color: #43a047;" onclick="selectColor('#43a047', this, event)"></span>
+                                </div>
+                            </div>
+
+                            <div class="pdf-tool-separator"></div>
+                            <button class="pdf-tool-btn" title="Desfazer (CTRL+Z)" onclick="undoPdfAction()">↩️ Desfazer</button>
+                            <button class="pdf-tool-btn" title="Refazer (CTRL+Y)" onclick="redoPdfAction()">↪️ Refazer</button>
+                            <button class="pdf-tool-btn" title="Limpar Tudo (Reset)" style="color: #c62828;" onclick="clearPdfCanvas()">🗑️ Reset</button>
+                            <div class="pdf-tool-separator"></div>
+                            <button class="pdf-tool-btn" title="Exportar Imagem" onclick="exportPDF()" style="color: var(--active-color);">💾 Exportar</button>
+                        </div>
                         <div class="pdf-viewer-area" id="viewer-area-parque">
                             <div id="pdf-container-parque" class="pdf-canvas-wrapper">
                                 <canvas id="pdf-fabric-parque"></canvas>
@@ -3569,3 +3633,5 @@
     </script>
 </body>
 </html>
+
+```

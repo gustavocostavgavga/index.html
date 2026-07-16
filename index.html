@@ -1050,6 +1050,7 @@
                 <div class="analyses-container">
                     <div class="analysis-tabs-container">
                         <button class="analysis-tab-btn active" data-antab="abc-mirante">Curva ABC</button>
+                        <button class="analysis-tab-btn" data-antab="insights-mirante">Insights Técnicos</button>
                         <button class="analysis-tab-btn" data-antab="mapa-fornecedores-mirante">Mapa de Fornecedores</button>
                         <button class="analysis-tab-btn" data-antab="matriz-kraljic-mirante">Matriz de Kraljic</button>
                         <button class="analysis-tab-btn" data-antab="proporcao-desembolsos-mirante">Proporção de Desembolsos</button>
@@ -1059,6 +1060,30 @@
                         <div class="abc-header"><h3>Curva ABC de Desembolsos por Etapa</h3></div>
                         <div class="chart-container"><canvas id="chartMiranteABC"></canvas></div>
                         <div class="table-container"><table id="tableABCMirante"></table></div>
+                    </div>
+                    
+                    <div class="analysis-inner-content" id="insights-mirante">
+                        <div class="abc-header"><h3>Insights Técnicos e Desafios Orçamentários</h3></div>
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <strong style="color: var(--title-color);">1. Orçamento Geral:</strong> <span style="color: var(--text-color-base);">Projeção de leve extrapolação no fechamento (cerca de +1,48%), exigindo monitoramento rigoroso e travas nas etapas finais de execução.</span>
+                            </div>
+                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <strong style="color: var(--title-color);">2. Pavimentação Total:</strong> <span style="color: var(--text-color-base);">Principal ofensor do orçamento da obra. O custo final projetado superou substancialmente a linha de base inicial, demandando forte revisão e adequação técnica.</span>
+                            </div>
+                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <strong style="color: var(--title-color);">3. Reservatório e Adutora:</strong> <span style="color: var(--text-color-base);">Apresentou aumento de custos (projetado > R$ 717 mil), sugerindo subdimensionamento original ou adversidades atípicas enfrentadas em solo e infraestrutura remanescente.</span>
+                            </div>
+                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <strong style="color: var(--title-color);">4. Meio Ambiente:</strong> <span style="color: var(--text-color-base);">Destaca-se como um ponto de alívio e economia expressiva (orçado inicial de R$ 1,31M vs projeção de fechamento próximo a R$ 1,02M), ajudando a compensar a extrapolação do asfalto.</span>
+                            </div>
+                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <strong style="color: var(--title-color);">5. Ações Mitigadoras:</strong> <span style="color: var(--text-color-base);">Acelerar a entrega do loteamento e o repasse das redes às concessionárias para cessar imediatamente os Gastos Indiretos (vigilância, manutenção de canteiro), que seguem dilapidando o saldo disponível.</span>
+                            </div>
+                            <div style="background: var(--active-color); padding: 15px; border-radius: 8px; border: 1px solid var(--active-hover-color); color: #ffffff;">
+                                <strong>6. Visão Estratégica Institucional:</strong> <em>Assumimos a gestão com a obra em andamento e, mediante um diagnóstico técnico criterioso, implementamos um controle orçamentário rigoroso. Essa atuação cirúrgica mitigou os passivos herdados por falhas técnicas anteriores, contendo desvios estruturais e garantindo a viabilidade comercial do ativo, com um custo por lote fortemente preservado.</em>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="analysis-inner-content" id="mapa-fornecedores-mirante">
@@ -1166,6 +1191,7 @@
                         <p>Localizada na região Norte de Minas Gerais, Bocaiúva possui uma população estimada em aproximadamente 50 mil habitantes e uma área territorial superior a 3.200 km².</p>
                         <p>Inserida em um importante eixo de desenvolvimento regional, Bocaiúva possui acesso facilitado por relevantes corredores rodoviários, com destaque para a BR-135, que conecta o município a centros econômicos como Belo Horizonte, Montes Claros e demais cidades do estado. Essa localização estratégica favorece o escoamento da produção agrícola e industrial, amplia a mobilidade regional, estimula a atração de novos investimentos e contribui para o crescimento urbano planejado e sustentável.</p>
                         <p>Com 705 lotes, o Mirante da Lagoa foi concebido para oferecer infraestrutura urbana de qualidade, promovendo organização territorial, desenvolvimento sustentável e potencial de valorização a longo prazo. O empreendimento acompanha a expansão natural do município e busca contribuir para o desenvolvimento ordenado da cidade, criando novas oportunidades de moradia, investimento e geração de valor para a região.</p>
+                        <button class="home-btn" style="font-size: 0.85rem; padding: 10px 20px; margin-top: 15px;" onclick="openPhotoModal('PROJETO_URBANIZADO_MIRANTE.jpg')">👁️ Visualizar Projeto Urbanizado</button>
                     </div>
                     <div class="sobre-image-wrapper">
                         <img src="27.jpeg" alt="Mirante da Lagoa">
@@ -1311,6 +1337,7 @@
                 <div class="analyses-container">
                     <div class="analysis-tabs-container">
                         <button class="analysis-tab-btn active" data-antab="abc-joaquim">Curva ABC</button>
+                        <button class="analysis-tab-btn" data-antab="insights-joaquim">Insights Técnicos</button>
                         <button class="analysis-tab-btn" data-antab="mapa-fornecedores-joaquim">Mapa de Fornecedores</button>
                         <button class="analysis-tab-btn" data-antab="matriz-kraljic-joaquim">Matriz de Kraljic</button>
                         <button class="analysis-tab-btn" data-antab="proporcao-desembolsos-joaquim">Proporção de Desembolsos</button>
@@ -1320,6 +1347,30 @@
                         <div class="abc-header"><h3>Curva ABC de Desembolsos por Etapa</h3></div>
                         <div class="chart-container"><canvas id="chartJoaquimABC"></canvas></div>
                         <div class="table-container"><table id="tableABCJoaquim"></table></div>
+                    </div>
+
+                    <div class="analysis-inner-content" id="insights-joaquim">
+                        <div class="abc-header"><h3>Insights Técnicos e Desafios Orçamentários</h3></div>
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <strong style="color: var(--title-color);">1. Orçamento Geral:</strong> <span style="color: var(--text-color-base);">Cenário altamente positivo, sinalizando uma forte economia projetada de -9,88% em relação à linha de base.</span>
+                            </div>
+                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <strong style="color: var(--title-color);">2. Reservatório / Adutora:</strong> <span style="color: var(--text-color-base);">Atua como principal vetor de redução de custos na obra, com uma previsão de fechamento muito aquém do valor inicialmente engessado no orçamento.</span>
+                            </div>
+                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <strong style="color: var(--title-color);">3. Obras de Acesso e Entorno:</strong> <span style="color: var(--text-color-base);">Apresentam tendência de encostar no teto do orçamento previsto, sendo essenciais as aprovações executivas precisas para não corroer o saldo ganho em outras frentes.</span>
+                            </div>
+                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <strong style="color: var(--title-color);">4. Estação Elevatória:</strong> <span style="color: var(--text-color-base);">Frente de infraestrutura pesada que já consumiu fatia significativa e exige rigidez na aprovação e instalação final do Booster.</span>
+                            </div>
+                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <strong style="color: var(--title-color);">5. Custo Unitário:</strong> <span style="color: var(--text-color-base);">A reestruturação derrubou o custo/lote global de R$ 8.714 para R$ 7.853, viabilizando e potencializando a margem de comercialização da área.</span>
+                            </div>
+                            <div style="background: var(--active-color); padding: 15px; border-radius: 8px; border: 1px solid var(--active-hover-color); color: #ffffff;">
+                                <strong>6. Visão Estratégica Institucional:</strong> <em>Apesar da nossa entrada na gestão em fase intermediária, o robusto diagnóstico técnico realizado permitiu conter anomalias orçamentárias herdadas. Destaca-se a excelência em firmar parcerias lindeiras para o rateio de custos de infraestrutura, movimento que gerou uma expressiva economia projetada e assegurou a alta viabilidade e rentabilidade comercial do ativo.</em>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="analysis-inner-content" id="mapa-fornecedores-joaquim">
@@ -1559,6 +1610,7 @@
                 <div class="analyses-container">
                     <div class="analysis-tabs-container">
                         <button class="analysis-tab-btn active" data-antab="abc-parque">Curva ABC</button>
+                        <button class="analysis-tab-btn" data-antab="insights-parque">Insights Técnicos</button>
                         <button class="analysis-tab-btn" data-antab="mapa-fornecedores-parque">Mapa de Fornecedores</button>
                         <button class="analysis-tab-btn" data-antab="matriz-kraljic-parque">Matriz de Kraljic</button>
                         <button class="analysis-tab-btn" data-antab="proporcao-desembolsos-parque">Proporção de Desembolsos</button>
@@ -1568,6 +1620,30 @@
                         <div class="abc-header"><h3>Curva ABC de Desembolsos por Etapa</h3></div>
                         <div class="chart-container"><canvas id="chartParqueABC"></canvas></div>
                         <div class="table-container"><table id="tableABCParque"></table></div>
+                    </div>
+
+                    <div class="analysis-inner-content" id="insights-parque">
+                        <div class="abc-header"><h3>Insights Técnicos e Desafios Orçamentários</h3></div>
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <strong style="color: var(--title-color);">1. Orçamento Geral:</strong> <span style="color: var(--text-color-base);">Projeção indica aderência quase total ao orçamento original (desvio de apenas +0,48%), evidenciando a precisão do diagnóstico preliminar e margem para manobras cirúrgicas.</span>
+                            </div>
+                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <strong style="color: var(--title-color);">2. Pavimentação Viária:</strong> <span style="color: var(--text-color-base);">Representa a maior fatia do orçamento com expressivos R$ 2,97M. O sucesso financeiro da obra passa invariavelmente pela eficiência na compra e execução deste escopo crítico.</span>
+                            </div>
+                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <strong style="color: var(--title-color);">3. Rede de Saneamento:</strong> <span style="color: var(--text-color-base);">Água e Esgoto permanecem como frentes 100% projetadas (ainda sem investimento consolidado expressivo), o que embute risco técnico oculto em caso de solos adversos.</span>
+                            </div>
+                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <strong style="color: var(--title-color);">4. Rede de Drenagem:</strong> <span style="color: var(--text-color-base);">Apresenta pequena tendência de extrapolação em relação à verba base. Exige travamento de aditivos e cuidado redobrado na compatibilização topográfica para afastar retrabalhos.</span>
+                            </div>
+                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <strong style="color: var(--title-color);">5. Ações Preventivas:</strong> <span style="color: var(--text-color-base);">Intensificar campanhas de sondagem prévias e controle tecnológico rigoroso antes da liberação das frentes de infraestrutura pesada, para balizar os orçamentos vindouros.</span>
+                            </div>
+                            <div style="background: var(--active-color); padding: 15px; border-radius: 8px; border: 1px solid var(--active-hover-color); color: #ffffff;">
+                                <strong>6. Visão Estratégica Institucional:</strong> <em>Em fase diligente de diagnóstico, já implementamos uma cultura de alta eficiência, maximizando o aproveitamento da infraestrutura pré-existente sem jamais abdicar das diretrizes e normas de segurança vigentes. Embora exista um extenso escopo a ser validado — notadamente no saneamento básico —, nosso time atua com governança, mantendo forte otimismo quanto ao fiel cumprimento do orçamento inicial estimado.</em>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="analysis-inner-content" id="mapa-fornecedores-parque">
@@ -3658,3 +3734,4 @@
     </script>
 </body>
 </html>
+

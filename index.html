@@ -1533,8 +1533,25 @@
             </div>
             
             <div class="sub-tab-content" id="subtab-fotos-parque">
+                <h3 style="color: var(--title-color); margin-bottom: 15px; text-align: center; font-size: 1.1rem;">VISTA AÉREA</h3>
+                <div class="gallery-container" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 30px;">
+                    <div class="gallery-item" style="width: 100%; max-width: 350px;" onclick="openPhotoModal('LOT_PN_VISTA_AÉREA01.jpg', this)">
+                        <img src="LOT_PN_VISTA_AÉREA01.jpg" alt="Vista Aérea 01">
+                    </div>
+                    <div class="gallery-item" style="width: 100%; max-width: 350px;" onclick="openPhotoModal('LOT_PN_VISTA_AÉREA02.jpg', this)">
+                        <img src="LOT_PN_VISTA_AÉREA02.jpg" alt="Vista Aérea 02">
+                    </div>
+                </div>
+
+                <h3 style="color: var(--title-color); margin-bottom: 15px; text-align: center; font-size: 1.1rem;">EXECUÇÃO DA REDE DE DRENAGEM</h3>
                 <div class="gallery-container">
-                    <div class="empty-state" style="grid-column: 1 / -1;">Aguardando imagens da obra.</div>
+                    <div class="gallery-item" onclick="openPhotoModal('LOT_PN_DRENAGEM_01.jpg', this)"><img src="LOT_PN_DRENAGEM_01.jpg" alt="Drenagem 01"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('LOT_PN_DRENAGEM_02.jpg', this)"><img src="LOT_PN_DRENAGEM_02.jpg" alt="Drenagem 02"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('LOT_PN_DRENAGEM_03.jpg', this)"><img src="LOT_PN_DRENAGEM_03.jpg" alt="Drenagem 03"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('LOT_PN_DRENAGEM_04.jpg', this)"><img src="LOT_PN_DRENAGEM_04.jpg" alt="Drenagem 04"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('LOT_PN_DRENAGEM_05.jpg', this)"><img src="LOT_PN_DRENAGEM_05.jpg" alt="Drenagem 05"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('LOT_PN_DRENAGEM_06.jpg', this)"><img src="LOT_PN_DRENAGEM_06.jpg" alt="Drenagem 06"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('LOT_PN_DRENAGEM_07.jpg', this)"><img src="LOT_PN_DRENAGEM_07.jpg" alt="Drenagem 07"></div>
                 </div>
             </div>
             
@@ -2675,7 +2692,7 @@
                                     click: function(context) {
                                         const chartId = context.chart.canvas.id;
                                         const obraId = chartId.includes('Mirante') ? 'mirante' : chartId.includes('Joaquim') ? 'joaquim' : 'parque';
-                                        if(obraId === 'parque') return true;
+                                        
                                         currentChartObra = obraId;
                                         currentChartLabel = context.chart.data.labels[context.dataIndex];
                                         currentChartModalType = 'financial';
@@ -2738,7 +2755,7 @@
                     },
                     onClick: (event, elements, chart) => {
                         const obraId = chart.canvas.id.includes('Mirante') ? 'mirante' : chart.canvas.id.includes('Joaquim') ? 'joaquim' : 'parque';
-                        if(obraId === 'parque') return;
+                        
                         if (elements.length > 0 && elements[0].datasetIndex === 0) {
                             const index = elements[0].index;
                             currentChartObra = obraId;

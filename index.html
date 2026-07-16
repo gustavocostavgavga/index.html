@@ -772,7 +772,7 @@
         .modal.active { display: flex; opacity: 1; }
         .modal-content { max-width: 85%; max-height: 85%; position: relative; transform: scale(0.9); transition: transform 0.3s ease; }
         .modal.active .modal-content { transform: scale(1); }
-        .modal-content img { width: auto; height: auto; max-width: 100%; max-height: 80vh; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: block; margin: 0 auto; }
+        .modal-content img { width: auto; height: auto; max-width: 100%; max-height: 80vh; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: block; margin: 0 auto; transition: transform 0.1s ease-out; }
         .modal-close { position: absolute; top: -40px; right: 0; color: #ffffff; font-size: 2.5rem; cursor: pointer; line-height: 1; transition: color 0.2s; font-weight: 300; }
         .modal-close:hover { color: var(--active-hover-color); }
 
@@ -1063,7 +1063,7 @@
                     </div>
                     
                     <div class="analysis-inner-content" id="insights-mirante">
-                        <div class="abc-header"><h3>Insights Técnicos e Desafios Orçamentários</h3></div>
+                        <div class="abc-header"><h3></h3></div>
                         <div style="display: flex; flex-direction: column; gap: 15px;">
                             <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
                                 <strong style="color: var(--title-color);">1. Orçamento Geral:</strong> <span style="color: var(--text-color-base);">Projeção de leve extrapolação no fechamento (cerca de +1,48%), exigindo monitoramento rigoroso e travas nas etapas finais de execução.</span>
@@ -1072,16 +1072,16 @@
                                 <strong style="color: var(--title-color);">2. Pavimentação Total:</strong> <span style="color: var(--text-color-base);">Principal ofensor do orçamento da obra. O custo final projetado superou substancialmente a linha de base inicial, demandando forte revisão e adequação técnica.</span>
                             </div>
                             <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">3. Reservatório e Adutora:</strong> <span style="color: var(--text-color-base);">A extrapolação de 11,2% se deu devido a impossibilidade de aproveitar a rede adutora antiga, mesmo após tentativas de adaptação, foi necessário executar a rede completamente do zero;</span>
+                                <strong style="color: var(--title-color);">3. Reservatório e Adutora:</strong> <span style="color: var(--text-color-base);">O desvio orçamentário de 11,2% decorre da inviabilidade técnica de aproveitamento da infraestrutura pré-existente. Constatou-se a necessidade de execução integral de uma nova rede adutora, garantindo a integridade e eficiência do sistema.</span>
                             </div>
                             <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">4. Rede de Água Potável:</strong> <span style="color: var(--text-color-base);">Estamos passando por um momento delicado na execução do reparo da rede de água potável, pois ao iniciarmos os testes de distribuição, diversos pontos estão apresentando patologias relacionados a vazamento, com isso o orçamento dessa etapa está sendo projetado um estouro de até 30%, mas é importante ressaltar que os pontos encontrados de patologias são referentes a trechos executados pela antiga administração, a parte da nossa administração não foi encontrada nenhuma patologia;</span>
+                                <strong style="color: var(--title-color);">4. Rede de Água Potável:</strong> <span style="color: var(--text-color-base);">Durante a fase de comissionamento e testes de distribuição, identificaram-se falhas estruturais e vazamentos em trechos executados pela gestão anterior. A mitigação dessas patologias resultará em um incremento projetado de até 30% no custo da etapa, sem impactos nas parcelas executadas sob a administração atual.</span>
                             </div>
                             <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
                                 <strong style="color: var(--title-color);">5. Ações Mitigadoras:</strong> <span style="color: var(--text-color-base);">Acelerar a entrega do loteamento e o repasse das redes às concessionárias para cessar imediatamente os Gastos Indiretos (vigilância, manutenção de canteiro), que seguem dilapidando o saldo disponível.</span>
                             </div>
                             <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">6. Meio Ambiente:</strong> <span style="color: var(--text-color-base);">Está sendo projetado uma economia de até 22% em relação ao orçamento aprovado para MEIO AMBIENTE, surgido a partir de uma estratégia de adequação da ideia de concepção do Parque Linear e áreas verdes previstas para o empreendimento, sem abrir mão da ideia comercial vendida, porém adequando para uma redução de custos a fim de não extrapolar o orçamento aprovado.</span>
+                                <strong style="color: var(--title-color);">6. Meio Ambiente:</strong> <span style="color: var(--text-color-base);">Projeta-se uma otimização orçamentária de aproximadamente 22% através da readequação técnica do projeto paisagístico e do Parque Linear. A estratégia assegura a manutenção do valor comercial agregado ao empreendimento, alinhando a execução às premissas de eficiência e controle de custos.</span>
                             </div>
                             <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
                                 <strong style="color: var(--title-color);">7. Visão Estratégica Institucional:</strong> <span style="color: var(--text-color-base);">Assumimos a gestão com a obra em andamento e, mediante um diagnóstico técnico criterioso, implementamos um controle orçamentário rigoroso. Essa atuação cirúrgica mitigou os passivos herdados por falhas técnicas anteriores, contendo desvios estruturais e garantindo a viabilidade comercial do ativo, com um custo por lote fortemente preservado.</span>
@@ -2257,6 +2257,25 @@
         let currentGalleryImages = [];
         let currentImageIndex = 0;
 
+        // --- SISTEMA DE ZOOM GLOBAL DA IMAGEM ---
+        let globalImgZoom = 1;
+        let globalImgPanX = 0;
+        let globalImgPanY = 0;
+        let isGlobalImgPanning = false;
+        let startPanX = 0;
+        let startPanY = 0;
+
+        function resetGlobalZoom() {
+            globalImgZoom = 1;
+            globalImgPanX = 0;
+            globalImgPanY = 0;
+            const img = document.getElementById('photoGlobalImage');
+            if (img) {
+                img.style.transform = `translate(0px, 0px) scale(1)`;
+                img.style.cursor = 'grab';
+            }
+        }
+
         function toggleMode() {
             const body = document.body;
             const btnText = document.getElementById('modeText');
@@ -2319,6 +2338,7 @@
         }
 
         function openPhotoModal(imgSrc, element) {
+            resetGlobalZoom();
             const modal = document.getElementById('photoGlobalModal');
             document.getElementById('photoGlobalImage').src = imgSrc;
             if (element) {
@@ -2332,11 +2352,13 @@
             modal.style.display = 'flex';
             setTimeout(() => modal.classList.add('active'), 10);
         }
+
         function closePhotoModal() {
             const modal = document.getElementById('photoGlobalModal');
             modal.classList.remove('active');
-            setTimeout(() => modal.style.display = 'none', 300);
+            setTimeout(() => { modal.style.display = 'none'; resetGlobalZoom(); }, 300);
         }
+
         function changePhoto(direction) {
             if (currentGalleryImages.length === 0) return;
             currentImageIndex += direction;
@@ -2346,6 +2368,7 @@
                 currentImageIndex = currentGalleryImages.length - 1;
             }
             document.getElementById('photoGlobalImage').src = currentGalleryImages[currentImageIndex];
+            resetGlobalZoom();
         }
         
         function closeGaugeModal() {
@@ -3703,6 +3726,43 @@
             }
 
             applyChartThemes('light');
+
+            // --- LÓGICA DE EVENTOS PARA ZOOM E PAN NA IMAGEM (MODAL GLOBAL) ---
+            const photoModalImg = document.getElementById('photoGlobalImage');
+            const photoModalBox = document.getElementById('photoGlobalModal');
+
+            if (photoModalBox && photoModalImg) {
+                photoModalImg.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    globalImgZoom += e.deltaY * -0.002;
+                    globalImgZoom = Math.min(Math.max(1, globalImgZoom), 5);
+                    photoModalImg.style.transform = `translate(${globalImgPanX}px, ${globalImgPanY}px) scale(${globalImgZoom})`;
+                });
+
+                photoModalImg.addEventListener('mousedown', (e) => {
+                    if (globalImgZoom > 1) {
+                        isGlobalImgPanning = true;
+                        startPanX = e.clientX - globalImgPanX;
+                        startPanY = e.clientY - globalImgPanY;
+                        photoModalImg.style.cursor = 'grabbing';
+                    }
+                });
+
+                window.addEventListener('mousemove', (e) => {
+                    if (!isGlobalImgPanning) return;
+                    e.preventDefault();
+                    globalImgPanX = e.clientX - startPanX;
+                    globalImgPanY = e.clientY - startPanY;
+                    photoModalImg.style.transform = `translate(${globalImgPanX}px, ${globalImgPanY}px) scale(${globalImgZoom})`;
+                });
+
+                window.addEventListener('mouseup', () => {
+                    if (isGlobalImgPanning) {
+                        isGlobalImgPanning = false;
+                        photoModalImg.style.cursor = 'grab';
+                    }
+                });
+            }
         });
 
         document.querySelectorAll('.tab-btn').forEach(btn => {

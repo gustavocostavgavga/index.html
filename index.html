@@ -1072,16 +1072,19 @@
                                 <strong style="color: var(--title-color);">2. Pavimentação Total:</strong> <span style="color: var(--text-color-base);">Principal ofensor do orçamento da obra. O custo final projetado superou substancialmente a linha de base inicial, demandando forte revisão e adequação técnica.</span>
                             </div>
                             <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">3. Reservatório e Adutora:</strong> <span style="color: var(--text-color-base);">Apresentou aumento de custos (projetado > R$ 717 mil), sugerindo subdimensionamento original ou adversidades atípicas enfrentadas em solo e infraestrutura remanescente.</span>
+                                <strong style="color: var(--title-color);">3. Reservatório e Adutora:</strong> <span style="color: var(--text-color-base);">A extrapolação de 11,2% se deu devido a impossibilidade de aproveitar a rede adutora antiga, mesmo após tentativas de adaptação, foi necessário executar a rede completamente do zero;</span>
                             </div>
                             <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">4. Meio Ambiente:</strong> <span style="color: var(--text-color-base);">Destaca-se como um ponto de alívio e economia expressiva (orçado inicial de R$ 1,31M vs projeção de fechamento próximo a R$ 1,02M), ajudando a compensar a extrapolação do asfalto.</span>
+                                <strong style="color: var(--title-color);">4. Rede de Água Potável:</strong> <span style="color: var(--text-color-base);">Estamos passando por um momento delicado na execução do reparo da rede de água potável, pois ao iniciarmos os testes de distribuição, diversos pontos estão apresentando patologias relacionados a vazamento, com isso o orçamento dessa etapa está sendo projetado um estouro de até 30%, mas é importante ressaltar que os pontos encontrados de patologias são referentes a trechos executados pela antiga administração, a parte da nossa administração não foi encontrada nenhuma patologia;</span>
                             </div>
                             <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
                                 <strong style="color: var(--title-color);">5. Ações Mitigadoras:</strong> <span style="color: var(--text-color-base);">Acelerar a entrega do loteamento e o repasse das redes às concessionárias para cessar imediatamente os Gastos Indiretos (vigilância, manutenção de canteiro), que seguem dilapidando o saldo disponível.</span>
                             </div>
-                            <div style="background: var(--active-color); padding: 15px; border-radius: 8px; border: 1px solid var(--active-hover-color); color: #ffffff;">
-                                <strong>6. Visão Estratégica Institucional:</strong> <em>Assumimos a gestão com a obra em andamento e, mediante um diagnóstico técnico criterioso, implementamos um controle orçamentário rigoroso. Essa atuação cirúrgica mitigou os passivos herdados por falhas técnicas anteriores, contendo desvios estruturais e garantindo a viabilidade comercial do ativo, com um custo por lote fortemente preservado.</em>
+                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <strong style="color: var(--title-color);">6. Meio Ambiente:</strong> <span style="color: var(--text-color-base);">Está sendo projetado uma economia de até 22% em relação ao orçamento aprovado para MEIO AMBIENTE, surgido a partir de uma estratégia de adequação da ideia de concepção do Parque Linear e áreas verdes previstas para o empreendimento, sem abrir mão da ideia comercial vendida, porém adequando para uma redução de custos a fim de não extrapolar o orçamento aprovado.</span>
+                            </div>
+                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <strong style="color: var(--title-color);">7. Visão Estratégica Institucional:</strong> <span style="color: var(--text-color-base);">Assumimos a gestão com a obra em andamento e, mediante um diagnóstico técnico criterioso, implementamos um controle orçamentário rigoroso. Essa atuação cirúrgica mitigou os passivos herdados por falhas técnicas anteriores, contendo desvios estruturais e garantindo a viabilidade comercial do ativo, com um custo por lote fortemente preservado.</span>
                             </div>
                         </div>
                     </div>
@@ -1191,7 +1194,12 @@
                         <p>Localizada na região Norte de Minas Gerais, Bocaiúva possui uma população estimada em aproximadamente 50 mil habitantes e uma área territorial superior a 3.200 km².</p>
                         <p>Inserida em um importante eixo de desenvolvimento regional, Bocaiúva possui acesso facilitado por relevantes corredores rodoviários, com destaque para a BR-135, que conecta o município a centros econômicos como Belo Horizonte, Montes Claros e demais cidades do estado. Essa localização estratégica favorece o escoamento da produção agrícola e industrial, amplia a mobilidade regional, estimula a atração de novos investimentos e contribui para o crescimento urbano planejado e sustentável.</p>
                         <p>Com 705 lotes, o Mirante da Lagoa foi concebido para oferecer infraestrutura urbana de qualidade, promovendo organização territorial, desenvolvimento sustentável e potencial de valorização a longo prazo. O empreendimento acompanha a expansão natural do município e busca contribuir para o desenvolvimento ordenado da cidade, criando novas oportunidades de moradia, investimento e geração de valor para a região.</p>
-                        <button class="home-btn" style="font-size: 0.85rem; padding: 10px 20px; margin-top: 15px;" onclick="openPhotoModal('PROJETO_URBANIZADO_MIRANTE.jpg')">👁️ Visualizar Projeto Urbanizado</button>
+                        
+                        <div id="hidden-mirante-gallery" class="gallery-container" style="display: none;">
+                            <div class="gallery-item"><img src="Aerea Mirante do Lago.jpg" alt="Aerea Mirante do Lago"></div>
+                            <div class="gallery-item"><img src="Master Plan Mirante do Lago - Ultra HD - 8K.jpg" alt="Master Plan Mirante"></div>
+                        </div>
+                        <button class="home-btn" style="font-size: 0.85rem; padding: 10px 20px; margin-top: 15px;" onclick="openPhotoModal('Aerea Mirante do Lago.jpg', document.querySelector('#hidden-mirante-gallery .gallery-item'))">👁️ Visualizar Projeto Urbanizado</button>
                     </div>
                     <div class="sobre-image-wrapper">
                         <img src="27.jpeg" alt="Mirante da Lagoa">
@@ -1367,8 +1375,8 @@
                             <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
                                 <strong style="color: var(--title-color);">5. Custo Unitário:</strong> <span style="color: var(--text-color-base);">A reestruturação derrubou o custo/lote global de R$ 8.714 para R$ 7.853, viabilizando e potencializando a margem de comercialização da área.</span>
                             </div>
-                            <div style="background: var(--active-color); padding: 15px; border-radius: 8px; border: 1px solid var(--active-hover-color); color: #ffffff;">
-                                <strong>6. Visão Estratégica Institucional:</strong> <em>Apesar da nossa entrada na gestão em fase intermediária, o robusto diagnóstico técnico realizado permitiu conter anomalias orçamentárias herdadas. Destaca-se a excelência em firmar parcerias lindeiras para o rateio de custos de infraestrutura, movimento que gerou uma expressiva economia projetada e assegurou a alta viabilidade e rentabilidade comercial do ativo.</em>
+                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <strong style="color: var(--title-color);">6. Visão Estratégica Institucional:</strong> <span style="color: var(--text-color-base);">Apesar de serem obras em que a administração nossa não foi desde o início, houve um controle maestral para conter os danos orçamentários que poderiam ser causados por falhas técnicas da antiga administração, a etapa de diagnóstico feita e ainda vigente foi conduzida de forma a segurar o máximo possível o custo/lote projetado, de forma a manter o ativo ainda viável para comercialização/vendas, e diante do cenário de economia projetada dado a parcerias feitas ao longo da administração para divisão de custos com parceiros vizinhos do loteamento, é concluído a eficiencia da gestão orçamentária.</span>
                             </div>
                         </div>
                     </div>
@@ -1640,8 +1648,8 @@
                             <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
                                 <strong style="color: var(--title-color);">5. Ações Preventivas:</strong> <span style="color: var(--text-color-base);">Intensificar campanhas de sondagem prévias e controle tecnológico rigoroso antes da liberação das frentes de infraestrutura pesada, para balizar os orçamentos vindouros.</span>
                             </div>
-                            <div style="background: var(--active-color); padding: 15px; border-radius: 8px; border: 1px solid var(--active-hover-color); color: #ffffff;">
-                                <strong>6. Visão Estratégica Institucional:</strong> <em>Em fase diligente de diagnóstico, já implementamos uma cultura de alta eficiência, maximizando o aproveitamento da infraestrutura pré-existente sem jamais abdicar das diretrizes e normas de segurança vigentes. Embora exista um extenso escopo a ser validado — notadamente no saneamento básico —, nosso time atua com governança, mantendo forte otimismo quanto ao fiel cumprimento do orçamento inicial estimado.</em>
+                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <strong style="color: var(--title-color);">6. Visão Estratégica Institucional:</strong> <span style="color: var(--text-color-base);">Ainda muito cedo na etapa de diagnóstico de obras, mas já aplicado a cultura de eficiência e aproveitamento máximo da infraestrutura já executada, garantindo sempre a qualidade técnica exigida por normas de segurança etc. Há muito o que se descobrir principalmente na rede de saneamento, porém a equipe vê com bons olhos o controle orçamentário previsto para a operação, baseado no orçamento inicial estimado.</span>
                             </div>
                         </div>
                     </div>
@@ -3734,4 +3742,3 @@
     </script>
 </body>
 </html>
-

@@ -612,6 +612,40 @@
         .analysis-inner-content.active { display: block; }
         .empty-state { text-align: center; padding: 40px; color: var(--empty-state-text); background: var(--empty-state-bg); border: 1px dashed var(--border-color); border-radius: 8px; font-style: italic; transition: all 0.4s; margin: 20px 0; }
 
+        /* INÍCIO ESTILIZAÇÃO GRID DE INSIGHTS */
+        .insights-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            align-items: stretch;
+        }
+        .insight-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            text-align: justify;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 0;
+        }
+        .insight-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-color: var(--active-color);
+        }
+        body.dark-mode .insight-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            border-color: var(--subtitle-color);
+        }
+        @media (max-width: 768px) {
+            .insights-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        /* FIM ESTILIZAÇÃO GRID DE INSIGHTS */
+
         .kpi-grid { display: grid; gap: 10px; margin-bottom: 25px; }
         .kpi-card { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 12px 10px; text-align: center; transition: all 0.4s; display: flex; flex-direction: column; justify-content: center; }
         .kpi-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(85,139,47,0.15); border-color: var(--active-color); }
@@ -1064,27 +1098,27 @@
                     
                     <div class="analysis-inner-content" id="insights-mirante">
                         <div class="abc-header"><h3></h3></div>
-                        <div style="display: flex; flex-direction: column; gap: 15px;">
-                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">1. Orçamento Geral:</strong> <span style="color: var(--text-color-base);">Projeção de leve extrapolação no fechamento (cerca de +1,48%), exigindo monitoramento rigoroso e travas nas etapas finais de execução.</span>
+                        <div class="insights-grid">
+                            <div class="insight-card">
+                                <div><strong style="color: var(--title-color);">💰 1. Orçamento Geral:</strong></div><span style="color: var(--text-color-base);">Projeção de leve extrapolação no fechamento (cerca de +1,48%), exigindo monitoramento rigoroso e travas nas etapas finais de execução.</span>
                             </div>
-                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">2. Pavimentação Total:</strong> <span style="color: var(--text-color-base);">Principal ofensor do orçamento da obra. O custo final projetado superou substancialmente a linha de base inicial, demandando forte revisão e adequação técnica.</span>
+                            <div class="insight-card">
+                                <div><strong style="color: var(--title-color);">🛣️ 2. Pavimentação Total:</strong></div><span style="color: var(--text-color-base);">Principal ofensor do orçamento da obra. O custo final projetado superou substancialmente a linha de base inicial, demandando forte revisão e adequação técnica.</span>
                             </div>
-                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">3. Reservatório e Adutora:</strong> <span style="color: var(--text-color-base);">O desvio orçamentário de 11,2% decorre da inviabilidade técnica de aproveitamento da infraestrutura pré-existente. Constatou-se a necessidade de execução integral de uma nova rede adutora, garantindo a integridade e eficiência do sistema.</span>
+                            <div class="insight-card">
+                                <div><strong style="color: var(--title-color);">💧 3. Reservatório e Adutora:</strong></div><span style="color: var(--text-color-base);">O desvio orçamentário de 11,2% decorre da inviabilidade técnica de aproveitamento da infraestrutura pré-existente. Constatou-se a necessidade de execução integral de uma nova rede adutora, garantindo a integridade e eficiência do sistema.</span>
                             </div>
-                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">4. Rede de Água Potável:</strong> <span style="color: var(--text-color-base);">Durante a fase de comissionamento e testes de distribuição, identificaram-se falhas estruturais e vazamentos em trechos executados pela gestão anterior. A mitigação dessas patologias resultará em um incremento projetado de até 30% no custo da etapa, sem impactos nas parcelas executadas sob a administração atual.</span>
+                            <div class="insight-card">
+                                <div><strong style="color: var(--title-color);">🚰 4. Rede de Água Potável:</strong></div><span style="color: var(--text-color-base);">Durante a fase de comissionamento e testes de distribuição, identificaram-se falhas estruturais e vazamentos em trechos executados pela gestão anterior. A mitigação dessas patologias resultará em um incremento projetado de até 30% no custo da etapa, sem impactos nas parcelas executadas sob a administração atual.</span>
                             </div>
-                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">5. Ações Mitigadoras:</strong> <span style="color: var(--text-color-base);">Acelerar a entrega do loteamento e o repasse das redes às concessionárias para cessar imediatamente os Gastos Indiretos (vigilância, manutenção de canteiro), que seguem dilapidando o saldo disponível.</span>
+                            <div class="insight-card">
+                                <div><strong style="color: var(--title-color);">🛡️ 5. Ações Mitigadoras:</strong></div><span style="color: var(--text-color-base);">Acelerar a entrega do loteamento e o repasse das redes às concessionárias para cessar imediatamente os Gastos Indiretos (vigilância, manutenção de canteiro), que seguem dilapidando o saldo disponível.</span>
                             </div>
-                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">6. Meio Ambiente:</strong> <span style="color: var(--text-color-base);">Projeta-se uma otimização orçamentária de aproximadamente 22% através da readequação técnica do projeto paisagístico e do Parque Linear. A estratégia assegura a manutenção do valor comercial agregado ao empreendimento, alinhando a execução às premissas de eficiência e controle de custos.</span>
+                            <div class="insight-card">
+                                <div><strong style="color: var(--title-color);">🌳 6. Meio Ambiente:</strong></div><span style="color: var(--text-color-base);">Projeta-se uma otimização orçamentária de aproximadamente 22% através da readequação técnica do projeto paisagístico e do Parque Linear. A estratégia assegura a manutenção do valor comercial agregado ao empreendimento, alinhando a execução às premissas de eficiência e controle de custos.</span>
                             </div>
-                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">7. Visão Estratégica Institucional:</strong> <span style="color: var(--text-color-base);">Assumimos a gestão com a obra em andamento e, mediante um diagnóstico técnico criterioso, implementamos um controle orçamentário rigoroso. Essa atuação cirúrgica mitigou os passivos herdados por falhas técnicas anteriores, contendo desvios estruturais e garantindo a viabilidade comercial do ativo, com um custo por lote fortemente preservado.</span>
+                            <div class="insight-card" style="grid-column: 1 / -1;">
+                                <div><strong style="color: var(--title-color);">📈 7. Visão Estratégica Institucional:</strong></div><span style="color: var(--text-color-base);">Assumimos a gestão com a obra em andamento e, mediante um diagnóstico técnico criterioso, implementamos um controle orçamentário rigoroso. Essa atuação cirúrgica mitigou os passivos herdados por falhas técnicas anteriores, contendo desvios estruturais e garantindo a viabilidade comercial do ativo, com um custo por lote fortemente preservado.</span>
                             </div>
                         </div>
                     </div>
@@ -1232,7 +1266,7 @@
                         <div class="kpi-sublist-item"><span class="sublist-label">Orçado:</span><span class="sublist-value">R$ 8.714</span></div>
                         <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 6.368</span></div>
                         <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 1.825</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 7.853</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 26.350</span></div>
                     </div>
                 </div>
             </div>
@@ -1358,25 +1392,25 @@
                     </div>
 
                     <div class="analysis-inner-content" id="insights-joaquim">
-                        <div class="abc-header"><h3>Insights Técnicos e Desafios Orçamentários</h3></div>
-                        <div style="display: flex; flex-direction: column; gap: 15px;">
-                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">1. Orçamento Geral:</strong> <span style="color: var(--text-color-base);">Cenário altamente positivo, sinalizando uma forte economia projetada de -9,88% em relação à linha de base.</span>
+                        <div class="abc-header"><h3></h3></div>
+                        <div class="insights-grid">
+                            <div class="insight-card">
+                                <div><strong style="color: var(--title-color);">💰 1. Orçamento Geral:</strong></div><span style="color: var(--text-color-base);">Cenário positivo, sinalizado uma expressiva economia projetada de aproximadamente 10%, em relação à linha de base.</span>
                             </div>
-                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">2. Reservatório / Adutora:</strong> <span style="color: var(--text-color-base);">Atua como principal vetor de redução de custos na obra, com uma previsão de fechamento muito aquém do valor inicialmente engessado no orçamento.</span>
+                            <div class="insight-card">
+                                <div><strong style="color: var(--title-color);">💧 2. Reservatório / Adutora:</strong></div><span style="color: var(--text-color-base);">Atua como principal vetor de redução de custos na obra, com uma previsão de fechamento de 41,6% abaixo do orçado, que foi alcançado devido a negociação com um vizinho de empreendimentos que dividiu os custos da obra com a nossa empresa.</span>
                             </div>
-                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">3. Obras de Acesso e Entorno:</strong> <span style="color: var(--text-color-base);">Apresentam tendência de encostar no teto do orçamento previsto, sendo essenciais as aprovações executivas precisas para não corroer o saldo ganho em outras frentes.</span>
+                            <div class="insight-card">
+                                <div><strong style="color: var(--title-color);">🚧 3. Obras de acesso e Entorno:</strong></div><span style="color: var(--text-color-base);">Apresentam tendência de encostar no teto do orçamento previsto, sendo essenciais as aprovações executivas precisas para não corroer o saldo ganho em outras frentes.</span>
                             </div>
-                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">4. Estação Elevatória:</strong> <span style="color: var(--text-color-base);">Frente de infraestrutura pesada que já consumiu fatia significativa e exige rigidez na aprovação e instalação final do Booster.</span>
+                            <div class="insight-card">
+                                <div><strong style="color: var(--title-color);">⚙️ 4. Estação Elevatória:</strong></div><span style="color: var(--text-color-base);">Frente de infraestrutura pesada que já consumiu fatia significativa e exige rigidez na aprovação e instalação final do Booster.</span>
                             </div>
-                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">5. Custo Unitário:</strong> <span style="color: var(--text-color-base);">A reestruturação derrubou o custo/lote global de R$ 8.714 para R$ 7.853, viabilizando e potencializando a margem de comercialização da área.</span>
+                            <div class="insight-card">
+                                <div><strong style="color: var(--title-color);">🔄 5. Sistema de Esgoto Sanitário e E.E.E:</strong></div><span style="color: var(--text-color-base);">Tendência de economia devido a nova parceria firmada com vizinhos do empreendimento da nossa empresa.</span>
                             </div>
-                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">6. Visão Estratégica Institucional:</strong> <span style="color: var(--text-color-base);">Apesar de serem obras em que a administração nossa não foi desde o início, houve um controle maestral para conter os danos orçamentários que poderiam ser causados por falhas técnicas da antiga administração, a etapa de diagnóstico feita e ainda vigente foi conduzida de forma a segurar o máximo possível o custo/lote projetado, de forma a manter o ativo ainda viável para comercialização/vendas, e diante do cenário de economia projetada dado a parcerias feitas ao longo da administração para divisão de custos com parceiros vizinhos do loteamento, é concluído a eficiencia da gestão orçamentária.</span>
+                            <div class="insight-card">
+                                <div><strong style="color: var(--title-color);">📈 6. Visão Estratégica Institucional:</strong></div><span style="color: var(--text-color-base);">A rigorosa gestão orçamentária conteve falhas herdadas da gestão anterior. Parcerias estratégicas para divisão de custos viabilizaram uma economia significativa, garantindo um custo/lote atrativo e a viabilidade de comercialização do ativo.</span>
                             </div>
                         </div>
                     </div>
@@ -1601,7 +1635,7 @@
                             <li class="level-2"><span class="enum">2.2</span> Execução de novos ramais e reparos dos antigos</li>
                             <li class="level-2"><span class="enum">2.3</span> Construção de poços de visita</li>
                             <li class="level-1"><span>3) Terraplenagem, pavimentação, recapeamento, guias e sarjetas</span><span>R$ 3.494.930,22</span></li>
-                            <li class="level-2"><span class="enum">3.1</span> Pavimentação completo da área pendente</li>
+                            <li class="level-2"><span class="enum">3.1</span> Pavimentação completa da área pendente</li>
                             <li class="level-2"><span class="enum">3.2</span> Reparo de guias e sarjetas</li>
                             <li class="level-2"><span class="enum">3.3</span> Pintura de guias</li>
                             <li class="level-1"><span>4) Paisagismo</span><span>R$ 899.440,00</span></li>
@@ -1659,25 +1693,25 @@
                     </div>
 
                     <div class="analysis-inner-content" id="insights-parque">
-                        <div class="abc-header"><h3>Insights Técnicos e Desafios Orçamentários</h3></div>
-                        <div style="display: flex; flex-direction: column; gap: 15px;">
-                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">1. Orçamento Geral:</strong> <span style="color: var(--text-color-base);">Projeção indica aderência quase total ao orçamento original (desvio de apenas +0,48%), evidenciando a precisão do diagnóstico preliminar e margem para manobras cirúrgicas.</span>
+                        <div class="abc-header"><h3></h3></div>
+                        <div class="insights-grid">
+                            <div class="insight-card">
+                                <div><strong style="color: var(--title-color);">💰 1. Orçamento Geral:</strong></div><span style="color: var(--text-color-base);">Projeção indica aderência quase total ao orçamento original (desvio de apenas +0,48%), evidenciando a precisão do diagnóstico preliminar e margem para manobras cirúrgicas.</span>
                             </div>
-                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">2. Pavimentação Viária:</strong> <span style="color: var(--text-color-base);">Representa a maior fatia do orçamento com expressivos R$ 2,97M. O sucesso financeiro da obra passa invariavelmente pela eficiência na compra e execução deste escopo crítico.</span>
+                            <div class="insight-card">
+                                <div><strong style="color: var(--title-color);">🛣️ 2. Pavimentação Viária:</strong></div><span style="color: var(--text-color-base);">Representa a maior fatia do orçamento com expressivos R$ 2,97M. O sucesso financeiro da obra passa invariavelmente pela eficiência na compra e execução deste escopo crítico.</span>
                             </div>
-                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">3. Rede de Saneamento:</strong> <span style="color: var(--text-color-base);">Água e Esgoto permanecem como frentes 100% projetadas (ainda sem investimento consolidado expressivo), o que embute risco técnico oculto em caso de solos adversos.</span>
+                            <div class="insight-card">
+                                <div><strong style="color: var(--title-color);">💧 3. Rede de Saneamento:</strong></div><span style="color: var(--text-color-base);">Água e Esgoto permanecem como frentes 100% projetadas (ainda sem investimento consolidado expressivo).</span>
                             </div>
-                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">4. Rede de Drenagem:</strong> <span style="color: var(--text-color-base);">Apresenta pequena tendência de extrapolação em relação à verba base. Exige travamento de aditivos e cuidado redobrado na compatibilização topográfica para afastar retrabalhos.</span>
+                            <div class="insight-card">
+                                <div><strong style="color: var(--title-color);">🌧️ 4. Rede de Drenagem:</strong></div><span style="color: var(--text-color-base);">Apresenta extrapolação em relação à verba base dado a etapa de verificação e sondagem de rede que possibilitou a visualização do cenário real e ajuste do orçamento.</span>
                             </div>
-                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">5. Ações Preventivas:</strong> <span style="color: var(--text-color-base);">Intensificar campanhas de sondagem prévias e controle tecnológico rigoroso antes da liberação das frentes de infraestrutura pesada, para balizar os orçamentos vindouros.</span>
+                            <div class="insight-card">
+                                <div><strong style="color: var(--title-color);">🛡️ 5. Ações Preventivas:</strong></div><span style="color: var(--text-color-base);">Intensificar campanhas de sondagem prévias e controle tecnológico rigoroso antes da liberação das frentes de infraestrutura pesada, para balizar os orçamentos vindouros.</span>
                             </div>
-                            <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
-                                <strong style="color: var(--title-color);">6. Visão Estratégica Institucional:</strong> <span style="color: var(--text-color-base);">Ainda muito cedo na etapa de diagnóstico de obras, mas já aplicado a cultura de eficiência e aproveitamento máximo da infraestrutura já executada, garantindo sempre a qualidade técnica exigida por normas de segurança etc. Há muito o que se descobrir principalmente na rede de saneamento, porém a equipe vê com bons olhos o controle orçamentário previsto para a operação, baseado no orçamento inicial estimado.</span>
+                            <div class="insight-card">
+                                <div><strong style="color: var(--title-color);">📈 6. Visão Estratégica Institucional:</strong></div><span style="color: var(--text-color-base);">Ainda muito cedo na etapa de diagnóstico de obras, mas já aplicado a cultura de eficiência e aproveitamento máximo da infraestrutura já executada, garantindo sempre a qualidade técnica exigida por normas de segurança etc. Há muito o que se descobrir principalmente na rede de saneamento, porém a equipe vê com bons olhos o controle orçamentário previsto para a operação, baseado no orçamento inicial estimado.</span>
                             </div>
                         </div>
                     </div>
@@ -1845,7 +1879,7 @@
                         <div class="kpi-item"><span class="label">Custo/Lote (Orçado)</span><span class="value">R$ 8.714</span></div>
                         <div class="kpi-item"><span class="label">Custo/Lote (Atual)</span><span class="value">R$ 6.368</span></div>
                         <div class="kpi-item"><span class="label">Custo/Lote (Projetado)</span><span class="value">R$ 1.825</span></div>
-                        <div class="kpi-item"><span class="label">Custo/Lote (Global)</span><span class="value">R$ 7.853</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Global)</span><span class="value">R$ 26.350</span></div>
                         
                         <div class="chart-container-gauge-integrated">
                             <div class="chart-title" style="font-size: 0.95rem; margin-bottom: 5px;">Avanço Financeiro</div>

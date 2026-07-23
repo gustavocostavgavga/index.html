@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard GRP - Controle de Orçamentos e Custos</title>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>    
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
@@ -24,14 +24,13 @@
 
         /* Variáveis de cores para os modos Claro e Noturno (Tons de Verde) */
         :root {
-            /* Modo Claro Original - Fundo cinza ligeiramente mais claro e sem gradiente */
             --bg-color-1: #f5f6f8; 
             --bg-color-2: #f5f6f8; 
             --bg-color-3: #f5f6f8; 
             
             --text-color-base: #2c3e50;
             --card-bg: #ffffff;
-            --insight-bg: #f1f5f9; /* Mais escuro que o card-bg (branco) */
+            --insight-bg: #f1f5f9; 
             --border-color: #c0c0c0;
             --title-color: #1b5e20;
             --subtitle-color: #558b2f;
@@ -58,7 +57,6 @@
             --empty-state-text: #7f8c8d;
             --center-text-base: #558b2f;
 
-            /* Ativos (Verdes Originais Mantidos) */
             --active-color: #558b2f;
             --active-hover-color: #7cb342;
             --active-text: #ffffff;
@@ -67,31 +65,26 @@
             --economy-color: #2e7d32;
             --economy-bg: #e8f5e9;
 
-            /* Estilo do botão de alternância (Modo Claro) */
             --toggle-btn-bg: #1b5e20;
             --toggle-btn-text: #ffffff;
             --toggle-btn-border: #1b5e20;
             
-            /* Cor única e rígida para toda a coluna Saldo Disponível no Modo Claro */
             --table-saldo-color: #2c3e50;
             --update-text-color: #7f8c8d;
         }
 
-        /* Definição das cores para o Modo Noturno (Verde Escuro) */
         body.dark-mode {
-            /* Fundo com degradê de verde escuro profundo */
             --bg-color-1: #051007; 
             --bg-color-2: #0a1f0d; 
             --bg-color-3: #0c2610; 
             --text-color-base: #e0e0e0; 
             --card-bg: #112d16; 
-            --insight-bg: #173d1f; /* Contraste diferente do card-bg */
+            --insight-bg: #173d1f; 
             --border-color: #1f5027; 
             --title-color: #ffffff; 
             --subtitle-color: #a3e635; 
             --kpi-value-color: #ffffff; 
             
-            /* Abas e Botões em Modo Noturno */
             --tab-btn-bg: #1a4522; 
             --tab-btn-text: #c5e1a5; 
             --sub-tab-btn-bg: #1a4522; 
@@ -101,33 +94,27 @@
             --analysis-tab-btn-text: #a3e635; 
             --analysis-tab-btn-border: #1f5027; 
 
-            /* Tabelas em Modo Noturno */
             --table-th-bg: #0c2610; 
             --table-td-text: #ffffff; 
             --table-border: #1f5027; 
             --table-row-hover: #163a1e; 
 
-            /* Planejamento em Modo Noturno */
             --planejamento-list-text: #e0e0e0;
             --planejamento-border: #1f5027;
 
-            /* Modal e Gauge em Modo Noturno */
             --modal-bg: #112d16;
             --gauge-label-color: #a3e635; 
             --gauge-value-color: #ffffff; 
             --gauge-fill-base: #23572e; 
 
-            /* Outros elementos */
             --empty-state-bg: #0f2d16;
             --empty-state-text: #a3e635;
             --center-text-base: #ffffff; 
 
-            /* Estilo do botão de alternância (Modo Noturno) */
             --toggle-btn-bg: #1a4522;
             --toggle-btn-text: #ffffff;
             --toggle-btn-border: #a3e635;
             
-            /* Cor única e rígida para toda a coluna Saldo Disponível no Modo Noturno */
             --table-saldo-color: #ffffff;
             --update-text-color: #ffffff;
         }
@@ -142,19 +129,16 @@
             transition: background 0.4s ease, color 0.4s ease; 
         }
 
-        /* INÍCIO DAS INJEÇÕES DA CAPA E BOTÕES FLUTUANTES */
         .home-page {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
             min-height: calc(100vh - 40px);
-            
             background-image: linear-gradient(rgba(240, 242, 245, 0.65), rgba(240, 242, 245, 0.65)), url('DJI_0369.JPG');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            
             border-radius: 12px;
             padding: 40px 20px;
             position: relative;
@@ -207,385 +191,74 @@
             box-shadow: 0 6px 15px rgba(0,0,0,0.4);
         }
 
-        .home-logo-frame {
-            padding: 10px 20px;
-            margin-top: 20px;
-            margin-bottom: 30px;
-        }
-        .home-logo {
-            max-height: 80px;
-            object-fit: contain;
-        }
+        .home-logo-frame { padding: 10px 20px; margin-top: 20px; margin-bottom: 30px; }
+        .home-logo { max-height: 80px; object-fit: contain; }
 
-        .home-title-container {
-            margin-bottom: 30px;
-            cursor: default;
-        }
-        .home-title {
-            font-size: 2.5rem;
-            font-weight: bold;
-            text-align: center;
-            margin: 0;
-            color: var(--title-color);
-        }
-        .home-title-container:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 10px 25px rgba(85, 139, 47, 0.15);
-        }
-        body.dark-mode .home-title-container:hover {
-            box-shadow: 0 10px 25px rgba(163, 230, 53, 0.15);
-        }
+        .home-title-container { margin-bottom: 30px; cursor: default; }
+        .home-title { font-size: 2.5rem; font-weight: bold; text-align: center; margin: 0; color: var(--title-color); }
+        .home-title-container:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(85, 139, 47, 0.15); }
+        body.dark-mode .home-title-container:hover { box-shadow: 0 10px 25px rgba(163, 230, 53, 0.15); }
 
-        .home-access-frame {
-            padding: 20px 40px;
-            margin-bottom: 30px;
-        }
-        .home-subtitle {
-            font-size: 1.2rem;
-            font-weight: normal; 
-            margin-bottom: 20px;
-            text-align: center;
-            color: var(--title-color);
-        }
-        .home-btn-group {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .home-btn {
-            background-color: #558b2f; 
-            color: #ffffff;
-            font-weight: bold;
-            font-size: 1.1rem;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.3s, opacity 0.3s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        }
-        .home-btn:hover {
-            transform: translateY(-2px);
-            opacity: 0.9;
-        }
+        .home-access-frame { padding: 20px 40px; margin-bottom: 30px; }
+        .home-subtitle { font-size: 1.2rem; font-weight: normal; margin-bottom: 20px; text-align: center; color: var(--title-color); }
+        .home-btn-group { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+        .home-btn { background-color: #558b2f; color: #ffffff; font-weight: bold; font-size: 1.1rem; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; transition: transform 0.3s, opacity 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        .home-btn:hover { transform: translateY(-2px); opacity: 0.9; }
 
-        .home-footer-frame {
-            padding: 10px 30px;
-            margin-top: auto; 
-        }
-        .home-date {
-            font-weight: bold; 
-            font-size: 1rem;
-            color: var(--title-color);
-            margin: 0;
-        }
+        .home-footer-frame { padding: 10px 30px; margin-top: auto; }
+        .home-date { font-weight: bold; font-size: 1rem; color: var(--title-color); margin: 0; }
 
-        #btn-voltar {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            background-color: #558b2f; 
-            color: #ffffff;
-            font-weight: bold;
-            font-size: 0.9rem;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            z-index: 9999;
-            transition: all 0.3s;
-            display: none; 
-        }
-        #btn-voltar:hover {
-            transform: scale(1.05);
-            background-color: #7cb342;
-        }
+        #btn-voltar { position: fixed; bottom: 25px; right: 25px; background-color: #558b2f; color: #ffffff; font-weight: bold; font-size: 0.9rem; padding: 12px 24px; border: none; border-radius: 25px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 9999; transition: all 0.3s; display: none; }
+        #btn-voltar:hover { transform: scale(1.05); background-color: #7cb342; }
 
-        /* Estilização da aba PROJETOS COM MENU DE EDIÇÃO */
-        .projetos-container {
-            display: flex;
-            gap: 20px;
-            align-items: flex-start;
-            margin-top: 15px;
-        }
-        .projetos-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 250px;
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 12px;
-            border: 2px solid var(--border-color);
-        }
-        .projeto-btn {
-            background: var(--table-th-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color-base);
-            padding: 12px 15px;
-            text-align: left;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 700;
-            transition: all 0.3s;
-        }
-        .projeto-btn:hover, .projeto-btn.active {
-            background: var(--active-color);
-            color: var(--active-text);
-            border-color: var(--active-color);
-        }
+        .projetos-container { display: flex; gap: 20px; align-items: flex-start; margin-top: 15px; }
+        .projetos-sidebar { display: flex; flex-direction: column; gap: 10px; width: 250px; background: var(--card-bg); padding: 15px; border-radius: 12px; border: 2px solid var(--border-color); }
+        .projeto-btn { background: var(--table-th-bg); border: 1px solid var(--border-color); color: var(--text-color-base); padding: 12px 15px; text-align: left; border-radius: 6px; cursor: pointer; font-weight: 700; transition: all 0.3s; }
+        .projeto-btn:hover, .projeto-btn.active { background: var(--active-color); color: var(--active-text); border-color: var(--active-color); }
         
-        .projetos-content {
-            flex: 1;
-            background: var(--card-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            height: 700px; 
-            display: flex;
-            flex-direction: column;
-            overflow: hidden; 
-        }
-        .pdf-toolbar {
-            display: flex;
-            gap: 6px; 
-            padding: 10px 15px; 
-            background: var(--table-th-bg);
-            border-bottom: 2px solid var(--border-color);
-            align-items: center;
-            justify-content: center; /* Botões centralizados */
-            flex-wrap: nowrap; 
-            overflow-x: auto; 
-            white-space: nowrap;
-            z-index: 10;
-        }
-        .pdf-tool-btn {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color-base);
-            padding: 6px 10px; 
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem; 
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            white-space: nowrap; 
-        }
-        .pdf-tool-btn.active, .pdf-tool-btn:hover {
-            background: var(--active-color);
-            color: var(--active-text);
-            border-color: var(--active-color);
-        }
-        .pdf-tool-separator {
-            width: 2px;
-            height: 24px;
-            background: var(--border-color);
-            margin: 0 2px; 
-            flex-shrink: 0;
-        }
+        .projetos-content { flex: 1; background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; height: 700px; display: flex; flex-direction: column; overflow: hidden; }
+        .pdf-toolbar { display: flex; gap: 6px; padding: 10px 15px; background: var(--table-th-bg); border-bottom: 2px solid var(--border-color); align-items: center; justify-content: center; flex-wrap: nowrap; overflow-x: auto; white-space: nowrap; z-index: 10; }
+        .pdf-tool-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color-base); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.85rem; transition: all 0.3s; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+        .pdf-tool-btn.active, .pdf-tool-btn:hover { background: var(--active-color); color: var(--active-text); border-color: var(--active-color); }
+        .pdf-tool-separator { width: 2px; height: 24px; background: var(--border-color); margin: 0 2px; flex-shrink: 0; }
         
-        .tool-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-        }
-        .color-picker-menu {
-            display: flex;
-            gap: 6px;
-        }
-        .color-dot {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: transform 0.2s;
-        }
-        .color-dot:hover {
-            transform: scale(1.1);
-        }
-        .color-dot.active {
-            border-color: var(--text-color-base);
-            box-shadow: 0 0 4px rgba(0,0,0,0.3);
-        }
-        body.dark-mode .color-dot.active {
-            border-color: #ffffff;
-        }
+        .tool-wrapper { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+        .color-picker-menu { display: flex; gap: 6px; }
+        .color-dot { width: 14px; height: 14px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.2s; }
+        .color-dot:hover { transform: scale(1.1); }
+        .color-dot.active { border-color: var(--text-color-base); box-shadow: 0 0 4px rgba(0,0,0,0.3); }
+        body.dark-mode .color-dot.active { border-color: #ffffff; }
         
-        /* Ícones Picker */
-        .icon-dot {
-            width: 18px; height: 18px; border-radius: 4px; cursor: pointer; border: 2px solid transparent; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: transform 0.2s;
-        }
-        .icon-dot:hover {
-            transform: scale(1.2);
-        }
-        .icon-dot.active {
-            border-color: var(--text-color-base);
-            box-shadow: 0 0 4px rgba(0,0,0,0.3);
-        }
-        body.dark-mode .icon-dot.active {
-            border-color: #ffffff;
-        }
+        .icon-dot { width: 18px; height: 18px; border-radius: 4px; cursor: pointer; border: 2px solid transparent; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: transform 0.2s; }
+        .icon-dot:hover { transform: scale(1.2); }
+        .icon-dot.active { border-color: var(--text-color-base); box-shadow: 0 0 4px rgba(0,0,0,0.3); }
+        body.dark-mode .icon-dot.active { border-color: #ffffff; }
 
-        .pdf-viewer-area {
-            flex: 1;
-            position: relative;
-            overflow: hidden; 
-            background: var(--bg-color-1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .pdf-canvas-wrapper {
-            width: 100%;
-            height: 100%;
-            display: none;
-        }
+        .pdf-viewer-area { flex: 1; position: relative; overflow: hidden; background: var(--bg-color-1); display: flex; align-items: center; justify-content: center; }
+        .pdf-canvas-wrapper { width: 100%; height: 100%; display: none; }
 
-        /* Estilos da nova aba SOBRE */
-        .sobre-container {
-            display: flex;
-            gap: 40px;
-            align-items: stretch;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            border: 2px solid var(--border-color);
-            transition: all 0.4s;
-        }
-        .sobre-text {
-            flex: 1;
-            font-size: 0.95rem;
-            line-height: 1.7;
-            color: var(--text-color-base);
-            text-align: justify;
-        }
-        .sobre-text h3 {
-            color: var(--title-color);
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-            transition: color 0.4s;
-        }
-        .sobre-text h4 {
-            color: var(--subtitle-color);
-            margin-top: 20px;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-            transition: color 0.4s;
-        }
-        .sobre-text p {
-            margin-bottom: 15px;
-        }
-        .sobre-image-wrapper {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border-radius: 12px;
-            border: 2px solid var(--border-color);
-            transition: all 0.4s;
-        }
-        .sobre-image-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.4s;
-        }
-        .sobre-image-wrapper:hover img {
-            transform: scale(1.02);
-        }
-        @media (max-width: 992px) {
-            .sobre-container {
-                flex-direction: column;
-            }
-            .sobre-image-wrapper {
-                aspect-ratio: 16/9;
-            }
-        }
+        .sobre-container { display: flex; gap: 40px; align-items: stretch; background: var(--card-bg); padding: 30px; border-radius: 12px; border: 2px solid var(--border-color); transition: all 0.4s; }
+        .sobre-text { flex: 1; font-size: 0.95rem; line-height: 1.7; color: var(--text-color-base); text-align: justify; }
+        .sobre-text h3 { color: var(--title-color); margin-bottom: 15px; font-size: 1.3rem; transition: color 0.4s; }
+        .sobre-text h4 { color: var(--subtitle-color); margin-top: 20px; margin-bottom: 10px; font-size: 1.1rem; transition: color 0.4s; }
+        .sobre-text p { margin-bottom: 15px; }
+        .sobre-image-wrapper { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 12px; border: 2px solid var(--border-color); transition: all 0.4s; }
+        .sobre-image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+        .sobre-image-wrapper:hover img { transform: scale(1.02); }
+        @media (max-width: 992px) { .sobre-container { flex-direction: column; } .sobre-image-wrapper { aspect-ratio: 16/9; } }
 
         .dashboard { max-width: 1440px; margin: 0 auto; position: relative; }
-        
         header { display: flex; align-items: center; justify-content: center; margin-bottom: 30px; gap: 20px; position: relative; }
+        header .title-section { display: flex; align-items: center; justify-content: space-between; flex: 1; background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 15px 24px; position: relative; transition: all 0.4s; }
+        .logo-container { display: flex; align-items: center; justify-content: flex-start; width: 170px; }
+        .logo-container img { max-height: 60px; width: auto; object-fit: contain; }
+        header h1 { flex: 1; font-size: 1.75rem; font-weight: 700; color: var(--title-color); letter-spacing: 0.5px; text-align: center; transition: color 0.4s; padding: 0 20px; margin: 0; }
         
-        header .title-section { 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            flex: 1; 
-            background: var(--card-bg); 
-            border: 2px solid var(--border-color); 
-            border-radius: 12px; 
-            padding: 15px 24px; 
-            position: relative; 
-            transition: all 0.4s; 
-        }
-        
-        .logo-container {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            width: 170px;
-        }
-        .logo-container img {
-            max-height: 60px;
-            width: auto;
-            object-fit: contain;
-        }
-
-        header h1 { 
-            flex: 1;
-            font-size: 1.75rem; 
-            font-weight: 700; 
-            color: var(--title-color); 
-            letter-spacing: 0.5px; 
-            text-align: center;
-            transition: color 0.4s; 
-            padding: 0 20px;
-            margin: 0;
-        }
-        
-        .header-controls-block {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            justify-content: center;
-            gap: 8px;
-            width: 140px;
-        }
-
-        .mode-toggle-btn { 
-            background: var(--toggle-btn-bg); 
-            color: var(--toggle-btn-text); 
-            border: 1px solid var(--toggle-btn-border); 
-            padding: 6px 12px; 
-            border-radius: 16px; 
-            cursor: pointer; 
-            font-weight: 600; 
-            font-size: 0.72rem; 
-            display: flex; 
-            align-items: center; 
-            gap: 6px; 
-            transition: all 0.3s; 
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1); 
-        }
+        .header-controls-block { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; gap: 8px; width: 140px; }
+        .mode-toggle-btn { background: var(--toggle-btn-bg); color: var(--toggle-btn-text); border: 1px solid var(--toggle-btn-border); padding: 6px 12px; border-radius: 16px; cursor: pointer; font-weight: 600; font-size: 0.72rem; display: flex; align-items: center; gap: 6px; transition: all 0.3s; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
         .mode-toggle-btn:hover { opacity: 0.9; transform: translateY(-1px); }
         .mode-toggle-btn .icon { font-size: 0.85rem; }
-
-        .update-date-lbl {
-            font-size: 0.65rem;
-            font-weight: 600;
-            color: var(--update-text-color);
-            transition: color 0.4s;
-            white-space: nowrap;
-            text-align: right;
-        }
+        .update-date-lbl { font-size: 0.65rem; font-weight: 600; color: var(--update-text-color); transition: color 0.4s; white-space: nowrap; text-align: right; }
         
         .prazos-header-container { display: flex; justify-content: center; margin-bottom: 25px; }
         .prazos-card { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 15px 30px; text-align: center; display: inline-block; transition: all 0.4s; }
@@ -608,46 +281,17 @@
         .analysis-tabs-container { display: flex; gap: 10px; margin-bottom: 25px; justify-content: flex-start; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; flex-wrap: wrap; }
         .analysis-tab-btn { background: var(--analysis-tab-btn-bg); border: 1px solid var(--analysis-tab-btn-border); color: var(--analysis-tab-btn-text); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.4s; font-size: 0.85rem; }
         .analysis-tab-btn.active, .analysis-tab-btn:hover { background: var(--title-color); color: var(--active-text); border-color: var(--title-color); }
-        
         body.dark-mode .analysis-tab-btn.active { background: #1a4522; border-color: #a3e635; color: #ffffff; }
 
         .analysis-inner-content { display: none; min-height: 200px; }
         .analysis-inner-content.active { display: block; }
         .empty-state { text-align: center; padding: 40px; color: var(--empty-state-text); background: var(--empty-state-bg); border: 1px dashed var(--border-color); border-radius: 8px; font-style: italic; transition: all 0.4s; margin: 20px 0; }
 
-        /* INÍCIO ESTILIZAÇÃO GRID DE INSIGHTS */
-        .insights-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            align-items: stretch;
-        }
-        .insight-card {
-            background: var(--insight-bg);
-            padding: 15px;
-            border-radius: 8px;
-            border: 3px solid var(--border-color);
-            text-align: justify;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 0;
-        }
-        .insight-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            border-color: var(--active-color);
-        }
-        body.dark-mode .insight-card:hover {
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-            border-color: var(--subtitle-color);
-        }
-        @media (max-width: 768px) {
-            .insights-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        /* FIM ESTILIZAÇÃO GRID DE INSIGHTS */
+        .insights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; align-items: stretch; }
+        .insight-card { background: var(--insight-bg); padding: 15px; border-radius: 8px; border: 3px solid var(--border-color); text-align: justify; transition: all 0.3s ease; display: flex; flex-direction: column; margin-bottom: 0; }
+        .insight-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); border-color: var(--active-color); }
+        body.dark-mode .insight-card:hover { box-shadow: 0 8px 20px rgba(0,0,0,0.5); border-color: var(--subtitle-color); }
+        @media (max-width: 768px) { .insights-grid { grid-template-columns: 1fr; } }
 
         .kpi-grid { display: grid; gap: 10px; margin-bottom: 25px; }
         .kpi-card { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 12px 10px; text-align: center; transition: all 0.4s; display: flex; flex-direction: column; justify-content: center; }
@@ -655,6 +299,7 @@
         .kpi-card .label { font-size: 0.65rem; color: var(--subtitle-color); text-transform: uppercase; letter-spacing: 0px; margin-bottom: 8px; font-weight: 700; min-height: 28px; display: flex; align-items: center; justify-content: center; transition: color 0.4s; line-height: 1.2; }
         .kpi-card .value { font-size: 1.15rem; font-weight: 800; color: var(--kpi-value-color); transition: color 0.4s; }
         .kpi-card .value.alert-value { color: var(--alert-color); }
+        .kpi-card .value.ok-value { color: var(--active-color); }
         .kpi-card .sublabel { font-size: 0.65rem; color: var(--subtitle-color); margin-top: 6px; transition: color 0.4s; }
         
         .kpi-card .kpi-sublist { display: flex; flex-direction: column; gap: 4px; text-align: left; margin: 4px 0; }
@@ -663,24 +308,7 @@
         .kpi-card .kpi-sublist-item .sublist-label { font-weight: 500; color: var(--subtitle-color); transition: color 0.4s; }
         .kpi-card .kpi-sublist-item .sublist-value { font-weight: 700; color: var(--kpi-value-color); transition: color 0.4s; }
 
-        @media (max-width: 1200px) {
-            .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) !important; }
-        }
-
-        .desvio-badge {
-            font-size: 0.8rem;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-weight: 700;
-            margin-left: 10px;
-            display: inline-block;
-            vertical-align: middle;
-            transition: all 0.4s;
-        }
-        .desvio-badge.positive { color: var(--economy-color); background: var(--economy-bg); }
-        .desvio-badge.negative { color: var(--alert-color); background: var(--alert-bg); }
-        body.dark-mode .desvio-badge.positive { color: #a3e635; background: rgba(163, 230, 53, 0.15); }
-        body.dark-mode .desvio-badge.negative { color: #ff5252; background: rgba(255, 82, 82, 0.15); }
+        @media (max-width: 1200px) { .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) !important; } }
 
         .chart-container-gauge-integrated { margin: 20px auto 0 auto; width: 100%; max-width: 440px; position: relative; border-top: 1px dashed var(--border-color); padding-top: 20px; transition: border 0.4s; }
         .main-gauge-wrapper { position: relative; width: 100%; height: 165px; margin-top: 5px; }
@@ -694,34 +322,10 @@
         .chart-container canvas { max-height: 300px; }
         .chart-title { color: var(--title-color); font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; text-align: center; transition: color 0.4s; }
         
-        .chart-container-large { 
-            background: var(--card-bg); 
-            border: 2px solid var(--border-color); 
-            border-radius: 12px; 
-            padding: 20px 15px 15px 15px; 
-            margin-bottom: 30px; 
-            position: relative; 
-            transition: all 0.4s; 
-            height: 650px; 
-            width: 100%;
-        }
+        .chart-container-large { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 20px 15px 15px 15px; margin-bottom: 30px; position: relative; transition: all 0.4s; height: 650px; width: 100%; }
         .chart-container-large canvas { height: 100% !important; width: 100% !important; }
 
-        .resumo-btn {
-            position: absolute;
-            right: 15px;
-            top: 15px;
-            background: var(--tab-btn-bg);
-            color: var(--tab-btn-text);
-            border: 1px solid var(--border-color);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            z-index: 10;
-        }
+        .resumo-btn { position: absolute; right: 15px; top: 15px; background: var(--tab-btn-bg); color: var(--tab-btn-text); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.3s; z-index: 10; }
         .resumo-btn:hover { background: var(--active-hover-color); color: var(--active-text); border-color: var(--active-hover-color); }
         body.dark-mode .resumo-btn { background: var(--tab-btn-bg); color: var(--tab-btn-text); border-color: var(--border-color); }
         body.dark-mode .resumo-btn:hover { background: var(--active-hover-color); color: var(--active-text); }
@@ -769,10 +373,7 @@
         .hierarchical-list .level-2 .enum { font-weight: 600; color: var(--subtitle-color); width: 25px; display: inline-block; flex-shrink: 0; }
         .hierarchical-list .level-2:last-child, .hierarchical-list .level-1:last-child { border-bottom: none; }
 
-        @media (max-width: 992px) {
-            .summary-container { grid-template-columns: 1fr !important; }
-            .summary-operator { font-size: 1.5rem !important; margin: 5px 0 !important; }
-        }
+        @media (max-width: 992px) { .summary-container { grid-template-columns: 1fr !important; } .summary-operator { font-size: 1.5rem !important; margin: 5px 0 !important; } }
         @media (max-width: 768px) {
             .chart-grid-top { grid-template-columns: 1fr; }
             header h1 { font-size: 1.2rem; padding: 0 10px; text-align: center; }
@@ -786,13 +387,10 @@
         }
         
         .executive { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
-        @media (max-width: 992px) {
-            .executive { grid-template-columns: 1fr !important; }
-        }
+        @media (max-width: 992px) { .executive { grid-template-columns: 1fr !important; } }
 
         .executive-column { display: flex; flex-direction: column; }
         .executive-card { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 20px; transition: all 0.4s; }
-        /* NOVO HOVER PARA EXECUTIVE CARD */
         .executive-card:hover { transform: translateY(-6px); box-shadow: 0 10px 25px rgba(85,139,47,0.15); border-color: var(--active-color); }
         body.dark-mode .executive-card:hover { box-shadow: 0 10px 25px rgba(163, 230, 53, 0.15); border-color: var(--subtitle-color); }
         
@@ -844,29 +442,10 @@
         .gauge-detail-item .g-value { color: var(--gauge-value-color); font-weight: 700; font-size: 1rem; transition: color 0.4s; }
         .gauge-detail-item.full { grid-column: 1 / -1; border-color: var(--border-color); }
 
-        /* Estilização para o Hover dos Balões de Resumo */
         .summary-container { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 20px; flex-wrap: nowrap; }
-        .summary-box { 
-            background: var(--card-bg); 
-            border: 2px solid var(--title-color); 
-            border-radius: 12px; 
-            padding: 18px; 
-            text-align: center; 
-            flex: 1; 
-            min-height: 110px; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            transition: all 0.3s ease; 
-        }
-        .summary-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        body.dark-mode .summary-box:hover {
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-        }
-
+        .summary-box { background: var(--card-bg); border: 2px solid var(--title-color); border-radius: 12px; padding: 18px; text-align: center; flex: 1; min-height: 110px; display: flex; flex-direction: column; justify-content: center; transition: all 0.3s ease; }
+        .summary-box:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        body.dark-mode .summary-box:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
         .summary-box .summary-title { font-size: 0.85rem; font-weight: 600; color: var(--title-color); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; transition: color 0.4s; }
         .summary-box .summary-value { font-size: 1.4rem; font-weight: 700; color: var(--title-color); transition: color 0.4s; }
         
@@ -892,6 +471,19 @@
         body.dark-mode .summary-box .summary-value,
         body.dark-mode .summary-box div { color: #ffffff !important; font-weight: 700 !important; }
         .summary-operator { font-size: 2rem; font-weight: 700; color: #7f8c8d; user-select: none; padding: 0 5px; text-align: center; }
+
+        /* Novo Hover Hint para o gráfico Histórico */
+        .chart-hint {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 0.75rem;
+            color: var(--subtitle-color);
+            font-weight: 600;
+            font-style: italic;
+            pointer-events: none;
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
@@ -952,6 +544,7 @@
             <button class="tab-btn" data-tab="geral"><strong>VISÃO GERAL</strong></button>
         </div>
         
+        <!-- INÍCIO MIRANTE -->
         <div class="tab-content active" id="tab-mirante">
             <div class="prazos-header-container">
                 <div class="prazos-card">
@@ -1011,8 +604,9 @@
             </div>
             
             <div class="sub-tab-content" id="subtab-historico-mirante">
-                <div class="chart-container" style="margin-bottom: 20px;">
+                <div class="chart-container" style="margin-bottom: 20px; position: relative;">
                     <div class="chart-title">Histórico e Projeção de Desembolsos</div>
+                    <div class="chart-hint">👆 Clique na coluna para mais detalhes</div>
                     <canvas id="chartMiranteHistorico"></canvas>
                     <div class="summary-container">
                         <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 5.357.842,03</div></div>
@@ -1250,6 +844,7 @@
 
         </div>
         
+        <!-- INÍCIO JOAQUIM -->
         <div class="tab-content" id="tab-joaquim">
             <div class="prazos-header-container">
                 <div class="prazos-card">
@@ -1311,8 +906,9 @@
             </div>
             
             <div class="sub-tab-content" id="subtab-historico-joaquim">
-                <div class="chart-container" style="margin-bottom: 20px;">
+                <div class="chart-container" style="margin-bottom: 20px; position: relative;">
                     <div class="chart-title">Histórico e Projeção de Desembolsos</div>
+                    <div class="chart-hint">👆 Clique na coluna para mais detalhes</div>
                     <canvas id="chartJoaquimHistorico"></canvas>
                     <div class="summary-container">
                         <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 3.471.934,26</div></div>
@@ -1536,7 +1132,7 @@
 
         </div>
         
-        <!-- INÍCIO ABA PARQUE DAS NAÇÕES -->
+        <!-- INÍCIO PARQUE -->
         <div class="tab-content" id="tab-parque">
             <div class="prazos-header-container">
                 <div class="prazos-card">
@@ -1598,8 +1194,9 @@
             </div>
             
             <div class="sub-tab-content" id="subtab-historico-parque">
-                <div class="chart-container" style="margin-bottom: 20px;">
+                <div class="chart-container" style="margin-bottom: 20px; position: relative;">
                     <div class="chart-title">Histórico e Projeção de Desembolsos</div>
+                    <div class="chart-hint">👆 Clique na coluna para mais detalhes</div>
                     <canvas id="chartParqueHistorico"></canvas>
                     <div class="summary-container">
                         <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 416.895,93</div></div>
@@ -1837,7 +1434,6 @@
             </div>
 
         </div>
-        <!-- FIM ABA PARQUE DAS NAÇÕES -->
         
         <div class="tab-content" id="tab-geral">
             <div class="prazos-header-container">
@@ -1924,8 +1520,7 @@
             </div>
         </div>
     </div>
-
-    <!-- Modais -->
+<!-- Modais -->
     <div class="modal" id="photoGlobalModal" onclick="if(event.target===this) closePhotoModal()">
         <div class="modal-content">
             <span class="modal-close" onclick="closePhotoModal()">&times;</span>
@@ -2003,7 +1598,7 @@
             <p style="text-align: center; font-size: 0.8rem; color: var(--subtitle-color); margin-bottom: 20px; font-weight: 600;">PENDÊNCIAS</p>
             
             <ul class="hierarchical-list" id="pendenciasList" style="max-height: 350px; overflow-y: auto; padding-right: 5px;">
-                </ul>
+            </ul>
         </div>
     </div>
 
@@ -2015,7 +1610,7 @@
             
             <div style="overflow-y: auto; padding-right: 10px; flex: 1;">
                 <ul class="hierarchical-list" id="resumoPendenciasList">
-                    </ul>
+                </ul>
             </div>
         </div>
     </div>
@@ -2084,13 +1679,73 @@
         </div>
     </div>
 
+    <!-- NOVO MODAL: Detalhamento do Desembolso Histórico por Mês -->
+    <div class="modal gauge-modal" id="modalDesembolsoMes" onclick="if(event.target===this) closeAllModals()">
+        <div class="gauge-modal-box" style="max-width: 500px; padding: 25px; text-align: left; max-height: 90vh; display: flex; flex-direction: column;">
+            <span class="gauge-modal-close" onclick="closeAllModals()">&times;</span>
+            <h3 style="margin-bottom: 5px; text-align: center; color: var(--title-color);">Desembolso - <span id="desembolsoMesTitle">Mês</span></h3>
+            <p id="desembolsoMesObra" style="text-align: center; font-size: 0.8rem; color: var(--subtitle-color); margin-bottom: 20px; font-weight: 600;"></p>
+            
+            <div class="table-container" style="overflow-y: auto; flex: 1; margin-bottom: 0;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem;">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; font-size: 0.75rem;">Etapa</th>
+                            <th style="text-align: center; font-size: 0.75rem;">Valor Desembolsado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="desembolsoMesTableBody">
+                    </tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td style="text-align: left;"><strong>TOTAL</strong></td>
+                            <td id="desembolsoMesTot" style="text-align: center; color: var(--title-color);"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // =========================================================================
+        // NAVEGAÇÃO: HOME <-> DASHBOARD E CONFIG DE OBRA
+        // =========================================================================
+        function goToDashboard(tabName) {
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('dashboard-view').style.display = 'block';
+            document.getElementById('btn-voltar').style.display = 'block';
+            
+            const tabBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+            if (tabBtn) tabBtn.click();
+            
+            window.scrollTo(0, 0);
+        }
+
+        function goToHome() {
+            document.getElementById('dashboard-view').style.display = 'none';
+            document.getElementById('btn-voltar').style.display = 'none';
+            document.getElementById('home-page').style.display = 'flex';
+            window.scrollTo(0, 0);
+        }
+
+        function setActiveObraPdf(obraId) {
+            currentObra = obraId;
+            if (pdfStates && pdfStates[obraId] && !pdfStates[obraId].canvas) {
+                if(typeof initFabricCanvas === 'function') initFabricCanvas(obraId);
+            }
+        }
+
+        // =========================================================================
+        // CONFIGURAÇÕES GERAIS DO CHART.JS
+        // =========================================================================
         Chart.defaults.font.family = "'Montserrat', sans-serif";
         Chart.register(ChartDataLabels);
 
         let currentChartLabel = null;
         let modalSortDirections = {};
         let desembolsoSortDirections = {};
+	let sortDirections = {};
 
         function sortModalTable(colIndex) {
             const tbody = document.getElementById('breakdownTableBody');
@@ -2192,43 +1847,173 @@
         };
         Chart.register(dateLimitPlugin);
 
+	// =========================================================================
+        // LEITURA DA NOVA PLANILHA "dados.xlsx" (OBRAS NA MESMA ABA)
+        // =========================================================================
+        
+        const csvHistoricoData = { mirante: {}, joaquim: {}, parque: {} };
+
+        async function carregarDadosExcel() {
+            try {
+                // Puxa o seu novo arquivo diretamente do GitHub
+                const response = await fetch('./dados.xlsx'); 
+                if (!response.ok) throw new Error("Arquivo Excel não encontrado.");
+                
+                const arrayBuffer = await response.arrayBuffer();
+                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+                
+                // Como todas as obras estão agora na primeira aba, lemos apenas ela
+                const primeiraAba = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[primeiraAba];
+                
+                // Converte a aba em linhas. O raw: false preserva o formato visual das células
+                const linhas = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "", raw: false });
+                
+                processarLinhasExcel(linhas);
+                
+            } catch (error) {
+                console.warn("Erro ao carregar a planilha Excel:", error);
+            }
+        }
+
+        function processarLinhasExcel(linhas) {
+            let obraAtual = null;
+            let cabecalhoEtapas = [];
+            
+            for (let i = 0; i < linhas.length; i++) {
+                let linha = linhas[i].map(c => String(c).trim());
+                let col1 = linha[1] ? linha[1].toUpperCase() : "";
+                
+                // 1. Identifica de qual obra são os dados pelos títulos das tabelas
+                if (col1.includes("FLUXO DE DESEMBOLSOS")) {
+                    if (col1.includes("MIRANTE")) obraAtual = "mirante";
+                    else if (col1.includes("JOAQUIM")) obraAtual = "joaquim";
+                    else if (col1.includes("PARQUE")) obraAtual = "parque";
+                    
+                    cabecalhoEtapas = linha; 
+                    continue;
+                }
+                
+                if (!obraAtual || col1 === "" || col1 === "TOTAL" || col1 === "NAN") {
+                    continue;
+                }
+                
+                let mes = linha[1].toLowerCase().trim();
+                
+                if (!csvHistoricoData[obraAtual][mes]) {
+                    csvHistoricoData[obraAtual][mes] = [];
+                }
+                
+                for (let j = 3; j < linha.length; j++) {
+                    let nomeEtapa = cabecalhoEtapas[j];
+                    
+                    if (!nomeEtapa || nomeEtapa === "") continue;
+                    
+                    let valorStr = linha[j].replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.');
+                    let valorFloat = parseFloat(valorStr);
+                    
+                    if (isNaN(valorFloat) || linha[j] === "-") {
+                        valorFloat = 0;
+                    }
+                    
+                    csvHistoricoData[obraAtual][mes].push({
+                        etapa: nomeEtapa,
+                        valor: valorFloat
+                    });
+                }
+            }
+        }
+
+        function openDesembolsoMesModal(canvasId, mesLabel, index) {
+            const isMirante = canvasId.includes('Mirante');
+            const isJoaquim = canvasId.includes('Joaquim');
+            const obraId = isMirante ? 'mirante' : isJoaquim ? 'joaquim' : 'parque';
+            const nomeObra = isMirante ? 'MIRANTE DA LAGOA' : isJoaquim ? 'JOAQUIM LEME' : 'PARQUE DAS NAÇÕES';
+            
+            document.getElementById('desembolsoMesTitle').textContent = mesLabel;
+            document.getElementById('desembolsoMesObra').textContent = nomeObra;
+            
+            const tbody = document.getElementById('desembolsoMesTableBody');
+            tbody.innerHTML = '';
+            
+            const mesKey = mesLabel.toLowerCase();
+            const dadosMes = csvHistoricoData[obraId][mesKey];
+            
+            if (!dadosMes || dadosMes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:15px; color:var(--subtitle-color);">Sem dados disponíveis para este mês.</td></tr>';
+                document.getElementById('desembolsoMesTot').textContent = 'R$ 0,00';
+                document.getElementById('modalDesembolsoMes').classList.add('active');
+                return;
+            }
+
+            const filtrados = dadosMes.filter(d => d.valor !== 0).sort((a, b) => Math.abs(b.valor) - Math.abs(a.valor));
+            let total = 0;
+
+            if (filtrados.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:15px; color:var(--subtitle-color);">Sem desembolsos registrados nas etapas neste mês.</td></tr>';
+            } else {
+                filtrados.forEach(item => {
+                    total += item.valor;
+                    tbody.innerHTML += `
+                        <tr>
+                            <td style="text-align: left; font-weight: 600; color: var(--title-color); border-bottom: 1px solid var(--table-border); padding: 8px;">
+                                ✅ ${item.etapa}
+                            </td>
+                            <td style="text-align: center; border-bottom: 1px solid var(--table-border); padding: 8px;">
+                                ${item.valor.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+            
+            document.getElementById('desembolsoMesTot').textContent = total.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+            document.getElementById('modalDesembolsoMes').classList.add('active');
+        }
+
+        // Executar a leitura da planilha logo ao abrir a página
+        carregarDadosExcel();
+
+        // =========================================================================
+        // VARIAVEIS E MATRIZES DE DADOS ORIGINAIS
+        // =========================================================================
         const pendenciasMirante = {
-            'TOPOGRAFIA E CONTROLE': ['Entrega do georreferenciamento.', 'Apoio em medições restantes e controle tecnológico.'],
-            'MANUTENÇÕES / AS BUILTS': ['Execução de As-Builts, impressões e cópias.'],
+            'TOPOGRAFIA E CONTROLE': ['1) Entrega do georreferenciamento.', '2) Apoio em medições restantes e controle tecnológico.'],
+            'MANUTENÇÕES / AS BUILTS': ['Execução de As-Builts, impressões e cópias'],
             'TERRAPLANAGEM': ['-'],
-            'DRENAGEM': ['Construção de alas dissipadoras na lagoa artificial.'],
-            'REDE DE ÁGUA POTÁVEL': ['Execução de testes na rede.'],
-            'RESERVATÓRIO / ADUTORA': ['Eletrificação e automação dos poços tubulares.', 'Cercamento e construção de casas de química.'],
-            'SISTEMA DE ESGOTO SANITÁRIO': ['Execução de testes na rede.'],
-            'ESTAÇÃO ELEVATÓRIA DE ESGOTO': ['Instalação de grade e comportas no tratamento preliminar.', 'Execução de contrapartida (Revitalização da área).'],
-            'GUIAS E SARJETAS': ['Eventuais reparos após recapeamento viário.'],
-            'PAVIMENTAÇÃO TOTAL': ['Recapeamento viário e pavimentação nova em pontos específicos.'],
-            'ELETRIFICAÇÃO': ['Eletrificação dos poços tubulares.'],
-            'MEIO AMBIENTE': ['Paisagismo.', 'Construção do parque linear.', 'Pintura dos meios-fios.', 'Sinalização viária.'],
-            'TOPOGRAFIA DE ENTREGA': ['Check list de marcos topográficos danificados.'],
-            'INDIRETO DE OBRAS': ['Custo de encarregado.', 'Vigilância patrimonial.', 'Deslocamentos, alimentação e hospedagem.', 'Vigente até o final das obras.']
+            'DRENAGEM': ['Construção de alas dissipadoras na lagoa artificial'],
+            'REDE DE ÁGUA POTÁVEL': ['Execução de testes na rede'],
+            'RESERVATÓRIO / ADUTORA': ['1) Eletrificação e automação dos poços tubulares.', '2) Cercamento e construção de casas de química'],
+            'SISTEMA DE ESGOTO SANITÁRIO': ['Execução de testes na rede'],
+            'ESTAÇÃO ELEVATÓRIA DE ESGOTO': ['1) Instalação de grade e comportas no tratamento preliminar.', '2) Execução de contrapartida (Revitalização da área).'],
+            'GUIAS E SARJETAS': ['Eventuais reparos após recapeamento viário'],
+            'PAVIMENTAÇÃO TOTAL': ['Recapeamento viário e pavimentação nova em pontos específicos'],
+            'ELETRIFICAÇÃO': ['Eletrificação dos poços tubulares'],
+            'MEIO AMBIENTE': ['1) Paisagismo.', '2) Construção do parque linear.', '3) Pintura dos meios-fios.', '4) Sinalização viária.'],
+            'TOPOGRAFIA DE ENTREGA': ['Check list de marcos topográficos danificados'],
+            'INDIRETO DE OBRAS': ['1) Custo de encarregado.', '2) Vigilância patrimonial.', '3) Deslocamentos, alimentação e hospedagem.', '4) Vigente até o final das obras.']
         };
 
         const pendenciasJoaquim = {
             'TOPOGRAFIA E CONTROLE': ['-'],
-            'MANUTENÇÕES / AS BUILTS': ['Execução de As-Builts, impressões e cópias.'],
-            'DRENAGEM': ['Construção de dissipador.'],
-            'REDE DE ÁGUA POTÁVEL': ['Sondagem de ramais dos lotes.'],
-            'RESERVATÓRIO / ADUTORA': ['Construção da rede adutora.', 'Execução do projeto SPDA.', 'Execução do balizamento.'],
-            'SISTEMA DE ESGOTO SANITÁRIO': ['Construção do interceptor de esgoto.', 'Sondagem de ramais dos lotes.'],
-            'ESTAÇÃO ELEVATÓRIA DE ESGOTO': ['Construção da linha de recalque.', 'Instalação do Booster e construção do abrigo. Obs: Aguardando aprovação do projeto.'],
-            'GUIAS E SARJETAS': ['Construção de guias do acesso.', 'Revitalização e reparos nos meios-fios.'],
-            'PAVIMENTAÇÃO TOTAL': ['Recapeamento (Tapa-Buracos).'],
+            'MANUTENÇÕES / AS BUILTS': ['Execução de As-Builts, impressões e cópias'],
+            'DRENAGEM': ['Construção de dissipador'],
+            'REDE DE ÁGUA POTÁVEL': ['Sondagem de ramais dos lotes'],
+            'RESERVATÓRIO / ADUTORA': ['1) Construção da rede adutora.', '2) Construção do barrilete.', '3) Ligação do reservatório na rede.'],
+            'SISTEMA DE ESGOTO SANITÁRIO': ['1) Construção do interceptor de esgoto.', '2) Sondagem de ramais dos lotes.'],
+            'ESTAÇÃO ELEVATÓRIA DE ESGOTO': ['1) Construção da linha de recalque.', '2) Instalação do Booster e construção do abrigo. Obs: Aguardando aprovação do projeto.'],
+            'GUIAS E SARJETAS': ['1) Construção de guias do acesso.', '2) Revitalização e reparos nos meios-fios.'],
+            'PAVIMENTAÇÃO TOTAL': ['Recapeamento (Tapa-Buracos)'],
             'ELETRIFICAÇÃO': ['-'],
-            'MEIO AMBIENTE': ['Construção de praça.', 'Pintura de meios-fios.', 'Execução de paisagismo.', 'Sinalização viária.'],
-            'OBRAS DE ACESSO': ['Execução do acesso.'],
-            'TOPOGRAFIA DE ENTREGA': ['-'],
-            'INDIRETO DE OBRAS': ['Custo de encarregado.', 'Vigilância patrimonial.', 'Deslocamentos, alimentação e hospedagem.', 'Vigente até o final das obras.']
+            'MEIO AMBIENTE': ['1) Construção de praça.', '2) Pintura de meios-fios.', '3) Execução de paisagismo.', '4) Sinalização viária.'],
+            'OBRAS DE ACESSO': ['Execução do acesso'],
+            'TOPOGRAFIA DE ENTREGA': ['Execução completa da demarcação dos lotes'],
+            'INDIRETO DE OBRAS': ['1) Custo de encarregado.', '2) Vigilância patrimonial.', '3) Deslocamentos, alimentação e hospedagem.', '4) Vigente até o final das obras.']
         };
         
         const pendenciasParque = {
             'TOPOGRAFIA E CONTROLE': ['1) Demarcação de obras de infraestrutura pendentes.', '2) Controle tecnológico de pavimentação.'],
-            'MANUTENÇÕES / AS BUILTS': ['Vigente até o final das obras quando necessário.'],
+            'MANUTENÇÕES / AS BUILTS': ['Vigente até o final das obras quando necessário'],
             'TERRAPLANAGEM': ['1) Conformação do greide da Rua 01.'],
             'DRENAGEM': ['1) Construção de Bocas de Lobo.', '2) Alteamento de Poços de Visita.', '3) Finalização da drenagem da Rua 01.'],
             'ÁGUA POTÁVEL': ['1) Levantamento da rede construída.', '2) Check list de eventuais reparos na rede.'],
@@ -2243,7 +2028,6 @@
         };
 
         let currentChartObra = null;
-        let currentChartIndex = 0;
         let currentChartModalType = null;
         
         const miranteEtapas = ['TOPOGRAFIA E CONTROLE','MANUTENÇÕES / AS BUILTS','TERRAPLANAGEM','DRENAGEM','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','MEIO AMBIENTE','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
@@ -2252,7 +2036,7 @@
         const miranteValorApropriado = [0.00, 17900.00, 0.00, 3459.29, 0.01, 0.00, 0.00, 48549.98, 35693.34, 1128000.00, 144300.00, 35616.39, 15000.00, 20562.34];
         const miranteComprometido = [37257.72, 214872.82, 134826.68, 272677.20, 230858.09, 534839.04, 171635.73, 221077.82, 578897.29, 2991431.74, 789722.37, 282040.28, 106808.40, 239978.20];
         const miranteProjetadoFuturo = [0.00, 24788.94, 0.00, 11540.71, 38499.99, 183038.97, 14000.00, 101043.30, 16700.50, 0.00, 0.00, 743333.00, 0.00, 35551.16];
-        const miranteFisicoRaw = [85.0, 90.0, 100.0, 90.0, 95.0, 90.0, 95.0, 80.0, 90.0, 80.0, 95.0, 20.0, 95.0, 90.0];
+        const miranteFisicoRaw = [90.0, 92.0, 100.0, 90.0, 97.0, 92.0, 95.0, 80.0, 90.0, 80.0, 95.0, 20.0, 100.0, 92.0];
 
         const joaquimEtapas = ['TOPOGRAFIA E CONTROLE','MANUTENÇÕES / AS BUILTS','DRENAGEM','REDE DE ÁGUA POTÁVEL','RESERVATÓRIO / ADUTORA','SISTEMA DE ESGOTO SANITÁRIO','ESTAÇÃO ELEVATÓRIA DE ESGOTO','GUIAS E SARJETAS','PAVIMENTAÇÃO TOTAL','ELETRIFICAÇÃO','MEIO AMBIENTE','OBRAS DE ACESSO','TOPOGRAFIA DE ENTREGA','INDIRETO DE OBRAS'];
         const joaquimOrcado = [6000.00, 146722.82, 205220.00, 84333.64, 1184518.92, 320633.13, 273976.19, 104745.00, 146000.00, 1846124.81, 69219.58, 448834.00, 32000.00, 151075.26];
@@ -2260,32 +2044,20 @@
         const joaquimComprometido = [0.00, 119068.02, 213239.99, 52733.63, 1078962.89, 106556.55, 26849.89, 7231.00, 0.00, 1846124.81, 21343.58, 14400.00, 0.00, 181367.52];
         const joaquimValorApropriado = [0.00, 1408.34, 23019.99, 2999.99, 50900.35, 51189.82, 26849.89, 0.00, 0.00, 10640.00, 2700.00, 0.00, 0.00, 26235.24];
         const joaquimProjetadoFuturo = [7500.00, 39075.65, 126980.01, 31600.01, -386620.60, 85875.72, 137410.89, 56500.00, 146000.00, 0.00, 56210.00, 434434.00, 80000.00, 40408.83];
-        const joaquimFisicoRaw = [0, 90, 90, 90, 80, 80, 0, 80, 80, 100, 30, 0, 0, 70];
+        const joaquimFisicoRaw = [0.0, 90.0, 90.0, 90.0, 85.0, 80.0, 0.0, 80.0, 80.0, 100.0, 30.0, 0.0, 0.0, 70.0];
 
         const parqueEtapas = ['TOPOGRAFIA E CONTROLE', 'MANUTENÇÕES / AS BUILTS', 'TERRAPLANAGEM', 'DRENAGEM', 'ÁGUA POTÁVEL', 'RESERVATÓRIO / ADUTORA', 'ESGOTO SANITÁRIO', 'GUIAS E SARJETAS', 'PAVIMENTAÇÃO VIÁRIA', 'MEIO AMBIENTE / PRAÇAS', 'OBRA DE ACESSO', 'TOPOGRAFIA DE ENTREGA', 'INDIRETO DE OBRAS'];
         const parqueOrcado = [20800.00, 186643.30, 50400.00, 523908.31, 106623.00, 134625.00, 200000.00, 466961.10, 2977569.12, 59674.90, 915450.00, 66600.00, 142862.13];
         const parqueComprometido = [7300.00, 93973.30, 0.00, 460306.64, 0.00, 0.00, 0.00, 0.00, 0.00, 555.90, 16010.00, 0.00, 28325.17];
         const parqueValorApropriado = [0.00, 0.00, 0.00, 189575.08, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00];
         const parqueProjetadoFuturo = [13500.00, 92670.00, 50400.00, 98763.85, 106623.00, 134625.00, 200000.00, 466961.10, 2977569.12, 59235.00, 899440.00, 66600.00, 107250.00];
-        const parqueFisicoRaw = [35.1, 50.3, 0.0, 60.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.9, 1.7, 0.0, 19.8];
-        const desembolsosParque = [
-            0, 0, 7500, 4110, 0,
-            0, 0, 0, 0, 0, 8900, 5100, 7100, 2000, 0, 0, 0,
-            0, 0, 0, 0, 20000, 19260, 0, 37280, 9500, 3159, 0, 1750,
-            6059.30, 0, 7479, 17587.13, 83696.26,
-            176415.24, 521617.32, 330525.07, 1186950.30, 1220397.80, 1230321.55, 175569.81, 159566.06,
-            159566.06, 159566.06, 159566.06, 159566.06
-        ];
+        const parqueFisicoRaw = [35.1, 50.3, 0.0, 70.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.9, 100.0, 100.0, 19.8];
 
         const dataMaps = {
             'mirante': { labels: miranteEtapas, orcado: miranteOrcado, investido: miranteComprometido, projetado: miranteProjetadoFuturo, pendencias: pendenciasMirante },
             'joaquim': { labels: joaquimEtapas, orcado: joaquimOrcado, investido: joaquimComprometido, projetado: joaquimProjetadoFuturo, pendencias: pendenciasJoaquim },
             'parque': { labels: parqueEtapas, orcado: parqueOrcado, investido: parqueComprometido, projetado: parqueProjetadoFuturo, pendencias: pendenciasParque }
         };
-
-        const miranteDisponivel = miranteOrcado.map((orc, idx) => orc - (miranteComprometido[idx] + miranteProjetadoFuturo[idx]));
-        const joaquimDisponivel = joaquimOrcado.map((orc, idx) => orc - (joaquimComprometido[idx] + joaquimProjetadoFuturo[idx]));
-        const parqueDisponivel = parqueOrcado.map((orc, idx) => orc - (parqueComprometido[idx] + parqueProjetadoFuturo[idx]));
 
         const miranteDisponivelGrafico = miranteOrcado.map((orc, idx) => orc - miranteComprometido[idx]);
         const joaquimDisponivelGrafico = joaquimOrcado.map((orc, idx) => orc - joaquimComprometido[idx]);
@@ -2314,8 +2086,14 @@
             6057.65, 490817, 807383, 13327, -61848, -62388, -62388, -73585, 0, 0, 0, 0
         ];
 
+        const desembolsosParque = [
+            0, 0, 7500, 4110, 0, 0, 0, 0, 0, 0, 8900, 5100, 7100, 2000, 0, 0, 0,
+            0, 0, 0, 0, 20000, 19260, 0, 37280, 9500, 3159, 0, 1750,
+            6059.30, 0, 7479, 17587.13, 83696.26, 176415.24, 521617.32, 330525.07, 1186950.30, 1220397.80, 1230321.55, 175569.81, 159566.06,
+            159566.06, 159566.06, 159566.06, 159566.06
+        ];
+
         function fmtNum(n) { return Math.ceil(n).toLocaleString('pt-BR'); }
-        
         function fmtMoney(n) { 
             if (n === null || n === undefined || isNaN(n) || String(n).includes('NaN')) return 'R$ 0,00';
             return 'R$ ' + parseFloat(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); 
@@ -2326,7 +2104,6 @@
         let currentGalleryImages = [];
         let currentImageIndex = 0;
 
-        // --- SISTEMA DE ZOOM GLOBAL DA IMAGEM ---
         let globalImgZoom = 1;
         let globalImgPanX = 0;
         let globalImgPanY = 0;
@@ -2335,14 +2112,9 @@
         let startPanY = 0;
 
         function resetGlobalZoom() {
-            globalImgZoom = 1;
-            globalImgPanX = 0;
-            globalImgPanY = 0;
+            globalImgZoom = 1; globalImgPanX = 0; globalImgPanY = 0;
             const img = document.getElementById('photoGlobalImage');
-            if (img) {
-                img.style.transform = `translate(0px, 0px) scale(1)`;
-                img.style.cursor = 'grab';
-            }
+            if (img) { img.style.transform = `translate(0px, 0px) scale(1)`; img.style.cursor = 'grab'; }
         }
 
         function toggleMode() {
@@ -2351,7 +2123,6 @@
             const btnIcon = document.getElementById('modeIcon');
             const homeBtnText = document.getElementById('homeModeText');
             const homeBtnIcon = document.getElementById('homeModeIcon');
-
             isDarkMode = !isDarkMode;
 
             if (isDarkMode) {
@@ -2431,11 +2202,8 @@
         function changePhoto(direction) {
             if (currentGalleryImages.length === 0) return;
             currentImageIndex += direction;
-            if (currentImageIndex >= currentGalleryImages.length) {
-                currentImageIndex = 0;
-            } else if (currentImageIndex < 0) {
-                currentImageIndex = currentGalleryImages.length - 1;
-            }
+            if (currentImageIndex >= currentGalleryImages.length) currentImageIndex = 0;
+            else if (currentImageIndex < 0) currentImageIndex = currentGalleryImages.length - 1;
             document.getElementById('photoGlobalImage').src = currentGalleryImages[currentImageIndex];
             resetGlobalZoom();
         }
@@ -2452,6 +2220,7 @@
             document.getElementById('modalResumoPendencias').classList.remove('active');
             document.getElementById('modalBreakdownProjetado').classList.remove('active');
             document.getElementById('modalDesembolsoComprometido').classList.remove('active');
+            document.getElementById('modalDesembolsoMes').classList.remove('active');
             if (gaugeChart) { gaugeChart.destroy(); gaugeChart = null; }
         }
 
@@ -2460,10 +2229,7 @@
             const tbody = document.getElementById('breakdownTableBody');
             tbody.innerHTML = '';
             
-            let totComp = 0;
-            let totProj = 0;
-            let totGeral = 0;
-            
+            let totComp = 0, totProj = 0, totGeral = 0;
             const isMirante = obra === 'MIRANTE DA LAGOA';
             const isJoaquim = obra === 'JOAQUIM LEME';
             const etapasArray = isMirante ? miranteEtapas : isJoaquim ? joaquimEtapas : parqueEtapas;
@@ -2474,32 +2240,24 @@
             if(titleEl) titleEl.textContent = obra;
             
             etapasArray.forEach((etapa, i) => {
-                const comp = compArray[i];
-                const proj = projArray[i];
-                const geral = comp + proj;
-                
-                totComp += comp;
-                totProj += proj;
-                totGeral += geral;
+                const comp = compArray[i]; const proj = projArray[i]; const geral = comp + proj;
+                totComp += comp; totProj += proj; totGeral += geral;
                 
                 const compStr = 'R$ ' + Math.round(comp).toLocaleString('pt-BR');
                 const projStr = 'R$ ' + Math.round(proj).toLocaleString('pt-BR');
                 const geralStr = 'R$ ' + Math.round(geral).toLocaleString('pt-BR');
                 
-                tbody.innerHTML += `
-                    <tr>
-                        <td style="text-align: left; font-weight: 600; color: var(--title-color); border-bottom: 1px solid var(--table-border); padding: 8px;">${etapa}</td>
-                        <td style="border-bottom: 1px solid var(--table-border); padding: 8px;">${compStr}</td>
-                        <td style="border-bottom: 1px solid var(--table-border); padding: 8px;">${projStr}</td>
-                        <td style="font-weight: 700; border-bottom: 1px solid var(--table-border); padding: 8px;">${geralStr}</td>
-                    </tr>
-                `;
+                tbody.innerHTML += `<tr>
+                    <td style="text-align: left; font-weight: 600; color: var(--title-color); border-bottom: 1px solid var(--table-border); padding: 8px;">${etapa}</td>
+                    <td style="border-bottom: 1px solid var(--table-border); padding: 8px;">${compStr}</td>
+                    <td style="border-bottom: 1px solid var(--table-border); padding: 8px;">${projStr}</td>
+                    <td style="font-weight: 700; border-bottom: 1px solid var(--table-border); padding: 8px;">${geralStr}</td>
+                </tr>`;
             });
             
             document.getElementById('breakdownTotComp').textContent = 'R$ ' + Math.round(totComp).toLocaleString('pt-BR');
             document.getElementById('breakdownTotProj').textContent = 'R$ ' + Math.round(totProj).toLocaleString('pt-BR');
             document.getElementById('breakdownTotGeral').textContent = 'R$ ' + Math.round(totGeral).toLocaleString('pt-BR');
-            
             document.getElementById('modalBreakdownProjetado').classList.add('active');
         }
 
@@ -2508,10 +2266,7 @@
             const tbody = document.getElementById('desembolsoTableBody');
             tbody.innerHTML = '';
             
-            let totDes = 0;
-            let totComp = 0;
-            let totGeral = 0;
-            
+            let totDes = 0, totComp = 0, totGeral = 0;
             const isMirante = obra === 'MIRANTE DA LAGOA';
             const isJoaquim = obra === 'JOAQUIM LEME';
             const etapasArray = isMirante ? miranteEtapas : isJoaquim ? joaquimEtapas : parqueEtapas;
@@ -2522,33 +2277,25 @@
             if(titleEl) titleEl.textContent = obra;
             
             etapasArray.forEach((etapa, i) => {
-                const invAtual = invAtualArray[i] || 0;
-                const apr = aprArray[i] || 0;
-                const des = invAtual - apr;
-                const geral = des + apr; 
-                
-                totDes += des;
-                totComp += apr;
-                totGeral += geral;
+                const invAtual = invAtualArray[i] || 0; const apr = aprArray[i] || 0;
+                const des = invAtual - apr; const geral = des + apr; 
+                totDes += des; totComp += apr; totGeral += geral;
                 
                 const desStr = 'R$ ' + Math.round(des).toLocaleString('pt-BR');
                 const aprStr = 'R$ ' + Math.round(apr).toLocaleString('pt-BR');
                 const geralStr = 'R$ ' + Math.round(geral).toLocaleString('pt-BR');
                 
-                tbody.innerHTML += `
-                    <tr>
-                        <td style="text-align: left; font-weight: 600; color: var(--title-color); border-bottom: 1px solid var(--table-border); padding: 8px;">${etapa}</td>
-                        <td style="border-bottom: 1px solid var(--table-border); padding: 8px;">${desStr}</td>
-                        <td style="border-bottom: 1px solid var(--table-border); padding: 8px;">${aprStr}</td>
-                        <td style="font-weight: 700; border-bottom: 1px solid var(--table-border); padding: 8px;">${geralStr}</td>
-                    </tr>
-                `;
+                tbody.innerHTML += `<tr>
+                    <td style="text-align: left; font-weight: 600; color: var(--title-color); border-bottom: 1px solid var(--table-border); padding: 8px;">${etapa}</td>
+                    <td style="border-bottom: 1px solid var(--table-border); padding: 8px;">${desStr}</td>
+                    <td style="border-bottom: 1px solid var(--table-border); padding: 8px;">${aprStr}</td>
+                    <td style="font-weight: 700; border-bottom: 1px solid var(--table-border); padding: 8px;">${geralStr}</td>
+                </tr>`;
             });
             
             document.getElementById('desembolsoTotDes').textContent = 'R$ ' + Math.round(totDes).toLocaleString('pt-BR');
             document.getElementById('desembolsoTotComp').textContent = 'R$ ' + Math.round(totComp).toLocaleString('pt-BR');
             document.getElementById('desembolsoTotGeral').textContent = 'R$ ' + Math.round(totGeral).toLocaleString('pt-BR');
-            
             document.getElementById('modalDesembolsoComprometido').classList.add('active');
         }
 
@@ -2840,13 +2587,9 @@
                             barPercentage: 0.60, 
                             categoryPercentage: 0.80,
                             datalabels: {
-                                display: true,
-                                align: 'center',
-                                anchor: 'center',
-                                color: '#ffffff',
+                                display: true, align: 'center', anchor: 'center', color: '#ffffff',
                                 font: { family: "'Montserrat'", weight: '700', size: 10 },
-                                textShadowColor: 'rgba(0,0,0,0.6)',
-                                textShadowBlur: 3,
+                                textShadowColor: 'rgba(0,0,0,0.6)', textShadowBlur: 3,
                                 formatter: function(value, context) {
                                     const rawVal = context.chart.data.datasets[0].rawData[context.dataIndex];
                                     return rawVal > 0 ? Math.round(rawVal) + '%' : '';
@@ -2863,37 +2606,20 @@
                             barPercentage: 0.60, 
                             categoryPercentage: 0.80,
                             datalabels: {
-                                display: true,
-                                align: 'top',
-                                anchor: 'end',
-                                textAlign: 'center',
-                                backgroundColor: function(context) {
-                                    return context.hovered ? (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)') : 'transparent';
-                                },
-                                borderRadius: 4,
-                                padding: 10,
+                                display: true, align: 'top', anchor: 'end', textAlign: 'center',
+                                backgroundColor: function(context) { return context.hovered ? (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)') : 'transparent'; },
+                                borderRadius: 4, padding: 10,
                                 listeners: {
                                     click: function(context) {
                                         const chartId = context.chart.canvas.id;
                                         const obraId = chartId.includes('Mirante') ? 'mirante' : chartId.includes('Joaquim') ? 'joaquim' : 'parque';
-                                        
-                                        currentChartObra = obraId;
-                                        currentChartLabel = context.chart.data.labels[context.dataIndex];
-                                        currentChartModalType = 'financial';
-                                        updateChartModal();
+                                        currentChartObra = obraId; currentChartLabel = context.chart.data.labels[context.dataIndex];
+                                        currentChartModalType = 'financial'; updateChartModal();
                                         document.getElementById('modalFinancialInfo').classList.add('active');
                                         return true;
                                     },
-                                    enter: function(context) {
-                                        context.hovered = true;
-                                        context.chart.canvas.style.cursor = 'pointer';
-                                        return true;
-                                    },
-                                    leave: function(context) {
-                                        context.hovered = false;
-                                        context.chart.canvas.style.cursor = 'default';
-                                        return true;
-                                    }
+                                    enter: function(context) { context.hovered = true; context.chart.canvas.style.cursor = 'pointer'; return true; },
+                                    leave: function(context) { context.hovered = false; context.chart.canvas.style.cursor = 'default'; return true; }
                                 },
                                 color: function(context) {
                                     const isDarkCtx = document.body.classList.contains('dark-mode');
@@ -2907,18 +2633,10 @@
                                     const finVal = context.chart.data.datasets[0].finDataRaw[context.dataIndex] || 0;
                                     const invVal = context.chart.data.datasets[0].investidoData[context.dataIndex] || 0;
                                     const invStr = Math.round(invVal).toLocaleString('pt-BR');
-
                                     if(invVal === 0 && finVal === 0) return '';
-
-                                    if (finVal > 100) {
-                                        const exc = (finVal - 100).toFixed(1).replace('.', ',');
-                                        return `${invStr}\n(⬆ +${exc}%)`;
-                                    } else if (finVal < 100) {
-                                        const falta = (100 - finVal).toFixed(1).replace('.', ',');
-                                        return `${invStr}\n(⬇ -${falta}%)`;
-                                    } else {
-                                        return `${invStr}\n(OK)`;
-                                    }
+                                    if (finVal > 100) { const exc = (finVal - 100).toFixed(1).replace('.', ','); return `${invStr}\n(⬆ +${exc}%)`; }
+                                    else if (finVal < 100) { const falta = (100 - finVal).toFixed(1).replace('.', ','); return `${invStr}\n(⬇ -${falta}%)`; }
+                                    else { return `${invStr}\n(OK)`; }
                                 }
                             }
                         }
@@ -2928,46 +2646,25 @@
                     responsive: true, maintainAspectRatio: false,
                     layout: { padding: { top: 40, right: 80, left: 160, bottom: 10 } }, 
                     plugins: {
-                        legend: { 
-                            labels: { font: { family: "'Montserrat'" }, color: '#000000' },
-                            filter: function(item, chart) {
-                                return item.datasetIndex === 0; 
-                            }
-                        },
-                        tooltip: { enabled: false }, 
-                        dateLimit: { enabled: true, finalDate: finalDateStr }
+                        legend: { labels: { font: { family: "'Montserrat'" }, color: '#000000' }, filter: function(item, chart) { return item.datasetIndex === 0; } },
+                        tooltip: { enabled: false }, dateLimit: { enabled: true, finalDate: finalDateStr }
                     },
                     onClick: (event, elements, chart) => {
                         const obraId = chart.canvas.id.includes('Mirante') ? 'mirante' : chart.canvas.id.includes('Joaquim') ? 'joaquim' : 'parque';
-                        
                         if (elements.length > 0 && elements[0].datasetIndex === 0) {
                             const index = elements[0].index;
-                            currentChartObra = obraId;
-                            currentChartLabel = chart.data.labels[index];
-                            currentChartModalType = 'physical';
-                            updateChartModal();
+                            currentChartObra = obraId; currentChartLabel = chart.data.labels[index];
+                            currentChartModalType = 'physical'; updateChartModal();
                             document.getElementById('modalPendencias').classList.add('active');
                         }
                     },
                     onHover: (e, elements, chart) => {
                         let isPointer = elements.length > 0 && elements[0].datasetIndex === 0;
-                        if (!isPointer) {
-                            e.native.target.style.cursor = 'default';
-                        }
+                        if (!isPointer) e.native.target.style.cursor = 'default';
                     },
                     scales: {
-                        x: { 
-                            stacked: true,
-                            ticks: { color: '#000000', maxRotation: 45, minRotation: 45, font: { size: 9, family: "'Montserrat'" } }, 
-                            grid: { display: false } 
-                        },
-                        y: { 
-                            stacked: true,
-                            beginAtZero: true,
-                            max: 140, 
-                            ticks: { display: false }, 
-                            grid: { display: false } 
-                        }
+                        x: { stacked: true, ticks: { color: '#000000', maxRotation: 45, minRotation: 45, font: { size: 9, family: "'Montserrat'" } }, grid: { display: false } },
+                        y: { stacked: true, beginAtZero: true, max: 140, ticks: { display: false }, grid: { display: false } }
                     }
                 }
             });
@@ -3046,9 +2743,6 @@
                 }
             });
         }
-
-        // --- SISTEMA DE ORDENAÇÃO DE TABELA INJETADO ---
-        let sortDirections = {};
         
         function sortTable(tableId, colIndex) {
             const table = document.getElementById(tableId);
@@ -3061,10 +2755,8 @@
             rows.sort((a, b) => {
                 let cellA = a.children[colIndex].textContent.trim();
                 let cellB = b.children[colIndex].textContent.trim();
-                
                 let valA = parseFloat(cellA.replace(/[R$\s%]/g, '').replace(/\./g, '').replace(',', '.')) || 0;
                 let valB = parseFloat(cellB.replace(/[R$\s%]/g, '').replace(/\./g, '').replace(',', '.')) || 0;
-                
                 return isAsc ? (valA - valB) : (valB - valA);
             });
             
@@ -3088,7 +2780,6 @@
                 const desvio = orcado[i] > 0 ? ((eac - orcado[i]) / orcado[i] * 100) : 0;
                 const statusClass = desvio <= 0 ? 'ok' : desvio <= 5 ? 'warn' : 'alert';
                 const statusLabel = desvio <= 0 ? 'OK' : desvio <= 5 ? 'Atenção' : 'Crítico';
-                
                 const progress = Math.min(100, fisicoRaw[i] || 0);
                 
                 totOrcado += orcado[i]; totComprometido += Peanut[i]; totProjetadoFuturo += Honey[i]; totDisponivel += disponivel[i];
@@ -3101,13 +2792,8 @@
             let totProgress = totOrcado > 0 ? Math.min(100, (totComprometido / totOrcado * 100)) : 0;
             let totDisponivelStr = fmtNum(totDisponivel);
 
-            if (obraNome === 'JOAQUIM LEME') {
-                totDesvioStr = '-9,88%';
-                totDisponivelStr = 'R$ 496.150';
-            }
-            if (obraNome === 'PARQUE DAS NAÇÕES') {
-                totDesvioStr = '+0,48%';
-            }
+            if (obraNome === 'JOAQUIM LEME') { totDesvioStr = '-9,88%'; totDisponivelStr = 'R$ 496.150'; }
+            if (obraNome === 'PARQUE DAS NAÇÕES') { totDesvioStr = '+0,48%'; }
 
             const isMirante = obraNome === 'MIRANTE DA LAGOA';
             let tdInvAtual = fmtNum(totComprometido);
@@ -3143,11 +2829,8 @@
             const saldoVal = orcadoVal - baseProgresso;
             
             let pct = 0;
-            if (orcadoVal > 0) {
-                pct = (baseProgresso / orcadoVal) * 100;
-            } else if (baseProgresso > 0) {
-                pct = 100;
-            }
+            if (orcadoVal > 0) pct = (baseProgresso / orcadoVal) * 100;
+            else if (baseProgresso > 0) pct = 100;
 
             const percentLabel = document.getElementById('gaugePercent');
             const statusText = document.getElementById('gaugeStatusText');
@@ -3172,28 +2855,20 @@
             saldoEl.style.color = saldoVal < 0 ? '#c62828' : (isDarkMode ? '#ffffff' : '#1b5e20');
 
             if(gaugeChart) gaugeChart.destroy();
-            
             const chartData = pct > 100 ? [100, 0] : [pct, 100 - pct];
             const gaugeFillBase = getComputedStyle(document.body).getPropertyValue('--gauge-fill-base').trim();
 
             gaugeChart = new Chart(document.getElementById('chartGauge'), {
                 type: 'doughnut',
-                data: {
-                    datasets: [{
-                        data: chartData,
-                        backgroundColor: [pct > 100 ? '#c62828' : '#7cb342', gaugeFillBase], 
-                        borderWidth: 0, hoverOffset: 0
-                    }]
-                },
-                options: {
-                    cutout: '85%', responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { display: false }, tooltip: { enabled: false }, centerText: false, datalabels: { display: false } }
-                }
+                data: { datasets: [{ data: chartData, backgroundColor: [pct > 100 ? '#c62828' : '#7cb342', gaugeFillBase], borderWidth: 0, hoverOffset: 0 }] },
+                options: { cutout: '85%', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false }, centerText: false, datalabels: { display: false } } }
             });
-
             document.getElementById('modalGauge').classList.add('active');
         }
 
+        // =========================================================================
+        // GRÁFICO HISTÓRICO DE COLUNAS COM FUNÇÃO ONCLICK PRO CSV
+        // =========================================================================
         function createColumnChart(canvasId, labels, data) {
             const columnColors = labels.map(label => {
                 if(label.includes('/27')) return '#f39c12';
@@ -3204,534 +2879,48 @@
                 }
                 return '#558b2f';
             });
+            
+            const hoverColors = columnColors.map(c => c === '#f39c12' ? '#d35400' : '#2e7d32');
+
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
-                data: { datasets: [{ label: 'Desembolso Mensal', data: data, backgroundColor: columnColors, borderRadius: 4 }], labels: labels },
+                data: { datasets: [{ label: 'Desembolso Mensal', data: data, backgroundColor: columnColors, hoverBackgroundColor: hoverColors, borderRadius: 4 }], labels: labels },
                 options: { 
                     responsive: true, maintainAspectRatio: false, 
-                    plugins: { legend: { display: false }, datalabels: { display: false } },
+                    plugins: { legend: { display: false }, datalabels: { display: false }, tooltip: { enabled: true } },
                     scales: { 
                         x: { ticks: { font: { family: "'Montserrat'", size: 10 }, color: '#000000', maxRotation: 45 }, grid: { color: 'rgba(0,0,0,0.1)' } }, 
                         y: { ticks: { font: { family: "'Montserrat'" }, color: '#000000', callback: v => fmtNum(v) }, grid: { color: 'rgba(0,0,0,0.1)' } } 
-                    }
-                }
-            });
-        }
-
-        function setDesvioBadge(orcado, comprometido, projetadoFuturo, elementId) {
-            let totOrc = 0;
-            let totEAC = 0;
-            for(let i=0; i<orcado.length; i++) {
-                totOrc += orcado[i];
-                totEAC += (comprometido[i] + projetadoFuturo[i]);
-            }
-            let desvio = totOrc > 0 ? ((totEAC - totOrc) / totOrc) * 100 : 0;
-            
-            let el = document.getElementById(elementId);
-            if(el) {
-                if (desvio > 0) {
-                    el.style.color = 'var(--alert-color)';
-                    el.innerHTML = `⬆ +${desvio.toFixed(1).replace('.', ',')}%`;
-                } else {
-                    el.style.color = '#03a9f4';
-                    el.innerHTML = `⬇ ${desvio.toFixed(1).replace('.', ',')}%`;
-                }
-            }
-        }
-
-        function goToDashboard(tabName) {
-            document.getElementById('home-page').style.display = 'none';
-            document.getElementById('dashboard-view').style.display = 'block';
-            document.getElementById('btn-voltar').style.display = 'block';
-            
-            const tabBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
-            if (tabBtn) tabBtn.click();
-            
-            setTimeout(() => {
-                window.dispatchEvent(new Event('resize'));
-            }, 100);
-        }
-
-        function goToHome() {
-            document.getElementById('dashboard-view').style.display = 'none';
-            document.getElementById('btn-voltar').style.display = 'none';
-            document.getElementById('home-page').style.display = 'flex';
-        }
-
-        // ==========================================
-        // LÓGICA DE PDF E DESENHO (FABRIC.JS + PDF.JS)
-        // ==========================================
-        
-        let activeObraPdf = 'mirante';
-        let pdfDocs = { 'mirante': null, 'joaquim': null, 'parque': null };
-        let fabricCanvases = { 'mirante': null, 'joaquim': null, 'parque': null };
-        
-        let activeTool = 'pan';
-        let activeColor = '#e53935';
-        let activeIcon = '📍';
-        const PIXEL_TO_METER = 0.052; // Fator de escala (ajuste para calibrar a área do PDF)
-        
-        let isDrawingLine = false;
-        let isDrawingCircle = false;
-        let tempLine, tempArrowHead, tempCircle, origX, origY;
-        
-        let polyPoints = [];
-        let polyLines = [];
-        let polyCircles = [];
-        let dynamicLine = null;
-
-        let historyMap = {
-            'mirante': { states: [], index: -1 },
-            'joaquim': { states: [], index: -1 },
-            'parque': { states: [], index: -1 }
-        };
-
-        function setActiveObraPdf(obra) {
-            activeObraPdf = obra;
-        }
-
-        function hexToRgba(hex, alpha) {
-            var r = parseInt(hex.slice(1, 3), 16),
-                g = parseInt(hex.slice(3, 5), 16),
-                b = parseInt(hex.slice(5, 7), 16);
-            return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
-        }
-
-        function resetPolygonTemp(canvas) {
-            polyCircles.forEach(c => canvas.remove(c));
-            polyLines.forEach(l => canvas.remove(l));
-            if (dynamicLine) canvas.remove(dynamicLine);
-            polyPoints = [];
-            polyLines = [];
-            polyCircles = [];
-            dynamicLine = null;
-            canvas.renderAll();
-        }
-
-        function finishPolygon(canvas) {
-            if (polyPoints.length < 3) {
-                resetPolygonTemp(canvas);
-                return;
-            }
-            let rgbaColor = hexToRgba(activeColor, 0.4);
-            let polygon = new fabric.Polygon(polyPoints, {
-                fill: rgbaColor,
-                stroke: activeColor,
-                strokeWidth: 3,
-                selectable: true,
-                objectCaching: false
-            });
-            
-            canvas.add(polygon);
-            resetPolygonTemp(canvas);
-            saveHistory();
-        }
-
-        function setTool(tool, btn, iconSymbol = null) {
-            if (activeTool === 'polygon' && tool !== 'polygon') {
-                const fCanvas = fabricCanvases[activeObraPdf];
-                if(fCanvas) resetPolygonTemp(fCanvas);
-            }
-
-            activeTool = tool;
-            if(iconSymbol) activeIcon = iconSymbol;
-
-            const toolbar = btn.closest('.pdf-toolbar');
-            if(!toolbar) return;
-            toolbar.querySelectorAll('.tool-mode').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            const fCanvas = fabricCanvases[activeObraPdf];
-            if(!fCanvas) return;
-            
-            if(tool === 'brush') {
-                fCanvas.isDrawingMode = true;
-                fCanvas.freeDrawingBrush.color = activeColor;
-                fCanvas.freeDrawingBrush.width = 5;
-            } else {
-                fCanvas.isDrawingMode = false;
-            }
-            
-            fCanvas.selection = (tool === 'pan' ? false : true);
-        }
-
-        function selectColor(color, element, event) {
-            if(event) event.stopPropagation(); 
-            activeColor = color;
-            const wrapper = element.closest('.color-picker-menu');
-            wrapper.querySelectorAll('.color-dot').forEach(dot => dot.classList.remove('active'));
-            element.classList.add('active');
-            
-            const fCanvas = fabricCanvases[activeObraPdf];
-            if(fCanvas && activeTool === 'brush') {
-                fCanvas.freeDrawingBrush.color = activeColor;
-            }
-        }
-
-        function selectIcon(symbol, element, event) {
-            if(event) event.stopPropagation();
-            activeIcon = symbol;
-            const wrapper = element.closest('.color-picker-menu');
-            wrapper.querySelectorAll('.icon-dot').forEach(dot => dot.classList.remove('active'));
-            element.classList.add('active');
-            setTool('icon', element.closest('.tool-wrapper').querySelector('.pdf-tool-btn'), symbol);
-        }
-
-        async function loadPDF(url, btnElement) {
-            const parent = btnElement.closest('.projetos-sidebar');
-            parent.querySelectorAll('.projeto-btn').forEach(b => b.classList.remove('active'));
-            btnElement.classList.add('active');
-
-            const viewerId = activeObraPdf === 'mirante' ? 'viewer-area-mirante' : activeObraPdf === 'joaquim' ? 'viewer-area-joaquim' : 'viewer-area-parque';
-            const emptyStateId = activeObraPdf === 'mirante' ? 'empty-state-mirante' : activeObraPdf === 'joaquim' ? 'empty-state-joaquim' : 'empty-state-parque';
-            const containerId = activeObraPdf === 'mirante' ? 'pdf-container-mirante' : activeObraPdf === 'joaquim' ? 'pdf-container-joaquim' : 'pdf-container-parque';
-            
-            document.getElementById(emptyStateId).style.display = 'none';
-            document.getElementById(containerId).style.display = 'block';
-
-            try {
-                const loadingTask = pdfjsLib.getDocument(url);
-                const pdf = await loadingTask.promise;
-                pdfDocs[activeObraPdf] = pdf;
-                
-                const renderScale = (url === 'ESGOTO_JOAQUIMLEME.pdf') ? 7.0 : 4.0;
-
-                let totalHeight = 0;
-                let maxWidth = 0;
-                const pagesData = [];
-
-                for (let i = 1; i <= pdf.numPages; i++) {
-                    const page = await pdf.getPage(i);
-                    const viewport = page.getViewport({ scale: renderScale });
-                    pagesData.push({ page, viewport });
-                    totalHeight += viewport.height;
-                    if (viewport.width > maxWidth) maxWidth = viewport.width;
-                }
-
-                const tempCanvas = document.createElement('canvas');
-                tempCanvas.width = maxWidth;
-                tempCanvas.height = totalHeight;
-                const context = tempCanvas.getContext('2d');
-
-                let currentY = 0;
-                for (let i = 0; i < pagesData.length; i++) {
-                    const { page, viewport } = pagesData[i];
-                    const pageCanvas = document.createElement('canvas');
-                    pageCanvas.width = viewport.width;
-                    pageCanvas.height = viewport.height;
-                    const pageCtx = pageCanvas.getContext('2d');
-
-                    await page.render({ canvasContext: pageCtx, viewport: viewport }).promise;
-                    context.drawImage(pageCanvas, 0, currentY);
-                    currentY += viewport.height;
-                }
-                
-                setupFabricCanvas(maxWidth, totalHeight, tempCanvas);
-                
-            } catch(e) {
-                console.error("Erro ao carregar PDF:", e);
-                document.getElementById(emptyStateId).style.display = 'block';
-                document.getElementById(emptyStateId).textContent = "PDF não encontrado (" + url + "). Hospede-o no mesmo diretório.";
-                document.getElementById(containerId).style.display = 'none';
-            }
-        }
-
-        function setupFabricCanvas(width, height, bgCanvasEl) {
-            const fabCanvasId = activeObraPdf === 'mirante' ? 'pdf-fabric-mirante' : activeObraPdf === 'joaquim' ? 'pdf-fabric-joaquim' : 'pdf-fabric-parque';
-            const containerId = activeObraPdf === 'mirante' ? 'pdf-container-mirante' : activeObraPdf === 'joaquim' ? 'pdf-container-joaquim' : 'pdf-container-parque';
-            const wrapper = document.getElementById(containerId);
-
-            let canvas = fabricCanvases[activeObraPdf];
-            
-            if (!canvas) {
-                // Cria o canvas e preenche toda a caixa
-                canvas = new fabric.Canvas(fabCanvasId, {
-                    width: wrapper.clientWidth,
-                    height: wrapper.clientHeight,
-                    isDrawingMode: (activeTool === 'brush')
-                });
-                fabricCanvases[activeObraPdf] = canvas;
-                
-                canvas.freeDrawingBrush.color = activeColor;
-                canvas.freeDrawingBrush.width = 5;
-
-                canvas.on('mouse:wheel', function(opt) {
-                    var delta = opt.e.deltaY;
-                    var zoom = canvas.getZoom();
-                    zoom *= 0.999 ** delta;
-                    if (zoom > 10) zoom = 10;
-                    if (zoom < 0.05) zoom = 0.05;
-                    
-                    canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
-                    opt.e.preventDefault();
-                    opt.e.stopPropagation();
-                });
-
-                canvas.on('mouse:down', function(opt) {
-                    var evt = opt.e;
-                    const pointer = canvas.getPointer(evt);
-
-                    if (activeTool === 'pan') {
-                        this.isDragging = true;
-                        this.selection = false;
-                        this.lastPosX = evt.clientX;
-                        this.lastPosY = evt.clientY;
-                    }
-                    else if (activeTool === 'icon') {
-                        if (opt.target) return; // Se clicou em objeto existente, apenas o seleciona
-                        const text = new fabric.Text(activeIcon, { 
-                            left: pointer.x, top: pointer.y, 
-                            fontSize: 40, originX: 'center', originY: 'bottom' 
-                        });
-                        canvas.add(text);
-                        canvas.setActiveObject(text);
-                        saveHistory();
-                    }
-                    else if (activeTool === 'text') {
-                        if (opt.target && opt.target.type === 'i-text') return; // Permite editar texto existente
-                        const text = new fabric.IText('Texto', {
-                            left: pointer.x, top: pointer.y, fontFamily: 'Montserrat', fill: '#000000', fontSize: 24, textBackgroundColor: 'rgba(255,255,255,0.7)'
-                        });
-                        canvas.add(text);
-                        canvas.setActiveObject(text);
-                        text.enterEditing();
-                        text.selectAll();
-                        saveHistory();
-                    }
-                    else if (activeTool === 'circle') {
-                        isDrawingCircle = true;
-                        origX = pointer.x;
-                        origY = pointer.y;
-                        tempCircle = new fabric.Circle({
-                            left: origX, top: origY, radius: 1, stroke: activeColor, strokeWidth: 3, fill: hexToRgba(activeColor, 0.2), originX: 'center', originY: 'center', selectable: false, evented: false
-                        });
-                        canvas.add(tempCircle);
-                    }
-                    else if (activeTool === 'arrow') {
-                        isDrawingLine = true;
-                        const points = [pointer.x, pointer.y, pointer.x, pointer.y];
-                        
-                        tempLine = new fabric.Line(points, {
-                            strokeWidth: 5, fill: activeColor, stroke: activeColor,
-                            originX: 'center', originY: 'center', selectable: false, evented: false
-                        });
-                        
-                        tempArrowHead = new fabric.Triangle({
-                            width: 15, height: 15, fill: activeColor, 
-                            left: pointer.x, top: pointer.y,
-                            originX: 'center', originY: 'center', selectable: false, evented: false, angle: 90
-                        });
-                        
-                        canvas.add(tempLine, tempArrowHead);
-                    }
-                    else if (activeTool === 'polygon') {
-                        
-                        if (polyPoints.length > 2) {
-                            const firstPoint = polyPoints[0];
-                            const dist = Math.hypot(pointer.x - firstPoint.x, pointer.y - firstPoint.y);
-                            if (dist < 20) {
-                                finishPolygon(canvas);
-                                return;
-                            }
-                        }
-
-                        polyPoints.push({x: pointer.x, y: pointer.y});
-                        
-                        let circle = new fabric.Circle({
-                            radius: 5, fill: activeColor, left: pointer.x, top: pointer.y,
-                            originX: 'center', originY: 'center', selectable: false, evented: false
-                        });
-                        polyCircles.push(circle);
-                        canvas.add(circle);
-
-                        if (polyPoints.length > 1) {
-                            let prev = polyPoints[polyPoints.length - 2];
-                            let line = new fabric.Line([prev.x, prev.y, pointer.x, pointer.y], {
-                                strokeWidth: 3, stroke: activeColor, selectable: false, evented: false
-                            });
-                            polyLines.push(line);
-                            canvas.add(line);
-                        }
-
-                        if (!dynamicLine) {
-                            dynamicLine = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
-                                strokeWidth: 3, stroke: activeColor, selectable: false, evented: false, opacity: 0.5, strokeDashArray: [5, 5]
-                            });
-                            canvas.add(dynamicLine);
+                    },
+                    onHover: (e, elements, chart) => {
+                        if (elements && elements.length) {
+                            e.native.target.style.cursor = 'pointer';
                         } else {
-                            dynamicLine.set({x1: pointer.x, y1: pointer.y, x2: pointer.x, y2: pointer.y});
-                            canvas.bringToFront(dynamicLine);
+                            e.native.target.style.cursor = 'default';
+                        }
+                    },
+                    onClick: (e, elements, chart) => {
+                        if (elements && elements.length > 0) {
+                            const index = elements[0].index;
+                            const mes = chart.data.labels[index];
+                            openDesembolsoMesModal(canvasId, mes, index);
                         }
                     }
-                });
-
-                canvas.on('mouse:move', function(opt) {
-                    if (this.isDragging && activeTool === 'pan') {
-                        var e = opt.e;
-                        var vpt = this.viewportTransform;
-                        vpt[4] += e.clientX - this.lastPosX;
-                        vpt[5] += e.clientY - this.lastPosY;
-                        this.requestRenderAll();
-                        this.lastPosX = e.clientX;
-                        this.lastPosY = e.clientY;
-                    }
-                    else if (isDrawingLine && activeTool === 'arrow') {
-                        const pointer = canvas.getPointer(opt.e);
-                        tempLine.set({ x2: pointer.x, y2: pointer.y });
-                        tempArrowHead.set({ left: pointer.x, top: pointer.y });
-                        
-                        const dx = pointer.x - tempLine.x1;
-                        const dy = pointer.y - tempLine.y1;
-                        const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-                        tempArrowHead.set({ angle: angle + 90 });
-                        canvas.renderAll();
-                    }
-                    else if (isDrawingCircle && activeTool === 'circle') {
-                        const pointer = canvas.getPointer(opt.e);
-                        let radius = Math.hypot(pointer.x - origX, pointer.y - origY);
-                        tempCircle.set({ radius: radius });
-                        canvas.renderAll();
-                    }
-                    else if (activeTool === 'polygon' && polyPoints.length > 0 && dynamicLine) {
-                        const pointer = canvas.getPointer(opt.e);
-                        dynamicLine.set({x2: pointer.x, y2: pointer.y});
-                        canvas.renderAll();
-                    }
-                });
-
-                canvas.on('mouse:up', function(opt) {
-                    if (activeTool === 'pan') {
-                        this.setViewportTransform(this.viewportTransform);
-                        this.isDragging = false;
-                        this.selection = true;
-                    }
-                    else if (activeTool === 'arrow' && isDrawingLine) {
-                        isDrawingLine = false;
-                        tempLine.setCoords();
-                        tempArrowHead.setCoords();
-                        tempLine.set({selectable: true, evented: true});
-                        tempArrowHead.set({selectable: true, evented: true});
-                        saveHistory();
-                    }
-                    else if (activeTool === 'circle' && isDrawingCircle) {
-                        isDrawingCircle = false;
-                        tempCircle.setCoords();
-                        tempCircle.set({selectable: true, evented: true});
-                        saveHistory();
-                    }
-                });
-                
-                canvas.on('path:created', function() { saveHistory(); });
-                canvas.on('object:modified', function() { saveHistory(); });
-            } else {
-                canvas.setWidth(wrapper.clientWidth);
-                canvas.setHeight(wrapper.clientHeight);
-                const objs = canvas.getObjects();
-                for(let i=objs.length-1; i>=0; i--) {
-                    if(objs[i].get('type') !== 'image') {
-                        canvas.remove(objs[i]);
-                    }
                 }
-            }
-
-            var bgImage = new fabric.Image(bgCanvasEl);
-            bgImage.set({ originX: 'left', originY: 'top', left: 0, top: 0 });
-            canvas.setBackgroundImage(bgImage, canvas.renderAll.bind(canvas));
-            
-            const scaleX = wrapper.clientWidth / width;
-            const scaleY = wrapper.clientHeight / height;
-            const fitScale = Math.min(scaleX, scaleY) * 0.95; 
-            
-            canvas.setZoom(fitScale);
-            
-            const vpt = canvas.viewportTransform;
-            vpt[4] = (wrapper.clientWidth - (width * fitScale)) / 2;
-            vpt[5] = (wrapper.clientHeight - (height * fitScale)) / 2;
-            canvas.setViewportTransform(vpt);
-
-            historyMap[activeObraPdf].states = [JSON.stringify(canvas.toJSON())];
-            historyMap[activeObraPdf].index = 0;
+            });
         }
 
-        function exportPDF() {
-            const canvas = fabricCanvases[activeObraPdf];
-            if(!canvas) return;
-            const dataURL = canvas.toDataURL({ format: 'png', multiplier: 2 });
-            const link = document.createElement('a');
-            link.download = `Projeto_Anotado_${activeObraPdf}.png`;
-            link.href = dataURL;
-            link.click();
-        }
-
-        function saveHistory() {
-            const canvas = fabricCanvases[activeObraPdf];
-            if(!canvas) return;
-            const h = historyMap[activeObraPdf];
-            h.states.splice(h.index + 1);
-            h.states.push(JSON.stringify(canvas.toJSON()));
-            h.index++;
-        }
-
-        function undoPdfAction() {
-            const canvas = fabricCanvases[activeObraPdf];
-            if(!canvas) return;
-            const h = historyMap[activeObraPdf];
-            if(h.index > 0) {
-                h.index--;
-                canvas.loadFromJSON(h.states[h.index], canvas.renderAll.bind(canvas));
-            }
-        }
-
-        function redoPdfAction() {
-            const canvas = fabricCanvases[activeObraPdf];
-            if(!canvas) return;
-            const h = historyMap[activeObraPdf];
-            if(h.index < h.states.length - 1) {
-                h.index++;
-                canvas.loadFromJSON(h.states[h.index], canvas.renderAll.bind(canvas));
-            }
-        }
-
-        function clearPdfCanvas() {
-            const canvas = fabricCanvases[activeObraPdf];
-            if(!canvas) return;
-            const objs = canvas.getObjects();
-            for(let i=objs.length-1; i>=0; i--) {
-                canvas.remove(objs[i]);
-            }
-            saveHistory();
-        }
-
-        // ==========================================
-        // ORDENAÇÃO DOS DADOS DO GRÁFICO
-        // ==========================================
         function sortChartData(labels, orcado, investido, projetadoF, fisico) {
             let eac = orcado.map((_, i) => investido[i] + projetadoF[i]);
             let combined = labels.map((l, i) => ({
-                label: l,
-                orc: orcado[i] || 0,
-                inv: investido[i] || 0,
-                proj: projetadoF[i] || 0,
-                eac: eac[i] || 0,
-                fis: fisico[i] || 0
+                label: l, orc: orcado[i] || 0, inv: investido[i] || 0, proj: projetadoF[i] || 0, eac: eac[i] || 0, fis: fisico[i] || 0
             }));
-            
-            // Ordenação pelo avanço físico (decrescente)
             combined.sort((a, b) => b.fis - a.fis); 
-            
             return {
-                labels: combined.map(o => o.label),
-                orcado: combined.map(o => o.orc),
-                investido: combined.map(o => o.inv),
-                projetado: combined.map(o => o.proj),
-                eac: combined.map(o => o.eac),
-                fisico: combined.map(o => o.fis)
+                labels: combined.map(o => o.label), orcado: combined.map(o => o.orc), investido: combined.map(o => o.inv),
+                projetado: combined.map(o => o.proj), eac: combined.map(o => o.eac), fisico: combined.map(o => o.fis)
             };
         }
-
-        // ==========================================
-        // EVENTOS DOMContentLoaded
-        // ==========================================
 
         window.addEventListener('DOMContentLoaded', () => {
             document.getElementById('home-date').textContent = 'Última atualização: 15/07/2026';
@@ -3744,7 +2933,6 @@
             createPieChart('chartJoaquimPie', joaquimEtapas, joaquimOrcado);
             createPieChart('chartParquePie', parqueEtapas, parqueOrcado);
             
-            // Tratamento e Ordenamento dos Gráficos Físico-Financeiros
             const sortedMirante = sortChartData(miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo, miranteFisicoRaw);
             const miranteEacPct = sortedMirante.eac.map((v, i) => sortedMirante.orcado[i] > 0 ? (v / sortedMirante.orcado[i] * 100) : 0);
 
@@ -3766,19 +2954,16 @@
             createDisponivelChart('chartJoaquimDisponivel', joaquimEtapas, joaquimDisponivelGrafico);
             createDisponivelChart('chartParqueDisponivel', parqueEtapas, parqueDisponivelGrafico);
             
-            createTable('tableMirante', 'MIRANTE DA LAGOA', miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo, miranteDisponivel, miranteFisicoRaw);
-            createTable('tableJoaquim', 'JOAQUIM LEME', joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo, joaquimDisponivel, joaquimFisicoRaw);
-            createTable('tableParque', 'PARQUE DAS NAÇÕES', parqueEtapas, parqueOrcado, parqueComprometido, parqueProjetadoFuturo, parqueDisponivel, parqueFisicoRaw);
+            createTable('tableMirante', 'MIRANTE DA LAGOA', miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo, miranteDisponivelGrafico, miranteFisicoRaw);
+createTable('tableJoaquim', 'JOAQUIM LEME', joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo, joaquimDisponivelGrafico, joaquimFisicoRaw);
+createTable('tableParque', 'PARQUE DAS NAÇÕES', parqueEtapas, parqueOrcado, parqueComprometido, parqueProjetadoFuturo, parqueDisponivelGrafico, parqueFisicoRaw);
             
             runABCEngine('chartMiranteABC', 'tableABCMirante', miranteEtapas, miranteRealizado);
             runABCEngine('chartJoaquimABC', 'tableABCJoaquim', joaquimEtapas, joaquimComprometido);
             runABCEngine('chartParqueABC', 'tableABCParque', parqueEtapas, parqueComprometido);
 
-            // Mirante da Lagoa: Ago/23 até Dez/26 (41 meses)
             createColumnChart('chartMiranteHistorico', mesesHistorico.slice(0, 41), desembolsosMirante.slice(0, 41));
-            // Joaquim Leme: Ago/23 até Jan/27 (42 meses)
             createColumnChart('chartJoaquimHistorico', mesesHistorico.slice(0, 42), desembolsosJoaquim.slice(0, 42));
-            // Parque das Nações: Mantém como está (Ago/23 até Mai/27)
             createColumnChart('chartParqueHistorico', mesesHistorico, desembolsosParque);
             
             let desvioMiranteCalc = ((7975420 / 7859182) - 1) * 100;
@@ -3796,7 +2981,6 @@
 
             applyChartThemes('light');
 
-            // --- LÓGICA DE EVENTOS PARA ZOOM E PAN NA IMAGEM (MODAL GLOBAL) ---
             const photoModalImg = document.getElementById('photoGlobalImage');
             const photoModalBox = document.getElementById('photoGlobalModal');
 
@@ -3834,6 +3018,279 @@
             }
         });
 
+        // =========================================================================
+        // PDF.js + Fabric.js LOGIC (Para o Visualizador)
+        // =========================================================================
+        let currentObra = 'mirante';
+        const pdfStates = {
+            'mirante': { canvas: null, pdfDoc: null, currentPdf: null, history: [], historyStep: -1 },
+            'joaquim': { canvas: null, pdfDoc: null, currentPdf: null, history: [], historyStep: -1 },
+            'parque': { canvas: null, pdfDoc: null, currentPdf: null, history: [], historyStep: -1 }
+        };
+
+        let currentTool = 'pan';
+        let currentColor = '#e53935';
+        let currentIcon = '📍';
+        let isDrawing = false;
+        let startPoint = null;
+        let shapeObj = null;
+
+        function initFabricCanvas(obra) {
+            const canvasElement = document.getElementById(`pdf-fabric-${obra}`);
+            if(!canvasElement) return;
+            pdfStates[obra].canvas = new fabric.Canvas(canvasElement, { selection: false, isDrawingMode: false });
+            
+            pdfStates[obra].canvas.on('mouse:down', onMouseDown);
+            pdfStates[obra].canvas.on('mouse:move', onMouseMove);
+            pdfStates[obra].canvas.on('mouse:up', onMouseUp);
+            pdfStates[obra].canvas.on('object:added', () => saveHistory(obra));
+            pdfStates[obra].canvas.on('object:modified', () => saveHistory(obra));
+        }
+
+        function setTool(tool, btnElement, iconVal = null) {
+            currentTool = tool;
+            if(iconVal) currentIcon = iconVal;
+            
+            const toolbar = btnElement.closest('.pdf-toolbar');
+            toolbar.querySelectorAll('.tool-mode').forEach(b => b.classList.remove('active'));
+            if(btnElement) btnElement.classList.add('active');
+
+            const canvas = pdfStates[currentObra].canvas;
+            if(!canvas) return;
+
+            canvas.isDrawingMode = (tool === 'brush');
+            if(tool === 'brush') {
+                canvas.freeDrawingBrush.color = currentColor;
+                canvas.freeDrawingBrush.width = 5;
+            }
+
+            if(tool === 'pan') {
+                canvas.selection = false;
+                canvas.defaultCursor = 'grab';
+                canvas.getObjects().forEach(o => { o.selectable = true; o.evented = true; });
+            } else {
+                canvas.selection = false;
+                canvas.defaultCursor = 'crosshair';
+                canvas.getObjects().forEach(o => { o.selectable = false; o.evented = false; });
+            }
+        }
+
+        function selectColor(color, element, e) {
+            e.stopPropagation();
+            currentColor = color;
+            const parent = element.closest('.color-picker-menu');
+            parent.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+            element.classList.add('active');
+            if(currentTool === 'brush' && pdfStates[currentObra].canvas) {
+                pdfStates[currentObra].canvas.freeDrawingBrush.color = color;
+            }
+        }
+
+        function selectIcon(icon, element, e) {
+            e.stopPropagation();
+            currentIcon = icon;
+            const parent = element.closest('.color-picker-menu');
+            parent.querySelectorAll('.icon-dot').forEach(d => d.classList.remove('active'));
+            element.classList.add('active');
+            if(currentTool !== 'icon') {
+                const btn = element.closest('.tool-wrapper').querySelector('.pdf-tool-btn');
+                setTool('icon', btn, icon);
+            }
+        }
+
+        async function loadPDF(filename, btnElement) {
+            const obra = currentObra;
+            const container = document.getElementById(`pdf-container-${obra}`);
+            const emptyState = document.getElementById(`empty-state-${obra}`);
+            const parent = document.getElementById(`viewer-area-${obra}`);
+            
+            const sidebar = btnElement.closest('.projetos-sidebar');
+            sidebar.querySelectorAll('.projeto-btn').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            container.style.display = 'none';
+            emptyState.style.display = 'block';
+            emptyState.innerText = "Carregando PDF...";
+
+            try {
+                if(!pdfStates[obra].canvas) initFabricCanvas(obra);
+                const canvas = pdfStates[obra].canvas;
+                canvas.clear();
+                
+                const loadingTask = pdfjsLib.getDocument(filename);
+                pdfStates[obra].pdfDoc = await loadingTask.promise;
+                pdfStates[obra].currentPdf = filename;
+                
+                const page = await pdfStates[obra].pdfDoc.getPage(1);
+                const viewport = page.getViewport({ scale: 2.0 });
+                
+                const pdfCanvas = document.createElement('canvas');
+                const ctx = pdfCanvas.getContext('2d');
+                pdfCanvas.width = viewport.width;
+                pdfCanvas.height = viewport.height;
+                
+                await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+                
+                fabric.Image.fromURL(pdfCanvas.toDataURL(), function(img) {
+                    canvas.setWidth(parent.clientWidth);
+                    canvas.setHeight(parent.clientHeight);
+                    
+                    const scale = Math.min(parent.clientWidth / img.width, parent.clientHeight / img.height);
+                    img.set({ scaleX: scale, scaleY: scale, originX: 'center', originY: 'center', left: canvas.width/2, top: canvas.height/2, selectable: false, evented: false });
+                    
+                    canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+                    
+                    emptyState.style.display = 'none';
+                    container.style.display = 'block';
+                    saveHistory(obra);
+                });
+            } catch (error) {
+                console.error("Erro ao carregar PDF:", error);
+                emptyState.innerText = "PDF não encontrado ou falha no carregamento.\nVerifique se o arquivo '" + filename + "' está na mesma pasta no GitHub.";
+                container.style.display = 'none';
+            }
+        }
+
+        let isPanning = false, lastPosX, lastPosY;
+        function onMouseDown(o) {
+            const canvas = pdfStates[currentObra].canvas;
+            if(!canvas) return;
+
+            if(currentTool === 'pan' && !canvas.getActiveObject()) {
+                isPanning = true;
+                canvas.defaultCursor = 'grabbing';
+                lastPosX = o.e.clientX;
+                lastPosY = o.e.clientY;
+                return;
+            }
+
+            if(currentTool === 'pan' || currentTool === 'brush') return;
+            isDrawing = true;
+            const pointer = canvas.getPointer(o.e);
+            startPoint = pointer;
+
+            if (currentTool === 'icon') {
+                const text = new fabric.Text(currentIcon, { left: pointer.x, top: pointer.y, fontSize: 30, originX: 'center', originY: 'center' });
+                canvas.add(text);
+                isDrawing = false;
+            } else if (currentTool === 'text') {
+                const text = new fabric.IText('Digite aqui...', { left: pointer.x, top: pointer.y, fontSize: 20, fill: currentColor, fontFamily: 'Montserrat' });
+                canvas.add(text);
+                canvas.setActiveObject(text);
+                text.enterEditing();
+                text.selectAll();
+                isDrawing = false;
+            } else if (currentTool === 'circle') {
+                shapeObj = new fabric.Circle({ left: pointer.x, top: pointer.y, radius: 1, fill: 'transparent', stroke: currentColor, strokeWidth: 3, originX: 'center', originY: 'center' });
+                canvas.add(shapeObj);
+            } else if (currentTool === 'arrow') {
+                shapeObj = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], { stroke: currentColor, strokeWidth: 3, selectable: false, evented: false });
+                canvas.add(shapeObj);
+            } else if (currentTool === 'polygon') {
+                shapeObj = new fabric.Rect({ left: pointer.x, top: pointer.y, width: 1, height: 1, fill: currentColor + '40', stroke: currentColor, strokeWidth: 2, selectable: false });
+                canvas.add(shapeObj);
+            }
+        }
+
+        function onMouseMove(o) {
+            const canvas = pdfStates[currentObra].canvas;
+            if(isPanning && currentTool === 'pan') {
+                const vpt = canvas.viewportTransform;
+                vpt[4] += o.e.clientX - lastPosX;
+                vpt[5] += o.e.clientY - lastPosY;
+                canvas.requestRenderAll();
+                lastPosX = o.e.clientX;
+                lastPosY = o.e.clientY;
+            }
+
+            if(!isDrawing) return;
+            const pointer = canvas.getPointer(o.e);
+
+            if (currentTool === 'circle') {
+                let radius = Math.max(Math.abs(startPoint.x - pointer.x), Math.abs(startPoint.y - pointer.y));
+                shapeObj.set({ radius: radius });
+                canvas.renderAll();
+            } else if (currentTool === 'arrow') {
+                shapeObj.set({ x2: pointer.x, y2: pointer.y });
+                canvas.renderAll();
+            } else if (currentTool === 'polygon') {
+                let w = Math.abs(pointer.x - startPoint.x);
+                let h = Math.abs(pointer.y - startPoint.y);
+                shapeObj.set({ width: w, height: h });
+                if(startPoint.x > pointer.x) shapeObj.set({ left: Math.abs(pointer.x) });
+                if(startPoint.y > pointer.y) shapeObj.set({ top: Math.abs(pointer.y) });
+                canvas.renderAll();
+            }
+        }
+
+        function onMouseUp(o) {
+            const canvas = pdfStates[currentObra].canvas;
+            if(isPanning) { isPanning = false; canvas.defaultCursor = 'grab'; }
+            if(!isDrawing) return;
+            isDrawing = false;
+            if(shapeObj) {
+                shapeObj.setCoords();
+                shapeObj = null;
+            }
+        }
+
+        function saveHistory(obra) {
+            const state = pdfStates[obra || currentObra];
+            if(!state.canvas) return;
+            const json = state.canvas.toJSON();
+            state.history = state.history.slice(0, state.historyStep + 1);
+            state.history.push(JSON.stringify(json));
+            state.historyStep++;
+        }
+
+        function undoPdfAction() {
+            const state = pdfStates[currentObra];
+            if(state.historyStep > 0) {
+                state.historyStep--;
+                state.canvas.loadFromJSON(state.history[state.historyStep], state.canvas.renderAll.bind(state.canvas));
+            }
+        }
+
+        function redoPdfAction() {
+            const state = pdfStates[currentObra];
+            if(state.historyStep < state.history.length - 1) {
+                state.historyStep++;
+                state.canvas.loadFromJSON(state.history[state.historyStep], state.canvas.renderAll.bind(state.canvas));
+            }
+        }
+
+        function clearPdfCanvas() {
+            if(confirm("Tem certeza que deseja apagar todas as anotações?")) {
+                const state = pdfStates[currentObra];
+                const bg = state.canvas.backgroundImage;
+                state.canvas.clear();
+                if(bg) { state.canvas.setBackgroundImage(bg, state.canvas.renderAll.bind(state.canvas)); }
+            }
+        }
+
+        function exportPDF() {
+            const canvas = pdfStates[currentObra].canvas;
+            if(!canvas) return;
+            const dataURL = canvas.toDataURL({ format: 'jpeg', quality: 0.9 });
+            const link = document.createElement('a');
+            link.download = `Marcacao_${currentObra}_Projeto.jpg`;
+            link.href = dataURL;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        window.addEventListener('resize', () => {
+            Object.values(pdfStates).forEach(state => {
+                if (state.canvas && state.canvas.backgroundImage) {
+                    const parent = state.canvas.wrapperEl.parentElement;
+                    state.canvas.setWidth(parent.clientWidth);
+                    state.canvas.setHeight(parent.clientHeight);
+                    state.canvas.renderAll();
+                }
+            });
+        });
+
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -3864,10 +3321,9 @@
         });
 
         document.addEventListener('keydown', e => { 
-            if (e.key === 'Escape') { 
-                closeAllModals();
-            } 
+            if (e.key === 'Escape') closeAllModals();
         });
+
     </script>
 </body>
 </html>

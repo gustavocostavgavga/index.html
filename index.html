@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1855,22 +1856,16 @@
 
         async function carregarDadosExcel() {
             try {
-                // Puxa o seu novo arquivo diretamente do GitHub
                 const response = await fetch('./dados.xlsx'); 
                 if (!response.ok) throw new Error("Arquivo Excel não encontrado.");
                 
                 const arrayBuffer = await response.arrayBuffer();
                 const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-                
-                // Como todas as obras estão agora na primeira aba, lemos apenas ela
                 const primeiraAba = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[primeiraAba];
                 
-                // Converte a aba em linhas. O raw: false preserva o formato visual das células
                 const linhas = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "", raw: false });
-                
                 processarLinhasExcel(linhas);
-                
             } catch (error) {
                 console.warn("Erro ao carregar a planilha Excel:", error);
             }
@@ -1882,44 +1877,51 @@
             
             for (let i = 0; i < linhas.length; i++) {
                 let linha = linhas[i].map(c => String(c).trim());
-                let col1 = linha[1] ? linha[1].toUpperCase() : "";
+                let rowStr = linha.join(" ").toUpperCase();
                 
-                // 1. Identifica de qual obra são os dados pelos títulos das tabelas
-                if (col1.includes("FLUXO DE DESEMBOLSOS")) {
-                    if (col1.includes("MIRANTE")) obraAtual = "mirante";
-                    else if (col1.includes("JOAQUIM")) obraAtual = "joaquim";
-                    else if (col1.includes("PARQUE")) obraAtual = "parque";
+                // 1. Identifica a obra em qualquer lugar da linha
+                if (rowStr.includes("FLUXO DE DESEMBOLSOS")) {
+                    if (rowStr.includes("MIRANTE")) obraAtual = "mirante";
+                    else if (rowStr.includes("JOAQUIM")) obraAtual = "joaquim";
+                    else if (rowStr.includes("PARQUE")) obraAtual = "parque";
                     
                     cabecalhoEtapas = linha; 
                     continue;
                 }
                 
-                if (!obraAtual || col1 === "" || col1 === "TOTAL" || col1 === "NAN") {
-                    continue;
-                }
+                if (!obraAtual || rowStr === "" || rowStr.includes("TOTAL")) continue;
                 
-                let mes = linha[1].toLowerCase().trim();
-                
-                if (!csvHistoricoData[obraAtual][mes]) {
-                    csvHistoricoData[obraAtual][mes] = [];
-                }
-                
-                for (let j = 3; j < linha.length; j++) {
-                    let nomeEtapa = cabecalhoEtapas[j];
-                    
-                    if (!nomeEtapa || nomeEtapa === "") continue;
-                    
-                    let valorStr = linha[j].replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.');
-                    let valorFloat = parseFloat(valorStr);
-                    
-                    if (isNaN(valorFloat) || linha[j] === "-") {
-                        valorFloat = 0;
+                // 2. Encontra a coluna do Mês (busca flexível na linha)
+                let mesStr = "";
+                for (let c = 0; c < 3; c++) {
+                    if (linha[c] && (linha[c].includes('/') || linha[c].includes('-'))) {
+                        mesStr = linha[c].toLowerCase().replace(/\s+/g, '').replace('-', '/');
+                        break;
                     }
+                }
+                if (!mesStr) mesStr = linha[1] ? linha[1].toLowerCase().trim() : "";
+                if (!mesStr) continue;
+
+                if (!csvHistoricoData[obraAtual][mesStr]) {
+                    csvHistoricoData[obraAtual][mesStr] = [];
+                }
+                
+                // 3. Registra os valores
+                for (let j = 0; j < linha.length; j++) {
+                    let nomeEtapa = cabecalhoEtapas[j];
+                    if (!nomeEtapa || j < 2) continue; // Ignora as colunas de Título e Mensal
                     
-                    csvHistoricoData[obraAtual][mes].push({
-                        etapa: nomeEtapa,
-                        valor: valorFloat
-                    });
+                    let valorStr = String(linha[j]).replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.');
+                    let valorFloat = parseFloat(valorStr);
+                    if (isNaN(valorFloat)) valorFloat = 0;
+                    
+                    // Só grava etapas que tiveram valor para não pesar a memória
+                    if (valorFloat !== 0) {
+                        csvHistoricoData[obraAtual][mesStr].push({
+                            etapa: nomeEtapa,
+                            valor: valorFloat
+                        });
+                    }
                 }
             }
         }
@@ -1932,15 +1934,21 @@
             
             document.getElementById('desembolsoMesTitle').textContent = mesLabel;
             document.getElementById('desembolsoMesObra').textContent = nomeObra;
-            
             const tbody = document.getElementById('desembolsoMesTableBody');
             tbody.innerHTML = '';
             
-            const mesKey = mesLabel.toLowerCase();
-            const dadosMes = csvHistoricoData[obraId][mesKey];
+            // Busca Exata ou Parcial para evitar falhas de digitação do Excel
+            const mesKey = mesLabel.toLowerCase().replace('-', '/').trim();
+            let dadosMes = csvHistoricoData[obraId][mesKey];
+            
+            if (!dadosMes) {
+                const possibleKeys = Object.keys(csvHistoricoData[obraId]);
+                const matchedKey = possibleKeys.find(k => k.includes(mesKey) || mesKey.includes(k));
+                if (matchedKey) dadosMes = csvHistoricoData[obraId][matchedKey];
+            }
             
             if (!dadosMes || dadosMes.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:15px; color:var(--subtitle-color);">Sem dados disponíveis para este mês.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:15px; color:var(--subtitle-color);">Sem dados detalhados para este mês na planilha.</td></tr>';
                 document.getElementById('desembolsoMesTot').textContent = 'R$ 0,00';
                 document.getElementById('modalDesembolsoMes').classList.add('active');
                 return;
@@ -1950,7 +1958,7 @@
             let total = 0;
 
             if (filtrados.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:15px; color:var(--subtitle-color);">Sem desembolsos registrados nas etapas neste mês.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:15px; color:var(--subtitle-color);">Nenhum desembolso em etapas para este mês.</td></tr>';
             } else {
                 filtrados.forEach(item => {
                     total += item.valor;
@@ -1971,7 +1979,7 @@
             document.getElementById('modalDesembolsoMes').classList.add('active');
         }
 
-        // Executar a leitura da planilha logo ao abrir a página
+        // Executar a leitura da planilha
         carregarDadosExcel();
 
         // =========================================================================
@@ -3018,7 +3026,7 @@ createTable('tableParque', 'PARQUE DAS NAÇÕES', parqueEtapas, parqueOrcado, pa
             }
         });
 
-        // =========================================================================
+       // =========================================================================
         // PDF.js + Fabric.js LOGIC (Para o Visualizador)
         // =========================================================================
         let currentObra = 'mirante';
@@ -3034,17 +3042,33 @@ createTable('tableParque', 'PARQUE DAS NAÇÕES', parqueEtapas, parqueOrcado, pa
         let isDrawing = false;
         let startPoint = null;
         let shapeObj = null;
+        let isHistoryUpdating = false; // Trava essencial para o Botão Refazer!
 
         function initFabricCanvas(obra) {
             const canvasElement = document.getElementById(`pdf-fabric-${obra}`);
             if(!canvasElement) return;
             pdfStates[obra].canvas = new fabric.Canvas(canvasElement, { selection: false, isDrawingMode: false });
             
-            pdfStates[obra].canvas.on('mouse:down', onMouseDown);
-            pdfStates[obra].canvas.on('mouse:move', onMouseMove);
-            pdfStates[obra].canvas.on('mouse:up', onMouseUp);
-            pdfStates[obra].canvas.on('object:added', () => saveHistory(obra));
-            pdfStates[obra].canvas.on('object:modified', () => saveHistory(obra));
+            const canvas = pdfStates[obra].canvas;
+
+            // ZOOM COM A RODINHA DO MOUSE
+            canvas.on('mouse:wheel', function(opt) {
+                var delta = opt.e.deltaY;
+                var zoom = canvas.getZoom();
+                zoom *= 0.999 ** delta;
+                if (zoom > 10) zoom = 10;
+                if (zoom < 0.1) zoom = 0.1;
+                canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
+                opt.e.preventDefault();
+                opt.e.stopPropagation();
+            });
+
+            canvas.on('mouse:down', onMouseDown);
+            canvas.on('mouse:move', onMouseMove);
+            canvas.on('mouse:up', onMouseUp);
+            
+            canvas.on('object:added', () => saveHistory(obra));
+            canvas.on('object:modified', () => saveHistory(obra));
         }
 
         function setTool(tool, btnElement, iconVal = null) {
@@ -3142,6 +3166,10 @@ createTable('tableParque', 'PARQUE DAS NAÇÕES', parqueEtapas, parqueOrcado, pa
                     
                     emptyState.style.display = 'none';
                     container.style.display = 'block';
+                    
+                    // Limpa o histórico ao carregar um PDF novo
+                    pdfStates[obra].history = [];
+                    pdfStates[obra].historyStep = -1;
                     saveHistory(obra);
                 });
             } catch (error) {
@@ -3235,6 +3263,7 @@ createTable('tableParque', 'PARQUE DAS NAÇÕES', parqueEtapas, parqueOrcado, pa
         }
 
         function saveHistory(obra) {
+            if (isHistoryUpdating) return; // Se está carregando uma ação de desfazer/refazer, não salve um estado novo
             const state = pdfStates[obra || currentObra];
             if(!state.canvas) return;
             const json = state.canvas.toJSON();
@@ -3246,16 +3275,24 @@ createTable('tableParque', 'PARQUE DAS NAÇÕES', parqueEtapas, parqueOrcado, pa
         function undoPdfAction() {
             const state = pdfStates[currentObra];
             if(state.historyStep > 0) {
+                isHistoryUpdating = true; // Trava o salvamento de histórico
                 state.historyStep--;
-                state.canvas.loadFromJSON(state.history[state.historyStep], state.canvas.renderAll.bind(state.canvas));
+                state.canvas.loadFromJSON(state.history[state.historyStep], function() {
+                    state.canvas.renderAll();
+                    isHistoryUpdating = false; // Libera o salvamento
+                });
             }
         }
 
         function redoPdfAction() {
             const state = pdfStates[currentObra];
             if(state.historyStep < state.history.length - 1) {
+                isHistoryUpdating = true; // Trava o salvamento de histórico
                 state.historyStep++;
-                state.canvas.loadFromJSON(state.history[state.historyStep], state.canvas.renderAll.bind(state.canvas));
+                state.canvas.loadFromJSON(state.history[state.historyStep], function() {
+                    state.canvas.renderAll();
+                    isHistoryUpdating = false; // Libera o salvamento
+                });
             }
         }
 
@@ -3265,6 +3302,7 @@ createTable('tableParque', 'PARQUE DAS NAÇÕES', parqueEtapas, parqueOrcado, pa
                 const bg = state.canvas.backgroundImage;
                 state.canvas.clear();
                 if(bg) { state.canvas.setBackgroundImage(bg, state.canvas.renderAll.bind(state.canvas)); }
+                saveHistory(currentObra);
             }
         }
 

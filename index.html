@@ -691,15 +691,15 @@
 
                 <h3 style="color: var(--title-color); margin-bottom: 15px; text-align: center; font-size: 1.1rem; margin-top: 15px;">CONSTRUÇÃO DO PARQUE LINEAR</h3>
                 <div class="gallery-container">
-                    <div class="gallery-item" onclick="openPhotoModal('PQLINEAR01_MIRANTEDALAGOA.jpeg', this)"><img src="PQLINEAR01_MIRANTEDALAGOA.jpeg" alt="Parque Linear 01"></div>
-                    <div class="gallery-item" onclick="openPhotoModal('PQLINEAR02_MIRANTEDALAGOA.jpeg', this)"><img src="PQLINEAR02_MIRANTEDALAGOA.jpeg" alt="Parque Linear 02"></div>
-                    <div class="gallery-item" onclick="openPhotoModal('PQLINEAR03_MIRANTEDALAGOA.jpeg', this)"><img src="PQLINEAR03_MIRANTEDALAGOA.jpeg" alt="Parque Linear 03"></div>
-                    <div class="gallery-item" onclick="openPhotoModal('PQLINEAR04_MIRANTEDALAGOA.jpeg', this)"><img src="PQLINEAR04_MIRANTEDALAGOA.jpeg" alt="Parque Linear 04"></div>
-                    <div class="gallery-item" onclick="openPhotoModal('PQLINEAR05_MIRANTEDALAGOA.jpeg', this)"><img src="PQLINEAR05_MIRANTEDALAGOA.jpeg" alt="Parque Linear 05"></div>
-                    <div class="gallery-item" onclick="openPhotoModal('PQLINEAR06_MIRANTEDALAGOA.jpeg', this)"><img src="PQLINEAR06_MIRANTEDALAGOA.jpeg" alt="Parque Linear 06"></div>
-                    <div class="gallery-item" onclick="openPhotoModal('PQLINEAR07_MIRANTEDALAGOA.jpeg', this)"><img src="PQLINEAR07_MIRANTEDALAGOA.jpeg" alt="Parque Linear 07"></div>
-                    <div class="gallery-item" onclick="openPhotoModal('PQLINEAR08_MIRANTEDALAGOA.jpeg', this)"><img src="PQLINEAR08_MIRANTEDALAGOA.jpeg" alt="Parque Linear 08"></div>
-                    <div class="gallery-item" onclick="openPhotoModal('PQLINEAR09_MIRANTEDALAGOA.jpeg', this)"><img src="PQLINEAR09_MIRANTEDALAGOA.jpeg" alt="Parque Linear 09"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('PQLINEAR01_MIRANTEDALAGOA.jpg', this)"><img src="PQLINEAR01_MIRANTEDALAGOA.jpg" alt="Parque Linear 01"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('PQLINEAR02_MIRANTEDALAGOA.jpg', this)"><img src="PQLINEAR02_MIRANTEDALAGOA.jpg" alt="Parque Linear 02"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('PQLINEAR03_MIRANTEDALAGOA.jpg', this)"><img src="PQLINEAR03_MIRANTEDALAGOA.jpg" alt="Parque Linear 03"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('PQLINEAR04_MIRANTEDALAGOA.jpg', this)"><img src="PQLINEAR04_MIRANTEDALAGOA.jpg" alt="Parque Linear 04"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('PQLINEAR05_MIRANTEDALAGOA.jpg', this)"><img src="PQLINEAR05_MIRANTEDALAGOA.jpg" alt="Parque Linear 05"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('PQLINEAR06_MIRANTEDALAGOA.jpg', this)"><img src="PQLINEAR06_MIRANTEDALAGOA.jpg" alt="Parque Linear 06"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('PQLINEAR07_MIRANTEDALAGOA.jpg', this)"><img src="PQLINEAR07_MIRANTEDALAGOA.jpg" alt="Parque Linear 07"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('PQLINEAR08_MIRANTEDALAGOA.jpg', this)"><img src="PQLINEAR08_MIRANTEDALAGOA.jpg" alt="Parque Linear 08"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('PQLINEAR09_MIRANTEDALAGOA.jpg', this)"><img src="PQLINEAR09_MIRANTEDALAGOA.jpg" alt="Parque Linear 09"></div>
                 </div>
             </div>
             
@@ -2969,6 +2969,20 @@
                     scales: { 
                         x: { ticks: { font: { family: "'Montserrat'", size: 10 }, color: '#000000', maxRotation: 45 }, grid: { color: 'rgba(0,0,0,0.1)' } }, 
                         y: { ticks: { font: { family: "'Montserrat'" }, color: '#000000', callback: v => fmtNum(v) }, grid: { color: 'rgba(0,0,0,0.1)' } } 
+                    },
+                    onHover: (e, elements, chart) => {
+                        if (elements && elements.length) {
+                            e.native.target.style.cursor = 'pointer';
+                        } else {
+                            e.native.target.style.cursor = 'default';
+                        }
+                    },
+                    onClick: (e, elements, chart) => {
+                        if (elements && elements.length > 0) {
+                            const index = elements[0].index;
+                            const mes = chart.data.labels[index];
+                            openDesembolsoMesModal(canvasId, mes, index);
+                        }
                     }
                 }
             });
@@ -3019,8 +3033,8 @@
             createDisponivelChart('chartParqueDisponivel', parqueEtapas, parqueDisponivelGrafico);
             
             createTable('tableMirante', 'MIRANTE DA LAGOA', miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo, miranteDisponivelGrafico, miranteFisicoRaw);
-createTable('tableJoaquim', 'JOAQUIM LEME', joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo, joaquimDisponivelGrafico, joaquimFisicoRaw);
-createTable('tableParque', 'PARQUE DAS NAÇÕES', parqueEtapas, parqueOrcado, parqueComprometido, parqueProjetadoFuturo, parqueDisponivelGrafico, parqueFisicoRaw);
+            createTable('tableJoaquim', 'JOAQUIM LEME', joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo, joaquimDisponivelGrafico, joaquimFisicoRaw);
+            createTable('tableParque', 'PARQUE DAS NAÇÕES', parqueEtapas, parqueOrcado, parqueComprometido, parqueProjetadoFuturo, parqueDisponivelGrafico, parqueFisicoRaw);
             
             runABCEngine('chartMiranteABC', 'tableABCMirante', miranteEtapas, miranteRealizado);
             runABCEngine('chartJoaquimABC', 'tableABCJoaquim', joaquimEtapas, joaquimComprometido);
@@ -3098,7 +3112,12 @@ createTable('tableParque', 'PARQUE DAS NAÇÕES', parqueEtapas, parqueOrcado, pa
         let isDrawing = false;
         let startPoint = null;
         let shapeObj = null;
-        let isHistoryUpdating = false; // Trava essencial para o Botão Refazer!
+        let isHistoryUpdating = false; 
+
+        // Variáveis para funcionalidade Polígono (Área)
+        let polygonPoints = [];
+        let polygonTempObjs = [];
+        let activeLine = null;
 
         function initFabricCanvas(obra) {
             const canvasElement = document.getElementById(`pdf-fabric-${obra}`);
@@ -3107,7 +3126,6 @@ createTable('tableParque', 'PARQUE DAS NAÇÕES', parqueEtapas, parqueOrcado, pa
             
             const canvas = pdfStates[obra].canvas;
 
-            // ZOOM COM A RODINHA DO MOUSE
             canvas.on('mouse:wheel', function(opt) {
                 var delta = opt.e.deltaY;
                 var zoom = canvas.getZoom();
@@ -3127,7 +3145,22 @@ createTable('tableParque', 'PARQUE DAS NAÇÕES', parqueEtapas, parqueOrcado, pa
             canvas.on('object:modified', () => saveHistory(obra));
         }
 
+        function clearPolygonDraft() {
+            const canvas = pdfStates[currentObra].canvas;
+            if (canvas) {
+                polygonTempObjs.forEach(obj => canvas.remove(obj));
+                if (activeLine) canvas.remove(activeLine);
+            }
+            polygonPoints = [];
+            polygonTempObjs = [];
+            activeLine = null;
+        }
+
         function setTool(tool, btnElement, iconVal = null) {
+            if (currentTool === 'polygon' && tool !== 'polygon') {
+                clearPolygonDraft();
+            }
+
             currentTool = tool;
             if(iconVal) currentIcon = iconVal;
             
@@ -3141,7 +3174,7 @@ createTable('tableParque', 'PARQUE DAS NAÇÕES', parqueEtapas, parqueOrcado, pa
             canvas.isDrawingMode = (tool === 'brush');
             if(tool === 'brush') {
                 canvas.freeDrawingBrush.color = currentColor;
-                canvas.freeDrawingBrush.width = 2;
+                canvas.freeDrawingBrush.width = 1.5;
             }
 
             if(tool === 'pan') {
@@ -3227,7 +3260,6 @@ createTable('tableParque', 'PARQUE DAS NAÇÕES', parqueEtapas, parqueOrcado, pa
                     emptyState.style.display = 'none';
                     container.style.display = 'block';
                     
-                    // Limpa o histórico ao carregar um PDF novo
                     pdfStates[obra].history = [];
                     pdfStates[obra].historyStep = -1;
                     saveHistory(obra);
@@ -3257,8 +3289,56 @@ createTable('tableParque', 'PARQUE DAS NAÇÕES', parqueEtapas, parqueOrcado, pa
             }
 
             if(currentTool === 'pan' || currentTool === 'brush') return;
-            isDrawing = true;
+            
             const pointer = canvas.getPointer(o.e);
+
+            if (currentTool === 'polygon') {
+                if (polygonPoints.length === 0) {
+                    polygonPoints.push({ x: pointer.x, y: pointer.y });
+                    const circle = new fabric.Circle({
+                        radius: 4, fill: currentColor, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', hasControls: false, hasBorders: false, selectable: false
+                    });
+                    polygonTempObjs.push(circle);
+                    canvas.add(circle);
+
+                    activeLine = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
+                        strokeWidth: 1.5, fill: currentColor, stroke: currentColor, originX: 'center', originY: 'center', selectable: false, evented: false
+                    });
+                    canvas.add(activeLine);
+                } else {
+                    const startPointPol = polygonPoints[0];
+                    const dist = Math.sqrt(Math.pow(startPointPol.x - pointer.x, 2) + Math.pow(startPointPol.y - pointer.y, 2));
+                    
+                    if (dist < 15 && polygonPoints.length > 2) {
+                        if (activeLine) canvas.remove(activeLine);
+                        polygonTempObjs.forEach(obj => canvas.remove(obj));
+
+                        const poly = new fabric.Polygon(polygonPoints, {
+                            fill: currentColor + '40', stroke: currentColor, strokeWidth: 1.5, selectable: false, evented: false
+                        });
+                        canvas.add(poly);
+                        saveHistory(currentObra);
+                        clearPolygonDraft();
+                    } else {
+                        polygonPoints.push({ x: pointer.x, y: pointer.y });
+                        activeLine.set({ x2: pointer.x, y2: pointer.y });
+                        
+                        const circle = new fabric.Circle({
+                            radius: 4, fill: currentColor, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', hasControls: false, hasBorders: false, selectable: false
+                        });
+                        polygonTempObjs.push(circle);
+                        canvas.add(circle);
+
+                        activeLine = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
+                            strokeWidth: 1.5, fill: currentColor, stroke: currentColor, originX: 'center', originY: 'center', selectable: false, evented: false
+                        });
+                        canvas.add(activeLine);
+                    }
+                }
+                return;
+            }
+
+            isDrawing = true;
             startPoint = pointer;
 
             if (currentTool === 'icon') {
@@ -3274,13 +3354,10 @@ createTable('tableParque', 'PARQUE DAS NAÇÕES', parqueEtapas, parqueOrcado, pa
                 text.selectAll();
                 isDrawing = false;
             } else if (currentTool === 'circle') {
-                shapeObj = new fabric.Circle({ left: pointer.x, top: pointer.y, radius: 1, fill: 'transparent', stroke: currentColor, strokeWidth: 2, originX: 'center', originY: 'center' });
+                shapeObj = new fabric.Circle({ left: pointer.x, top: pointer.y, radius: 1, fill: 'transparent', stroke: currentColor, strokeWidth: 1.5, originX: 'center', originY: 'center' });
                 canvas.add(shapeObj);
             } else if (currentTool === 'arrow') {
-                shapeObj = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], { stroke: currentColor, strokeWidth: 2, selectable: false, evented: false });
-                canvas.add(shapeObj);
-            } else if (currentTool === 'polygon') {
-                shapeObj = new fabric.Rect({ left: pointer.x, top: pointer.y, width: 1, height: 1, fill: currentColor + '40', stroke: currentColor, strokeWidth: 2, selectable: false });
+                shapeObj = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], { stroke: currentColor, strokeWidth: 1.5, selectable: false, evented: false });
                 canvas.add(shapeObj);
             }
         }
@@ -3296,8 +3373,15 @@ createTable('tableParque', 'PARQUE DAS NAÇÕES', parqueEtapas, parqueOrcado, pa
                 lastPosY = o.e.clientY;
             }
 
-            if(!isDrawing) return;
             const pointer = canvas.getPointer(o.e);
+
+            if (currentTool === 'polygon' && activeLine && activeLine.class !== 'Polygon') {
+                activeLine.set({ x2: pointer.x, y2: pointer.y });
+                canvas.renderAll();
+                return;
+            }
+
+            if(!isDrawing) return;
 
             if (currentTool === 'circle') {
                 let radius = Math.max(Math.abs(startPoint.x - pointer.x), Math.abs(startPoint.y - pointer.y));
@@ -3305,13 +3389,6 @@ createTable('tableParque', 'PARQUE DAS NAÇÕES', parqueEtapas, parqueOrcado, pa
                 canvas.renderAll();
             } else if (currentTool === 'arrow') {
                 shapeObj.set({ x2: pointer.x, y2: pointer.y });
-                canvas.renderAll();
-            } else if (currentTool === 'polygon') {
-                let w = Math.abs(pointer.x - startPoint.x);
-                let h = Math.abs(pointer.y - startPoint.y);
-                shapeObj.set({ width: w, height: h });
-                if(startPoint.x > pointer.x) shapeObj.set({ left: Math.abs(pointer.x) });
-                if(startPoint.y > pointer.y) shapeObj.set({ top: Math.abs(pointer.y) });
                 canvas.renderAll();
             }
         }

@@ -3160,7 +3160,7 @@
             canvas.isDrawingMode = (tool === 'brush');
             if(tool === 'brush') {
                 canvas.freeDrawingBrush.color = currentColor;
-                canvas.freeDrawingBrush.width = 1.5;
+                canvas.freeDrawingBrush.width = 0.5;
             }
 
             if(tool === 'pan') {
@@ -3300,7 +3300,7 @@
                         polygonTempObjs.forEach(obj => canvas.remove(obj));
 
                         const poly = new fabric.Polygon(polygonPoints, {
-                            fill: currentColor + '40', stroke: currentColor, strokeWidth: 1.5, selectable: false, evented: false
+                            fill: currentColor + '40', stroke: currentColor, strokeWidth: 0.5, selectable: false, evented: false
                         });
                         canvas.add(poly);
                         saveHistory(currentObra);
@@ -3316,7 +3316,7 @@
                         canvas.add(circle);
 
                         activeLine = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
-                            strokeWidth: 1.5, fill: currentColor, stroke: currentColor, originX: 'center', originY: 'center', selectable: false, evented: false
+                            strokeWidth: 0.5, fill: currentColor, stroke: currentColor, originX: 'center', originY: 'center', selectable: false, evented: false
                         });
                         canvas.add(activeLine);
                     }
@@ -3340,10 +3340,10 @@
                 text.selectAll();
                 isDrawing = false;
             } else if (currentTool === 'circle') {
-                shapeObj = new fabric.Circle({ left: pointer.x, top: pointer.y, radius: 1, fill: 'transparent', stroke: currentColor, strokeWidth: 1.5, originX: 'center', originY: 'center' });
+                shapeObj = new fabric.Circle({ left: pointer.x, top: pointer.y, radius: 1, fill: 'transparent', stroke: currentColor, strokeWidth: 0.5, originX: 'center', originY: 'center' });
                 canvas.add(shapeObj);
             } else if (currentTool === 'arrow') {
-                shapeObj = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], { stroke: currentColor, strokeWidth: 1.5, selectable: false, evented: false });
+                shapeObj = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], { stroke: currentColor, strokeWidth: 0.5, selectable: false, evented: false });
                 canvas.add(shapeObj);
             }
         }

@@ -522,7 +522,7 @@
         </div>
 
         <div class="home-frame home-footer-frame">
-            <p class="home-date" id="home-date">Última atualização: 15/07/2026</p>
+            <p class="home-date" id="home-date">Última atualização: 11/08/2026</p>
         </div>
     </div>
 
@@ -542,7 +542,7 @@
                         <span class="icon" id="modeIcon">🌙</span>
                         <span id="modeText">Modo Noturno</span>
                     </button>
-                    <div class="update-date-lbl" id="update-date-lbl">Última atualização: 15/07/2026</div>
+                    <div class="update-date-lbl" id="update-date-lbl">Última atualização: 11/08/2026</div>
                 </div>
             </div>
         </header>
@@ -1150,7 +1150,7 @@
                         
                         <h4>Ituiutaba em Números</h4>
                         <p>Ituiutaba possui uma população estimada em aproximadamente 105 mil habitantes e uma área territorial superior a 2.600 km², consolidando-se como um importante polo regional de serviços, comércio e agronegócio. O município apresenta elevados índices de desenvolvimento e exerce influência econômica sobre diversas cidades do Pontal do Triângulo Mineiro.</p>
-                        <p>Inserida em uma região estratégica do estado, Ituiutaba beneficia-se da proximidade com importantes centros econômicos, como Uberlândia, um dos maiores polos logísticos e empresariais do Brasil. Essa localização favorece a integração regional, o fluxo de pessoas e mercadorias, a geração de empregos e a expansão de novos empreendimentos residenciais e comerciais.</p>
+                        <p>Inserida em uma região estratégica do estado, Ituiutaba beneficia-se da proximidade com importantes centros econômicos, কপmo Uberlândia, um dos maiores polos logísticos e empresariais do Brasil. Essa localização favorece a integração regional, o fluxo de pessoas e mercadorias, a geração de empregos e a expansão de novos empreendimentos residenciais e comerciais.</p>
                         <p>O crescimento populacional, a expansão urbana planejada e a demanda crescente por novas áreas residenciais têm impulsionado o desenvolvimento imobiliário da região, fortalecendo o potencial de valorização dos empreendimentos localizados em áreas estratégicas da cidade.</p>
                         <p>Com 576 lotes, o Loteamento Joaquim Leme foi concebido para oferecer infraestrutura urbana de qualidade, contribuindo para a expansão ordenada do município e acompanhando o desenvolvimento econômico e imobiliário de Ituiutaba. Sua localização privilegiada, próxima ao Aeroporto Municipal e ao bairro Lagoa Azul II, proporciona fácil acesso aos principais pontos da cidade e reforça seu potencial de valorização a longo prazo.</p>
                     </div>
@@ -1897,7 +1897,7 @@
                     ctx.textBaseline = 'bottom';
                     
                     const headerDateEl = document.getElementById('update-date-lbl');
-                    let dateStr = "15/07/2026";
+                    let dateStr = "11/08/2026";
                     if (headerDateEl) {
                         const parts = headerDateEl.textContent.split(':');
                         if (parts.length > 1) dateStr = parts[1].trim();
@@ -2969,20 +2969,6 @@
                     scales: { 
                         x: { ticks: { font: { family: "'Montserrat'", size: 10 }, color: '#000000', maxRotation: 45 }, grid: { color: 'rgba(0,0,0,0.1)' } }, 
                         y: { ticks: { font: { family: "'Montserrat'" }, color: '#000000', callback: v => fmtNum(v) }, grid: { color: 'rgba(0,0,0,0.1)' } } 
-                    },
-                    onHover: (e, elements, chart) => {
-                        if (elements && elements.length) {
-                            e.native.target.style.cursor = 'pointer';
-                        } else {
-                            e.native.target.style.cursor = 'default';
-                        }
-                    },
-                    onClick: (e, elements, chart) => {
-                        if (elements && elements.length > 0) {
-                            const index = elements[0].index;
-                            const mes = chart.data.labels[index];
-                            openDesembolsoMesModal(canvasId, mes, index);
-                        }
                     }
                 }
             });
@@ -3001,7 +2987,7 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('home-date').textContent = 'Última atualização: 15/07/2026';
+            document.getElementById('home-date').textContent = 'Última atualização: 11/08/2026';
 
             createMainGauge('gaugeMainMirante', 7859182, 5357842.03, 6806923.38, { desembolso: 'Desembolso Total', comprometido: 'Desembolso + Comprometido' });
             createMainGauge('gaugeMainJoaquim', 5019403, 3471934.26, 3667878.23, { desembolso: 'Desembolso Total', comprometido: 'Desembolso + Comprometido' });

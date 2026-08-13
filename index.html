@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -3195,13 +3193,13 @@
             document.getElementById(containerId).innerHTML = html;
         }
         
-	// 2. Novo Gráfico de Colunas Verticais de Saldo x Investimento
+	// 2. Novo Gráfico de Colunas Verticais de Saldo x Investimento (Estilo Bullet Chart)
         function createDisponivelChartVertical(canvasId, labels, orcado, investido) {
             let combined = labels.map((l, i) => {
                 let orc = orcado[i] || 0;
                 let inv = investido[i] || 0;
                 let saldo = orc - inv; 
-                return { label: l, orc: orc, inv: inv, saldo: saldo, originalInv: inv, originalSaldo: saldo };
+                return { label: l, orc: orc, inv: inv, saldo: saldo };
             });
 
             // Ordena as colunas do maior para o menor pelo Orçamento Total
@@ -3209,16 +3207,16 @@
 
             let sortedLabels = combined.map(o => o.label);
             
-            // TRUQUE DA ESCALA: Aplica Raiz Quadrada para diminuir a disparidade visual das colunas gigantes
-            let plotInv = combined.map(o => Math.sign(o.inv) * Math.sqrt(Math.abs(o.inv)));
-            
-            // Separa o Saldo em dois Datasets para gerar duas legendas precisas de Cores (Positivo e Negativo)
-            let plotSaldoPositivo = combined.map(o => o.saldo >= 0 ? Math.sqrt(o.saldo) : 0);
-            let plotSaldoNegativo = combined.map(o => o.saldo < 0 ? -Math.sqrt(Math.abs(o.saldo)) : 0);
+            // TRUQUE DA ESCALA: Aplica a Raiz Quadrada para reduzir a disparidade visual
+            let plotOrcBg = combined.map(o => Math.sqrt(o.orc)); // Barra de Fundo (Total)
+            let plotInvNormal = combined.map(o => [0, Math.sqrt(Math.min(o.inv, o.orc))]); // Barra Interna
+            let plotSaldo = combined.map(o => o.saldo > 0 ? [Math.sqrt(o.inv), Math.sqrt(o.orc)] : null); // Completa a barra interna
+            let plotEstouro = combined.map(o => o.inv > o.orc ? [Math.sqrt(o.orc), Math.sqrt(o.inv)] : null); // Nasce acima do limite
 
-            const colorInv = '#1b5e20'; // Tom Escuro para Investimento Atual
-            const colorSaldoPositivo = '#7cb342'; // Tom Claro para Saldo Disponível
-            const colorSaldoNegativo = '#d32f2f'; // Tom Vermelho para Estouro
+            // >>> DETECÇÃO DE MODO E CORES MAIS VISÍVEIS <<<
+            const isDark = document.body.classList.contains('dark-mode');
+            const bgOrcamento = isDark ? 'rgba(255, 255, 255, 0.25)' : 'rgba(0, 0, 0, 0.15)'; 
+            const borderOrcamento = isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.5)';
 
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
@@ -3226,34 +3224,45 @@
                     labels: sortedLabels, 
                     datasets: [
                         { 
-                            label: 'Investimento Atual', 
-                            data: plotInv, 
-                            originalData: combined.map(o => o.originalInv),
-                            backgroundColor: colorInv, 
-                            stack: 'Stack 0', // Todos empilhados na mesma coluna
+                            label: 'Orçamento Aprovado', 
+                            data: plotOrcBg, 
+                            backgroundColor: bgOrcamento, 
+                            borderColor: borderOrcamento, 
+                            borderWidth: 2, // Borda engrossada para melhor visibilidade
+                            grouped: false, // Desativa o empilhamento lado a lado, forçando a sobreposição (overlay)
                             borderRadius: 4,
-                            barPercentage: 0.6,
+                            barPercentage: 0.8, // Define esta barra como a mais grossa do gráfico
                             categoryPercentage: 0.8
+                        },
+                        { 
+                            label: 'Investimento Atual', 
+                            data: plotInvNormal, 
+                            backgroundColor: '#1b5e20', // Verde Escuro
+                            grouped: false, 
+                            borderRadius: 4,
+                            barPercentage: 0.4, // Define a barra interna com a metade da grossura da barra de fundo
+                            categoryPercentage: 0.8,
+                            borderSkipped: false
                         },
                         { 
                             label: 'Saldo Disponível', 
-                            data: plotSaldoPositivo, 
-                            originalData: combined.map(o => o.originalSaldo >= 0 ? o.originalSaldo : 0),
-                            backgroundColor: colorSaldoPositivo, 
-                            stack: 'Stack 0', 
-                            borderRadius: { topLeft: 4, topRight: 4, bottomLeft: 4, bottomRight: 4 },
-                            barPercentage: 0.6,
-                            categoryPercentage: 0.8
+                            data: plotSaldo, 
+                            backgroundColor: '#7cb342', // Verde Claro
+                            grouped: false, 
+                            borderRadius: 4,
+                            barPercentage: 0.4, 
+                            categoryPercentage: 0.8,
+                            borderSkipped: false
                         },
                         { 
                             label: 'Orçamento Estourado', 
-                            data: plotSaldoNegativo, 
-                            originalData: combined.map(o => o.originalSaldo < 0 ? o.originalSaldo : 0),
-                            backgroundColor: colorSaldoNegativo, 
-                            stack: 'Stack 0', 
-                            borderRadius: { topLeft: 4, topRight: 4, bottomLeft: 4, bottomRight: 4 },
-                            barPercentage: 0.6,
-                            categoryPercentage: 0.8
+                            data: plotEstouro, 
+                            backgroundColor: '#d32f2f', // Vermelho Escuro
+                            grouped: false, 
+                            borderRadius: 4,
+                            barPercentage: 0.4, 
+                            categoryPercentage: 0.8,
+                            borderSkipped: false
                         }
                     ] 
                 },
@@ -3268,18 +3277,27 @@
                         datalabels: { display: false },
                         tooltip: {
                             callbacks: {
+                                // Customiza o tooltip para exibir o valor integral real (sem a matemática da escala)
                                 label: function(context) {
-                                    let raw = context.dataset.originalData[context.dataIndex];
-                                    // Oculta a linha do tooltip caso o valor do saldo seja zero
-                                    if(raw === 0 && context.dataset.label !== 'Investimento Atual') return null; 
-                                    return ` ${context.dataset.label}: ${fmtMoney(raw)}`;
+                                    let o = combined[context.dataIndex];
+                                    if (context.datasetIndex === 0) {
+                                        return ` Orçamento Aprovado: ${fmtMoney(o.orc)}`;
+                                    } else if (context.datasetIndex === 1) {
+                                        return ` Investimento Atual: ${fmtMoney(o.inv)}`;
+                                    } else if (context.datasetIndex === 2) {
+                                        if (o.saldo > 0) return ` Saldo Disponível: ${fmtMoney(o.saldo)}`;
+                                        return null; // Oculta a linha se não houver saldo
+                                    } else if (context.datasetIndex === 3) {
+                                        if (o.saldo < 0) return ` Orçamento Estourado: ${fmtMoney(Math.abs(o.saldo))}`;
+                                        return null; // Oculta a linha se não houver estouro
+                                    }
                                 }
                             }
                         }
                     }, 
                     scales: { 
                         x: { 
-                            stacked: true,
+                            stacked: false, 
                             ticks: { 
                                 color: '#000000', 
                                 font: { size: 9, family: "'Montserrat'" }, 
@@ -3289,12 +3307,12 @@
                             grid: { display: false } 
                         }, 
                         y: { 
-                            stacked: true,
+                            stacked: false,
                             ticks: { 
                                 color: '#000000', 
                                 font: { family: "'Montserrat'" },
                                 callback: function(value) { 
-                                    // Reverte a escala matemática para exibir o valor R$ verdadeiro no eixo lateral
+                                    // Reverte a raiz quadrada para exibir R$ no eixo lateral
                                     let realValue = Math.sign(value) * Math.pow(value, 2);
                                     return fmtNum(realValue); 
                                 }
@@ -3305,7 +3323,6 @@
                 }
             });
         }
-
                function runABCEngine(canvasId, tableId, labels, valores) {
             let dados = labels.map((l, i) => ({ etapa: l, valor: valores[i] })).sort((a, b) => b.valor - a.valor);
             let total = dados.reduce((a, b) => a + b.valor, 0) || 1;

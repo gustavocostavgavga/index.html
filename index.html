@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -594,15 +595,38 @@
             
             <div class="sub-tab-content active" id="subtab-detalhe-mirante">
                 <div class="chart-grid-top">
+                    <!-- 1. Gráfico Distribuição Percentual -->
                     <div class="chart-container-pie">
                         <div class="chart-title">Distribuição percentual por etapa</div>
-                        <canvas id="chartMirantePie"></canvas>
+                        <div style="width: 100%; height: 350px;">
+                            <canvas id="chartMirantePie"></canvas>
+                        </div>
                     </div>
-                    <div class="chart-container-disponivel">
-                        <div class="chart-title">Saldo disponível por etapa</div>
-                        <canvas id="chartMiranteDisponivel"></canvas>
+                    <!-- 2. Gráfico Top 5 Impacto (Novo no Mirante) -->
+                    <div class="chart-container-pie" style="display: flex; flex-direction: column;">
+                        <div class="chart-title" style="margin-bottom: 15px;">Etapas de maior impacto orçamentário</div>
+                        <div id="top5-container-mirante" style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 5px 10px;"></div>
                     </div>
                 </div>
+              
+                <!-- 3. Quadros de Rankings -->
+                <div class="ranking-grid-3" id="ranking-mirante">
+                    <div class="ranking-col" id="rank-inv-mirante"></div>
+                    <div class="ranking-col" id="rank-proj-mirante"></div>
+                    <div class="ranking-col" id="rank-desv-mirante"></div>
+                </div>
+
+                <!-- 4. NOVO Gráfico: Saldo Disponível (Vertical) -->
+                <div class="chart-grid-bottom" style="margin-top: 20px;">
+                    <div class="chart-container-disponivel" style="height: 400px; padding-bottom: 20px; display: flex; flex-direction: column;">
+                        <div class="chart-title" style="flex-shrink: 0; margin-bottom: 15px;">Avanço do orçamento aprovado por etapa</div>
+                        <div style="flex: 1; position: relative; width: 100%;">
+                            <canvas id="chartMiranteDisponivel"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Avanço Físico-Financeiro -->
                 <div class="chart-grid-bottom">
                     <div class="chart-container-large">
                         <button class="resumo-btn" onclick="openResumoPendencias('mirante')">📋 Resumo de Pendências</button>
@@ -611,7 +635,7 @@
                     </div>
                 </div>
             </div>
-            
+           
             <div class="sub-tab-content" id="subtab-historico-mirante">
                 <div class="chart-container" style="margin-bottom: 20px; position: relative;">
                     <div class="chart-title">Histórico e Projeção de Desembolsos</div>
@@ -911,17 +935,40 @@
                 </div>
             </div>
             
-            <div class="sub-tab-content active" id="subtab-detalhe-joaquim">
+           <div class="sub-tab-content active" id="subtab-detalhe-joaquim">
                 <div class="chart-grid-top">
+                    <!-- 1. Gráfico Distribuição Percentual -->
                     <div class="chart-container-pie">
                         <div class="chart-title">Distribuição percentual por etapa</div>
-                        <canvas id="chartJoaquimPie"></canvas>
+                        <div style="width: 100%; height: 350px;">
+                            <canvas id="chartJoaquimPie"></canvas>
+                        </div>
                     </div>
-                    <div class="chart-container-disponivel">
-                        <div class="chart-title">Saldo disponível por etapa</div>
-                        <canvas id="chartJoaquimDisponivel"></canvas>
+                    <!-- 2. Gráfico Top 5 Impacto (Novo no Joaquim) -->
+                    <div class="chart-container-pie" style="display: flex; flex-direction: column;">
+                        <div class="chart-title" style="margin-bottom: 15px;">Etapas de maior impacto orçamentário</div>
+                        <div id="top5-container-joaquim" style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 5px 10px;"></div>
                     </div>
                 </div>
+                
+                <!-- 3. Quadros de Rankings -->
+                <div class="ranking-grid-3" id="ranking-joaquim">
+                    <div class="ranking-col" id="rank-inv-joaquim"></div>
+                    <div class="ranking-col" id="rank-proj-joaquim"></div>
+                    <div class="ranking-col" id="rank-desv-joaquim"></div>
+                </div>
+
+                <!-- 4. NOVO Gráfico: Saldo Disponível (Vertical) -->
+                <div class="chart-grid-bottom" style="margin-top: 20px;">
+                    <div class="chart-container-disponivel" style="height: 400px; padding-bottom: 20px; display: flex; flex-direction: column;">
+                        <div class="chart-title" style="flex-shrink: 0; margin-bottom: 15px;">Avanço do orçamento aprovado por etapa</div>
+                        <div style="flex: 1; position: relative; width: 100%;">
+                            <canvas id="chartJoaquimDisponivel"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Avanço Físico-Financeiro -->
                 <div class="chart-grid-bottom">
                     <div class="chart-container-large">
                         <button class="resumo-btn" onclick="openResumoPendencias('joaquim')">📋 Resumo de Pendências</button>
@@ -930,7 +977,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="sub-tab-content" id="subtab-historico-joaquim">
                 <div class="chart-container" style="margin-bottom: 20px; position: relative;">
                     <div class="chart-title">Histórico e Projeção de Desembolsos</div>
@@ -1204,14 +1251,114 @@
             </div>
             
             <div class="sub-tab-content active" id="subtab-detalhe-parque">
-                <!-- Estilos das barras interativas -->
+                
+		<!-- Estilos das barras interativas (Novo Design) -->
                 <style>
+                    .top5-item-container {
+                        display: flex;
+                        flex-direction: column;
+                        
+                        /* 1) AGORA SIM! TESTE A DISTÂNCIA ENTRE AS ETAPAS AQUI */
+                        margin-bottom: 20px; 
+                        
+                        /* 2) TESTE A CENTRALIZAÇÃO AQUI (diminua para empurrar mais pro centro) */
+                        width: 75%; 
+                        
+                        /* Comandos de centralização corrigidos para não matar a margem inferior */
+                        margin-left: auto;
+                        margin-right: auto;
+                        
+                        transition: transform 0.3s ease; 
+                        cursor: default;
+                    }
+                    .top5-item-container:hover {
+                        transform: translateY(-4px); 
+                    }
+                    .top5-item-title {
+                        font-size: 0.72rem;
+                        font-weight: 700;
+                        color: var(--text-color-base);
+                        text-transform: uppercase;
+                        margin-bottom: 6px;
+                        letter-spacing: 0.5px;
+                    }
+                    .top5-item-row {
+                        display: flex;
+                        align-items: center;
+                        gap: 15px;
+                        width: 100%;
+                    }
+                    .top5-bar-track {
+                        width: 55%; 
+                        height: 16px;
+                    }
+                    .top5-bar-fill-new {
+                        height: 100%;
+                        border-radius: 2px;
+                        transition: width 0.8s ease;
+                    }
+                    .top5-item-values {
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                        font-size: 0.8rem;
+                        font-weight: 700;
+                        color: var(--text-color-base);
+                        white-space: nowrap;
+                    }
+                    .top5-val-money {
+                        width: 110px;
+                        text-align: right;
+                    }
+                    .top5-val-separator {
+                        color: var(--subtitle-color);
+                        font-weight: 400;
+                    }
+                   
+ 		.top5-val-pct {
+                        width: 45px;
+                        text-align: left;
+                    }
                     
-                .top5-bar-wrapper { display: flex; justify-content: center; align-items: center; width: 100%; margin-bottom: 10px; transition: transform 0.3s ease; cursor: default; }
-                    .top5-bar-wrapper:hover { transform: translateY(-3px); filter: brightness(1.1); }
-                    .top5-bar-fill { background: linear-gradient(90deg, var(--active-color), var(--active-hover-color)); border-radius: 6px; height: 38px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border: 1px solid var(--active-hover-color); transition: width 0.8s ease; overflow: hidden; white-space: nowrap; }
-                    .top5-bar-text { color: #ffffff; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; padding: 0 15px; text-align: center; }
-
+                    /* Estilos para o novo quadro de 3 colunas */
+                    .ranking-grid-3 { 
+                        display: grid; 
+                        grid-template-columns: repeat(3, 1fr); 
+                        gap: 15px; 
+                        margin-bottom: 25px; 
+                    }
+                    .ranking-col { 
+                        background: var(--card-bg); 
+                        border: 2px solid var(--border-color); 
+                        border-radius: 12px; 
+                        padding: 18px; 
+                        display: flex; 
+                        flex-direction: column; 
+                        transition: all 0.4s;
+                    }
+                    .ranking-col:hover {
+                        transform: translateY(-4px); 
+                        box-shadow: 0 8px 20px rgba(0,0,0,0.1); 
+                        border-color: var(--active-color);
+                    }
+                    body.dark-mode .ranking-col:hover {
+                        box-shadow: 0 8px 20px rgba(0,0,0,0.4); 
+                        border-color: var(--subtitle-color);
+                    }
+                    .ranking-warning { 
+                        font-size: 0.65rem; 
+                        color: var(--text-color-base); 
+                        font-style: italic; 
+                        margin-top: auto; 
+                        line-height: 1.4; 
+                        border-top: 1px dashed var(--border-color); 
+                        padding-top: 12px; 
+                        text-align: justify;
+                        opacity: 0.8;
+                    }
+                    @media (max-width: 992px) {
+                        .ranking-grid-3 { grid-template-columns: 1fr; }
+                    }
                 </style>
 
             	<div class="chart-grid-top">
@@ -1231,11 +1378,17 @@
                         </div>
                     </div>
                 </div>
-                
+                      
+                <div class="ranking-grid-3" id="ranking-parque">
+                    <div class="ranking-col" id="rank-inv-parque"></div>
+                    <div class="ranking-col" id="rank-proj-parque"></div>
+                    <div class="ranking-col" id="rank-desv-parque"></div>
+                </div>
+
                 <!-- 3. Gráfico Saldo Disponível (Escala de Raiz Quadrada para Disparidade) -->
                 <div class="chart-grid-bottom" style="margin-top: 20px;">
                     <div class="chart-container-disponivel" style="height: 400px; padding-bottom: 20px; display: flex; flex-direction: column;">
-                        <div class="chart-title" style="flex-shrink: 0; margin-bottom: 15px;">Saldo disponível por etapa</div>
+                        <div class="chart-title" style="flex-shrink: 0; margin-bottom: 15px;">Avanço do orçamento aprovado por etapa</div>
                         
                         <!-- Contêiner simples que ocupa 100% da largura, sem rolagem -->
                         <div style="flex: 1; position: relative; width: 100%;">
@@ -2708,12 +2861,11 @@
                     wrapper.style.alignItems = 'center';
                     wrapper.style.justifyContent = 'space-between';
                     
-                    // DIV protetora para o Canvas não ser esmagado
                     const canvasBox = document.createElement('div');
                     canvasBox.style.flex = '1';
                     canvasBox.style.position = 'relative';
                     canvasBox.style.height = '100%';
-                    canvasBox.style.minWidth = '0';
+                    canvasBox.style.minWidth = '0'; 
                     wrapper.insertBefore(canvasBox, canvas);
                     canvasBox.appendChild(canvas);
 
@@ -2722,13 +2874,14 @@
                     legendDiv.style.width = '200px';
                     legendDiv.style.maxHeight = '300px';
                     legendDiv.style.overflowY = 'auto';
+                    legendDiv.style.overflowX = 'hidden'; /* Desativa explicitamente a rolagem horizontal */
                     legendDiv.style.padding = '10px';
                     legendDiv.style.border = '1px solid var(--border-color)';
                     legendDiv.style.borderRadius = '8px';
                     legendDiv.style.marginLeft = '15px';
                     legendDiv.style.fontSize = '0.7rem';
                     legendDiv.style.background = 'var(--table-th-bg)';
-                    legendDiv.style.flexShrink = '0'; // Impede a legenda de encolher
+                    legendDiv.style.flexShrink = '0'; 
                     wrapper.appendChild(legendDiv);
                 }
 
@@ -2736,9 +2889,10 @@
                 if (legendDiv) {
                     let legendHtml = '<ul style="list-style: none; padding: 0; margin: 0;">';
                     labels.forEach((label, i) => {
-                        legendHtml += `<li style="display: flex; align-items: center; margin-bottom: 8px;">
-                            <span style="display: inline-block; width: 12px; height: 12px; background-color: ${cores[i % cores.length]}; border-radius: 50%; margin-right: 8px; flex-shrink: 0;"></span>
-                            <span style="color: var(--text-color-base); line-height: 1.2;">${label}</span>
+                        // O "flex: 1" e "word-wrap" impedem o texto de crescer além da caixa, quebrando a linha
+                        legendHtml += `<li style="display: flex; align-items: flex-start; margin-bottom: 8px;">
+                            <span style="display: inline-block; width: 12px; height: 12px; background-color: ${cores[i % cores.length]}; border-radius: 50%; margin-right: 8px; margin-top: 1px; flex-shrink: 0;"></span>
+                            <span style="color: var(--text-color-base); line-height: 1.3; overflow-wrap: break-word; word-wrap: break-word; flex: 1;">${label}</span>
                         </li>`;
                     });
                     legendHtml += '</ul>';
@@ -2993,14 +3147,18 @@
             });
         }
 
-        function renderTop5Parque() {
-            // A última cor foi substituída de #FFF176 (amarelo claro) para #F57F17 (laranja escuro) para leitura perfeita
-            const cores = ['#E74C3C','#3498DB','#2ECC71','#F39C12','#9B59B6','#1ABC9C','#E67E22','#C0392B','#34495E','#16A085','#D35400','#8E44AD','#27AE60','#2980B9', '#FFB74D', '#A1887F', '#90A4AE', '#7986CB', '#4DD0E1', '#81C784', '#DCE775', '#F57F17'];
-            
-            let dados = parqueEtapas.map((etapa, idx) => ({ 
+       // 1. Função universal do Top 5 Impacto (Cria em qualquer aba)
+        
+	// 1. Função universal do Top 5 Impacto (Cria em qualquer aba)
+        function renderTop5Impacto(containerId, etapas, orcado) {
+            // Alterado para utilizar a paleta em tons de verde
+            const coresVerde = ['#1b5e20', '#2e7d32', '#388e3c', '#4caf50', '#81c784'];
+            const totalOrcamento = orcado.reduce((acc, curr) => acc + curr, 0);
+
+            let dados = etapas.map((etapa, idx) => ({ 
                 etapa: etapa, 
-                valor: parqueOrcado[idx],
-                cor: cores[idx % cores.length]
+                valor: orcado[idx],
+                cor: coresVerde[idx % coresVerde.length] 
             }));
             
             dados.sort((a, b) => b.valor - a.valor);
@@ -3009,90 +3167,145 @@
             
             let html = '';
             top5.forEach(item => {
-                // Trocado para Raiz Cúbica (cbrt) para reduzir mais ainda a barra gigante e aumentar as menores
-                let pct = Math.max((Math.cbrt(item.valor) / Math.cbrt(maxValor)) * 100, 35); 
+                let pctBarra = Math.max((Math.cbrt(item.valor) / Math.cbrt(maxValor)) * 100, 5); 
+                let pctTotal = ((item.valor / totalOrcamento) * 100).toFixed(1).replace('.', ',');
                 let valSemDecimal = Math.round(item.valor).toLocaleString('pt-BR');
                 
+                let tituloFinal = item.etapa;
+                if (tituloFinal.toUpperCase().includes('PAVIMENTAÇÃO')) {
+                    tituloFinal += ' <span style="font-size: 0.95rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2);" title="Maior Impacto Orçamentário">🏆</span>';
+                }
+                
                 html += `
-                <div class="top5-bar-wrapper">
-                    <div class="top5-bar-fill" style="width: ${pct}%; background: ${item.cor}; border-color: ${item.cor}; min-width: max-content;">
-                        <span class="top5-bar-text">${item.etapa} - R$ ${valSemDecimal}</span>
+                <div class="top5-item-container" style="margin-bottom: 20px; width: 75%; margin-left: auto; margin-right: auto; transition: transform 0.3s ease; cursor: default;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <div class="top5-item-title" style="font-size: 0.72rem; font-weight: 700; color: var(--text-color-base); text-transform: uppercase; margin-bottom: 6px;">${tituloFinal}</div>
+                    <div class="top5-item-row" style="display: flex; align-items: center; gap: 15px; width: 100%;">
+                        <div class="top5-bar-track" style="width: 55%; height: 16px;">
+                            <div class="top5-bar-fill-new" style="width: ${pctBarra}%; height: 100%; border-radius: 2px; transition: width 0.8s ease; background-color: ${item.cor};"></div>
+                        </div>
+                        <div class="top5-item-values" style="display: flex; align-items: center; gap: 12px; font-size: 0.8rem; font-weight: 700; color: var(--text-color-base); white-space: nowrap;">
+                            <span class="top5-val-money" style="width: 110px; text-align: right;">R$ ${valSemDecimal}</span>
+                            <span class="top5-val-separator" style="color: var(--subtitle-color); font-weight: 400;">|</span>
+                            <span class="top5-val-pct" style="width: 45px; text-align: left;">${pctTotal}%</span>
+                        </div>
                     </div>
                 </div>
                 `;
             });
-            document.getElementById('top5-container-parque').innerHTML = html;
+            document.getElementById(containerId).innerHTML = html;
         }
+        
+	// 2. Novo Gráfico de Colunas Verticais de Saldo x Investimento
+        function createDisponivelChartVertical(canvasId, labels, orcado, investido) {
+            let combined = labels.map((l, i) => {
+                let orc = orcado[i] || 0;
+                let inv = investido[i] || 0;
+                let saldo = orc - inv; 
+                return { label: l, orc: orc, inv: inv, saldo: saldo, originalInv: inv, originalSaldo: saldo };
+            });
 
-        function createDisponivelChart(canvasId, labels, disponivel) {
-            const colors = disponivel.map(v => v < 0 ? '#d32f2f' : '#2e7d32');
-            let fontSizeY = canvasId === 'chartParqueDisponivel' ? 11 : 9;
-            let isParque = canvasId === 'chartParqueDisponivel';
+            // Ordena as colunas do maior para o menor pelo Orçamento Total
+            combined.sort((a, b) => b.orc - a.orc);
 
-            // TRUQUE VISUAL: Aplicamos a Raiz Quadrada nos valores para encurtar
-            // visualmente as barras gigantes e esticar as barras pequenas.
-            let plotData = isParque ? disponivel.map(v => Math.sign(v) * Math.sqrt(Math.abs(v))) : disponivel;
+            let sortedLabels = combined.map(o => o.label);
+            
+            // TRUQUE DA ESCALA: Aplica Raiz Quadrada para diminuir a disparidade visual das colunas gigantes
+            let plotInv = combined.map(o => Math.sign(o.inv) * Math.sqrt(Math.abs(o.inv)));
+            
+            // Separa o Saldo em dois Datasets para gerar duas legendas precisas de Cores (Positivo e Negativo)
+            let plotSaldoPositivo = combined.map(o => o.saldo >= 0 ? Math.sqrt(o.saldo) : 0);
+            let plotSaldoNegativo = combined.map(o => o.saldo < 0 ? -Math.sqrt(Math.abs(o.saldo)) : 0);
+
+            const colorInv = '#1b5e20'; // Tom Escuro para Investimento Atual
+            const colorSaldoPositivo = '#7cb342'; // Tom Claro para Saldo Disponível
+            const colorSaldoNegativo = '#d32f2f'; // Tom Vermelho para Estouro
 
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
                 data: { 
-                    labels: labels, 
-                    datasets: [{ 
-                        label: 'Saldo Disponível', 
-                        data: plotData, // Gráfico desenha a proporção ajustada
-                        originalData: disponivel, // Salva o valor real para usarmos na legenda
-                        backgroundColor: colors, 
-                        borderRadius: 4,
-                        barPercentage: 0.8,
-                        categoryPercentage: 0.9
-                    }] 
+                    labels: sortedLabels, 
+                    datasets: [
+                        { 
+                            label: 'Investimento Atual', 
+                            data: plotInv, 
+                            originalData: combined.map(o => o.originalInv),
+                            backgroundColor: colorInv, 
+                            stack: 'Stack 0', // Todos empilhados na mesma coluna
+                            borderRadius: 4,
+                            barPercentage: 0.6,
+                            categoryPercentage: 0.8
+                        },
+                        { 
+                            label: 'Saldo Disponível', 
+                            data: plotSaldoPositivo, 
+                            originalData: combined.map(o => o.originalSaldo >= 0 ? o.originalSaldo : 0),
+                            backgroundColor: colorSaldoPositivo, 
+                            stack: 'Stack 0', 
+                            borderRadius: { topLeft: 4, topRight: 4, bottomLeft: 4, bottomRight: 4 },
+                            barPercentage: 0.6,
+                            categoryPercentage: 0.8
+                        },
+                        { 
+                            label: 'Orçamento Estourado', 
+                            data: plotSaldoNegativo, 
+                            originalData: combined.map(o => o.originalSaldo < 0 ? o.originalSaldo : 0),
+                            backgroundColor: colorSaldoNegativo, 
+                            stack: 'Stack 0', 
+                            borderRadius: { topLeft: 4, topRight: 4, bottomLeft: 4, bottomRight: 4 },
+                            barPercentage: 0.6,
+                            categoryPercentage: 0.8
+                        }
+                    ] 
                 },
                 options: { 
-                    indexAxis: 'y', 
                     responsive: true, 
                     maintainAspectRatio: false, 
-                    layout: { 
-                        padding: { bottom: 0, top: 0, right: 20 } 
-                    },
                     plugins: { 
-                        legend: { display: false }, 
+                        legend: { 
+                            display: true, 
+                            labels: { font: { family: "'Montserrat'" }, color: '#000000' } 
+                        }, 
                         datalabels: { display: false },
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    // MÁGICA 1: Mostra o valor monetário real ao passar o mouse
-                                    let raw = context.dataset.originalData ? context.dataset.originalData[context.dataIndex] : context.raw;
-                                    return ' Saldo: ' + fmtMoney(raw);
+                                    let raw = context.dataset.originalData[context.dataIndex];
+                                    // Oculta a linha do tooltip caso o valor do saldo seja zero
+                                    if(raw === 0 && context.dataset.label !== 'Investimento Atual') return null; 
+                                    return ` ${context.dataset.label}: ${fmtMoney(raw)}`;
                                 }
                             }
                         }
                     }, 
                     scales: { 
                         x: { 
+                            stacked: true,
                             ticks: { 
                                 color: '#000000', 
-                                font: { family: "'Montserrat'" }, 
+                                font: { size: 9, family: "'Montserrat'" }, 
+                                maxRotation: 45, 
+                                minRotation: 45 
+                            }, 
+                            grid: { display: false } 
+                        }, 
+                        y: { 
+                            stacked: true,
+                            ticks: { 
+                                color: '#000000', 
+                                font: { family: "'Montserrat'" },
                                 callback: function(value) { 
-                                    // MÁGICA 2: Reverte o cálculo matemático para a legenda de baixo exibir o valor real
-                                    let realValue = isParque ? (Math.sign(value) * Math.pow(value, 2)) : value;
+                                    // Reverte a escala matemática para exibir o valor R$ verdadeiro no eixo lateral
+                                    let realValue = Math.sign(value) * Math.pow(value, 2);
                                     return fmtNum(realValue); 
                                 }
                             }, 
                             grid: { color: 'rgba(0,0,0,0.1)' } 
-                        }, 
-                        y: { 
-                            ticks: { 
-                                color: '#000000', 
-                                font: { size: fontSizeY, family: "'Montserrat'" },
-                                autoSkip: false, 
-                                padding: 5
-                            }, 
-                            grid: { display: false } 
                         } 
                     } 
                 }
             });
         }
+
                function runABCEngine(canvasId, tableId, labels, valores) {
             let dados = labels.map((l, i) => ({ etapa: l, valor: valores[i] })).sort((a, b) => b.valor - a.valor);
             let total = dados.reduce((a, b) => a + b.valor, 0) || 1;
@@ -3315,8 +3528,109 @@
                 }
             });
         }
+       
+        function renderTopRankings(obraId, etapas, orcado, investido, projetado) {
+            let dadosInv = [];
+            let dadosProj = [];
+            let dadosDesv = [];
 
-        function sortChartData(labels, orcado, investido, projetadoF, fisico) {
+            for (let i = 0; i < etapas.length; i++) {
+                let eac = investido[i] + projetado[i];
+                let desvio = orcado[i] > 0 ? ((eac - orcado[i]) / orcado[i]) * 100 : 0;
+                
+                dadosInv.push({ etapa: etapas[i], valor: investido[i] });
+                dadosProj.push({ etapa: etapas[i], valor: projetado[i] });
+                dadosDesv.push({ etapa: etapas[i], valor: desvio, eac: eac, orc: orcado[i] });
+            }
+
+            dadosInv.sort((a, b) => b.valor - a.valor);
+            dadosProj.sort((a, b) => b.valor - a.valor);
+            dadosDesv.sort((a, b) => b.valor - a.valor);
+
+            let topInv = dadosInv.slice(0, 5);
+            let topProj = dadosProj.slice(0, 5);
+            let topDesv = dadosDesv.slice(0, 5);
+
+            // Tons de verde para investimentos
+            const coresVerde = ['#1b5e20', '#2e7d32', '#388e3c', '#4caf50', '#81c784'];
+            // Tons quentes para desvio (Vermelho até o Amarelo)
+            const coresDesvio = ['#d32f2f', '#f57c00', '#ffa000', '#fbc02d', '#fff176']; 
+
+            // Adicionamos a variável "legenda" na função construtora
+            function buildHTML(title, data, isDesvio, legenda) {
+                let maxVal = data.length > 0 ? data[0].valor || 1 : 1;
+                if(maxVal <= 0) maxVal = 1;
+
+                let html = `<div class="chart-title" style="margin-bottom: 20px; font-size: 0.95rem; text-align: center;">${title}</div>`;
+                
+                data.forEach((item, index) => {
+                    if (isDesvio && item.valor <= 0) return;
+
+                    let pctBarra = 5;
+                    if(isDesvio) {
+                        pctBarra = item.valor > 0 ? Math.max((item.valor / maxVal) * 100, 5) : 5;
+                    } else {
+                        pctBarra = item.valor > 0 ? Math.max((Math.cbrt(item.valor) / Math.cbrt(maxVal)) * 100, 5) : 5;
+                    }
+                    
+                    let cor = isDesvio ? coresDesvio[index % coresDesvio.length] : coresVerde[index % coresVerde.length];
+                    let valStr = isDesvio ? `${item.valor.toFixed(1).replace('.', ',')}%` : `R$ ${Math.round(item.valor).toLocaleString('pt-BR')}`;
+
+                    // >>> AQUI VOCÊ CONTROLA A CENTRALIZAÇÃO DOS ITENS NOS 3 QUADROS <<<
+                    // O comando "margin: 0 auto;" garante que o bloco fique no centro.
+                    // Altere o "width: 85%;" para 70%, 65%, 90% para ir testando o afastamento lateral.
+                    // >>> AJUSTE DE CENTRALIZAÇÃO E TAMANHO DA BARRA <<<
+                    // 1. width do container: Diminua (ex: 90%, 85%, 80%) para empurrar todo o bloco mais para o centro.
+                    // 2. width do top5-bar-track: Aumente (ex: 60%, 70%, 80%) para compensar e a barra não encolher.
+                    html += `
+                    <div class="top5-item-container" style="margin-bottom: 25px; width: 70%; margin-left: auto; margin-right: auto;">
+                        <div class="top5-item-title" style="font-size: 0.65rem;">${item.etapa}</div>
+                        <div class="top5-item-row" style="gap: 8px;">
+                            <div class="top5-bar-track" style="width: 75%;">
+                                <div class="top5-bar-fill-new" style="width: ${pctBarra}%; background-color: ${cor};"></div>
+                            </div>
+                            <div class="top5-item-values" style="font-size: 0.75rem;">
+                                <span class="top5-val-money" style="width: auto; text-align: left;">${valStr}</span>
+                            </div>
+                        </div>
+                    </div>
+                    `;               
+		});
+
+                // Injeta os avisos ou as legendas criando a linha pontilhada automaticamente
+                if (isDesvio) {
+                    html += `<div class="ranking-warning"><strong>Aviso:</strong> A porcentagem em "Maiores desvios" representa a projeção de estouro (Projetado + Investido > Orçamento Aprovado). Diferente do gráfico "Saldo Disponível por Etapa", que avalia apenas o Orçamento Total contraposto pelo Investimento Atual.</div>`;
+                } else if (legenda) {
+                    html += `<div class="ranking-warning"><strong>Legenda:</strong> ${legenda}</div>`;
+                }
+
+                return html;
+            }
+
+            // Invocando as funções passando as legendas personalizadas
+            document.getElementById(`rank-inv-${obraId}`).innerHTML = buildHTML(
+                'Maiores Investimentos Realizados', 
+                topInv, 
+                false, 
+                'Valores totalizados pela soma de "Desembolsos + Verbas Comprometidas" por etapa.'
+            );
+            
+            document.getElementById(`rank-proj-${obraId}`).innerHTML = buildHTML(
+                'Maiores Projeções de Investimento', 
+                topProj, 
+                false, 
+                'Valores gerados pelo planejamento de obras frente ao orçamento aprovado por etapa.'
+            );
+            
+            document.getElementById(`rank-desv-${obraId}`).innerHTML = buildHTML(
+                'Maiores Desvios Projetados', 
+                topDesv, 
+                true, 
+                null
+            );
+        }
+        
+	    function sortChartData(labels, orcado, investido, projetadoF, fisico) {
             let eac = orcado.map((_, i) => investido[i] + projetadoF[i]);
             let combined = labels.map((l, i) => ({
                 label: l, orc: orcado[i] || 0, inv: investido[i] || 0, proj: projetadoF[i] || 0, eac: eac[i] || 0, fis: fisico[i] || 0
@@ -3338,7 +3652,16 @@
             createPieChart('chartMirantePie', miranteEtapas, miranteOrcado);
             createPieChart('chartJoaquimPie', joaquimEtapas, joaquimOrcado);
             createPieChart('chartParquePie', parqueEtapas, parqueOrcado);
-            renderTop5Parque();
+            
+            // 1. Inicializa o Top 5 nas 3 obras
+            renderTop5Impacto('top5-container-mirante', miranteEtapas, miranteOrcado);
+            renderTop5Impacto('top5-container-joaquim', joaquimEtapas, joaquimOrcado);
+            renderTop5Impacto('top5-container-parque', parqueEtapas, parqueOrcado);
+
+            // 2. Inicializa o Quadro de Rankings nas 3 obras
+            renderTopRankings('mirante', miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo);
+            renderTopRankings('joaquim', joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo);
+            renderTopRankings('parque', parqueEtapas, parqueOrcado, parqueComprometido, parqueProjetadoFuturo);
             
             const sortedMirante = sortChartData(miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo, miranteFisicoRaw);
             const miranteEacPct = sortedMirante.eac.map((v, i) => sortedMirante.orcado[i] > 0 ? (v / sortedMirante.orcado[i] * 100) : 0);
@@ -3357,9 +3680,10 @@
             createBarChart('chartJoaquimBar', joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo);
             createBarChart('chartParqueBar', parqueEtapas, parqueOrcado, parqueComprometido, parqueProjetadoFuturo);
 
-            createDisponivelChart('chartMiranteDisponivel', miranteEtapas, miranteDisponivelGrafico);
-            createDisponivelChart('chartJoaquimDisponivel', joaquimEtapas, joaquimDisponivelGrafico);
-            createDisponivelChart('chartParqueDisponivel', parqueEtapas, parqueDisponivelGrafico);
+            // 3. Inicializa o NOVO Gráfico de Saldo (Barras Empilhadas Verticais)
+            createDisponivelChartVertical('chartMiranteDisponivel', miranteEtapas, miranteOrcado, miranteComprometido);
+            createDisponivelChartVertical('chartJoaquimDisponivel', joaquimEtapas, joaquimOrcado, joaquimComprometido);
+            createDisponivelChartVertical('chartParqueDisponivel', parqueEtapas, parqueOrcado, parqueComprometido);
             
             createTable('tableMirante', 'MIRANTE DA LAGOA', miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo, miranteDisponivelGrafico, miranteFisicoRaw);
             createTable('tableJoaquim', 'JOAQUIM LEME', joaquimEtapas, joaquimOrcado, joaquimComprometido, joaquimProjetadoFuturo, joaquimDisponivelGrafico, joaquimFisicoRaw);

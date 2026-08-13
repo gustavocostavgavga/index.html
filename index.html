@@ -626,9 +626,9 @@
                         <div class="summary-box result-extrapolacao"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 240.603,78</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Extrapolação</div></div>
                     </div>
                 </div>
-                <div class="chart-container" style="margin-bottom: 20px;">
+                <div class="chart-container" style="margin-bottom: 20px; height: 620px; padding-bottom: 30px;">
                     <div class="chart-title">Orçado x Investido x Projetado por Etapa</div>
-                    <canvas id="chartMiranteBar"></canvas>
+                    <canvas id="chartMiranteBar" style="max-height: 100%;"></canvas>
                 </div>
                 <p class="table-hint">Clique em uma etapa para visualizar o avanço no painel flutuante</p>
                 <div class="table-container">
@@ -945,9 +945,9 @@
                         <div class="summary-box result-economia"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 483.284,73</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Economia</div></div>
                     </div>
                 </div>
-                <div class="chart-container" style="margin-bottom: 20px;">
+                <div class="chart-container" style="margin-bottom: 20px; height: 620px; padding-bottom: 30px;">
                     <div class="chart-title">Orçado x Investido x Projetado por Etapa</div>
-                    <canvas id="chartJoaquimBar"></canvas>
+                    <canvas id="chartJoaquimBar" style="max-height: 100%;"></canvas>
                 </div>
                 <p class="table-hint">Clique em uma etapa para visualizar o avanço no painel flutuante</p>
                 <div class="table-container"><table id="tableJoaquim"></table></div>
@@ -1172,21 +1172,21 @@
             
             <div class="kpi-grid" style="grid-template-columns: repeat(6, 1fr);">
                 <div class="kpi-card"><div class="label">Orçamento Total Aprovado</div><div class="value">R$ 5.852.117</div></div>
-                <div class="kpi-card"><div class="label">Investimento Atual</div><div class="value">R$ 606.471</div></div>
-                <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 5.273.637</div></div>
-                <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 5.880.108</div></div>
+                <div class="kpi-card"><div class="label">Investimento Atual</div><div class="value">R$ 519.437,27</div></div>
+                <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 5.358.359,94</div></div>
+                <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 5.877.797,21</div></div>
                 <div class="kpi-card">
                     <div class="label">Desvio Orçamentário</div>
-                    <div class="value alert-value" id="kpiDesvioParque">⬆ +0,48%</div>
-                    <div class="sublabel" style="text-transform: none; letter-spacing: 0;">(R$ 5.880.108 / R$ 5.852.117) - 1</div>
+                    <div class="value alert-value" id="kpiDesvioParque">⬆ +0,44%</div>
+                    <div class="sublabel" style="text-transform: none; letter-spacing: 0;">(R$ 5.877.797,21 / R$ 5.852.116,86) - 1</div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Custo/Lote</div>
                     <div class="kpi-sublist">
                         <div class="kpi-sublist-item"><span class="sublist-label">Orçado:</span><span class="sublist-value">R$ 16.077</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 1.666</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 16.154</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 35.231</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 1.427,03</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 16.147,79</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 35.224,92</span></div>
                     </div>
                 </div>
             </div>
@@ -1204,16 +1204,48 @@
             </div>
             
             <div class="sub-tab-content active" id="subtab-detalhe-parque">
-                <div class="chart-grid-top">
+                <!-- Estilos das barras interativas -->
+                <style>
+                    
+                .top5-bar-wrapper { display: flex; justify-content: center; align-items: center; width: 100%; margin-bottom: 10px; transition: transform 0.3s ease; cursor: default; }
+                    .top5-bar-wrapper:hover { transform: translateY(-3px); filter: brightness(1.1); }
+                    .top5-bar-fill { background: linear-gradient(90deg, var(--active-color), var(--active-hover-color)); border-radius: 6px; height: 38px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border: 1px solid var(--active-hover-color); transition: width 0.8s ease; overflow: hidden; white-space: nowrap; }
+                    .top5-bar-text { color: #ffffff; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; padding: 0 15px; text-align: center; }
+
+                </style>
+
+            	<div class="chart-grid-top">
+                    <!-- 1. Gráfico Distribuição Percentual -->
                     <div class="chart-container-pie">
                         <div class="chart-title">Distribuição percentual por etapa</div>
-                        <canvas id="chartParquePie"></canvas>
+                        <div style="width: 100%; height: 350px;">
+                            <canvas id="chartParquePie"></canvas>
+                        </div>
                     </div>
-                    <div class="chart-container-disponivel">
-                        <div class="chart-title">Saldo disponível por etapa</div>
-                        <canvas id="chartParqueDisponivel"></canvas>
+
+                    <!-- 2. Gráfico Top 5 Impacto -->
+                    <div class="chart-container-pie" style="display: flex; flex-direction: column;">
+                        <div class="chart-title" style="margin-bottom: 15px;">Etapas de maior impacto orçamentário</div>
+                        <div id="top5-container-parque" style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 5px 10px;">
+                            <!-- Barras geradas via JavaScript -->
+                        </div>
                     </div>
                 </div>
+                
+                <!-- 3. Gráfico Saldo Disponível (Escala de Raiz Quadrada para Disparidade) -->
+                <div class="chart-grid-bottom" style="margin-top: 20px;">
+                    <div class="chart-container-disponivel" style="height: 400px; padding-bottom: 20px; display: flex; flex-direction: column;">
+                        <div class="chart-title" style="flex-shrink: 0; margin-bottom: 15px;">Saldo disponível por etapa</div>
+                        
+                        <!-- Contêiner simples que ocupa 100% da largura, sem rolagem -->
+                        <div style="flex: 1; position: relative; width: 100%;">
+                            <canvas id="chartParqueDisponivel"></canvas>
+                        </div>
+                        
+                    </div>
+                </div>
+    
+                <!-- 4. Avanço Físico-Financeiro -->
                 <div class="chart-grid-bottom">
                     <div class="chart-container-large">
                         <button class="resumo-btn" onclick="openResumoPendencias('parque')">📋 Resumo de Pendências</button>
@@ -1222,24 +1254,24 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="sub-tab-content" id="subtab-historico-parque">
                 <div class="chart-container" style="margin-bottom: 20px; position: relative;">
                     <div class="chart-title">Histórico e Projeção de Desembolsos</div>
                     <canvas id="chartParqueHistorico"></canvas>
                     <div class="summary-container">
-                        <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 416.895,93</div></div>
+                        <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 481.387,27</div></div>
                         <div class="summary-operator">+</div>
-                        <div class="summary-box projected"><div class="summary-title">Valor Total de Desembolso Projetado</div><div class="summary-value">R$ 5.463.212,15</div></div>
+                        <div class="summary-box projected"><div class="summary-title">Valor Total de Desembolso Projetado</div><div class="summary-value">R$ 5.396.409,94</div></div>
                         <div class="summary-operator">=</div>
-                        <div class="summary-box executed-projected"><div class="summary-title">Valor de Execução Projetado</div><div class="summary-value">R$ 5.880.108,08</div></div>
+                        <div class="summary-box executed-projected"><div class="summary-title">Valor de Execução Projetado</div><div class="summary-value">R$ 5.877.797,21</div></div>
                         <div class="summary-operator">|</div>
-                        <div class="summary-box result-extrapolacao"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 27.991,22</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Extrapolação</div></div>
+                        <div class="summary-box result-extrapolacao"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 25.680,35</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Extrapolação</div></div>
                     </div>
                 </div>
-                <div class="chart-container" style="margin-bottom: 20px;">
+                <div class="chart-container" style="margin-bottom: 20px; height: 620px; padding-bottom: 30px;">
                     <div class="chart-title">Orçado x Investido x Projetado por Etapa</div>
-                    <canvas id="chartParqueBar"></canvas>
+                    <canvas id="chartParqueBar" style="max-height: 100%;"></canvas>
                 </div>
                 <p class="table-hint">Clique em uma etapa para visualizar o avanço no painel flutuante</p>
                 <div class="table-container"><table id="tableParque"></table></div>
@@ -1533,13 +1565,13 @@
                         <div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
                         <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">364</span></div>
                         <div class="kpi-item"><span class="label">Orçamento Total Aprovado</span><span class="value">R$ 5.852.117</span></div>
-                        <div class="kpi-item"><span class="label">Investimento Atual</span><span class="value">R$ 606.471</span></div>
-                        <div class="kpi-item"><span class="label">Verba Projetada para Conclusão</span><span class="value">R$ 5.273.637</span></div>
-                        <div class="kpi-item"><span class="label">Valor de Execução Projetado</span><span class="value">R$ 5.880.108</span></div>
+                        <div class="kpi-item"><span class="label">Investimento Atual</span><span class="value">R$ 519.437,27</span></div>
+                        <div class="kpi-item"><span class="label">Verba Projetada para Conclusão</span><span class="value">R$ 5.358.359,94</span></div>
+                        <div class="kpi-item"><span class="label">Valor de Execução Projetado</span><span class="value">R$ 5.877.797,21</span></div>
                         <div class="kpi-item"><span class="label">Custo/Lote (Orçado)</span><span class="value">R$ 16.077</span></div>
-                        <div class="kpi-item"><span class="label">Custo/Lote (Atual)</span><span class="value">R$ 1.666</span></div>
-                        <div class="kpi-item"><span class="label">Custo/Lote (Projetado)</span><span class="value">R$ 16.154</span></div>
-                        <div class="kpi-item"><span class="label">Custo/Lote (Global)</span><span class="value">R$ 35.231</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Atual)</span><span class="value">R$ 1.427,03</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Projetado)</span><span class="value">R$ 16.147,79</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Global)</span><span class="value">R$ 35.224,92</span></div>
                         
                         <div class="chart-container-gauge-integrated">
                             <div class="chart-title" style="font-size: 0.95rem; margin-bottom: 5px;">Avanço Financeiro</div>
@@ -1816,7 +1848,7 @@
         let currentChartLabel = null;
         let modalSortDirections = {};
         let desembolsoSortDirections = {};
-	let sortDirections = {};
+        let sortDirections = {};
 
         function sortModalTable(colIndex) {
             const tbody = document.getElementById('breakdownTableBody');
@@ -1918,7 +1950,7 @@
         };
         Chart.register(dateLimitPlugin);
 
-	// =========================================================================
+        // =========================================================================
         // LEITURA DA NOVA PLANILHA "dados.xlsx" (OBRAS NA MESMA ABA)
         // =========================================================================
         
@@ -1949,7 +1981,6 @@
                 let linha = linhas[i].map(c => String(c).trim());
                 let rowStr = linha.join(" ").toUpperCase();
                 
-                // 1. Identifica a obra em qualquer lugar da linha
                 if (rowStr.includes("FLUXO DE DESEMBOLSOS")) {
                     if (rowStr.includes("MIRANTE")) obraAtual = "mirante";
                     else if (rowStr.includes("JOAQUIM")) obraAtual = "joaquim";
@@ -1961,7 +1992,6 @@
                 
                 if (!obraAtual || rowStr === "" || rowStr.includes("TOTAL")) continue;
                 
-                // 2. Encontra a coluna do Mês (busca flexível na linha)
                 let mesStr = "";
                 for (let c = 0; c < 3; c++) {
                     if (linha[c] && (linha[c].includes('/') || linha[c].includes('-'))) {
@@ -1976,16 +2006,14 @@
                     csvHistoricoData[obraAtual][mesStr] = [];
                 }
                 
-                // 3. Registra os valores
                 for (let j = 0; j < linha.length; j++) {
                     let nomeEtapa = cabecalhoEtapas[j];
-                    if (!nomeEtapa || j < 2) continue; // Ignora as colunas de Título e Mensal
+                    if (!nomeEtapa || j < 2) continue; 
                     
                     let valorStr = String(linha[j]).replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.');
                     let valorFloat = parseFloat(valorStr);
                     if (isNaN(valorFloat)) valorFloat = 0;
                     
-                    // Só grava etapas que tiveram valor para não pesar a memória
                     if (valorFloat !== 0) {
                         csvHistoricoData[obraAtual][mesStr].push({
                             etapa: nomeEtapa,
@@ -2007,7 +2035,6 @@
             const tbody = document.getElementById('desembolsoMesTableBody');
             tbody.innerHTML = '';
             
-            // Busca Exata ou Parcial para evitar falhas de digitação do Excel
             const mesKey = mesLabel.toLowerCase().replace('-', '/').trim();
             let dadosMes = csvHistoricoData[obraId][mesKey];
             
@@ -2049,7 +2076,6 @@
             document.getElementById('modalDesembolsoMes').classList.add('active');
         }
 
-        // Executar a leitura da planilha
         carregarDadosExcel();
 
         // =========================================================================
@@ -2090,18 +2116,27 @@
         };
         
         const pendenciasParque = {
-            'TOPOGRAFIA E CONTROLE': ['1) Demarcação de obras de infraestrutura pendentes.', '2) Controle tecnológico de pavimentação.'],
-            'MANUTENÇÕES / AS BUILTS': ['Vigente até o final das obras quando necessário'],
+            'CANTEIRO DE OBRAS': ['-'],
+            'TOPOGRAFIA': ['1) Demarcação de obras de infraestrutura pendentes.', '2) Controle tecnológico de pavimentação.'],
             'TERRAPLANAGEM': ['1) Conformação do greide da Rua 01.'],
             'DRENAGEM': ['1) Construção de Bocas de Lobo.', '2) Alteamento de Poços de Visita.', '3) Finalização da drenagem da Rua 01.'],
-            'ÁGUA POTÁVEL': ['1) Levantamento da rede construída.', '2) Check list de eventuais reparos na rede.'],
-            'RESERVATÓRIO / ADUTORA': ['1) Ligação na rede do loteamento.'],
-            'ESGOTO SANITÁRIO': ['1) Levantamento da rede construída.', '2) Check list de eventuais reparos na rede.'],
+            'REDE DE ÁGUA - DISTRIBUIÇÃO': ['1) Levantamento da rede construída.', '2) Check list de eventuais reparos na rede.'],
+            'REDE DE ÁGUA - ADUÇÃO': ['1) Ligação na rede do loteamento.'],
+            'REDE DE ÁGUA - RESERVAÇÃO': ['-'],
+            'REDE COLETORA DE ESGOTO': ['1) Levantamento da rede construída.', '2) Check list de eventuais reparos na rede.'],
+            'REDE DE RECALQUE / ETE': ['-'],
             'GUIAS E SARJETAS': ['1) Mapeamento e reparos das guias e sarjetas.'],
-            'PAVIMENTAÇÃO VIÁRIA': ['1) Execução completa da pavimentação na área pendente.'],
-            'MEIO AMBIENTE / PRAÇAS': ['1) Execução de paisagismo.'],
-            'OBRA DE ACESSO': ['1) Execução do acesso conforme aprovação.'],
-            'TOPOGRAFIA DE ENTREGA': ['1) Execução completa da demarcação topográfica de lotes.'],
+            'PAVIMENTAÇÃO': ['1) Execução completa da pavimentação na área pendente.'],
+            'ELÉTRICA': ['-'],
+            'ACESSO': ['1) Execução do acesso conforme aprovação.'],
+            'SINALIZAÇÃO HORIZ/VERT': ['-'],
+            'OBRIGAÇÕES AMBIENTAIS': ['-'],
+            'PARQUES E PAISAGISMO': ['1) Execução de paisagismo.'],
+            'CONTENÇÕES/PROTEÇÕES': ['-'],
+            'LIMPEZA / MANUTENÇÕES': ['Vigente até o final das obras quando necessário'],
+            'MULTAS': ['-'],
+            'REPARAÇÃO DANOS TERC.': ['-'],
+            'DIAGNÓSTICO OBRA EXIST.': ['-'],
             'INDIRETO DE OBRAS': ['1) Vigente até o final das obras.']
         };
 
@@ -2124,12 +2159,19 @@
         const joaquimProjetadoFuturo = [434434.00, 7500.00, 34783.49, 150000.00, 34600.00, -396043.27, 134270.88, 153854.53, 56500.00, 146000.00, 0.00, 56750.30, 80000.00, 24401.26];
         const joaquimFisicoRaw = [0.0, 0.0, 90.0, 90.0, 90.0, 85.0, 80.0, 0.0, 80.0, 80.0, 100.0, 30.0, 0.0, 70.0];
 
-        const parqueEtapas = ['TOPOGRAFIA E CONTROLE', 'MANUTENÇÕES / AS BUILTS', 'TERRAPLANAGEM', 'DRENAGEM', 'ÁGUA POTÁVEL', 'RESERVATÓRIO / ADUTORA', 'ESGOTO SANITÁRIO', 'GUIAS E SARJETAS', 'PAVIMENTAÇÃO VIÁRIA', 'MEIO AMBIENTE / PRAÇAS', 'OBRA DE ACESSO', 'TOPOGRAFIA DE ENTREGA', 'INDIRETO DE OBRAS'];
-        const parqueOrcado = [20800.00, 186643.30, 50400.00, 523908.31, 106623.00, 134625.00, 200000.00, 466961.10, 2977569.12, 59674.90, 915450.00, 66600.00, 142862.13];
-        const parqueComprometido = [7300.00, 93973.30, 0.00, 460306.64, 0.00, 0.00, 0.00, 0.00, 0.00, 555.90, 16010.00, 0.00, 28325.17];
-        const parqueValorApropriado = [0.00, 0.00, 0.00, 189575.08, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00];
-        const parqueProjetadoFuturo = [13500.00, 92670.00, 50400.00, 98763.85, 106623.00, 134625.00, 200000.00, 466961.10, 2977569.12, 59235.00, 899440.00, 66600.00, 107250.00];
-        const parqueFisicoRaw = [35.1, 50.3, 0.0, 70.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.9, 100.0, 100.0, 19.8];
+        const parqueEtapasV1 = ['TOPOGRAFIA E CONTROLE', 'MANUTENÇÕES / AS BUILTS', 'TERRAPLANAGEM', 'DRENAGEM', 'ÁGUA POTÁVEL', 'RESERVATÓRIO / ADUTORA', 'ESGOTO SANITÁRIO', 'GUIAS E SARJETAS', 'PAVIMENTAÇÃO VIÁRIA', 'MEIO AMBIENTE / PRAÇAS', 'OBRA DE ACESSO', 'TOPOGRAFIA DE ENTREGA', 'INDIRETO DE OBRAS'];
+        const parqueOrcadoV1 = [20800.00, 186643.30, 50400.00, 523908.31, 106623.00, 134625.00, 200000.00, 466961.10, 2977569.12, 59674.90, 915450.00, 66600.00, 142862.13];
+
+        const parqueEtapas = ['CANTEIRO DE OBRAS', 'TOPOGRAFIA', 'TERRAPLANAGEM', 'DRENAGEM', 'REDE DE ÁGUA - DISTRIBUIÇÃO', 'REDE DE ÁGUA - ADUÇÃO', 'REDE DE ÁGUA - RESERVAÇÃO', 'REDE COLETORA DE ESGOTO', 'REDE DE RECALQUE / ETE', 'GUIAS E SARJETAS', 'PAVIMENTAÇÃO', 'ELÉTRICA', 'ACESSO', 'SINALIZAÇÃO HORIZ/VERT', 'OBRIGAÇÕES AMBIENTAIS', 'PARQUES E PAISAGISMO', 'CONTENÇÕES/PROTEÇÕES', 'LIMPEZA / MANUTENÇÕES', 'MULTAS', 'REPARAÇÃO DANOS TERC.', 'DIAGNÓSTICO OBRA EXIST.', 'INDIRETO DE OBRAS'];
+        const parqueOrcado = [439.90, 87400.04, 50400.00, 439893.31, 45500.00, 15850.00, 134625.00, 152170.00, 47830.00, 466961.00, 3155066.32, 0.00, 704342.80, 0.00, 0.00, 59235.00, 50000.00, 133752.30, 0.00, 0.00, 129288.00, 179363.13];
+        const parqueComprometido = [0, 26660.00, 0, 329938.90, 0, 0, 0, 0, 0, 0, 0, 0, 4400.00, 0, 0, 0, 0, 94529.20, 0, 0, 0, 63909.17];
+        const parqueValorApropriado = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6250.00, 0, 31800.00];
+        const parqueProjetadoFuturo = [0, 72349.99, 50400.00, 175531.42, 45500.00, 15850.00, 134625.00, 200000.00, 47830.00, 466961.00, 3155066.32, 0, 704342.80, 0, 0, 59235.00, 50000.00, 41200.00, 0, 0, 95570.50, 43897.91];
+
+        const parqueFisicoRaw = parqueEtapas.map((_, i) => {
+            let eac = parqueComprometido[i] + parqueProjetadoFuturo[i];
+            return eac > 0 ? (parqueComprometido[i] / eac) * 100 : 0;
+        });
 
         const dataMaps = {
             'mirante': { labels: miranteEtapas, orcado: miranteOrcado, investido: miranteComprometido, projetado: miranteProjetadoFuturo, pendencias: pendenciasMirante },
@@ -2167,8 +2209,8 @@
         const desembolsosParque = [
             0, 0, 7500, 4110, 0, 0, 0, 0, 0, 0, 8900, 5100, 7100, 2000, 0, 0, 0,
             0, 0, 0, 0, 20000, 19260, 0, 37280, 9500, 3159, 0, 1750,
-            6059.30, 0, 7479, 17587.13, 83696.26, 176415.24, 521617.32, 330525.07, 1186950.30, 1220397.80, 1230321.55, 175569.81, 159566.06,
-            159566.06, 159566.06, 159566.06, 159566.06
+            6059.30, 0, 7479, 17587.13, 83696.26, 176415.24, 64491.34, 344695.68, 638393.46, 1244026.63, 1916361.93, 1192869.62, 15345.86,
+            15345.86, 15345.86, 7012.52, 7012.52
         ];
 
         function fmtNum(n) { return Math.ceil(n).toLocaleString('pt-BR'); }
@@ -2319,7 +2361,7 @@
             
             etapasArray.forEach((etapa, i) => {
                 const comp = compArray[i]; const proj = projArray[i]; const geral = comp + proj;
-                totComp += comp; totProj += proj; totGeral += geral;
+                totComp += comp; totProj += proj; totGeral+= geral;
                 
                 const compStr = 'R$ ' + Math.round(comp).toLocaleString('pt-BR');
                 const projStr = 'R$ ' + Math.round(proj).toLocaleString('pt-BR');
@@ -2611,17 +2653,111 @@
         Chart.register(centerTextPlugin);
 
         function createPieChart(canvasId, labels, valores) {
-            const cores = ['#E74C3C','#3498DB','#2ECC71','#F39C12','#9B59B6','#1ABC9C','#E67E22','#C0392B','#34495E','#16A085','#D35400','#8E44AD','#27AE60','#2980B9'];
+            const cores = ['#E74C3C','#3498DB','#2ECC71','#F39C12','#9B59B6','#1ABC9C','#E67E22','#C0392B','#34495E','#16A085','#D35400','#8E44AD','#27AE60','#2980B9', '#FFB74D', '#A1887F', '#90A4AE', '#7986CB', '#4DD0E1', '#81C784', '#DCE775', '#FFF176'];
             const totalSum = valores.reduce((a, b) => a + b, 0);
             
-            new Chart(document.getElementById(canvasId), {
+            const canvas = document.getElementById(canvasId);
+            const card = canvas.closest('.chart-container-pie');
+            
+            if (card) {
+                card.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
+                card.style.cursor = 'pointer';
+                
+                let oldBadge = card.querySelector('.etapas-badge');
+                if(oldBadge) oldBadge.remove();
+
+                const badge = document.createElement('div');
+                badge.className = 'etapas-badge';
+                badge.innerText = `(${labels.length} etapas)`;
+                badge.style.position = 'absolute';
+                badge.style.top = '15px';
+                badge.style.left = '15px';
+                badge.style.background = 'var(--active-color)';
+                badge.style.color = '#fff';
+                badge.style.padding = '4px 8px';
+                badge.style.borderRadius = '12px';
+                badge.style.fontSize = '0.75rem';
+                badge.style.fontWeight = 'bold';
+                badge.style.opacity = '0';
+                badge.style.transform = 'translateY(10px)';
+                badge.style.transition = 'all 0.3s ease';
+                card.appendChild(badge);
+
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-5px)';
+                    card.style.boxShadow = '0 10px 25px rgba(0,0,0,0.15)';
+                    badge.style.opacity = '1';
+                    badge.style.transform = 'translateY(0)';
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0)';
+                    card.style.boxShadow = '';
+                    badge.style.opacity = '0';
+                    badge.style.transform = 'translateY(10px)';
+                });
+            }
+
+            let showNativeLegend = true;
+            if (canvasId === 'chartParquePie') {
+                showNativeLegend = false;
+                const wrapper = canvas.parentElement; 
+                
+                if (!wrapper.classList.contains('flex-aplicado')) {
+                    wrapper.classList.add('flex-aplicado');
+                    wrapper.style.display = 'flex';
+                    wrapper.style.alignItems = 'center';
+                    wrapper.style.justifyContent = 'space-between';
+                    
+                    // DIV protetora para o Canvas não ser esmagado
+                    const canvasBox = document.createElement('div');
+                    canvasBox.style.flex = '1';
+                    canvasBox.style.position = 'relative';
+                    canvasBox.style.height = '100%';
+                    canvasBox.style.minWidth = '0';
+                    wrapper.insertBefore(canvasBox, canvas);
+                    canvasBox.appendChild(canvas);
+
+                    const legendDiv = document.createElement('div');
+                    legendDiv.className = 'custom-html-legend';
+                    legendDiv.style.width = '200px';
+                    legendDiv.style.maxHeight = '300px';
+                    legendDiv.style.overflowY = 'auto';
+                    legendDiv.style.padding = '10px';
+                    legendDiv.style.border = '1px solid var(--border-color)';
+                    legendDiv.style.borderRadius = '8px';
+                    legendDiv.style.marginLeft = '15px';
+                    legendDiv.style.fontSize = '0.7rem';
+                    legendDiv.style.background = 'var(--table-th-bg)';
+                    legendDiv.style.flexShrink = '0'; // Impede a legenda de encolher
+                    wrapper.appendChild(legendDiv);
+                }
+
+                const legendDiv = wrapper.querySelector('.custom-html-legend');
+                if (legendDiv) {
+                    let legendHtml = '<ul style="list-style: none; padding: 0; margin: 0;">';
+                    labels.forEach((label, i) => {
+                        legendHtml += `<li style="display: flex; align-items: center; margin-bottom: 8px;">
+                            <span style="display: inline-block; width: 12px; height: 12px; background-color: ${cores[i % cores.length]}; border-radius: 50%; margin-right: 8px; flex-shrink: 0;"></span>
+                            <span style="color: var(--text-color-base); line-height: 1.2;">${label}</span>
+                        </li>`;
+                    });
+                    legendHtml += '</ul>';
+                    legendDiv.innerHTML = legendHtml;
+                }
+            }
+            
+            new Chart(canvas, {
                 type: 'doughnut',
                 data: { labels: labels, datasets: [{ data: valores, backgroundColor: cores.slice(0, labels.length), borderColor: 'transparent', borderWidth: 2 }] },
                 options: {
                     responsive: true, maintainAspectRatio: false,
                     layout: { padding: { top: 20, bottom: 20, left: 10, right: 10 } },
                     plugins: {
-                        legend: { position: 'right', labels: { color: '#000000', font: { size: 9, family: "'Montserrat'" }, padding: 8 } },
+                        legend: { 
+                            display: showNativeLegend, 
+                            position: 'right', 
+                            labels: { color: '#000000', font: { size: 9, family: "'Montserrat'" }, padding: 8 } 
+                        },
                         centerText: { text: totalSum },
                         tooltip: { callbacks: { label: (context) => ` ${context.label}: ${fmtMoney(context.parsed)} (${totalSum > 0 ? ((context.parsed / totalSum) * 100).toFixed(1) : 0}%)` } },
                         datalabels: {
@@ -2638,7 +2774,7 @@
                 }
             });
         }
-
+        
         function createFisicoFinChart(canvasId, labels, finData, fisData, finDataRaw, fisDataRaw, orcado, investido, finalDateStr) {
             const isDark = document.body.classList.contains('dark-mode');
             const bgRestante = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)';
@@ -2747,46 +2883,217 @@
                 }
             });
         }
+ 	 
+	function createBarChart(canvasId, labels, orcado, comprometido, projetadoFuturo) {
+            // 2) Largura padronizada para que TODAS as obras tenham as colunas finas iguais
+            let barPct = 0.8;
+            let catPct = 0.8;
 
-        function createBarChart(canvasId, labels, orcado, comprometido, projetadoFuturo) {
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
                 data: { 
                     labels: labels, 
                     datasets: [
-                        { label: 'Orçado', data: orcado, backgroundColor: '#7cb342', stack: 'Stack 0', borderRadius: 4 }, 
-                        { label: 'Investido', data: comprometido, backgroundColor: '#1b5e20', stack: 'Stack 1' },
-                        { label: 'Projetado (A Realizar)', data: projetadoFuturo, backgroundColor: '#f39c12', stack: 'Stack 1', borderRadius: {topLeft: 4, topRight: 4} }
+                        { label: 'Orçado', data: orcado, backgroundColor: '#7cb342', stack: 'Stack 0', borderRadius: 4, barPercentage: barPct, categoryPercentage: catPct }, 
+                        { label: 'Investido', data: comprometido, backgroundColor: '#1b5e20', stack: 'Stack 1', barPercentage: barPct, categoryPercentage: catPct },
+                        { label: 'Projetado (A Realizar)', data: projetadoFuturo, backgroundColor: '#f39c12', stack: 'Stack 1', borderRadius: {topLeft: 4, topRight: 4}, barPercentage: barPct, categoryPercentage: catPct }
                     ] 
                 },
                 options: { 
                     responsive: true, maintainAspectRatio: false, 
                     plugins: { legend: { labels: { font: { family: "'Montserrat'" }, color: '#000000' } }, datalabels: { display: false } },
                     scales: { 
-                        x: { stacked: true, ticks: { color: '#000000', maxRotation: 45, font: { size: 9, family: "'Montserrat'" } }, grid: { color: 'rgba(0,0,0,0.1)' } }, 
+                        x: { stacked: true, ticks: { color: '#000000', maxRotation: 45, minRotation: 45, font: { size: 9, family: "'Montserrat'" } }, grid: { display: false } }, 
                         y: { stacked: true, ticks: { color: '#000000', font: { family: "'Montserrat'" }, callback: v => fmtNum(v) }, grid: { color: 'rgba(0,0,0,0.1)' } } 
                     } 
                 }
             });
         }
-
-        function createDisponivelChart(canvasId, labels, disponivel) {
-            const colors = disponivel.map(v => v < 0 ? '#d32f2f' : '#2e7d32');
+        
+        function createParqueBarChartHorizontal(canvasId, labels, orcado, comprometido, projetadoFuturo) {
+            let eac = comprometido.map((val, i) => val + projetadoFuturo[i]);
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
-                data: { labels: labels, datasets: [{ label: 'Saldo Disponível', data: disponivel, backgroundColor: colors, borderRadius: 4 }] },
+                data: { 
+                    labels: labels, 
+                    datasets: [
+                        { label: 'Orçado', data: orcado, backgroundColor: '#7cb342', borderRadius: 4 }, 
+                        { label: 'Investido + Projetado', data: eac, backgroundColor: '#1b5e20', borderRadius: 4 }
+                    ] 
+                },
                 options: { 
-                    indexAxis: 'y', responsive: true, maintainAspectRatio: false, 
-                    plugins: { legend: { display: false }, datalabels: { display: false } }, 
+                    indexAxis: 'y', 
+                    responsive: true, maintainAspectRatio: false, 
+                    plugins: { legend: { labels: { font: { family: "'Montserrat'" }, color: '#000000' } }, datalabels: { display: false } },
                     scales: { 
                         x: { ticks: { color: '#000000', font: { family: "'Montserrat'" }, callback: v => fmtNum(v) }, grid: { color: 'rgba(0,0,0,0.1)' } }, 
-                        y: { ticks: { color: '#000000', font: { size: 9, family: "'Montserrat'" } }, grid: { display: false } } 
+                        y: { ticks: { color: '#000000', font: { size: 9, family: "'Montserrat'" } }, grid: { color: 'rgba(0,0,0,0.1)' } } 
                     } 
                 }
             });
         }
 
-        function runABCEngine(canvasId, tableId, labels, valores) {
+       function createDisponivelChartVerticalCentered(canvasId, labels, disponivel) {
+            let maxVal = Math.max(...disponivel.map(Math.abs));
+            
+            // Tratamento especial para o Parque das Nações: limitamos a escala do eixo Y 
+            // em 800.000 para que a coluna gigante da "Pavimentação" não achate as demais.
+            if (canvasId === 'chartParqueDisponivel') {
+                maxVal = 800000; 
+            }
+            
+            const bound = maxVal > 0 ? maxVal * 1.15 : 100;
+            const colors = disponivel.map(v => v < 0 ? '#d32f2f' : '#2e7d32');
+            
+            new Chart(document.getElementById(canvasId), {
+                type: 'bar',
+                data: { 
+                    labels: labels, 
+                    datasets: [{ 
+                        label: 'Saldo Disponível', 
+                        data: disponivel, 
+                        backgroundColor: colors, 
+                        borderRadius: 4,
+                        barPercentage: 0.5, 
+                        categoryPercentage: 0.8
+                    }] 
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { display: false }, datalabels: { display: false } }, 
+                    scales: { 
+                        x: { 
+                            ticks: { 
+                                color: '#000000', 
+                                font: { size: 9, family: "'Montserrat'" }, 
+                                maxRotation: 90, 
+                                minRotation: 90, 
+                                autoSkip: false 
+                            }, 
+                            grid: { display: false } 
+                        }, 
+                        y: { 
+                            min: -bound, 
+                            max: bound, 
+                            ticks: { color: '#000000', font: { family: "'Montserrat'" }, callback: v => fmtNum(v) }, 
+                            grid: { 
+                                color: (ctx) => {
+                                    if(ctx.tick && ctx.tick.value === 0) return '#d32f2f';
+                                    return 'rgba(0,0,0,0.1)'; 
+                                },
+                                lineWidth: (ctx) => {
+                                    if(ctx.tick && ctx.tick.value === 0) return 3;
+                                    return 1;
+                                }
+                            } 
+                        } 
+                    } 
+                } 
+            });
+        }
+
+        function renderTop5Parque() {
+            // A última cor foi substituída de #FFF176 (amarelo claro) para #F57F17 (laranja escuro) para leitura perfeita
+            const cores = ['#E74C3C','#3498DB','#2ECC71','#F39C12','#9B59B6','#1ABC9C','#E67E22','#C0392B','#34495E','#16A085','#D35400','#8E44AD','#27AE60','#2980B9', '#FFB74D', '#A1887F', '#90A4AE', '#7986CB', '#4DD0E1', '#81C784', '#DCE775', '#F57F17'];
+            
+            let dados = parqueEtapas.map((etapa, idx) => ({ 
+                etapa: etapa, 
+                valor: parqueOrcado[idx],
+                cor: cores[idx % cores.length]
+            }));
+            
+            dados.sort((a, b) => b.valor - a.valor);
+            let top5 = dados.slice(0, 5); 
+            let maxValor = top5[0].valor || 1;
+            
+            let html = '';
+            top5.forEach(item => {
+                // Trocado para Raiz Cúbica (cbrt) para reduzir mais ainda a barra gigante e aumentar as menores
+                let pct = Math.max((Math.cbrt(item.valor) / Math.cbrt(maxValor)) * 100, 35); 
+                let valSemDecimal = Math.round(item.valor).toLocaleString('pt-BR');
+                
+                html += `
+                <div class="top5-bar-wrapper">
+                    <div class="top5-bar-fill" style="width: ${pct}%; background: ${item.cor}; border-color: ${item.cor}; min-width: max-content;">
+                        <span class="top5-bar-text">${item.etapa} - R$ ${valSemDecimal}</span>
+                    </div>
+                </div>
+                `;
+            });
+            document.getElementById('top5-container-parque').innerHTML = html;
+        }
+
+        function createDisponivelChart(canvasId, labels, disponivel) {
+            const colors = disponivel.map(v => v < 0 ? '#d32f2f' : '#2e7d32');
+            let fontSizeY = canvasId === 'chartParqueDisponivel' ? 11 : 9;
+            let isParque = canvasId === 'chartParqueDisponivel';
+
+            // TRUQUE VISUAL: Aplicamos a Raiz Quadrada nos valores para encurtar
+            // visualmente as barras gigantes e esticar as barras pequenas.
+            let plotData = isParque ? disponivel.map(v => Math.sign(v) * Math.sqrt(Math.abs(v))) : disponivel;
+
+            new Chart(document.getElementById(canvasId), {
+                type: 'bar',
+                data: { 
+                    labels: labels, 
+                    datasets: [{ 
+                        label: 'Saldo Disponível', 
+                        data: plotData, // Gráfico desenha a proporção ajustada
+                        originalData: disponivel, // Salva o valor real para usarmos na legenda
+                        backgroundColor: colors, 
+                        borderRadius: 4,
+                        barPercentage: 0.8,
+                        categoryPercentage: 0.9
+                    }] 
+                },
+                options: { 
+                    indexAxis: 'y', 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    layout: { 
+                        padding: { bottom: 0, top: 0, right: 20 } 
+                    },
+                    plugins: { 
+                        legend: { display: false }, 
+                        datalabels: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    // MÁGICA 1: Mostra o valor monetário real ao passar o mouse
+                                    let raw = context.dataset.originalData ? context.dataset.originalData[context.dataIndex] : context.raw;
+                                    return ' Saldo: ' + fmtMoney(raw);
+                                }
+                            }
+                        }
+                    }, 
+                    scales: { 
+                        x: { 
+                            ticks: { 
+                                color: '#000000', 
+                                font: { family: "'Montserrat'" }, 
+                                callback: function(value) { 
+                                    // MÁGICA 2: Reverte o cálculo matemático para a legenda de baixo exibir o valor real
+                                    let realValue = isParque ? (Math.sign(value) * Math.pow(value, 2)) : value;
+                                    return fmtNum(realValue); 
+                                }
+                            }, 
+                            grid: { color: 'rgba(0,0,0,0.1)' } 
+                        }, 
+                        y: { 
+                            ticks: { 
+                                color: '#000000', 
+                                font: { size: fontSizeY, family: "'Montserrat'" },
+                                autoSkip: false, 
+                                padding: 5
+                            }, 
+                            grid: { display: false } 
+                        } 
+                    } 
+                }
+            });
+        }
+               function runABCEngine(canvasId, tableId, labels, valores) {
             let dados = labels.map((l, i) => ({ etapa: l, valor: valores[i] })).sort((a, b) => b.valor - a.valor);
             let total = dados.reduce((a, b) => a + b.valor, 0) || 1;
             let acumulado = 0, pAcum = [], etapasOrd = [], valsOrd = [], classes = [];
@@ -2871,7 +3178,7 @@
             let totDisponivelStr = fmtNum(totDisponivel);
 
             if (obraNome === 'JOAQUIM LEME') { totDesvioStr = '-9,62%'; totDisponivelStr = 'R$ 483.285'; }
-            if (obraNome === 'PARQUE DAS NAÇÕES') { totDesvioStr = '+0,48%'; }
+            if (obraNome === 'PARQUE DAS NAÇÕES') { totDesvioStr = '+0,44%'; }
 
             const isMirante = obraNome === 'MIRANTE DA LAGOA';
             let tdInvAtual = fmtNum(totComprometido);
@@ -2947,16 +3254,13 @@
         // =========================================================================
         // GRÁFICO HISTÓRICO DE COLUNAS (Sem onClick, mantendo apenas hover no tooltip)
         // =========================================================================
+      
         function createColumnChart(canvasId, labels, data) {
             const columnColors = labels.map(label => {
-                if(label.includes('/27')) {
-                    const mes = label.split('/')[0];
-                    if (mes === 'jan') return '#f39c12';
-                    return '#f39c12';
-                }
+                if(label.includes('/27')) return '#f39c12';
                 if(label.includes('/26')) {
                     const mes = label.split('/')[0];
-                    const mesesFuturos = ['ago', 'set', 'out', 'nov', 'dez']; // Jul/26 volta a ser verde (consolidado)
+                    const mesesFuturos = ['ago', 'set', 'out', 'nov', 'dez']; 
                     if(mesesFuturos.includes(mes)) return '#f39c12';
                 }
                 return '#558b2f';
@@ -2966,10 +3270,44 @@
 
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
-                data: { datasets: [{ label: 'Desembolso Mensal', data: data, backgroundColor: columnColors, hoverBackgroundColor: hoverColors, borderRadius: 4 }], labels: labels },
+                data: { 
+                    labels: labels, 
+                    datasets: [
+                        { 
+                            type: 'line', 
+                            label: 'Tendência', 
+                            data: data, 
+                            borderColor: '#1b5e20', 
+                            borderWidth: 2, 
+                            pointBackgroundColor: '#ffffff', 
+                            pointBorderColor: '#1b5e20', 
+                            pointRadius: 4, 
+                            fill: false,
+                            tension: 0.3 
+                        },
+                        { 
+                            type: 'bar', 
+                            label: 'Desembolso Mensal', 
+                            data: data, 
+                            backgroundColor: columnColors, 
+                            hoverBackgroundColor: hoverColors, 
+                            borderRadius: 4 
+                        }
+                    ] 
+                },
                 options: { 
                     responsive: true, maintainAspectRatio: false, 
-                    plugins: { legend: { display: false }, datalabels: { display: false }, tooltip: { enabled: true } },
+                    plugins: { 
+                        legend: { display: false }, 
+                        datalabels: { display: false }, 
+                        tooltip: { 
+                            enabled: true,
+                            filter: function(tooltipItem) {
+                                // Ignora o tooltip (caixa preta) se for a linha (dataset índice 0)
+                                return tooltipItem.datasetIndex !== 0; 
+                            }
+                        } 
+                    },
                     scales: { 
                         x: { ticks: { font: { family: "'Montserrat'", size: 10 }, color: '#000000', maxRotation: 45 }, grid: { color: 'rgba(0,0,0,0.1)' } }, 
                         y: { ticks: { font: { family: "'Montserrat'" }, color: '#000000', callback: v => fmtNum(v) }, grid: { color: 'rgba(0,0,0,0.1)' } } 
@@ -2995,11 +3333,12 @@
 
             createMainGauge('gaugeMainMirante', 7859182, 5827009.01, 7045701.18, { desembolso: 'Desembolso Total', comprometido: 'Desembolso + Comprometido' });
             createMainGauge('gaugeMainJoaquim', 5019403, 3497657.16, 3619067.08, { desembolso: 'Desembolso Total', comprometido: 'Desembolso + Comprometido' });
-            createMainGauge('gaugeMainParqueGeral', 5852117, 416895.93, 606471.01, { desembolso: 'Desembolso Total', comprometido: 'Desembolso + Comprometido' });
+            createMainGauge('gaugeMainParqueGeral', 5852117, 481387.27, 519437.27, { desembolso: 'Desembolso Total', comprometido: 'Desembolso + Comprometido' });
             
             createPieChart('chartMirantePie', miranteEtapas, miranteOrcado);
             createPieChart('chartJoaquimPie', joaquimEtapas, joaquimOrcado);
             createPieChart('chartParquePie', parqueEtapas, parqueOrcado);
+            renderTop5Parque();
             
             const sortedMirante = sortChartData(miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo, miranteFisicoRaw);
             const miranteEacPct = sortedMirante.eac.map((v, i) => sortedMirante.orcado[i] > 0 ? (v / sortedMirante.orcado[i] * 100) : 0);

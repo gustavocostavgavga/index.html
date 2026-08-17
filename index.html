@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -508,6 +506,29 @@
             .insights-carousel-track { transform: translateX(7.5%); }
             .insights-carousel-track .insight-card { flex: 0 0 80%; max-width: 80%; margin: 0 2.5%; }
         }
+
+        /* Estilos das barras interativas e Rankings (Novo Design) */
+        .top5-item-container { display: flex; flex-direction: column; margin-bottom: 20px; width: 75%; margin-left: auto; margin-right: auto; transition: transform 0.3s ease; cursor: default; }
+        .top5-item-container:hover { transform: translateY(-4px); }
+        .top5-item-title { font-size: 0.72rem; font-weight: 700; color: var(--text-color-base); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
+        .top5-item-row { display: flex; align-items: center; gap: 15px; width: 100%; }
+        .top5-bar-track { width: 55%; height: 16px; }
+        .top5-bar-fill-new { height: 100%; border-radius: 2px; transition: width 0.8s ease; }
+        .top5-item-values { display: flex; align-items: center; gap: 12px; font-size: 0.8rem; font-weight: 700; color: var(--text-color-base); white-space: nowrap; }
+        .top5-val-money { width: 110px; text-align: right; }
+        .top5-val-separator { color: var(--subtitle-color); font-weight: 400; }
+        .top5-val-pct { width: 45px; text-align: left; }
+        
+        /* Estilos para o novo quadro de 3 colunas (Rankings) */
+        .ranking-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
+        .ranking-col { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 18px; display: flex; flex-direction: column; transition: all 0.4s; }
+        .ranking-col:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); border-color: var(--active-color); }
+        body.dark-mode .ranking-col:hover { box-shadow: 0 8px 20px rgba(0,0,0,0.4); border-color: var(--subtitle-color); }
+        .ranking-warning { font-size: 0.65rem; color: var(--text-color-base); font-style: italic; margin-top: auto; line-height: 1.4; border-top: 1px dashed var(--border-color); padding-top: 12px; text-align: justify; opacity: 0.8; }
+        
+        @media (max-width: 992px) {
+            .ranking-grid-3 { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -561,7 +582,7 @@
                 </div>
             </div>
         </header>
-        <div class="tabs">
+<div class="tabs">
             <button class="tab-btn active" data-tab="mirante" onclick="setActiveObraPdf('mirante')"><strong>MIRANTE DA LAGOA</strong></button>
             <button class="tab-btn" data-tab="joaquim" onclick="setActiveObraPdf('joaquim')"><strong>JOAQUIM LEME</strong></button>
             <button class="tab-btn" data-tab="parque" onclick="setActiveObraPdf('parque')"><strong>PARQUE DAS NAÇÕES</strong></button>
@@ -622,7 +643,7 @@
                             <canvas id="chartMirantePie"></canvas>
                         </div>
                     </div>
-                    <!-- 2. Gráfico Top 5 Impacto (Novo no Mirante) -->
+                    <!-- 2. Gráfico Top 5 Impacto -->
                     <div class="chart-container-pie" style="display: flex; flex-direction: column;">
                         <div class="chart-title" style="margin-bottom: 15px;">Etapas de maior impacto orçamentário</div>
                         <div id="top5-container-mirante" style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 5px 10px;"></div>
@@ -685,26 +706,24 @@
                     <div class="planejamento-card">
                         <h3>⚙️ Etapas vigentes ou contratadas</h3>
                         <div class="vigentes-header" style="display: flex; justify-content: space-between; font-weight: 700; color: var(--title-color); border-bottom: 2px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9rem;"><span>Atividades</span><span>Em investimento</span></div>
-                        <div class="vigentes-item"><span>Check List da topografia de entrega</span><span>R$ 15.000,00</span></div>
                         <div class="vigentes-item"><span>Recapeamento viário</span><span>R$ 1.681.000,00</span></div>
-                        <div class="vigentes-item"><span>Testes na rede de saneamento</span><span>R$ 11.000,00</span></div>
-                        <div class="vigentes-item"><span>Reparos na rede na água</span><span>R$ 65.000,00</span></div>
-                        <div class="vigentes-item"><span>Construção de vias de pedestres</span><span>R$ 78.080,00</span></div>
-                        <div class="vigentes-item"><span>Limpeza entorno das calçadas e ruas</span><span>R$ 17.000,00</span></div>
-                        <div class="vigentes-total"><span>TOTAL</span><span>R$ 1.867.080,00</span></div>
+                        <div class="vigentes-item"><span>Reparos da rede de saneamento (Água potável e Esgoto sanitário)</span><span>R$ 300.000,00</span></div>
+                        <div class="vigentes-item"><span>Finalização da infraestrutura elétrica para manobra de energização</span><span>R$ 144.300,00</span></div>
+                        <div class="vigentes-item"><span>Construção do cercamento dos poços</span><span>R$ 21.184,20</span></div>
+                        <div class="vigentes-item"><span>Construção das casas de química</span><span>R$ 39.360,00</span></div>
+                        <div class="vigentes-item"><span>Ligação do tratamento preliminar de esgoto</span><span>R$ 25.989,00</span></div>
+                        <div class="vigentes-item"><span>Terraplenagem do parque linear e aterro do lote comercial</span><span>R$ 119.402,50</span></div>
+                        <div class="vigentes-total"><span>TOTAL</span><span>R$ 2.331.235,70</span></div>
                     </div>
                     <div class="planejamento-card">
                         <h3>🕒 Próximas ativações</h3>
                         <div class="vigentes-header" style="display: flex; justify-content: space-between; font-weight: 700; color: var(--title-color); border-bottom: 2px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9rem;"><span>Atividades</span><span>Previsão de investimento</span></div>
                         <ul class="hierarchical-list">
-                            <li class="level-1"><span>1) Implantação das casas de química</span><span>R$ 189.940,00</span></li>
-                            <li class="level-2"><span class="enum">1.1</span> Construção da alvenaria da casa</li>
-                            <li class="level-2"><span class="enum">1.2</span> Cercamento do perímetro dos poços</li>
-                            <li class="level-2"><span class="enum">1.3</span> Automação e eletrificação dos poços</li>
-                            <li class="level-1"><span>2) Finalização do tratamento preliminar</span><span>R$ 99.385,00</span></li>
+                            <li class="level-1"><span>1) Implantação das casas de química</span><span>R$ 34.875,94</span></li>
+                            <li class="level-2"><span class="enum">1.1</span> Automação e eletrificação dos poços</li>
+                            <li class="level-1"><span>2) Finalização do tratamento preliminar</span><span>R$ 40.120,00</span></li>
                             <li class="level-2"><span class="enum">4.1</span> Instalação de grelha e comportas</li>
                             <li class="level-2"><span class="enum">4.2</span> Execução de contrapartida ao invés do poço de sucção</li>
-                            <li class="level-2"><span class="enum">4.3</span> Ligação do tratamento preliminar na rede municipal</li>
                             <li class="level-1"><span>3) Paisagismo</span><span>R$ 60.000,00</span></li>
                             <li class="level-2"><span class="enum">5.1</span> Plantio de mudas</li>
                             <li class="level-2"><span class="enum">5.2</span> Pintura de meios-fios</li>
@@ -712,16 +731,12 @@
                             <li class="level-1"><span>5) Processo de entrega</span><span>-</span></li>
                             <li class="level-2"><span class="enum">7.1</span> Entre SAE (Água e Esgoto)</li>
                             <li class="level-2"><span class="enum">7.2</span> Entrega Prefeitura</li>
-                            <li class="level-1"><span>6) Construção do Parque Linear</span><span>R$ 1.186.801,00</span></li>
-                            <li class="level-2"><span class="enum">8.1</span> Terraplenagem</li>
-                            <li class="level-2"><span class="enum">8.2</span> Construção de calçada e elementos de urbanismo</li>
-                            <li class="level-2"><span class="enum">8.3</span> Paisagismo</li>
                         </ul>
-                        <div class="vigentes-total" style="border-top: 2px solid var(--border-color); padding-top: 10px; margin-top: 5px;"><span>TOTAL</span><span>R$ 1.566.126,00</span></div>
+                        <div class="vigentes-total" style="border-top: 2px solid var(--border-color); padding-top: 10px; margin-top: 5px;"><span>TOTAL</span><span>R$ 164.995,94</span></div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="sub-tab-content" id="subtab-fotos-mirante">
                 <h3 style="color: var(--title-color); margin-bottom: 15px; text-align: center; font-size: 1.1rem; margin-top: 10px;">VISTA AÉREA</h3>
                 <div class="gallery-container">
@@ -911,7 +926,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
         
         <!-- INÍCIO JOAQUIM -->
@@ -949,16 +963,14 @@
                 </div>
             </div>
 
-            <div class="tabs-s">
-                <div class="sub-tabs">
-                    <button class="sub-tab-btn active" data-subtab="detalhe-joaquim">Detalhamento por Etapa</button>
-                    <button class="sub-tab-btn" data-subtab="historico-joaquim">Fluxo de Desembolsos</button>
-                    <button class="sub-tab-btn" data-subtab="planejamento-joaquim">Planejamento</button>
-                    <button class="sub-tab-btn" data-subtab="fotos-joaquim">Galeria de Fotos</button>
-                    <button class="sub-tab-btn" data-subtab="analises-joaquim">Análises</button>
-                    <button class="sub-tab-btn" data-subtab="projetos-joaquim">Projetos</button>
-                    <button class="sub-tab-btn" data-subtab="sobre-joaquim">Sobre</button>
-                </div>
+            <div class="sub-tabs">
+                <button class="sub-tab-btn active" data-subtab="detalhe-joaquim">Detalhamento por Etapa</button>
+                <button class="sub-tab-btn" data-subtab="historico-joaquim">Fluxo de Desembolsos</button>
+                <button class="sub-tab-btn" data-subtab="planejamento-joaquim">Planejamento</button>
+                <button class="sub-tab-btn" data-subtab="fotos-joaquim">Galeria de Fotos</button>
+                <button class="sub-tab-btn" data-subtab="analises-joaquim">Análises</button>
+                <button class="sub-tab-btn" data-subtab="projetos-joaquim">Projetos</button>
+                <button class="sub-tab-btn" data-subtab="sobre-joaquim">Sobre</button>
             </div>
             
            <div class="sub-tab-content active" id="subtab-detalhe-joaquim">
@@ -970,7 +982,7 @@
                             <canvas id="chartJoaquimPie"></canvas>
                         </div>
                     </div>
-                    <!-- 2. Gráfico Top 5 Impacto (Novo no Joaquim) -->
+                    <!-- 2. Gráfico Top 5 Impacto -->
                     <div class="chart-container-pie" style="display: flex; flex-direction: column;">
                         <div class="chart-title" style="margin-bottom: 15px;">Etapas de maior impacto orçamentário</div>
                         <div id="top5-container-joaquim" style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 5px 10px;"></div>
@@ -1031,9 +1043,9 @@
                     <div class="planejamento-card">
                         <h3>⚙️ Etapas vigentes ou contratadas</h3>
                         <div class="vigentes-header" style="display: flex; justify-content: space-between; font-weight: 700; color: var(--title-color); border-bottom: 2px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9rem;"><span>Atividades</span><span>Em investimento</span></div>
-                        <div class="vigentes-item"><span>Execução do projeto SPDA e luz de balizamento</span><span>R$ 17.000,00</span></div>
-                        <div class="vigentes-item"><span>Compra de materiais e contratação de mão de obra para execução da rede adutora</span><span>R$ 53.764,46</span></div>
-                        <div class="vigentes-total"><span>TOTAL</span><span>R$ 70.764,46</span></div>
+                        <div class="vigentes-item"><span>Construção da rede adutora</span><span>R$ 77.508,21</span></div>
+                        <div class="vigentes-item"><span>Interligações do reservatório metálico de água e execução de parte hidráulica</span><span>R$ 35.000,00</span></div>
+                        <div class="vigentes-total"><span>TOTAL</span><span>R$ 112.508,21</span></div>
                     </div>
                     <div class="planejamento-card">
                         <h3>🕒 Próximas ativações</h3>
@@ -1045,26 +1057,23 @@
                             <li class="level-2"><span class="enum">1.3</span> Aquisição e instalação do Booster</li>
                             <li class="level-2"><span class="enum">1.4</span> Construção da casa de abrigo do Booster</li>
                             <li class="level-2"><span class="enum">1.5</span> Construção do interceptor de esgoto</li>
-                            <li class="level-1"><span>2) Reservatório</span><span>R$ 17.000,00</span></li>
-                            <li class="level-2"><span class="enum">2.1</span> Construção de prumada / barrilete</li>
-                            <li class="level-2"><span class="enum">2.2</span> Interligação do reservatório na rede municipal</li>
-                            <li class="level-1"><span>3) Recapeamento viário (Tapa-Buracos)</span><span>R$ 146.000,00</span></li>
-                            <li class="level-1"><span>4) Meio-fio e sarjeta</span><span>R$ 56.500,00</span></li>
+                            <li class="level-1"><span>2) Recapeamento viário (Tapa-Buracos)</span><span>R$ 146.000,00</span></li>
+                            <li class="level-1"><span>3) Meio-fio e sarjeta</span><span>R$ 56.500,00</span></li>
                             <li class="level-2"><span class="enum">4.1</span> Revitalização e reparo de meios-fios</li>
-                            <li class="level-1"><span>5) Obra de acesso</span><span>R$ 435.000,00</span></li>
+                            <li class="level-1"><span>4) Obra de acesso</span><span>R$ 435.000,00</span></li>
                             <li class="level-2"><span class="enum">5.1</span> Construção do acesso ao empreendimento</li>
-                            <li class="level-1"><span>6) Paisagismo e praças</span><span>R$ 56.750,00</span></li>
+                            <li class="level-1"><span>5) Paisagismo e praças</span><span>R$ 56.750,00</span></li>
                             <li class="level-2"><span class="enum">6.1</span> Execução do paisagismo de canteiros</li>
                             <li class="level-2"><span class="enum">6.2</span> Construção de praça na rotatória</li>
-                            <li class="level-1"><span>7) Sinalização viária</span><span>R$ 20.000,00</span></li>
+                            <li class="level-1"><span>6) Sinalização viária</span><span>R$ 20.000,00</span></li>
                             <li class="level-2"><span class="enum">7.1</span> Estudo e contratação de projeto</li>
                             <li class="level-2"><span class="enum">7.2</span> Execução da sinalização</li>
-                            <li class="level-1"><span>8) Processo de entrega</span><span>-</span></li>
-                            <li class="level-2"><span class="enum">8.1</span> Entre SAE (Água e Esgoto)</li>
+                            <li class="level-1"><span>7) Processo de entrega</span><span>-</span></li>
+                            <li class="level-2"><span class="enum">8.1</span> Entrega SAE (Água e Esgoto)</li>
                             <li class="level-2"><span class="enum">8.2</span> Entrega Secretaria de Obras (Drenagem)</li>
                             <li class="level-2"><span class="enum">8.3</span> Entrega Prefeitura</li>
                         </ul>
-                        <div class="vigentes-total" style="border-top: 2px solid var(--border-color); padding-top: 10px; margin-top: 5px;"><span>TOTAL</span><span>R$ 1.040.267,91</span></div>
+                        <div class="vigentes-total" style="border-top: 2px solid var(--border-color); padding-top: 10px; margin-top: 5px;"><span>TOTAL</span><span>R$ 1.023.267,91</span></div>
                     </div>
                 </div>
             </div>
@@ -1270,130 +1279,18 @@
                 </div>
             </div>
 
-            <div class="tabs-s">
-                <div class="sub-tabs">
-                    <button class="sub-tab-btn active" data-subtab="detalhe-parque">Detalhamento por Etapa</button>
-                    <button class="sub-tab-btn" data-subtab="historico-parque">Fluxo de Desembolsos</button>
-                    <button class="sub-tab-btn" data-subtab="planejamento-parque">Planejamento</button>
-                    <button class="sub-tab-btn" data-subtab="fotos-parque">Galeria de Fotos</button>
-                    <button class="sub-tab-btn" data-subtab="analises-parque">Análises</button>
-                    <button class="sub-tab-btn" data-subtab="projetos-parque">Projetos</button>
-                    <button class="sub-tab-btn" data-subtab="sobre-parque">Sobre</button>
-                </div>
+            <div class="sub-tabs">
+                <button class="sub-tab-btn active" data-subtab="detalhe-parque">Detalhamento por Etapa</button>
+                <button class="sub-tab-btn" data-subtab="historico-parque">Fluxo de Desembolsos</button>
+                <button class="sub-tab-btn" data-subtab="planejamento-parque">Planejamento</button>
+                <button class="sub-tab-btn" data-subtab="fotos-parque">Galeria de Fotos</button>
+                <button class="sub-tab-btn" data-subtab="analises-parque">Análises</button>
+                <button class="sub-tab-btn" data-subtab="projetos-parque">Projetos</button>
+                <button class="sub-tab-btn" data-subtab="sobre-parque">Sobre</button>
             </div>
             
             <div class="sub-tab-content active" id="subtab-detalhe-parque">
-                
-		<!-- Estilos das barras interativas (Novo Design) -->
-                <style>
-                    .top5-item-container {
-                        display: flex;
-                        flex-direction: column;
-                        
-                        /* 1) AGORA SIM! TESTE A DISTÂNCIA ENTRE AS ETAPAS AQUI */
-                        margin-bottom: 20px; 
-                        
-                        /* 2) TESTE A CENTRALIZAÇÃO AQUI (diminua para empurrar mais pro centro) */
-                        width: 75%; 
-                        
-                        /* Comandos de centralização corrigidos para não matar a margem inferior */
-                        margin-left: auto;
-                        margin-right: auto;
-                        
-                        transition: transform 0.3s ease; 
-                        cursor: default;
-                    }
-                    .top5-item-container:hover {
-                        transform: translateY(-4px); 
-                    }
-                    .top5-item-title {
-                        font-size: 0.72rem;
-                        font-weight: 700;
-                        color: var(--text-color-base);
-                        text-transform: uppercase;
-                        margin-bottom: 6px;
-                        letter-spacing: 0.5px;
-                    }
-                    .top5-item-row {
-                        display: flex;
-                        align-items: center;
-                        gap: 15px;
-                        width: 100%;
-                    }
-                    .top5-bar-track {
-                        width: 55%; 
-                        height: 16px;
-                    }
-                    .top5-bar-fill-new {
-                        height: 100%;
-                        border-radius: 2px;
-                        transition: width 0.8s ease;
-                    }
-                    .top5-item-values {
-                        display: flex;
-                        align-items: center;
-                        gap: 12px;
-                        font-size: 0.8rem;
-                        font-weight: 700;
-                        color: var(--text-color-base);
-                        white-space: nowrap;
-                    }
-                    .top5-val-money {
-                        width: 110px;
-                        text-align: right;
-                    }
-                    .top5-val-separator {
-                        color: var(--subtitle-color);
-                        font-weight: 400;
-                    }
-                   
- 		.top5-val-pct {
-                        width: 45px;
-                        text-align: left;
-                    }
-                    
-                    /* Estilos para o novo quadro de 3 colunas */
-                    .ranking-grid-3 { 
-                        display: grid; 
-                        grid-template-columns: repeat(3, 1fr); 
-                        gap: 15px; 
-                        margin-bottom: 25px; 
-                    }
-                    .ranking-col { 
-                        background: var(--card-bg); 
-                        border: 2px solid var(--border-color); 
-                        border-radius: 12px; 
-                        padding: 18px; 
-                        display: flex; 
-                        flex-direction: column; 
-                        transition: all 0.4s;
-                    }
-                    .ranking-col:hover {
-                        transform: translateY(-4px); 
-                        box-shadow: 0 8px 20px rgba(0,0,0,0.1); 
-                        border-color: var(--active-color);
-                    }
-                    body.dark-mode .ranking-col:hover {
-                        box-shadow: 0 8px 20px rgba(0,0,0,0.4); 
-                        border-color: var(--subtitle-color);
-                    }
-                    .ranking-warning { 
-                        font-size: 0.65rem; 
-                        color: var(--text-color-base); 
-                        font-style: italic; 
-                        margin-top: auto; 
-                        line-height: 1.4; 
-                        border-top: 1px dashed var(--border-color); 
-                        padding-top: 12px; 
-                        text-align: justify;
-                        opacity: 0.8;
-                    }
-                    @media (max-width: 992px) {
-                        .ranking-grid-3 { grid-template-columns: 1fr; }
-                    }
-                </style>
-
-            	<div class="chart-grid-top">
+                <div class="chart-grid-top">
                     <!-- 1. Gráfico Distribuição Percentual -->
                     <div class="chart-container-pie">
                         <div class="chart-title">Distribuição percentual por etapa</div>
@@ -1467,9 +1364,9 @@
                     <div class="planejamento-card">
                         <h3>⚙️ Etapas vigentes ou contratadas</h3>
                         <div class="vigentes-header" style="display: flex; justify-content: space-between; font-weight: 700; color: var(--title-color); border-bottom: 2px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9rem;"><span>Atividades</span><span>Em investimento</span></div>
-                        <div class="vigentes-item"><span>Diagnóstico, reparos, adequações e execução da rede de drenagem</span><span>R$ 313.728,82</span></div>
-                        <div class="vigentes-item"><span>Diagnóstico e sondagem da rede de água potável</span><span>R$ 12.500,00</span></div>
-                        <div class="vigentes-total"><span>TOTAL</span><span>R$ 326.228,82</span></div>
+                        <div class="vigentes-item"><span>Diagnóstico, reparos, adequações e execução da rede de esgoto</span><span>R$ 86.597,14</span></div>
+                        <div class="vigentes-item"><span>Construção das bocas de lobo de drenagem</span><span>R$ 81.725,60</span></div>
+                        <div class="vigentes-total"><span>TOTAL</span><span>R$ 168.322,74</span></div>
                     </div>
                     <div class="planejamento-card">
                         <h3>🕒 Próximas ativações</h3>
@@ -1480,25 +1377,23 @@
                             <li class="level-2"><span class="enum">1.2</span> Resolução de pendências SIMO/Cadastro COPASA</li>
                             <li class="level-2"><span class="enum">1.4</span> Mapeamento e execução de reparos (Registros e Rede)</li>
                             <li class="level-2"><span class="enum">1.5</span> Interligação do reservatório na adução e distribuição</li>
-                            <li class="level-1"><span>2) Execução da rede de esgoto pendente</span><span>R$ 200.000,00</span></li>
-                            <li class="level-2"><span class="enum">2.1</span> Sondagem da rede de esgoto</li>
-                            <li class="level-2"><span class="enum">2.2</span> Execução de novos ramais e reparos dos antigos</li>
-                            <li class="level-2"><span class="enum">2.3</span> Construção de poços de visita</li>
-                            <li class="level-1"><span>3) Terraplenagem, pavimentação, recapeamento, guias e sarjetas</span><span>R$ 3.494.930,22</span></li>
-                            <li class="level-2"><span class="enum">3.1</span> Pavimentação completa da área pendente</li>
+                            <li class="level-1"><span>2) Terraplenagem, pavimentação, recapeamento, guias e sarjetas</span><span>R$ 3.494.930,22</span></li>
+                            <li class="level-2"><span class="enum">3.1</span> Pavimentação completo da área pendente</li>
                             <li class="level-2"><span class="enum">3.2</span> Reparo de guias e sarjetas</li>
                             <li class="level-2"><span class="enum">3.3</span> Pintura de guias</li>
-                            <li class="level-1"><span>4) Paisagismo</span><span>R$ 899.440,00</span></li>
+                            <li class="level-1"><span>3) Paisagismo</span><span>R$ 899.440,00</span></li>
                             <li class="level-2"><span class="enum">4.1</span> Plantio de mudas</li>
                             <li class="level-2"><span class="enum">4.2</span> Sinalização viária</li>
-                            <li class="level-1"><span>5) Topografia de entrega</span><span>R$ 66.600,00</span></li>
+                            <li class="level-1"><span>4) Topografia de entrega</span><span>R$ 66.600,00</span></li>
                             <li class="level-2"><span class="enum">5.1</span> Demarcação topográfica e implantação de marcos</li>
-                            <li class="level-1"><span>6) Entrega do loteamento</span><span>-</span></li>
+                            <li class="level-1"><span>4) Obra de acesso</span><span>-</span></li>
+                            <li class="level-2"><span class="enum">5.1</span> Construção do acesso ao empreendimento</li>
+                            <li class="level-1"><span>5) Entrega do loteamento</span><span>-</span></li>
                             <li class="level-2"><span class="enum">6.1</span> Entrega COPASA (Água e Esgoto)</li>
                             <li class="level-2"><span class="enum">6.2</span> Entrega Secretaria de Obras (Drenagem)</li>
                             <li class="level-2"><span class="enum">6.3</span> Entrega Final Prefeitura</li>
                         </ul>
-                        <div class="vigentes-total" style="border-top: 2px solid var(--border-color); padding-top: 10px; margin-top: 5px;"><span>TOTAL</span><span>R$ 4.902.218,22</span></div>
+                        <div class="vigentes-total" style="border-top: 2px solid var(--border-color); padding-top: 10px; margin-top: 5px;"><span>TOTAL</span><span>R$ 4.702.218,22</span></div>
                     </div>
                 </div>
             </div>
@@ -1769,8 +1664,7 @@
 
             </div>
         </div>
-    </div>
-<!-- Modais -->
+        <!-- Modais -->
     <div class="modal" id="photoGlobalModal" onclick="if(event.target===this) closePhotoModal()">
         <div class="modal-content">
             <span class="modal-close" onclick="closePhotoModal()">&times;</span>
@@ -3598,7 +3492,6 @@
             // Tons quentes para desvio (Vermelho até o Amarelo)
             const coresDesvio = ['#d32f2f', '#f57c00', '#ffa000', '#fbc02d', '#fff176']; 
 
-            // Adicionamos a variável "legenda" na função construtora
             function buildHTML(title, data, isDesvio, legenda) {
                 let maxVal = data.length > 0 ? data[0].valor || 1 : 1;
                 if(maxVal <= 0) maxVal = 1;
@@ -3618,38 +3511,30 @@
                     let cor = isDesvio ? coresDesvio[index % coresDesvio.length] : coresVerde[index % coresVerde.length];
                     let valStr = isDesvio ? `${item.valor.toFixed(1).replace('.', ',')}%` : `R$ ${Math.round(item.valor).toLocaleString('pt-BR')}`;
 
-                    // >>> AQUI VOCÊ CONTROLA A CENTRALIZAÇÃO DOS ITENS NOS 3 QUADROS <<<
-                    // O comando "margin: 0 auto;" garante que o bloco fique no centro.
-                    // Altere o "width: 85%;" para 70%, 65%, 90% para ir testando o afastamento lateral.
-                    // >>> AJUSTE DE CENTRALIZAÇÃO E TAMANHO DA BARRA <<<
-                    // 1. width do container: Diminua (ex: 90%, 85%, 80%) para empurrar todo o bloco mais para o centro.
-                    // 2. width do top5-bar-track: Aumente (ex: 60%, 70%, 80%) para compensar e a barra não encolher.
                     html += `
-                    <div class="top5-item-container" style="margin-bottom: 25px; width: 70%; margin-left: auto; margin-right: auto;">
-                        <div class="top5-item-title" style="font-size: 0.65rem;">${item.etapa}</div>
-                        <div class="top5-item-row" style="gap: 8px;">
-                            <div class="top5-bar-track" style="width: 75%;">
-                                <div class="top5-bar-fill-new" style="width: ${pctBarra}%; background-color: ${cor};"></div>
+                    <div class="top5-item-container" style="margin-bottom: 25px; width: 75%; margin-left: auto; margin-right: auto; cursor: default; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <div class="top5-item-title" style="font-size: 0.65rem; font-weight: 700; color: var(--text-color-base); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">${item.etapa}</div>
+                        <div class="top5-item-row" style="display: flex; align-items: center; gap: 15px; width: 100%;">
+                            <div class="top5-bar-track" style="width: 55%; height: 16px;">
+                                <div class="top5-bar-fill-new" style="width: ${pctBarra}%; height: 100%; border-radius: 2px; transition: width 0.8s ease; background-color: ${cor};"></div>
                             </div>
-                            <div class="top5-item-values" style="font-size: 0.75rem;">
+                            <div class="top5-item-values" style="display: flex; align-items: center; gap: 12px; font-size: 0.75rem; font-weight: 700; color: var(--text-color-base); white-space: nowrap;">
                                 <span class="top5-val-money" style="width: auto; text-align: left;">${valStr}</span>
                             </div>
                         </div>
                     </div>
                     `;               
-		});
+                });
 
-                // Injeta os avisos ou as legendas criando a linha pontilhada automaticamente
                 if (isDesvio) {
-                    html += `<div class="ranking-warning"><strong>Aviso:</strong> A porcentagem em "Maiores desvios" representa a projeção de estouro (Projetado + Investido > Orçamento Aprovado). Diferente do gráfico "Saldo Disponível por Etapa", que avalia apenas o Orçamento Total contraposto pelo Investimento Atual.</div>`;
+                    html += `<div class="ranking-warning" style="font-size: 0.65rem; color: var(--text-color-base); font-style: italic; margin-top: auto; line-height: 1.4; border-top: 1px dashed var(--border-color); padding-top: 12px; text-align: justify; opacity: 0.8;"><strong>Aviso:</strong> A porcentagem em "Maiores desvios" representa a projeção de estouro (Projetado + Investido > Orçamento Aprovado). Diferente do gráfico "Saldo Disponível por Etapa", que avalia apenas o Orçamento Total contraposto pelo Investimento Atual.</div>`;
                 } else if (legenda) {
-                    html += `<div class="ranking-warning"><strong>Legenda:</strong> ${legenda}</div>`;
+                    html += `<div class="ranking-warning" style="font-size: 0.65rem; color: var(--text-color-base); font-style: italic; margin-top: auto; line-height: 1.4; border-top: 1px dashed var(--border-color); padding-top: 12px; text-align: justify; opacity: 0.8;"><strong>Legenda:</strong> ${legenda}</div>`;
                 }
 
                 return html;
             }
 
-            // Invocando as funções passando as legendas personalizadas
             document.getElementById(`rank-inv-${obraId}`).innerHTML = buildHTML(
                 'Maiores Investimentos Realizados', 
                 topInv, 
@@ -3795,7 +3680,8 @@
        // =========================================================================
         // PDF.js + Fabric.js LOGIC (Para o Visualizador)
         // =========================================================================
-        let currentObra = 'mirante';
+        
+       let currentObra = 'mirante';
         const pdfStates = {
             'mirante': { canvas: null, pdfDoc: null, currentPdf: null, history: [], historyStep: -1 },
             'joaquim': { canvas: null, pdfDoc: null, currentPdf: null, history: [], historyStep: -1 },
@@ -3837,7 +3723,8 @@
             canvas.on('mouse:move', onMouseMove);
             canvas.on('mouse:up', onMouseUp);
             
-            canvas.on('object:added', () => saveHistory(obra));
+            // Corrige o Pincel para salvar no histórico apenas quando terminar o traçado
+            canvas.on('path:created', () => saveHistory(obra));
             canvas.on('object:modified', () => saveHistory(obra));
         }
 
@@ -3853,9 +3740,7 @@
         }
 
         function setTool(tool, btnElement, iconVal = null) {
-            if (currentTool === 'polygon' && tool !== 'polygon') {
-                clearPolygonDraft();
-            }
+            if (currentTool === 'polygon' && tool !== 'polygon') clearPolygonDraft();
 
             currentTool = tool;
             if(iconVal) currentIcon = iconVal;
@@ -3870,21 +3755,23 @@
             canvas.isDrawingMode = (tool === 'brush');
             if(tool === 'brush') {
                 canvas.freeDrawingBrush.color = currentColor;
-                canvas.freeDrawingBrush.width = 1;
+                canvas.freeDrawingBrush.width = 2; // Espessura do Pincel
             }
 
             if(tool === 'pan') {
-                canvas.selection = false;
-                canvas.defaultCursor = 'grab';
-                canvas.getObjects().forEach(o => { o.selectable = true; o.evented = true; });
-            } else if (tool === 'icon' || tool === 'text') {
-                canvas.selection = false;
-                canvas.defaultCursor = 'crosshair';
-                canvas.getObjects().forEach(o => { o.selectable = true; o.evented = true; });
+                // Modo Arraste: Permite selecionar e mover tudo que foi desenhado
+                canvas.selection = true;
+                canvas.defaultCursor = 'default';
+                canvas.getObjects().forEach(o => { 
+                    if(o !== canvas.backgroundImage) { o.selectable = true; o.evented = true; } 
+                });
             } else {
+                // Modos de Edição: Trava os objetos anteriores para não atrapalhar o novo desenho
                 canvas.selection = false;
                 canvas.defaultCursor = 'crosshair';
-                canvas.getObjects().forEach(o => { o.selectable = false; o.evented = false; });
+                canvas.getObjects().forEach(o => { 
+                    if(o !== canvas.backgroundImage) { o.selectable = false; o.evented = false; } 
+                });
             }
         }
 
@@ -3947,12 +3834,10 @@
                 fabric.Image.fromURL(pdfCanvas.toDataURL(), function(img) {
                     canvas.setWidth(parent.clientWidth);
                     canvas.setHeight(parent.clientHeight);
-                    
                     const scale = Math.min(parent.clientWidth / img.width, parent.clientHeight / img.height);
                     img.set({ scaleX: scale, scaleY: scale, originX: 'center', originY: 'center', left: canvas.width/2, top: canvas.height/2, selectable: false, evented: false });
                     
                     canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
-                    
                     emptyState.style.display = 'none';
                     container.style.display = 'block';
                     
@@ -3961,17 +3846,17 @@
                     saveHistory(obra);
                 });
             } catch (error) {
-                console.error("Erro ao carregar PDF:", error);
                 emptyState.innerText = "PDF não encontrado ou falha no carregamento.\nVerifique se o arquivo '" + filename + "' está na mesma pasta no GitHub.";
                 container.style.display = 'none';
             }
         }
 
         let isPanning = false, lastPosX, lastPosY;
-       function onMouseDown(o) {
+        function onMouseDown(o) {
             const canvas = pdfStates[currentObra].canvas;
             if(!canvas) return;
 
+            // Se for modo Arraste e não clicou em nenhum objeto, arrasta a tela inteira
             if(currentTool === 'pan' && !canvas.getActiveObject()) {
                 isPanning = true;
                 canvas.defaultCursor = 'grabbing';
@@ -3982,6 +3867,7 @@
 
             if (currentTool === 'icon' && o.target) return;
             if(currentTool === 'pan' || currentTool === 'brush') return;
+            if(isDrawing) return; // Trava contra cliques múltiplos rápidos
             
             const pointer = canvas.getPointer(o.e);
 
@@ -3989,26 +3875,27 @@
                 if (polygonPoints.length === 0) {
                     polygonPoints.push({ x: pointer.x, y: pointer.y });
                     const circle = new fabric.Circle({
-                        radius: 1.5, fill: currentColor, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', hasControls: false, hasBorders: false, selectable: false
+                        radius: 1, fill: currentColor, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', selectable: false, evented: false
                     });
                     polygonTempObjs.push(circle);
                     canvas.add(circle);
 
                     activeLine = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
-                        strokeWidth: 1, fill: currentColor, stroke: currentColor, originX: 'center', originY: 'center', selectable: false, evented: false
+                        strokeWidth: 2, fill: currentColor, stroke: currentColor, originX: 'center', originY: 'center', selectable: false, evented: false
                     });
                     canvas.add(activeLine);
                 } else {
                     const startPointPol = polygonPoints[0];
                     const dist = Math.sqrt(Math.pow(startPointPol.x - pointer.x, 2) + Math.pow(startPointPol.y - pointer.y, 2));
                     
-                    // Distância de fechamento reduzida para 8 e exigência de pontos
-                    if (dist < 8 && polygonPoints.length > 2) {
+                    // Exige que o clique seja exato (dist < 10) para fechar o polígono
+                    if (dist < 10 && polygonPoints.length > 2) {
                         if (activeLine) canvas.remove(activeLine);
                         polygonTempObjs.forEach(obj => canvas.remove(obj));
 
                         const poly = new fabric.Polygon(polygonPoints, {
-                            fill: currentColor + '40', stroke: currentColor, strokeWidth: 1, selectable: false, evented: false
+                            fill: currentColor + '40', stroke: currentColor, strokeWidth: 2, 
+                            selectable: (currentTool === 'pan'), evented: (currentTool === 'pan')
                         });
                         canvas.add(poly);
                         saveHistory(currentObra);
@@ -4018,13 +3905,13 @@
                         activeLine.set({ x2: pointer.x, y2: pointer.y });
                         
                         const circle = new fabric.Circle({
-                            radius: 1.5, fill: currentColor, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', hasControls: false, hasBorders: false, selectable: false
+                            radius: 1, fill: currentColor, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', selectable: false, evented: false
                         });
                         polygonTempObjs.push(circle);
                         canvas.add(circle);
 
                         activeLine = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
-                            strokeWidth: 1, fill: currentColor, stroke: currentColor, originX: 'center', originY: 'center', selectable: false, evented: false
+                            strokeWidth: 2, fill: currentColor, stroke: currentColor, originX: 'center', originY: 'center', selectable: false, evented: false
                         });
                         canvas.add(activeLine);
                     }
@@ -4036,30 +3923,32 @@
             startPoint = pointer;
 
             if (currentTool === 'icon') {
-                const text = new fabric.Text(currentIcon, { left: pointer.x, top: pointer.y, fontSize: 30, originX: 'center', originY: 'center' });
+                const text = new fabric.Text(currentIcon, { left: pointer.x, top: pointer.y, fontSize: 30, originX: 'center', originY: 'center', selectable: (currentTool === 'pan'), evented: (currentTool === 'pan') });
                 canvas.add(text);
-                canvas.setActiveObject(text);
+                saveHistory(currentObra);
                 isDrawing = false;
             } else if (currentTool === 'text') {
-                const text = new fabric.IText('Digite aqui...', { left: pointer.x, top: pointer.y, fontSize: 20, fill: currentColor, fontFamily: 'Montserrat' });
+                const text = new fabric.IText('Digite...', { left: pointer.x, top: pointer.y, fontSize: 20, fill: currentColor, fontFamily: 'Montserrat', selectable: true, evented: true });
                 canvas.add(text);
                 canvas.setActiveObject(text);
                 text.enterEditing();
                 text.selectAll();
+                saveHistory(currentObra);
                 isDrawing = false;
             } else if (currentTool === 'circle') {
-                shapeObj = new fabric.Circle({ left: pointer.x, top: pointer.y, radius: 1, fill: 'transparent', stroke: currentColor, strokeWidth: 1, originX: 'center', originY: 'center' });
+                shapeObj = new fabric.Circle({ left: pointer.x, top: pointer.y, radius: 1, fill: 'transparent', stroke: currentColor, strokeWidth: 2, originX: 'center', originY: 'center', selectable: false, evented: false });
                 canvas.add(shapeObj);
             } else if (currentTool === 'arrow') {
-                // >>> TESTE A ESPESSURA DA SETA AQUI <<<
-                let espessuraSeta = 2; // Altere para 1 ou 3 para ver como se adequa melhor
+                // >>> TESTE A ESPESSURA DA SETA AQUI (Ex: 1, 2, 3) <<<
+                let espessuraSeta = 2; 
+                let tamanhoPonta = espessuraSeta * 4 + 4; // Ajuste dinâmico do triângulo
                 
                 let line = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
                     stroke: currentColor, strokeWidth: espessuraSeta, selectable: false, evented: false
                 });
                 
                 let head = new fabric.Triangle({
-                    fill: currentColor, width: espessuraSeta * 4 + 6, height: espessuraSeta * 4 + 6,
+                    fill: currentColor, width: tamanhoPonta, height: tamanhoPonta,
                     left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', selectable: false, evented: false, angle: 90
                 });
                 
@@ -4087,7 +3976,7 @@
                 return;
             }
 
-            if(!isDrawing) return;
+            if(!isDrawing || !shapeObj) return;
 
             if (currentTool === 'circle') {
                 let radius = Math.max(Math.abs(startPoint.x - pointer.x), Math.abs(startPoint.y - pointer.y));
@@ -4095,11 +3984,9 @@
                 canvas.renderAll();
             } else if (currentTool === 'arrow') {
                 shapeObj.line.set({ x2: pointer.x, y2: pointer.y });
-                
                 let dx = pointer.x - startPoint.x;
                 let dy = pointer.y - startPoint.y;
                 let angle = Math.atan2(dy, dx) * 180 / Math.PI;
-                
                 shapeObj.head.set({ left: pointer.x, top: pointer.y, angle: angle + 90 });
                 canvas.renderAll();
             }
@@ -4107,7 +3994,7 @@
 
         function onMouseUp(o) {
             const canvas = pdfStates[currentObra].canvas;
-            if(isPanning) { isPanning = false; canvas.defaultCursor = 'grab'; }
+            if(isPanning) { isPanning = false; canvas.defaultCursor = 'default'; }
             if(!isDrawing) return;
             isDrawing = false;
             
@@ -4115,12 +4002,43 @@
                 if (shapeObj.type === 'arrow') {
                     shapeObj.line.setCoords();
                     shapeObj.head.setCoords();
+                    // Agrupa a Seta para que ela seja selecionável como um item único
+                    let group = new fabric.Group([shapeObj.line, shapeObj.head], {
+                        selectable: (currentTool === 'pan'),
+                        evented: (currentTool === 'pan')
+                    });
+                    canvas.remove(shapeObj.line, shapeObj.head);
+                    canvas.add(group);
                 } else {
                     shapeObj.setCoords();
                 }
                 shapeObj = null;
+                saveHistory(currentObra);
             }
         }
+
+        function saveHistory(obra) {
+            if (isHistoryUpdating) return; 
+            const state = pdfStates[obra || currentObra];
+            if(!state.canvas) return;
+            const json = state.canvas.toJSON();
+            state.history = state.history.slice(0, state.historyStep + 1);
+            state.history.push(JSON.stringify(json));
+            state.historyStep++;
+        }
+
+        function undoPdfAction() {
+            const state = pdfStates[currentObra];
+            if(state.historyStep > 0) {
+                isHistoryUpdating = true; 
+                state.historyStep--;
+                state.canvas.loadFromJSON(state.history[state.historyStep], function() {
+                    state.canvas.renderAll();
+                    isHistoryUpdating = false; 
+                });
+            }
+        }
+
         function redoPdfAction() {
             const state = pdfStates[currentObra];
             if(state.historyStep < state.history.length - 1) {

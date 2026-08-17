@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -324,6 +325,20 @@
         
         .chart-container-large { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 20px 15px 15px 15px; margin-bottom: 30px; position: relative; transition: all 0.4s; height: 650px; width: 100%; }
         .chart-container-large canvas { height: 100% !important; width: 100% !important; }
+        .chart-container-large { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 20px 15px 15px 15px; margin-bottom: 30px; position: relative; transition: all 0.4s; height: 650px; width: 100%; }
+        .chart-container-large canvas { height: 100% !important; width: 100% !important; }
+
+        /* Efeito Hover Universal para os Gráficos */
+        .chart-container:hover, .chart-container-large:hover, .chart-container-pie:hover, .chart-container-disponivel:hover {
+            transform: translateY(-4px); 
+            box-shadow: 0 8px 25px rgba(85,139,47,0.15); 
+            border-color: var(--active-color);
+        }
+        body.dark-mode .chart-container:hover, body.dark-mode .chart-container-large:hover, body.dark-mode .chart-container-pie:hover, body.dark-mode .chart-container-disponivel:hover {
+            box-shadow: 0 8px 25px rgba(163, 230, 53, 0.15); 
+            border-color: var(--subtitle-color);
+        }
+        .resumo-btn { position: absolute; right: 15px; top: 15px; background: var(--tab-btn-bg); color: var(--tab-btn-text); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.3s; z-index: 10; }
 
         .resumo-btn { position: absolute; right: 15px; top: 15px; background: var(--tab-btn-bg); color: var(--tab-btn-text); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.3s; z-index: 10; }
         .resumo-btn:hover { background: var(--active-hover-color); color: var(--active-text); border-color: var(--active-hover-color); }
@@ -562,7 +577,13 @@
             
             <div class="kpi-grid" style="grid-template-columns: repeat(6, 1fr);">
                 <div class="kpi-card"><div class="label">Orçamento Total Aprovado</div><div class="value">R$ 7.859.182</div></div>
-                <div class="kpi-card"><div class="label">Investimento Atual</div><div class="value">R$ 7.045.701</div></div>
+               <div class="kpi-card">
+                    <div class="label">Investimento Atual</div>
+                    <div class="value" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        R$ 7.045.701
+                        <span style="font-size: 0.7rem; color: #ffffff; background-color: var(--active-color); padding: 3px 6px; border-radius: 6px; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" title="Avanço sobre o Orçamento">📈 89,6%</span>
+                    </div>
+                </div>
                 <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 1.054.084</div></div>
                 <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 8.099.786</div></div>
                 <div class="kpi-card">
@@ -902,7 +923,13 @@
             
             <div class="kpi-grid" style="grid-template-columns: repeat(6, 1fr);">
                 <div class="kpi-card"><div class="label">Orçamento Total Aprovado</div><div class="value">R$ 5.019.403</div></div>
-                <div class="kpi-card"><div class="label">Investimento Atual</div><div class="value">R$ 3.619.067</div></div>
+               <div class="kpi-card">
+                    <div class="label">Investimento Atual</div>
+                    <div class="value" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        R$ 3.619.067
+                        <span style="font-size: 0.7rem; color: #ffffff; background-color: var(--active-color); padding: 3px 6px; border-radius: 6px; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" title="Avanço sobre o Orçamento">📈 72,1%</span>
+                    </div>
+                </div>
                 <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 917.051</div></div>
                 <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 4.536.118</div></div>
                 <div class="kpi-card">
@@ -1217,7 +1244,13 @@
             
             <div class="kpi-grid" style="grid-template-columns: repeat(6, 1fr);">
                 <div class="kpi-card"><div class="label">Orçamento Total Aprovado</div><div class="value">R$ 5.852.117</div></div>
-                <div class="kpi-card"><div class="label">Investimento Atual</div><div class="value">R$ 519.437,27</div></div>
+                <div class="kpi-card">
+                    <div class="label">Investimento Atual</div>
+                    <div class="value" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        R$ 519.437,27
+                        <span style="font-size: 0.7rem; color: #ffffff; background-color: var(--active-color); padding: 3px 6px; border-radius: 6px; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" title="Avanço sobre o Orçamento">📈 8,9%</span>
+                    </div>
+                </div>
                 <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 5.358.359,94</div></div>
                 <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 5.877.797,21</div></div>
                 <div class="kpi-card">
@@ -2004,40 +2037,40 @@
         function sortModalTable(colIndex) {
             const tbody = document.getElementById('breakdownTableBody');
             const rows = Array.from(tbody.querySelectorAll('tr'));
-            
             const isAsc = !modalSortDirections[colIndex];
             modalSortDirections[colIndex] = isAsc;
-            
             rows.sort((a, b) => {
-                let cellA = a.children[colIndex].textContent.trim();
-                let cellB = b.children[colIndex].textContent.trim();
-                
-                let valA = parseFloat(cellA.replace(/[R$\s%]/g, '').replace(/\./g, '').replace(',', '.')) || 0;
-                let valB = parseFloat(cellB.replace(/[R$\s%]/g, '').replace(/\./g, '').replace(',', '.')) || 0;
-                
+                let valA = parseFloat(a.children[colIndex].textContent.trim().replace(/[^0-9,-]/g, '').replace(',', '.')) || 0;
+                let valB = parseFloat(b.children[colIndex].textContent.trim().replace(/[^0-9,-]/g, '').replace(',', '.')) || 0;
                 return isAsc ? (valA - valB) : (valB - valA);
             });
-            
             rows.forEach(row => tbody.appendChild(row));
         }
 
         function sortDesembolsoTable(colIndex) {
             const tbody = document.getElementById('desembolsoTableBody');
             const rows = Array.from(tbody.querySelectorAll('tr'));
-            
             const isAsc = !desembolsoSortDirections[colIndex];
             desembolsoSortDirections[colIndex] = isAsc;
-            
             rows.sort((a, b) => {
-                let cellA = a.children[colIndex].textContent.trim();
-                let cellB = b.children[colIndex].textContent.trim();
-                
-                let valA = parseFloat(cellA.replace(/[R$\s%]/g, '').replace(/\./g, '').replace(',', '.')) || 0;
-                let valB = parseFloat(cellB.replace(/[R$\s%]/g, '').replace(',', '.')) || 0;
-                
+                let valA = parseFloat(a.children[colIndex].textContent.trim().replace(/[^0-9,-]/g, '').replace(',', '.')) || 0;
+                let valB = parseFloat(b.children[colIndex].textContent.trim().replace(/[^0-9,-]/g, '').replace(',', '.')) || 0;
                 return isAsc ? (valA - valB) : (valB - valA);
             });
-            
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function sortTable(tableId, colIndex) {
+            const table = document.getElementById(tableId);
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr.etapa-row'));
+            const isAsc = !sortDirections[tableId + '-' + colIndex];
+            sortDirections[tableId + '-' + colIndex] = isAsc;
+            rows.sort((a, b) => {
+                let valA = parseFloat(a.children[colIndex].textContent.trim().replace(/[^0-9,-]/g, '').replace(',', '.')) || 0;
+                let valB = parseFloat(b.children[colIndex].textContent.trim().replace(/[^0-9,-]/g, '').replace(',', '.')) || 0;
+                return isAsc ? (valA - valB) : (valB - valA);
+            });
             rows.forEach(row => tbody.appendChild(row));
         }
 
@@ -3193,7 +3226,7 @@
             document.getElementById(containerId).innerHTML = html;
         }
         
-	// 2. Novo Gráfico de Colunas Verticais de Saldo x Investimento (Estilo Bullet Chart)
+        // 2. Novo Gráfico de Colunas Verticais de Saldo x Investimento (Estilo Bullet Chart - 3 Tons de Verde)
         function createDisponivelChartVertical(canvasId, labels, orcado, investido) {
             let combined = labels.map((l, i) => {
                 let orc = orcado[i] || 0;
@@ -3202,21 +3235,29 @@
                 return { label: l, orc: orc, inv: inv, saldo: saldo };
             });
 
-            // Ordena as colunas do maior para o menor pelo Orçamento Total
             combined.sort((a, b) => b.orc - a.orc);
-
             let sortedLabels = combined.map(o => o.label);
             
-            // TRUQUE DA ESCALA: Aplica a Raiz Quadrada para reduzir a disparidade visual
-            let plotOrcBg = combined.map(o => Math.sqrt(o.orc)); // Barra de Fundo (Total)
-            let plotInvNormal = combined.map(o => [0, Math.sqrt(Math.min(o.inv, o.orc))]); // Barra Interna
-            let plotSaldo = combined.map(o => o.saldo > 0 ? [Math.sqrt(o.inv), Math.sqrt(o.orc)] : null); // Completa a barra interna
-            let plotEstouro = combined.map(o => o.inv > o.orc ? [Math.sqrt(o.orc), Math.sqrt(o.inv)] : null); // Nasce acima do limite
+            let plotOrcBg = combined.map(o => Math.sqrt(o.orc)); 
+            let plotInvNormal = combined.map(o => [0, Math.sqrt(Math.min(o.inv, o.orc))]); 
+            let plotSaldo = combined.map(o => o.saldo > 0 ? [Math.sqrt(o.inv), Math.sqrt(o.orc)] : null); 
+            let plotEstouro = combined.map(o => o.inv > o.orc ? [Math.sqrt(o.orc), Math.sqrt(o.inv)] : null); 
 
-            // >>> DETECÇÃO DE MODO E CORES MAIS VISÍVEIS <<<
+            // >>> CORES EM TONS DE VERDE DISTINTOS <<<
             const isDark = document.body.classList.contains('dark-mode');
-            const bgOrcamento = isDark ? 'rgba(255, 255, 255, 0.25)' : 'rgba(0, 0, 0, 0.15)'; 
-            const borderOrcamento = isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.5)';
+            
+            // Orçamento Aprovado (Fundo da coluna): Verde menta clarinho (cinza/escuro no dark mode)
+            const colorOrcamento = isDark ? '#1b5e20' : '#c8e6c9'; 
+            const borderOrcamento = isDark ? '#388e3c' : '#a5d6a7'; 
+            
+            // Investimento Atual: Verde bem escuro
+            const colorInv = isDark ? '#a3e635' : '#1b5e20'; 
+            
+            // Saldo Disponível: Verde médio (mesmo do avanço físico)
+            const colorSaldoPositivo = '#4caf50'; 
+            
+            // Orçamento Estourado (Mantido em vermelho para alerta)
+            const colorSaldoNegativo = '#d32f2f'; 
 
             new Chart(document.getElementById(canvasId), {
                 type: 'bar',
@@ -3226,99 +3267,82 @@
                         { 
                             label: 'Orçamento Aprovado', 
                             data: plotOrcBg, 
-                            backgroundColor: bgOrcamento, 
-                            borderColor: borderOrcamento, 
-                            borderWidth: 2, // Borda engrossada para melhor visibilidade
-                            grouped: false, // Desativa o empilhamento lado a lado, forçando a sobreposição (overlay)
+                            backgroundColor: colorOrcamento, 
+                            borderColor: borderOrcamento,
+                            borderWidth: 1, 
+                            grouped: false, 
                             borderRadius: 4,
-                            barPercentage: 0.8, // Define esta barra como a mais grossa do gráfico
-                            categoryPercentage: 0.8
+                            barPercentage: 0.8, 
+                            categoryPercentage: 0.8,
+                            order: 2 // Joga a barra de Orçamento para o fundo
                         },
                         { 
                             label: 'Investimento Atual', 
                             data: plotInvNormal, 
-                            backgroundColor: '#1b5e20', // Verde Escuro
+                            backgroundColor: colorInv, 
                             grouped: false, 
                             borderRadius: 4,
-                            barPercentage: 0.4, // Define a barra interna com a metade da grossura da barra de fundo
+                            barPercentage: 0.4, 
                             categoryPercentage: 0.8,
-                            borderSkipped: false
+                            borderSkipped: false,
+                            order: 1 // Traz a barra para frente
                         },
                         { 
                             label: 'Saldo Disponível', 
                             data: plotSaldo, 
-                            backgroundColor: '#7cb342', // Verde Claro
+                            backgroundColor: colorSaldoPositivo, 
                             grouped: false, 
                             borderRadius: 4,
                             barPercentage: 0.4, 
                             categoryPercentage: 0.8,
-                            borderSkipped: false
+                            borderSkipped: false,
+                            order: 1 // Traz a barra para frente
                         },
                         { 
                             label: 'Orçamento Estourado', 
                             data: plotEstouro, 
-                            backgroundColor: '#d32f2f', // Vermelho Escuro
+                            backgroundColor: colorSaldoNegativo, 
                             grouped: false, 
                             borderRadius: 4,
                             barPercentage: 0.4, 
                             categoryPercentage: 0.8,
-                            borderSkipped: false
+                            borderSkipped: false,
+                            order: 1 // Traz a barra para frente
                         }
                     ] 
                 },
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false, 
+                    // >>> INTERAÇÃO DO MOUSE CORRIGIDA <<<
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
                     plugins: { 
-                        legend: { 
-                            display: true, 
-                            labels: { font: { family: "'Montserrat'" }, color: '#000000' } 
-                        }, 
+                        legend: { display: true, labels: { font: { family: "'Montserrat'" }, color: '#000000' } }, 
                         datalabels: { display: false },
                         tooltip: {
                             callbacks: {
-                                // Customiza o tooltip para exibir o valor integral real (sem a matemática da escala)
                                 label: function(context) {
                                     let o = combined[context.dataIndex];
-                                    if (context.datasetIndex === 0) {
-                                        return ` Orçamento Aprovado: ${fmtMoney(o.orc)}`;
-                                    } else if (context.datasetIndex === 1) {
-                                        return ` Investimento Atual: ${fmtMoney(o.inv)}`;
-                                    } else if (context.datasetIndex === 2) {
+                                    if (context.datasetIndex === 0) return ` Orçamento Aprovado: ${fmtMoney(o.orc)}`;
+                                    if (context.datasetIndex === 1) return ` Investimento Atual: ${fmtMoney(o.inv)}`;
+                                    if (context.datasetIndex === 2) {
                                         if (o.saldo > 0) return ` Saldo Disponível: ${fmtMoney(o.saldo)}`;
-                                        return null; // Oculta a linha se não houver saldo
-                                    } else if (context.datasetIndex === 3) {
+                                        return null; // Oculta se não houver saldo
+                                    }
+                                    if (context.datasetIndex === 3) {
                                         if (o.saldo < 0) return ` Orçamento Estourado: ${fmtMoney(Math.abs(o.saldo))}`;
-                                        return null; // Oculta a linha se não houver estouro
+                                        return null; // Oculta se não houver estouro
                                     }
                                 }
                             }
                         }
                     }, 
                     scales: { 
-                        x: { 
-                            stacked: false, 
-                            ticks: { 
-                                color: '#000000', 
-                                font: { size: 9, family: "'Montserrat'" }, 
-                                maxRotation: 45, 
-                                minRotation: 45 
-                            }, 
-                            grid: { display: false } 
-                        }, 
-                        y: { 
-                            stacked: false,
-                            ticks: { 
-                                color: '#000000', 
-                                font: { family: "'Montserrat'" },
-                                callback: function(value) { 
-                                    // Reverte a raiz quadrada para exibir R$ no eixo lateral
-                                    let realValue = Math.sign(value) * Math.pow(value, 2);
-                                    return fmtNum(realValue); 
-                                }
-                            }, 
-                            grid: { color: 'rgba(0,0,0,0.1)' } 
-                        } 
+                        x: { stacked: false, ticks: { color: '#000000', font: { size: 9, family: "'Montserrat'" }, maxRotation: 45, minRotation: 45 }, grid: { display: false } }, 
+                        y: { stacked: false, ticks: { color: '#000000', font: { family: "'Montserrat'" }, callback: function(value) { return fmtNum(Math.sign(value) * Math.pow(value, 2)); } }, grid: { color: 'rgba(0,0,0,0.1)' } } 
                     } 
                 }
             });
@@ -3943,7 +3967,7 @@
         }
 
         let isPanning = false, lastPosX, lastPosY;
-        function onMouseDown(o) {
+       function onMouseDown(o) {
             const canvas = pdfStates[currentObra].canvas;
             if(!canvas) return;
 
@@ -3955,10 +3979,7 @@
                 return;
             }
 
-            if (currentTool === 'icon' && o.target) {
-                return;
-            }
-
+            if (currentTool === 'icon' && o.target) return;
             if(currentTool === 'pan' || currentTool === 'brush') return;
             
             const pointer = canvas.getPointer(o.e);
@@ -3967,7 +3988,7 @@
                 if (polygonPoints.length === 0) {
                     polygonPoints.push({ x: pointer.x, y: pointer.y });
                     const circle = new fabric.Circle({
-                        radius: 2, fill: currentColor, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', hasControls: false, hasBorders: false, selectable: false
+                        radius: 1.5, fill: currentColor, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', hasControls: false, hasBorders: false, selectable: false
                     });
                     polygonTempObjs.push(circle);
                     canvas.add(circle);
@@ -3980,7 +4001,8 @@
                     const startPointPol = polygonPoints[0];
                     const dist = Math.sqrt(Math.pow(startPointPol.x - pointer.x, 2) + Math.pow(startPointPol.y - pointer.y, 2));
                     
-                    if (dist < 15 && polygonPoints.length > 2) {
+                    // Distância de fechamento reduzida para 8 e exigência de pontos
+                    if (dist < 8 && polygonPoints.length > 2) {
                         if (activeLine) canvas.remove(activeLine);
                         polygonTempObjs.forEach(obj => canvas.remove(obj));
 
@@ -3995,7 +4017,7 @@
                         activeLine.set({ x2: pointer.x, y2: pointer.y });
                         
                         const circle = new fabric.Circle({
-                            radius: 2, fill: currentColor, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', hasControls: false, hasBorders: false, selectable: false
+                            radius: 1.5, fill: currentColor, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', hasControls: false, hasBorders: false, selectable: false
                         });
                         polygonTempObjs.push(circle);
                         canvas.add(circle);
@@ -4028,8 +4050,20 @@
                 shapeObj = new fabric.Circle({ left: pointer.x, top: pointer.y, radius: 1, fill: 'transparent', stroke: currentColor, strokeWidth: 1, originX: 'center', originY: 'center' });
                 canvas.add(shapeObj);
             } else if (currentTool === 'arrow') {
-                shapeObj = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], { stroke: currentColor, strokeWidth: 1, selectable: false, evented: false });
-                canvas.add(shapeObj);
+                // >>> TESTE A ESPESSURA DA SETA AQUI <<<
+                let espessuraSeta = 2; // Altere para 1 ou 3 para ver como se adequa melhor
+                
+                let line = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
+                    stroke: currentColor, strokeWidth: espessuraSeta, selectable: false, evented: false
+                });
+                
+                let head = new fabric.Triangle({
+                    fill: currentColor, width: espessuraSeta * 4 + 6, height: espessuraSeta * 4 + 6,
+                    left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', selectable: false, evented: false, angle: 90
+                });
+                
+                shapeObj = { line: line, head: head, type: 'arrow' };
+                canvas.add(line, head);
             }
         }
 
@@ -4059,7 +4093,13 @@
                 shapeObj.set({ radius: radius });
                 canvas.renderAll();
             } else if (currentTool === 'arrow') {
-                shapeObj.set({ x2: pointer.x, y2: pointer.y });
+                shapeObj.line.set({ x2: pointer.x, y2: pointer.y });
+                
+                let dx = pointer.x - startPoint.x;
+                let dy = pointer.y - startPoint.y;
+                let angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                
+                shapeObj.head.set({ left: pointer.x, top: pointer.y, angle: angle + 90 });
                 canvas.renderAll();
             }
         }
@@ -4069,34 +4109,17 @@
             if(isPanning) { isPanning = false; canvas.defaultCursor = 'grab'; }
             if(!isDrawing) return;
             isDrawing = false;
+            
             if(shapeObj) {
-                shapeObj.setCoords();
+                if (shapeObj.type === 'arrow') {
+                    shapeObj.line.setCoords();
+                    shapeObj.head.setCoords();
+                } else {
+                    shapeObj.setCoords();
+                }
                 shapeObj = null;
             }
         }
-
-        function saveHistory(obra) {
-            if (isHistoryUpdating) return; 
-            const state = pdfStates[obra || currentObra];
-            if(!state.canvas) return;
-            const json = state.canvas.toJSON();
-            state.history = state.history.slice(0, state.historyStep + 1);
-            state.history.push(JSON.stringify(json));
-            state.historyStep++;
-        }
-
-        function undoPdfAction() {
-            const state = pdfStates[currentObra];
-            if(state.historyStep > 0) {
-                isHistoryUpdating = true; 
-                state.historyStep--;
-                state.canvas.loadFromJSON(state.history[state.historyStep], function() {
-                    state.canvas.renderAll();
-                    isHistoryUpdating = false; 
-                });
-            }
-        }
-
         function redoPdfAction() {
             const state = pdfStates[currentObra];
             if(state.historyStep < state.history.length - 1) {

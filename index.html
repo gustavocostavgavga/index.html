@@ -4111,28 +4111,37 @@ async function loadPDF(filename, btnElement) {
                 return;
             }
 
-          // LOGICA DO TEXTO CONTÍNUO E EDITÁVEL
+         // LOGICA DO TEXTO CONTÍNUO E EDITÁVEL
             if (currentTool === 'text') {
-                // Se já houver um objeto selecionado (como a caixa de texto atual),
-                // a intenção do usuário ao clicar no vazio é apenas DESELECIONAR.
-                // Portanto, retornamos para não criar uma nova caixa indevidamente.
-                if (canvas.getActiveObject()) {
+                // Se clicou em um objeto (como a própria caixa de texto para mover/redimensionar), não cria texto novo
+                if (o.target) {
+                    activeTextObj = o.target;
                     return; 
                 }
 
-                // O próximo clique em uma área limpa (quando NADA estiver selecionado) cria a NOVA caixa.
-                const text = new fabric.IText('Digite...', { 
+                // Se clicou numa área em branco, mas ainda tínhamos um texto ativo selecionado
+                // o clique no branco serve APENAS para tirar a seleção dele.
+                if (activeTextObj) {
+                    activeTextObj = null; // Limpa a memória
+                    saveHistory(currentObra);
+                    return; // Retorna sem criar outra caixa
+                }
+
+                // Cria o texto novo APENAS se clicou no branco e nada estava selecionado antes
+                activeTextObj = new fabric.IText('Digite...', { 
                     left: pointer.x, top: pointer.y, 
-                    // >>> TESTE TAMANHO DA FONTE INICIAL DO TEXTO AQUI <<<
-                    fontSize: 12, 
+                    fontSize: 12, // Tamanho inicial
                     fill: currentColor, fontFamily: 'Montserrat', 
                     originX: 'center', originY: 'center',
                     selectable: true, evented: true 
                 });
-                canvas.add(text);
-                canvas.setActiveObject(text);
-                text.enterEditing();
-                text.selectAll();
+                
+                canvas.add(activeTextObj);
+                canvas.setActiveObject(activeTextObj);
+                
+                // Removido o modo de edição automática!
+                // Agora as ferramentas de redimensionar e mover aparecem IMEDIATAMENTE.
+                // Para alterar a palavra "Digite...", basta o usuário dar um duplo clique.
                 saveHistory(currentObra);
                 return;
             }

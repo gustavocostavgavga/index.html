@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -2161,62 +2163,62 @@
         // VARIAVEIS E MATRIZES DE DADOS ORIGINAIS
         // =========================================================================
         const pendenciasMirante = {
-            'TOPOGRAFIA E CONTROLE': ['1) Entrega do georreferenciamento.', '2) Apoio em medições restantes e controle tecnológico.'],
+            'TOPOGRAFIA E CONTROLE': ['Apoio em medições restantes e controle tecnológico.'],
             'MANUTENÇÕES / AS BUILTS': ['Execução de As-Builts, impressões e cópias'],
             'TERRAPLANAGEM': ['-'],
             'DRENAGEM': ['Construção de alas dissipadoras na lagoa artificial'],
             'REDE DE ÁGUA POTÁVEL': ['Execução de testes na rede'],
-            'RESERVATÓRIO / ADUTORA': ['1) Eletrificação e automação dos poços tubulares.', '2) Cercamento e construção de casas de química'],
+            'RESERVATÓRIO / ADUTORA': ['Eletrificação e automação dos poços tubulares.'],
             'SISTEMA DE ESGOTO SANITÁRIO': ['Execução de testes na rede'],
-            'ESTAÇÃO ELEVATÓRIA DE ESGOTO': ['1) Instalação de grade e comportas no tratamento preliminar.', '2) Execução de contrapartida (Revitalização da área).'],
+            'ESTAÇÃO ELEVATÓRIA DE ESGOTO': ['Instalação de grade e comportas no tratamento preliminar.', 'Ligação do tratamento preliminar.', 'Execução de contrapartida (Revitalização da área).'],
             'GUIAS E SARJETAS': ['Eventuais reparos após recapeamento viário'],
             'PAVIMENTAÇÃO TOTAL': ['Recapeamento viário e pavimentação nova em pontos específicos'],
             'ELETRIFICAÇÃO': ['Eletrificação dos poços tubulares'],
-            'MEIO AMBIENTE': ['1) Paisagismo.', '2) Construção do parque linear.', '3) Pintura dos meios-fios.', '4) Sinalização viária.'],
-            'TOPOGRAFIA DE ENTREGA': ['Check list de marcos topográficos danificados'],
-            'INDIRETO DE OBRAS': ['1) Custo de encarregado.', '2) Vigilância patrimonial.', '3) Deslocamentos, alimentação e hospedagem.', '4) Vigente até o final das obras.']
+            'MEIO AMBIENTE': ['Paisagismo.', 'Construção do parque linear.', 'Pintura dos meios-fios.', 'Sinalização viária.'],
+            'TOPOGRAFIA DE ENTREGA': ['-'],
+            'INDIRETO DE OBRAS': ['Custo de encarregado.', 'Vigilância patrimonial.', 'Deslocamentos, alimentação e hospedagem.', 'Vigente até o final das obras.']
         };
 
         const pendenciasJoaquim = {
-            'TOPOGRAFIA E CONTROLE': ['-'],
+            'OBRA DE ACESSO': ['Execução do acesso'],
+            'TOPOGRAFIA e CONTROLE': ['-'],
             'MANUTENÇÕES / AS BUILTS': ['Execução de As-Builts, impressões e cópias'],
             'DRENAGEM': ['Construção de dissipador'],
             'REDE DE ÁGUA POTÁVEL': ['Sondagem de ramais dos lotes'],
-            'RESERVATÓRIO / ADUTORA': ['1) Construção da rede adutora.', '2) Construção do barrilete.', '3) Ligação do reservatório na rede.'],
-            'SISTEMA DE ESGOTO SANITÁRIO': ['1) Construção do interceptor de esgoto.', '2) Sondagem de ramais dos lotes.'],
-            'ESTAÇÃO ELEVATÓRIA DE ESGOTO': ['1) Construção da linha de recalque.', '2) Instalação do Booster e construção do abrigo. Obs: Aguardando aprovação do projeto.'],
-            'GUIAS E SARJETAS': ['1) Construção de guias do acesso.', '2) Revitalização e reparos nos meios-fios.'],
-            'PAVIMENTAÇÃO TOTAL': ['Recapeamento (Tapa-Buracos)'],
-            'ELETRIFICAÇÃO': ['-'],
-            'MEIO AMBIENTE': ['1) Construção de praça.', '2) Pintura de meios-fios.', '3) Execução de paisagismo.', '4) Sinalização viária.'],
-            'OBRAS DE ACESSO': ['Execução do acesso'],
+            'RESERVATÓRIO / ADUTORA': ['-'],
+            'SISTEMA DE ESGOTO SANITÁRIO': ['Construção do interceptor de esgoto.', 'Sondagem de ramais dos lotes.'],
+            'ESTAÇÃO ELEVATÓRIA DE ESGOTO': ['Construção da linha de recalque.', 'Instalação do Booster e construção do abrigo. Obs: Aguardando aprovação do projeto.'],
+            'GUIAS E SARJETAS': ['Construção de guias do acesso.', 'Revitalização e reparos nos meios-fios.'],
+            'PAVIMENTAÇÃO VIÁRIA': ['Recapeamento (Tapa-Buracos)'],
+            'ENERGIA / ILUMINAÇÃO': ['-'],
+            'MEIO AMBIENTE / PRAÇAS': ['Construção de praça.', 'Pintura de meios-fios.', 'Execução de paisagismo.', 'Sinalização viária.'],
             'TOPOGRAFIA DE ENTREGA': ['Execução completa da demarcação dos lotes'],
-            'INDIRETO DE OBRAS': ['1) Custo de encarregado.', '2) Vigilância patrimonial.', '3) Deslocamentos, alimentação e hospedagem.', '4) Vigente até o final das obras.']
+            'INDIRETO DE OBRAS': ['Custo de encarregado.', 'Vigilância patrimonial.', 'Deslocamentos, alimentação e hospedagem.', 'Vigente até o final das obras.']
         };
         
         const pendenciasParque = {
             'CANTEIRO DE OBRAS': ['-'],
-            'TOPOGRAFIA': ['1) Demarcação de obras de infraestrutura pendentes.', '2) Controle tecnológico de pavimentação.'],
-            'TERRAPLANAGEM': ['1) Conformação do greide da Rua 01.'],
-            'DRENAGEM': ['1) Construção de Bocas de Lobo.', '2) Alteamento de Poços de Visita.', '3) Finalização da drenagem da Rua 01.'],
-            'REDE DE ÁGUA - DISTRIBUIÇÃO': ['1) Levantamento da rede construída.', '2) Check list de eventuais reparos na rede.'],
-            'REDE DE ÁGUA - ADUÇÃO': ['1) Ligação na rede do loteamento.'],
+            'TOPOGRAFIA': ['Demarcação de obras de infraestrutura pendentes.', 'Controle tecnológico de pavimentação.'],
+            'TERRAPLANAGEM': ['Conformação do greide da Rua 01.'],
+            'DRENAGEM': ['Alteamento de Poços de Visita.', 'Finalização da drenagem da Rua 01.'],
+            'REDE DE ÁGUA - DISTRIBUIÇÃO': ['Levantamento da rede construída.', 'Check list de eventuais reparos na rede.'],
+            'REDE DE ÁGUA - ADUÇÃO': ['Ligação na rede do loteamento.'],
             'REDE DE ÁGUA - RESERVAÇÃO': ['-'],
-            'REDE COLETORA DE ESGOTO': ['1) Levantamento da rede construída.', '2) Check list de eventuais reparos na rede.'],
+            'REDE COLETORA DE ESGOTO': ['Mapeamento e reparos das guias e sarjetas.'],
             'REDE DE RECALQUE / ETE': ['-'],
-            'GUIAS E SARJETAS': ['1) Mapeamento e reparos das guias e sarjetas.'],
-            'PAVIMENTAÇÃO': ['1) Execução completa da pavimentação na área pendente.'],
+            'GUIAS E SARJETAS': ['Execução de reparos nas guias'],
+            'PAVIMENTAÇÃO': ['Execução completa da pavimentação na área pendente.'],
             'ELÉTRICA': ['-'],
-            'ACESSO': ['1) Execução do acesso conforme aprovação.'],
+            'ACESSO': ['Execução do acesso conforme aprovação.'],
             'SINALIZAÇÃO HORIZ/VERT': ['-'],
             'OBRIGAÇÕES AMBIENTAIS': ['-'],
-            'PARQUES E PAISAGISMO': ['1) Execução de paisagismo.'],
+            'PARQUES E PAISAGISMO': ['Execução do projeto de sinalização'],
             'CONTENÇÕES/PROTEÇÕES': ['-'],
             'LIMPEZA / MANUTENÇÕES': ['Vigente até o final das obras quando necessário'],
             'MULTAS': ['-'],
             'REPARAÇÃO DANOS TERC.': ['-'],
-            'DIAGNÓSTICO OBRA EXIST.': ['-'],
-            'INDIRETO DE OBRAS': ['1) Vigente até o final das obras.']
+            'DIAGNÓSTICO OBRA EXIST.': ['Diagnóstico de rede de água potável e esgoto sanitário'],
+            'INDIRETO DE OBRAS': ['Custo de encarregado.', 'Deslocamentos e alimentação.', 'Vigente até o final das obras.']
         };
 
         let currentChartObra = null;
@@ -2228,7 +2230,7 @@
         const miranteValorApropriado = [0.00, 0.00, 0.00, 12550.28, 10844.80, 37264.50, 0.00, 48549.98, 35693.34, 867456.39, 144300.00, 51066.40, 172.90, 10793.57];
         const miranteComprometido = [37257.72, 210865.82, 134826.68, 281768.19, 306139.78, 587806.54, 171635.73, 226576.22, 578897.29, 3012888.13, 789722.37, 352574.97, 106410.50, 248331.23];
         const miranteProjetadoFuturo = [0.00, 26657.43, 0.00, 2869.72, 59488.20, 143028.46, 14000.00, 95544.93, 16700.50, 0.00, 0.00, 666226.98, -149.40, 29717.68];
-        const miranteFisicoRaw = [90.0, 92.0, 100.0, 90.0, 97.0, 92.0, 95.0, 80.0, 90.0, 80.0, 95.0, 20.0, 100.0, 92.0];
+        const miranteFisicoRaw = [95.0, 95.0, 100.0, 98.0, 98.0, 95.0, 95.0, 80.0, 95.0, 85.0, 95.0, 20.0, 100.0, 92.0];
 
         const joaquimEtapas = ['OBRA DE ACESSO', 'TOPOGRAFIA e CONTROLE', 'MANUTENÇÕES / AS BUILTS', 'DRENAGEM', 'REDE DE ÁGUA POTÁVEL', 'RESERVATÓRIO / ADUTORA', 'SISTEMA DE ESGOTO SANITÁRIO', 'ESTAÇÃO ELEVATÓRIA DE ESGOTO', 'GUIAS E SARJETAS', 'PAVIMENTAÇÃO VIÁRIA', 'ENERGIA / ILUMINAÇÃO', 'MEIO AMBIENTE / PRAÇAS', 'TOPOGRAFIA DE ENTREGA', 'INDIRETO DE OBRAS'];
         const joaquimOrcado = [448834.00, 6000.00, 146722.83, 205220.00, 84333.64, 1184518.92, 320633.13, 273976.19, 104745.00, 146000.00, 1846124.81, 69219.58, 32000.00, 151075.26];
@@ -2236,10 +2238,7 @@
         const joaquimComprometido = [14400.00, 0.00, 119606.27, 190220.00, 49733.64, 1090870.35, 58161.38, 10406.25, 7231.00, 0.00, 1846124.81, 20947.78, 0.00, 211365.60];
         const joaquimValorApropriado = [0.00, 0.00, 1408.34, 0.00, 0.00, 33468.83, 22586.25, 10406.25, 0.00, 0.00, 10640.00, 1679.70, 0.00, 41220.55];
         const joaquimProjetadoFuturo = [434434.00, 7500.00, 34783.49, 150000.00, 34600.00, -396043.27, 134270.88, 153854.53, 56500.00, 146000.00, 0.00, 56750.30, 80000.00, 24401.26];
-        const joaquimFisicoRaw = [0.0, 0.0, 90.0, 90.0, 90.0, 85.0, 80.0, 0.0, 80.0, 80.0, 100.0, 30.0, 0.0, 70.0];
-
-        const parqueEtapasV1 = ['TOPOGRAFIA E CONTROLE', 'MANUTENÇÕES / AS BUILTS', 'TERRAPLANAGEM', 'DRENAGEM', 'ÁGUA POTÁVEL', 'RESERVATÓRIO / ADUTORA', 'ESGOTO SANITÁRIO', 'GUIAS E SARJETAS', 'PAVIMENTAÇÃO VIÁRIA', 'MEIO AMBIENTE / PRAÇAS', 'OBRA DE ACESSO', 'TOPOGRAFIA DE ENTREGA', 'INDIRETO DE OBRAS'];
-        const parqueOrcadoV1 = [20800.00, 186643.30, 50400.00, 523908.31, 106623.00, 134625.00, 200000.00, 466961.10, 2977569.12, 59674.90, 915450.00, 66600.00, 142862.13];
+        const joaquimFisicoRaw = [0.0, 0.0, 92.0, 90.0, 90.0, 95.0, 80.0, 0.0, 80.0, 80.0, 100.0, 30.0, 0.0, 70.0];
 
         const parqueEtapas = ['CANTEIRO DE OBRAS', 'TOPOGRAFIA', 'TERRAPLANAGEM', 'DRENAGEM', 'REDE DE ÁGUA - DISTRIBUIÇÃO', 'REDE DE ÁGUA - ADUÇÃO', 'REDE DE ÁGUA - RESERVAÇÃO', 'REDE COLETORA DE ESGOTO', 'REDE DE RECALQUE / ETE', 'GUIAS E SARJETAS', 'PAVIMENTAÇÃO', 'ELÉTRICA', 'ACESSO', 'SINALIZAÇÃO HORIZ/VERT', 'OBRIGAÇÕES AMBIENTAIS', 'PARQUES E PAISAGISMO', 'CONTENÇÕES/PROTEÇÕES', 'LIMPEZA / MANUTENÇÕES', 'MULTAS', 'REPARAÇÃO DANOS TERC.', 'DIAGNÓSTICO OBRA EXIST.', 'INDIRETO DE OBRAS'];
         const parqueOrcado = [439.90, 87400.04, 50400.00, 439893.31, 45500.00, 15850.00, 134625.00, 152170.00, 47830.00, 466961.00, 3155066.32, 0.00, 704342.80, 0.00, 0.00, 59235.00, 50000.00, 133752.30, 0.00, 0.00, 129288.00, 179363.13];
@@ -2247,10 +2246,7 @@
         const parqueValorApropriado = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6250.00, 0, 31800.00];
         const parqueProjetadoFuturo = [0, 72349.99, 50400.00, 175531.42, 45500.00, 15850.00, 134625.00, 200000.00, 47830.00, 466961.00, 3155066.32, 0, 704342.80, 0, 0, 59235.00, 50000.00, 41200.00, 0, 0, 95570.50, 43897.91];
 
-        const parqueFisicoRaw = parqueEtapas.map((_, i) => {
-            let eac = parqueComprometido[i] + parqueProjetadoFuturo[i];
-            return eac > 0 ? (parqueComprometido[i] / eac) * 100 : 0;
-        });
+        const parqueFisicoRaw = [50.0, 80.0, 80.0, 85.0, 90.0, 80.0, 80.0, 80.0, 0.0, 80.0, 20.0, 90.0, 0.0, 0.0, 0.0, 0.0, 0.0, 70.3, 0.0, 0.0, 17.9, 0.0];
 
         const dataMaps = {
             'mirante': { labels: miranteEtapas, orcado: miranteOrcado, investido: miranteComprometido, projetado: miranteProjetadoFuturo, pendencias: pendenciasMirante },
@@ -3688,12 +3684,13 @@
             'parque': { canvas: null, pdfDoc: null, currentPdf: null, history: [], historyStep: -1 }
         };
 
-        let currentTool = 'pan';
+       let currentTool = 'pan';
         let currentColor = '#e53935';
         let currentIcon = '📍';
         let isDrawing = false;
         let startPoint = null;
         let shapeObj = null;
+        let activeIconObj = null; // Variável nova para controlar o ícone que está sendo arrastado
         let isHistoryUpdating = false; 
 
         // Variáveis para funcionalidade Polígono (Área)
@@ -3723,7 +3720,6 @@
             canvas.on('mouse:move', onMouseMove);
             canvas.on('mouse:up', onMouseUp);
             
-            // Corrige o Pincel para salvar no histórico apenas quando terminar o traçado
             canvas.on('path:created', () => saveHistory(obra));
             canvas.on('object:modified', () => saveHistory(obra));
         }
@@ -3744,6 +3740,7 @@
 
             currentTool = tool;
             if(iconVal) currentIcon = iconVal;
+            activeIconObj = null; // Reseta se trocar de ferramenta
             
             const toolbar = btnElement.closest('.pdf-toolbar');
             toolbar.querySelectorAll('.tool-mode').forEach(b => b.classList.remove('active'));
@@ -3755,18 +3752,17 @@
             canvas.isDrawingMode = (tool === 'brush');
             if(tool === 'brush') {
                 canvas.freeDrawingBrush.color = currentColor;
-                canvas.freeDrawingBrush.width = 2; // Espessura do Pincel
+                // >>> TESTE ESPESSURA PINCEL AQUI <<<
+                canvas.freeDrawingBrush.width = 1.5; 
             }
 
             if(tool === 'pan') {
-                // Modo Arraste: Permite selecionar e mover tudo que foi desenhado
                 canvas.selection = true;
                 canvas.defaultCursor = 'default';
                 canvas.getObjects().forEach(o => { 
                     if(o !== canvas.backgroundImage) { o.selectable = true; o.evented = true; } 
                 });
             } else {
-                // Modos de Edição: Trava os objetos anteriores para não atrapalhar o novo desenho
                 canvas.selection = false;
                 canvas.defaultCursor = 'crosshair';
                 canvas.getObjects().forEach(o => { 
@@ -3798,65 +3794,11 @@
             }
         }
 
-        async function loadPDF(filename, btnElement) {
-            const obra = currentObra;
-            const container = document.getElementById(`pdf-container-${obra}`);
-            const emptyState = document.getElementById(`empty-state-${obra}`);
-            const parent = document.getElementById(`viewer-area-${obra}`);
-            
-            const sidebar = btnElement.closest('.projetos-sidebar');
-            sidebar.querySelectorAll('.projeto-btn').forEach(b => b.classList.remove('active'));
-            btnElement.classList.add('active');
-
-            container.style.display = 'none';
-            emptyState.style.display = 'block';
-            emptyState.innerText = "Carregando PDF...";
-
-            try {
-                if(!pdfStates[obra].canvas) initFabricCanvas(obra);
-                const canvas = pdfStates[obra].canvas;
-                canvas.clear();
-                
-                const loadingTask = pdfjsLib.getDocument(filename);
-                pdfStates[obra].pdfDoc = await loadingTask.promise;
-                pdfStates[obra].currentPdf = filename;
-                
-                const page = await pdfStates[obra].pdfDoc.getPage(1);
-                const viewport = page.getViewport({ scale: 2.0 });
-                
-                const pdfCanvas = document.createElement('canvas');
-                const ctx = pdfCanvas.getContext('2d');
-                pdfCanvas.width = viewport.width;
-                pdfCanvas.height = viewport.height;
-                
-                await page.render({ canvasContext: ctx, viewport: viewport }).promise;
-                
-                fabric.Image.fromURL(pdfCanvas.toDataURL(), function(img) {
-                    canvas.setWidth(parent.clientWidth);
-                    canvas.setHeight(parent.clientHeight);
-                    const scale = Math.min(parent.clientWidth / img.width, parent.clientHeight / img.height);
-                    img.set({ scaleX: scale, scaleY: scale, originX: 'center', originY: 'center', left: canvas.width/2, top: canvas.height/2, selectable: false, evented: false });
-                    
-                    canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
-                    emptyState.style.display = 'none';
-                    container.style.display = 'block';
-                    
-                    pdfStates[obra].history = [];
-                    pdfStates[obra].historyStep = -1;
-                    saveHistory(obra);
-                });
-            } catch (error) {
-                emptyState.innerText = "PDF não encontrado ou falha no carregamento.\nVerifique se o arquivo '" + filename + "' está na mesma pasta no GitHub.";
-                container.style.display = 'none';
-            }
-        }
-
         let isPanning = false, lastPosX, lastPosY;
         function onMouseDown(o) {
             const canvas = pdfStates[currentObra].canvas;
             if(!canvas) return;
 
-            // Se for modo Arraste e não clicou em nenhum objeto, arrasta a tela inteira
             if(currentTool === 'pan' && !canvas.getActiveObject()) {
                 isPanning = true;
                 canvas.defaultCursor = 'grabbing';
@@ -3865,9 +3807,28 @@
                 return;
             }
 
-            if (currentTool === 'icon' && o.target) return;
+            // Lógica para soltar ícone e travar
+            if (currentTool === 'icon') {
+                if (activeIconObj) {
+                    activeIconObj.set({ selectable: false, evented: false });
+                    canvas.discardActiveObject();
+                    saveHistory(currentObra);
+                    activeIconObj = null;
+                }
+                const pointer = canvas.getPointer(o.e);
+                activeIconObj = new fabric.Text(currentIcon, { 
+                    left: pointer.x, top: pointer.y, 
+                    fontSize: 24, // Tamanho base do ícone
+                    originX: 'center', originY: 'center', 
+                    selectable: true, evented: true 
+                });
+                canvas.add(activeIconObj);
+                canvas.setActiveObject(activeIconObj);
+                return;
+            }
+
             if(currentTool === 'pan' || currentTool === 'brush') return;
-            if(isDrawing) return; // Trava contra cliques múltiplos rápidos
+            if(isDrawing) return; 
             
             const pointer = canvas.getPointer(o.e);
 
@@ -3875,26 +3836,28 @@
                 if (polygonPoints.length === 0) {
                     polygonPoints.push({ x: pointer.x, y: pointer.y });
                     const circle = new fabric.Circle({
-                        radius: 1, fill: currentColor, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', selectable: false, evented: false
+                        radius: 0.5, // Bolinha menor
+                        fill: currentColor, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', selectable: false, evented: false
                     });
                     polygonTempObjs.push(circle);
                     canvas.add(circle);
 
                     activeLine = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
-                        strokeWidth: 2, fill: currentColor, stroke: currentColor, originX: 'center', originY: 'center', selectable: false, evented: false
+                        strokeWidth: 1, // Espessura da linha da área
+                        fill: currentColor, stroke: currentColor, originX: 'center', originY: 'center', selectable: false, evented: false
                     });
                     canvas.add(activeLine);
                 } else {
                     const startPointPol = polygonPoints[0];
                     const dist = Math.sqrt(Math.pow(startPointPol.x - pointer.x, 2) + Math.pow(startPointPol.y - pointer.y, 2));
                     
-                    // Exige que o clique seja exato (dist < 10) para fechar o polígono
                     if (dist < 10 && polygonPoints.length > 2) {
                         if (activeLine) canvas.remove(activeLine);
                         polygonTempObjs.forEach(obj => canvas.remove(obj));
 
                         const poly = new fabric.Polygon(polygonPoints, {
-                            fill: currentColor + '40', stroke: currentColor, strokeWidth: 2, 
+                            fill: currentColor + '40', stroke: currentColor, 
+                            strokeWidth: 1.5, // Espessura da borda da área finalizada
                             selectable: (currentTool === 'pan'), evented: (currentTool === 'pan')
                         });
                         canvas.add(poly);
@@ -3905,13 +3868,15 @@
                         activeLine.set({ x2: pointer.x, y2: pointer.y });
                         
                         const circle = new fabric.Circle({
-                            radius: 1, fill: currentColor, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', selectable: false, evented: false
+                            radius: 0.5, // Bolinha menor
+                            fill: currentColor, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', selectable: false, evented: false
                         });
                         polygonTempObjs.push(circle);
                         canvas.add(circle);
 
                         activeLine = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
-                            strokeWidth: 2, fill: currentColor, stroke: currentColor, originX: 'center', originY: 'center', selectable: false, evented: false
+                            strokeWidth: 1, // Espessura da linha da área
+                            fill: currentColor, stroke: currentColor, originX: 'center', originY: 'center', selectable: false, evented: false
                         });
                         canvas.add(activeLine);
                     }
@@ -3922,13 +3887,9 @@
             isDrawing = true;
             startPoint = pointer;
 
-            if (currentTool === 'icon') {
-                const text = new fabric.Text(currentIcon, { left: pointer.x, top: pointer.y, fontSize: 30, originX: 'center', originY: 'center', selectable: (currentTool === 'pan'), evented: (currentTool === 'pan') });
-                canvas.add(text);
-                saveHistory(currentObra);
-                isDrawing = false;
-            } else if (currentTool === 'text') {
-                const text = new fabric.IText('Digite...', { left: pointer.x, top: pointer.y, fontSize: 20, fill: currentColor, fontFamily: 'Montserrat', selectable: true, evented: true });
+            if (currentTool === 'text') {
+                // >>> TESTE TAMANHO FONTE CAIXA TEXTO AQUI <<<
+                const text = new fabric.IText('Digite...', { left: pointer.x, top: pointer.y, fontSize: 12, fill: currentColor, fontFamily: 'Montserrat', selectable: true, evented: true });
                 canvas.add(text);
                 canvas.setActiveObject(text);
                 text.enterEditing();
@@ -3936,15 +3897,18 @@
                 saveHistory(currentObra);
                 isDrawing = false;
             } else if (currentTool === 'circle') {
-                shapeObj = new fabric.Circle({ left: pointer.x, top: pointer.y, radius: 1, fill: 'transparent', stroke: currentColor, strokeWidth: 2, originX: 'center', originY: 'center', selectable: false, evented: false });
+                // >>> TESTE ESPESSURA BORDA CIRCULO AQUI <<<
+                shapeObj = new fabric.Circle({ left: pointer.x, top: pointer.y, radius: 1, fill: 'transparent', stroke: currentColor, strokeWidth: 1.5, originX: 'center', originY: 'center', selectable: false, evented: false });
                 canvas.add(shapeObj);
             } else if (currentTool === 'arrow') {
-                // >>> TESTE A ESPESSURA DA SETA AQUI (Ex: 1, 2, 3) <<<
-                let espessuraSeta = 2; 
-                let tamanhoPonta = espessuraSeta * 4 + 4; // Ajuste dinâmico do triângulo
+                // >>> TESTE ESPESSURA LINHA SETA AQUI <<<
+                let espessuraSeta = 1.5; 
+                // >>> TESTE TAMANHO TRIANGULO SETA AQUI <<<
+                let tamanhoPonta = 8; 
                 
                 let line = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
-                    stroke: currentColor, strokeWidth: espessuraSeta, selectable: false, evented: false
+                    stroke: currentColor, strokeWidth: espessuraSeta, selectable: false, evented: false,
+                    originX: 'center', originY: 'center'
                 });
                 
                 let head = new fabric.Triangle({
@@ -3952,7 +3916,7 @@
                     left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', selectable: false, evented: false, angle: 90
                 });
                 
-                shapeObj = { line: line, head: head, type: 'arrow' };
+                shapeObj = { line: line, head: head, type: 'arrow', pontaOffset: tamanhoPonta/2 };
                 canvas.add(line, head);
             }
         }
@@ -3967,6 +3931,8 @@
                 lastPosX = o.e.clientX;
                 lastPosY = o.e.clientY;
             }
+
+            if (currentTool === 'icon') return;
 
             const pointer = canvas.getPointer(o.e);
 
@@ -3983,11 +3949,16 @@
                 shapeObj.set({ radius: radius });
                 canvas.renderAll();
             } else if (currentTool === 'arrow') {
-                shapeObj.line.set({ x2: pointer.x, y2: pointer.y });
                 let dx = pointer.x - startPoint.x;
                 let dy = pointer.y - startPoint.y;
-                let angle = Math.atan2(dy, dx) * 180 / Math.PI;
-                shapeObj.head.set({ left: pointer.x, top: pointer.y, angle: angle + 90 });
+                let angle = Math.atan2(dy, dx);
+                
+                // Centralização perfeita da ponta da seta em relação à linha
+                let lineEndX = pointer.x - (shapeObj.pontaOffset * Math.cos(angle));
+                let lineEndY = pointer.y - (shapeObj.pontaOffset * Math.sin(angle));
+                
+                shapeObj.line.set({ x2: lineEndX, y2: lineEndY });
+                shapeObj.head.set({ left: pointer.x, top: pointer.y, angle: (angle * 180 / Math.PI) + 90 });
                 canvas.renderAll();
             }
         }
@@ -4002,7 +3973,6 @@
                 if (shapeObj.type === 'arrow') {
                     shapeObj.line.setCoords();
                     shapeObj.head.setCoords();
-                    // Agrupa a Seta para que ela seja selecionável como um item único
                     let group = new fabric.Group([shapeObj.line, shapeObj.head], {
                         selectable: (currentTool === 'pan'),
                         evented: (currentTool === 'pan')
@@ -4016,7 +3986,6 @@
                 saveHistory(currentObra);
             }
         }
-
         function saveHistory(obra) {
             if (isHistoryUpdating) return; 
             const state = pdfStates[obra || currentObra];

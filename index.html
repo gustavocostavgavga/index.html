@@ -4018,21 +4018,24 @@ async function loadPDF(filename, btnElement) {
            // LOGICA DO TEXTO CONTÍNUO E EDITÁVEL
             if (currentTool === 'text') {
                 if (activeTextObj) {
-                    // Se o usuário ainda estiver editando (digitando), o clique fora da caixa apenas finaliza a edição.
-                    // Não travamos o objeto ainda, para que ele possa clicar de novo para mover/redimensionar.
-                    if (activeTextObj.isEditing) {
-                        return;
+                    // Se o texto está selecionado ou em edição e o usuário clica fora, apenas tiramos a seleção
+                    if (canvas.getActiveObject() === activeTextObj || activeTextObj.isEditing) {
+                        if (activeTextObj.isEditing) {
+                            activeTextObj.exitEditing();
+                        }
+                        canvas.discardActiveObject();
+                        canvas.requestRenderAll();
+                        return; 
+                    } else {
+                        // Se o texto já estava sem seleção e o usuário clicou numa área limpa, travamos ele e criamos outro
+                        activeTextObj.set({ selectable: false, evented: false });
+                        saveHistory(currentObra);
+                        activeTextObj = null;
                     }
-                    
-                    // Se ele clicou fora e não estava editando, aí sim travamos o texto atual e criamos um novo.
-                    activeTextObj.set({ selectable: false, evented: false });
-                    canvas.discardActiveObject();
-                    saveHistory(currentObra);
-                    activeTextObj = null;
                 }
+                
                 activeTextObj = new fabric.IText('Digite...', { 
                     left: pointer.x, top: pointer.y, 
-                    // >>> TESTE TAMANHO DA FONTE INICIAL DO TEXTO AQUI <<<
                     fontSize: 12, 
                     fill: currentColor, fontFamily: 'Montserrat', 
                     originX: 'center', originY: 'center',

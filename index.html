@@ -4015,12 +4015,20 @@ async function loadPDF(filename, btnElement) {
                 return;
             }
 
-            // LOGICA DO TEXTO CONTÍNUO (NOVO)
+           // LOGICA DO TEXTO CONTÍNUO E EDITÁVEL
             if (currentTool === 'text') {
                 if (activeTextObj) {
+                    // Se o usuário ainda estiver editando (digitando), o clique fora da caixa apenas finaliza a edição.
+                    // Não travamos o objeto ainda, para que ele possa clicar de novo para mover/redimensionar.
+                    if (activeTextObj.isEditing) {
+                        return;
+                    }
+                    
+                    // Se ele clicou fora e não estava editando, aí sim travamos o texto atual e criamos um novo.
                     activeTextObj.set({ selectable: false, evented: false });
                     canvas.discardActiveObject();
                     saveHistory(currentObra);
+                    activeTextObj = null;
                 }
                 activeTextObj = new fabric.IText('Digite...', { 
                     left: pointer.x, top: pointer.y, 
@@ -4058,7 +4066,7 @@ async function loadPDF(filename, btnElement) {
                     const startPointPol = polygonPoints[0];
                     const dist = Math.sqrt(Math.pow(startPointPol.x - pointer.x, 2) + Math.pow(startPointPol.y - pointer.y, 2));
                     
-                    if (dist < 10 && polygonPoints.length > 2) {
+                   if (dist < 4 && polygonPoints.length > 2) {
                         if (activeLine) canvas.remove(activeLine);
                         polygonTempObjs.forEach(obj => canvas.remove(obj));
 

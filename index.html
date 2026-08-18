@@ -211,6 +211,13 @@
         #btn-voltar { position: fixed; bottom: 25px; right: 25px; background-color: #558b2f; color: #ffffff; font-weight: bold; font-size: 0.9rem; padding: 12px 24px; border: none; border-radius: 25px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 9999; transition: all 0.3s; display: none; }
         #btn-voltar:hover { transform: scale(1.05); background-color: #7cb342; }
 
+        #btn-insights { position: fixed; bottom: 25px; left: 25px; background-color: #558b2f; color: #ffffff; font-weight: bold; font-size: 0.9rem; padding: 12px 24px; border: none; border-radius: 25px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 9999; transition: all 0.3s; display: none; }
+        #btn-insights:hover { transform: scale(1.05); background-color: #7cb342; }
+        #btn-insights .icon { margin-right: 5px; }
+        /* Oculta os botões antigos de insights da aba análises */
+        button[data-antab^="insights"] { display: none !important; }
+        div[id^="insights-"] { display: none !important; }
+
         .projetos-container { display: flex; gap: 20px; align-items: flex-start; margin-top: 15px; }
         .projetos-sidebar { display: flex; flex-direction: column; gap: 10px; width: 250px; background: var(--card-bg); padding: 15px; border-radius: 12px; border: 2px solid var(--border-color); }
         .projeto-btn { background: var(--table-th-bg); border: 1px solid var(--border-color); color: var(--text-color-base); padding: 12px 15px; text-align: left; border-radius: 6px; cursor: pointer; font-weight: 700; transition: all 0.3s; }
@@ -563,6 +570,23 @@
     </div>
 
     <button id="btn-voltar" onclick="goToHome()">Voltar para a página inicial</button>
+<button id="btn-insights" onclick="openGlobalInsightsModal()"><span class="icon">💡</span> Insights</button>
+
+    <div class="modal gauge-modal" id="modalInsightsGlobal" onclick="if(event.target===this) closeAllModals()">
+        <div class="gauge-modal-box" style="max-width: 700px; padding: 30px; text-align: left;">
+            <span class="gauge-modal-close" onclick="closeAllModals()">&times;</span>
+            <h3 style="margin-bottom: 5px; text-align: center; color: var(--title-color);">💡 Insights Técnicos</h3>
+            <p id="insightsObraTitle" style="text-align: center; font-size: 0.8rem; color: var(--subtitle-color); margin-bottom: 20px; font-weight: 600;">OBRA</p>
+            
+            <div class="insights-carousel-container" style="padding: 20px 0; background: transparent;">
+                <button class="insight-nav-btn prev" onclick="moveGlobalInsight(-1)" style="left: -15px;">&#10094;</button>
+                <div class="insights-carousel-track" id="global-insights-track" style="transform: translateX(17.5%);">
+                    <!-- Gerado via JS -->
+                </div>
+                <button class="insight-nav-btn next" onclick="moveGlobalInsight(1)" style="right: -15px;">&#10095;</button>
+            </div>
+        </div>
+    </div>
 
     <div id="dashboard-view" class="dashboard" style="display: none;">
         <header>
@@ -2406,7 +2430,7 @@
             if (gaugeChart) { gaugeChart.destroy(); gaugeChart = null; }
         }
 
-        function closeAllModals() {
+       function closeAllModals() {
             document.getElementById('modalGauge').classList.remove('active');
             document.getElementById('modalFinancialInfo').classList.remove('active');
             document.getElementById('modalPendencias').classList.remove('active');
@@ -2414,6 +2438,14 @@
             document.getElementById('modalBreakdownProjetado').classList.remove('active');
             document.getElementById('modalDesembolsoComprometido').classList.remove('active');
             document.getElementById('modalDesembolsoMes').classList.remove('active');
+            
+            // Fecha o novo modal de Insights
+            const modalInsights = document.getElementById('modalInsightsGlobal');
+            if (modalInsights) modalInsights.classList.remove('active');
+            
+            const photoModal = document.getElementById('photoGlobalModal');
+            if (photoModal) photoModal.classList.remove('active');
+
             if (gaugeChart) { gaugeChart.destroy(); gaugeChart = null; }
         }
 
@@ -3563,6 +3595,99 @@
             };
         }
 
+        let globalInsightIndex = 0;
+        const insightsDB = {
+            'mirante': [
+                { icon: '💰', title: 'Orçamento Geral', text: 'Projeção de extrapolação no fechamento (cerca de +3,1%), exigindo monitoramento rigoroso e travas nas etapas finais de execução.' },
+                { icon: '🛣️', title: 'Pavimentação', text: 'Principal ofensor do orçamento da obra. O custo final projetado superou substancialmente a linha de base inicial, demandando forte revisão e adequação técnica.' },
+                { icon: '💧', title: 'Reservatório e Adutora', text: 'O desvio orçamentário de 11,2% decorre da inviabilidade técnica de aproveitamento da infraestrutura pré-existente. Constatou-se a necessidade de execução integral de uma nova rede adutora, garantindo a integridade e eficiência do sistema.' },
+                { icon: '🚰', title: 'Rede de Água Potável', text: 'Durante a fase de comissionamento e testes de distribuição, identificaram-se falhas estruturais e vazamentos em trechos executados pela gestão anterior. A mitigação dessas patologias está resultando em um incremento projetado de até 80% no custo da etapa.' },
+                { icon: '🛡️', title: 'Ações Mitigadoras', text: 'Acelerar a entrega do loteamento e o repasse das redes às concessionárias para cessar imediatamente os Gastos Indiretos (vigilância, manutenção de canteiro), que seguem dilapidando o saldo disponível.' },
+                { icon: '🌳', title: 'Meio Ambiente', text: 'Projeta-se uma otimização orçamentária de aproximadamente 22% através da readequação técnica do projeto paisagístico e do Parque Linear. A estratégia assegura a manutenção do valor comercial agregado ao empreendimento, alinhando a execução às premissas de eficiência e controle de custos.' },
+                { icon: '⚡', title: 'Eletrificação', text: 'A empresa contratada para execução da infraestrutura elétrica pendente mobilizou ao empreendimento para finalizar as obras e viabilizar a manobra de energização no dia 20/08/2026.' },
+                { icon: '📈', title: 'Visão Estratégica', text: 'Assumimos a gestão com a obra em andamento e, mediante um diagnóstico técnico criterioso, implementamos um controle orçamentário rigoroso. Essa atuação cirúrgica mitigou os passivos herdados por falhas técnicas anteriores, contendo desvios estruturais e garantindo a viabilidade comercial do ativo, com um custo por lote fortemente preservado.' }
+            ],
+            'joaquim': [
+                { icon: '💰', title: 'Orçamento Geral', text: 'Cenário positivo, sinalizado uma expressiva economia projetada de aproximadamente 10%, em relação à linha de base.' },
+                { icon: '💧', title: 'Reservatório / Adutora', text: 'Destaca-se como o maior gerador de economia, projetando um custo 41,6% menor que o previsto inicialmente, resultado de uma parceria estratégica com um empreendimento vizinho para o rateio das despesas da obra.' },
+                { icon: '🚧', title: 'Obras de acesso e entorno', text: 'Apresentam tendência de encostar no teto do orçamento previsto, sendo essenciais as aprovações executivas precisas para não corroer o saldo ganho em outras frentes.' },
+                { icon: '🔄', title: 'Sistema de Esgoto Sanitário e E.E.E', text: 'Tendência de economia devido a nova parceria firmada com vizinhos do empreendimento da nossa empresa.' },
+                { icon: '🌧️', title: 'Drenagem', text: 'O entendimento técnico da necessidade de execução de um dissipador conforme o projeto aprovado anteriormente será crucial para evitar uma extrapolação de até 65% do orçamento aprovado para a etapa.' },
+                { icon: '⚡', title: 'Eletrificação', text: 'A obra de infraestrutura elétrica foi 100% concluída e entregue à CEMIG, com a obtenção do CCO, marcando um avanço importantíssimo considerando o histórico desafiador do projeto.' },
+                { icon: '📈', title: 'Visão Estratégica Institucional', text: 'A rigorosa gestão orçamentária conteve falhas herdadas da gestão anterior. Parcerias estratégicas para divisão de custos viabilizaram uma economia significativa, garantindo um custo/lote atrativo e a viabilidade de comercialização do ativo.' }
+            ],
+            'parque': [
+                { icon: '💰', title: 'Orçamento Geral', text: 'Projeção indica aderência quase total ao orçamento original (desvio de apenas +0,44%), evidenciando a precisão do diagnóstico preliminar e margem para manobras cirúrgicas.' },
+                { icon: '🛣️', title: 'Pavimentação', text: 'Representa a maior fatia do orçamento com expressivos R$ 3,15M. O sucesso financeiro da obra passa invariavelmente pela eficiência na compra e execução deste escopo crítico.' },
+                { icon: '🚰', title: 'Rede de Saneamento', text: 'Água potável permanece como frente 100% projetada (ainda sem investimento consolidado expressivo).' },
+                { icon: '🌧️', title: 'Drenagem', text: 'Identificou-se um desvio projetado de 15% nesta etapa devido à necessidade de corrigir diversas patologias apontadas durante o diagnóstico e a reconstrução da rede. Para finalizar, resta a execução das caixas das bocas de lobo e o alteamento dos poços de visita.' },
+                { icon: '🛡️', title: 'Ações Preventivas', text: 'Intensificar campanhas de sondagem prévias e controle tecnológico rigoroso antes da liberação das frentes de infraestrutura pesada, para balizar os orçamentos vindouros.' },
+                { icon: '🔄', title: 'Saneamento', text: 'Com a drenagem quase concluída (90%), o foco agora se volta para os desafios de validar e diagnosticar as redes de água e esgoto existentes. Estratégias já foram traçadas para resolver essas pendências e destravar as próximas fases. Ao mesmo tempo, novos pacotes de serviços estão sendo montados para garantir a finalização completa do saneamento e a entrega do loteamento conforme o planejado.' }
+            ]
+        };
+
+       function openGlobalInsightsModal() {
+            const obraId = currentObra || 'mirante';
+            const data = insightsDB[obraId] || [];
+            
+            let nomeObra = 'MIRANTE DA LAGOA';
+            if(obraId === 'joaquim') nomeObra = 'JOAQUIM LEME';
+            if(obraId === 'parque') nomeObra = 'PARQUE DAS NAÇÕES';
+            document.getElementById('insightsObraTitle').textContent = nomeObra;
+            
+            let trackHTML = '';
+            data.forEach((ins, idx) => {
+                let activeClass = idx === 0 ? 'active' : '';
+                // Adicionado flex: 1, align-items: center e justify-content: center para centralizar vertical e horizontalmente o texto.
+                trackHTML += `<div class="insight-card ${activeClass}" style="min-height: 200px;">
+                    <div style="text-align: center; margin-bottom: 15px; border-bottom: 1px dashed var(--border-color); padding-bottom: 10px;">
+                        <strong style="color: var(--title-color); font-size: 1.1rem;">${ins.icon} ${idx+1}. ${ins.title}</strong>
+                    </div>
+                    <div style="flex: 1; display: flex; align-items: center; justify-content: center; color: var(--text-color-base); text-align: center; line-height: 1.6; font-size: 0.95rem; padding: 0 10px;">
+                        ${ins.text}
+                    </div>
+                </div>`;
+            });
+            
+            document.getElementById('global-insights-track').innerHTML = trackHTML;
+            globalInsightIndex = 0;
+            moveGlobalInsight(0); 
+            
+            document.getElementById('modalInsightsGlobal').classList.add('active');
+        }
+
+        function moveGlobalInsight(direction) {
+            const track = document.getElementById('global-insights-track');
+            if (!track) return;
+            const cards = track.querySelectorAll('.insight-card');
+            if(cards.length === 0) return;
+
+            cards[globalInsightIndex].classList.remove('active');
+
+            globalInsightIndex += direction;
+            if(globalInsightIndex < 0) globalInsightIndex = cards.length - 1;
+            if(globalInsightIndex >= cards.length) globalInsightIndex = 0;
+
+            cards[globalInsightIndex].classList.add('active');
+
+            const isMobile = window.innerWidth <= 768;
+            const baseOffset = isMobile ? 7.5 : 17.5;
+            const step = isMobile ? 85 : 65;
+            
+            const offset = baseOffset - (globalInsightIndex * step);
+            track.style.transform = `translateX(${offset}%)`;
+        }
+
+        function checkInsightsVisibility(subtabId) {
+            const btn = document.getElementById('btn-insights');
+            if(!btn) return;
+            if(subtabId.includes('detalhe') || subtabId.includes('historico') || subtabId.includes('planejamento')) {
+                btn.style.display = 'block';
+            } else {
+                btn.style.display = 'none';
+            }
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             document.getElementById('home-date').textContent = 'Última atualização: 11/08/2026';
 
@@ -3688,7 +3813,7 @@
         let isDrawing = false;
         let startPoint = null;
         let shapeObj = null;
-        let activeIconObj = null; // Variável nova para controlar o ícone que está sendo arrastado
+        let activeIconObj = null; // Variável para controlar o ícone que está sendo arrastado
         let isHistoryUpdating = false; 
 
         // Variáveis para funcionalidade Polígono (Área)
@@ -3718,6 +3843,7 @@
             canvas.on('mouse:move', onMouseMove);
             canvas.on('mouse:up', onMouseUp);
             
+            // Corrige o Pincel para salvar no histórico apenas quando terminar o traçado
             canvas.on('path:created', () => saveHistory(obra));
             canvas.on('object:modified', () => saveHistory(obra));
         }
@@ -3738,7 +3864,7 @@
 
             currentTool = tool;
             if(iconVal) currentIcon = iconVal;
-            activeIconObj = null; // Reseta se trocar de ferramenta
+            activeIconObj = null; // Reseta o ícone ao trocar de ferramenta
             
             const toolbar = btnElement.closest('.pdf-toolbar');
             toolbar.querySelectorAll('.tool-mode').forEach(b => b.classList.remove('active'));
@@ -3750,7 +3876,7 @@
             canvas.isDrawingMode = (tool === 'brush');
             if(tool === 'brush') {
                 canvas.freeDrawingBrush.color = currentColor;
-                // >>> TESTE ESPESSURA PINCEL AQUI <<<
+                // >>> TESTE ESPESSURA DO PINCEL AQUI <<< (Original era 2)
                 canvas.freeDrawingBrush.width = 1.5; 
             }
 
@@ -3792,7 +3918,64 @@
             }
         }
 
+        // ==========================================
+        // FUNÇÃO QUE ABRE O PDF RESTAURADA!
+        // ==========================================
+        async function loadPDF(filename, btnElement) {
+            const obra = currentObra;
+            const container = document.getElementById(`pdf-container-${obra}`);
+            const emptyState = document.getElementById(`empty-state-${obra}`);
+            const parent = document.getElementById(`viewer-area-${obra}`);
+            
+            const sidebar = btnElement.closest('.projetos-sidebar');
+            sidebar.querySelectorAll('.projeto-btn').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            container.style.display = 'none';
+            emptyState.style.display = 'block';
+            emptyState.innerText = "Carregando PDF...";
+
+            try {
+                if(!pdfStates[obra].canvas) initFabricCanvas(obra);
+                const canvas = pdfStates[obra].canvas;
+                canvas.clear();
+                
+                const loadingTask = pdfjsLib.getDocument(filename);
+                pdfStates[obra].pdfDoc = await loadingTask.promise;
+                pdfStates[obra].currentPdf = filename;
+                
+                const page = await pdfStates[obra].pdfDoc.getPage(1);
+                const viewport = page.getViewport({ scale: 2.0 });
+                
+                const pdfCanvas = document.createElement('canvas');
+                const ctx = pdfCanvas.getContext('2d');
+                pdfCanvas.width = viewport.width;
+                pdfCanvas.height = viewport.height;
+                
+                await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+                
+                fabric.Image.fromURL(pdfCanvas.toDataURL(), function(img) {
+                    canvas.setWidth(parent.clientWidth);
+                    canvas.setHeight(parent.clientHeight);
+                    const scale = Math.min(parent.clientWidth / img.width, parent.clientHeight / img.height);
+                    img.set({ scaleX: scale, scaleY: scale, originX: 'center', originY: 'center', left: canvas.width/2, top: canvas.height/2, selectable: false, evented: false });
+                    
+                    canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+                    emptyState.style.display = 'none';
+                    container.style.display = 'block';
+                    
+                    pdfStates[obra].history = [];
+                    pdfStates[obra].historyStep = -1;
+                    saveHistory(obra);
+                });
+            } catch (error) {
+                emptyState.innerText = "PDF não encontrado ou falha no carregamento.\nVerifique se o arquivo '" + filename + "' está na mesma pasta no GitHub.";
+                container.style.display = 'none';
+            }
+        }
+
         let isPanning = false, lastPosX, lastPosY;
+        
         function onMouseDown(o) {
             const canvas = pdfStates[currentObra].canvas;
             if(!canvas) return;
@@ -3805,18 +3988,27 @@
                 return;
             }
 
-            // Lógica para soltar ícone e travar
+            // Permite clicar num ícone recém-criado para redimensioná-lo/movê-lo
+            if (currentTool === 'icon' && o.target) return;
+            
+            if(currentTool === 'pan' || currentTool === 'brush') return;
+            if(isDrawing) return; 
+            
+            const pointer = canvas.getPointer(o.e);
+
+            // LOGICA DO NOVO ÍCONE CONTÍNUO
             if (currentTool === 'icon') {
                 if (activeIconObj) {
+                    // Trava o ícone anterior quando você clica fora dele
                     activeIconObj.set({ selectable: false, evented: false });
                     canvas.discardActiveObject();
                     saveHistory(currentObra);
-                    activeIconObj = null;
                 }
-                const pointer = canvas.getPointer(o.e);
+                // Cria um NOVO ícone
                 activeIconObj = new fabric.Text(currentIcon, { 
                     left: pointer.x, top: pointer.y, 
-                    fontSize: 24, // Tamanho base do ícone
+                    // >>> TESTE TAMANHO DO ÍCONE AQUI <<<
+                    fontSize: 24, 
                     originX: 'center', originY: 'center', 
                     selectable: true, evented: true 
                 });
@@ -3825,23 +4017,20 @@
                 return;
             }
 
-            if(currentTool === 'pan' || currentTool === 'brush') return;
-            if(isDrawing) return; 
-            
-            const pointer = canvas.getPointer(o.e);
-
             if (currentTool === 'polygon') {
                 if (polygonPoints.length === 0) {
                     polygonPoints.push({ x: pointer.x, y: pointer.y });
                     const circle = new fabric.Circle({
-                        radius: 0.5, // Bolinha menor
+                        // >>> TESTE TAMANHO DO PONTO (ÁREA) AQUI <<<
+                        radius: 0.5, 
                         fill: currentColor, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', selectable: false, evented: false
                     });
                     polygonTempObjs.push(circle);
                     canvas.add(circle);
 
                     activeLine = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
-                        strokeWidth: 1, // Espessura da linha da área
+                        // >>> TESTE ESPESSURA DA LINHA DA ÁREA (EM DESENHO) AQUI <<<
+                        strokeWidth: 1, 
                         fill: currentColor, stroke: currentColor, originX: 'center', originY: 'center', selectable: false, evented: false
                     });
                     canvas.add(activeLine);
@@ -3855,7 +4044,8 @@
 
                         const poly = new fabric.Polygon(polygonPoints, {
                             fill: currentColor + '40', stroke: currentColor, 
-                            strokeWidth: 1.5, // Espessura da borda da área finalizada
+                            // >>> TESTE ESPESSURA DA BORDA DA ÁREA FINALIZADA AQUI <<<
+                            strokeWidth: 1.5, 
                             selectable: (currentTool === 'pan'), evented: (currentTool === 'pan')
                         });
                         canvas.add(poly);
@@ -3866,15 +4056,13 @@
                         activeLine.set({ x2: pointer.x, y2: pointer.y });
                         
                         const circle = new fabric.Circle({
-                            radius: 0.5, // Bolinha menor
-                            fill: currentColor, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', selectable: false, evented: false
+                            radius: 0.5, fill: currentColor, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', selectable: false, evented: false
                         });
                         polygonTempObjs.push(circle);
                         canvas.add(circle);
 
                         activeLine = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
-                            strokeWidth: 1, // Espessura da linha da área
-                            fill: currentColor, stroke: currentColor, originX: 'center', originY: 'center', selectable: false, evented: false
+                            strokeWidth: 1, fill: currentColor, stroke: currentColor, originX: 'center', originY: 'center', selectable: false, evented: false
                         });
                         canvas.add(activeLine);
                     }
@@ -3886,8 +4074,12 @@
             startPoint = pointer;
 
             if (currentTool === 'text') {
-                // >>> TESTE TAMANHO FONTE CAIXA TEXTO AQUI <<<
-                const text = new fabric.IText('Digite...', { left: pointer.x, top: pointer.y, fontSize: 12, fill: currentColor, fontFamily: 'Montserrat', selectable: true, evented: true });
+                const text = new fabric.IText('Digite...', { 
+                    left: pointer.x, top: pointer.y, 
+                    // >>> TESTE TAMANHO DO TEXTO AQUI <<< (Original era 20)
+                    fontSize: 12, 
+                    fill: currentColor, fontFamily: 'Montserrat', selectable: true, evented: true 
+                });
                 canvas.add(text);
                 canvas.setActiveObject(text);
                 text.enterEditing();
@@ -3895,13 +4087,17 @@
                 saveHistory(currentObra);
                 isDrawing = false;
             } else if (currentTool === 'circle') {
-                // >>> TESTE ESPESSURA BORDA CIRCULO AQUI <<<
-                shapeObj = new fabric.Circle({ left: pointer.x, top: pointer.y, radius: 1, fill: 'transparent', stroke: currentColor, strokeWidth: 1.5, originX: 'center', originY: 'center', selectable: false, evented: false });
+                shapeObj = new fabric.Circle({ 
+                    left: pointer.x, top: pointer.y, radius: 1, fill: 'transparent', stroke: currentColor, 
+                    // >>> TESTE ESPESSURA DO CÍRCULO AQUI <<< (Original era 2)
+                    strokeWidth: 1.5, 
+                    originX: 'center', originY: 'center', selectable: false, evented: false 
+                });
                 canvas.add(shapeObj);
             } else if (currentTool === 'arrow') {
-                // >>> TESTE ESPESSURA LINHA SETA AQUI <<<
+                // >>> TESTE ESPESSURA DA LINHA DA SETA AQUI <<<
                 let espessuraSeta = 1.5; 
-                // >>> TESTE TAMANHO TRIANGULO SETA AQUI <<<
+                // >>> TESTE TAMANHO DO TRIÂNGULO DA SETA AQUI <<<
                 let tamanhoPonta = 8; 
                 
                 let line = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
@@ -3951,7 +4147,7 @@
                 let dy = pointer.y - startPoint.y;
                 let angle = Math.atan2(dy, dx);
                 
-                // Centralização perfeita da ponta da seta em relação à linha
+                // Centralização perfeita do triângulo
                 let lineEndX = pointer.x - (shapeObj.pontaOffset * Math.cos(angle));
                 let lineEndY = pointer.y - (shapeObj.pontaOffset * Math.sin(angle));
                 
@@ -3984,6 +4180,7 @@
                 saveHistory(currentObra);
             }
         }
+
         function saveHistory(obra) {
             if (isHistoryUpdating) return; 
             const state = pdfStates[obra || currentObra];
@@ -4051,12 +4248,23 @@
             });
         });
 
-        document.querySelectorAll('.tab-btn').forEach(btn => {
+       document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
-                document.getElementById('tab-'+this.dataset.tab).classList.add('active');
+                
+                const targetTabId = 'tab-'+this.dataset.tab;
+                document.getElementById(targetTabId).classList.add('active');
+                
+                // Oculta o botão ao mudar a aba mestra, até que se defina a sub-aba ativa
+                document.getElementById('btn-insights').style.display = 'none';
+                
+                // Puxar automaticamente a subaba ativa e testar visibilidade
+                const activeSubTab = document.querySelector(`#${targetTabId} .sub-tab-btn.active`);
+                if(activeSubTab) {
+                    checkInsightsVisibility(activeSubTab.dataset.subtab);
+                }
             });
         });
 
@@ -4066,7 +4274,11 @@
                 parent.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 parent.querySelectorAll('.sub-tab-content').forEach(tc => tc.classList.remove('active'));
-                document.getElementById('subtab-'+this.dataset.subtab).classList.add('active');
+                
+                const targetSubTabId = 'subtab-'+this.dataset.subtab;
+                document.getElementById(targetSubTabId).classList.add('active');
+                
+                checkInsightsVisibility(this.dataset.subtab); // Checa se mostra o botão
             });
         });
 
@@ -4081,7 +4293,10 @@
         });
 
         document.addEventListener('keydown', e => { 
-            if (e.key === 'Escape') closeAllModals();
+            if (e.key === 'Escape') {
+                closeAllModals();
+                document.getElementById('modalInsightsGlobal').classList.remove('active');
+            }
         });
 
     </script>

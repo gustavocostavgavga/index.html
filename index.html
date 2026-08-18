@@ -3807,13 +3807,14 @@
             'parque': { canvas: null, pdfDoc: null, currentPdf: null, history: [], historyStep: -1 }
         };
 
-       let currentTool = 'pan';
+      let currentTool = 'pan';
         let currentColor = '#e53935';
         let currentIcon = '📍';
         let isDrawing = false;
         let startPoint = null;
         let shapeObj = null;
-        let activeIconObj = null; // Variável para controlar o ícone que está sendo arrastado
+        let activeIconObj = null; // Controla o ícone arrastável
+        let activeTextObj = null; // Controla o texto arrastável/editável
         let isHistoryUpdating = false; 
 
         // Variáveis para funcionalidade Polígono (Área)
@@ -3843,7 +3844,6 @@
             canvas.on('mouse:move', onMouseMove);
             canvas.on('mouse:up', onMouseUp);
             
-            // Corrige o Pincel para salvar no histórico apenas quando terminar o traçado
             canvas.on('path:created', () => saveHistory(obra));
             canvas.on('object:modified', () => saveHistory(obra));
         }
@@ -3864,20 +3864,24 @@
 
             currentTool = tool;
             if(iconVal) currentIcon = iconVal;
-            activeIconObj = null; // Reseta o ícone ao trocar de ferramenta
+            
+            const canvas = pdfStates[currentObra].canvas;
+            
+            // Se trocar de ferramenta, trava o ícone ou o texto anterior
+            if (activeIconObj) { activeIconObj.set({ selectable: false, evented: false }); activeIconObj = null; }
+            if (activeTextObj) { activeTextObj.set({ selectable: false, evented: false }); activeTextObj = null; }
             
             const toolbar = btnElement.closest('.pdf-toolbar');
             toolbar.querySelectorAll('.tool-mode').forEach(b => b.classList.remove('active'));
             if(btnElement) btnElement.classList.add('active');
 
-            const canvas = pdfStates[currentObra].canvas;
             if(!canvas) return;
 
             canvas.isDrawingMode = (tool === 'brush');
             if(tool === 'brush') {
                 canvas.freeDrawingBrush.color = currentColor;
-                // >>> TESTE ESPESSURA DO PINCEL AQUI <<< (Original era 2)
-                canvas.freeDrawingBrush.width = 1.5; 
+                // >>> TESTE ESPESSURA DO PINCEL AQUI <<< (Pode testar 0.5, 1, 1.5)
+                canvas.freeDrawingBrush.width = 0.5; 
             }
 
             if(tool === 'pan') {
@@ -3918,10 +3922,7 @@
             }
         }
 
-        // ==========================================
-        // FUNÇÃO QUE ABRE O PDF RESTAURADA!
-        // ==========================================
-        async function loadPDF(filename, btnElement) {
+async function loadPDF(filename, btnElement) {
             const obra = currentObra;
             const container = document.getElementById(`pdf-container-${obra}`);
             const emptyState = document.getElementById(`empty-state-${obra}`);
@@ -3975,7 +3976,6 @@
         }
 
         let isPanning = false, lastPosX, lastPosY;
-        
         function onMouseDown(o) {
             const canvas = pdfStates[currentObra].canvas;
             if(!canvas) return;
@@ -3988,23 +3988,21 @@
                 return;
             }
 
-            // Permite clicar num ícone recém-criado para redimensioná-lo/movê-lo
-            if (currentTool === 'icon' && o.target) return;
+            // Impede a criação de um novo objeto se você apenas clicou em um ícone ou texto que acabou de criar
+            if ((currentTool === 'icon' || currentTool === 'text') && o.target) return;
             
             if(currentTool === 'pan' || currentTool === 'brush') return;
             if(isDrawing) return; 
             
             const pointer = canvas.getPointer(o.e);
 
-            // LOGICA DO NOVO ÍCONE CONTÍNUO
+            // LOGICA DO ÍCONE CONTÍNUO
             if (currentTool === 'icon') {
                 if (activeIconObj) {
-                    // Trava o ícone anterior quando você clica fora dele
                     activeIconObj.set({ selectable: false, evented: false });
                     canvas.discardActiveObject();
                     saveHistory(currentObra);
                 }
-                // Cria um NOVO ícone
                 activeIconObj = new fabric.Text(currentIcon, { 
                     left: pointer.x, top: pointer.y, 
                     // >>> TESTE TAMANHO DO ÍCONE AQUI <<<
@@ -4017,11 +4015,33 @@
                 return;
             }
 
+            // LOGICA DO TEXTO CONTÍNUO (NOVO)
+            if (currentTool === 'text') {
+                if (activeTextObj) {
+                    activeTextObj.set({ selectable: false, evented: false });
+                    canvas.discardActiveObject();
+                    saveHistory(currentObra);
+                }
+                activeTextObj = new fabric.IText('Digite...', { 
+                    left: pointer.x, top: pointer.y, 
+                    // >>> TESTE TAMANHO DA FONTE INICIAL DO TEXTO AQUI <<<
+                    fontSize: 12, 
+                    fill: currentColor, fontFamily: 'Montserrat', 
+                    originX: 'center', originY: 'center',
+                    selectable: true, evented: true 
+                });
+                canvas.add(activeTextObj);
+                canvas.setActiveObject(activeTextObj);
+                activeTextObj.enterEditing();
+                activeTextObj.selectAll();
+                return;
+            }
+
             if (currentTool === 'polygon') {
                 if (polygonPoints.length === 0) {
                     polygonPoints.push({ x: pointer.x, y: pointer.y });
                     const circle = new fabric.Circle({
-                        // >>> TESTE TAMANHO DO PONTO (ÁREA) AQUI <<<
+                        // >>> TESTE TAMANHO DA BOLINHA DOS PONTOS DA ÁREA AQUI <<<
                         radius: 0.5, 
                         fill: currentColor, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', selectable: false, evented: false
                     });
@@ -4029,8 +4049,8 @@
                     canvas.add(circle);
 
                     activeLine = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
-                        // >>> TESTE ESPESSURA DA LINHA DA ÁREA (EM DESENHO) AQUI <<<
-                        strokeWidth: 1, 
+                        // >>> TESTE ESPESSURA DA LINHA ENQUANTO DESENHA A ÁREA AQUI <<<
+                        strokeWidth: 0.5, 
                         fill: currentColor, stroke: currentColor, originX: 'center', originY: 'center', selectable: false, evented: false
                     });
                     canvas.add(activeLine);
@@ -4045,7 +4065,7 @@
                         const poly = new fabric.Polygon(polygonPoints, {
                             fill: currentColor + '40', stroke: currentColor, 
                             // >>> TESTE ESPESSURA DA BORDA DA ÁREA FINALIZADA AQUI <<<
-                            strokeWidth: 1.5, 
+                            strokeWidth: 0.5, 
                             selectable: (currentTool === 'pan'), evented: (currentTool === 'pan')
                         });
                         canvas.add(poly);
@@ -4062,7 +4082,7 @@
                         canvas.add(circle);
 
                         activeLine = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
-                            strokeWidth: 1, fill: currentColor, stroke: currentColor, originX: 'center', originY: 'center', selectable: false, evented: false
+                            strokeWidth: 0.5, fill: currentColor, stroke: currentColor, originX: 'center', originY: 'center', selectable: false, evented: false
                         });
                         canvas.add(activeLine);
                     }
@@ -4073,32 +4093,19 @@
             isDrawing = true;
             startPoint = pointer;
 
-            if (currentTool === 'text') {
-                const text = new fabric.IText('Digite...', { 
-                    left: pointer.x, top: pointer.y, 
-                    // >>> TESTE TAMANHO DO TEXTO AQUI <<< (Original era 20)
-                    fontSize: 12, 
-                    fill: currentColor, fontFamily: 'Montserrat', selectable: true, evented: true 
-                });
-                canvas.add(text);
-                canvas.setActiveObject(text);
-                text.enterEditing();
-                text.selectAll();
-                saveHistory(currentObra);
-                isDrawing = false;
-            } else if (currentTool === 'circle') {
+            if (currentTool === 'circle') {
                 shapeObj = new fabric.Circle({ 
                     left: pointer.x, top: pointer.y, radius: 1, fill: 'transparent', stroke: currentColor, 
-                    // >>> TESTE ESPESSURA DO CÍRCULO AQUI <<< (Original era 2)
-                    strokeWidth: 1.5, 
+                    // >>> TESTE ESPESSURA DO CÍRCULO AQUI <<<
+                    strokeWidth: 0.5, 
                     originX: 'center', originY: 'center', selectable: false, evented: false 
                 });
                 canvas.add(shapeObj);
             } else if (currentTool === 'arrow') {
                 // >>> TESTE ESPESSURA DA LINHA DA SETA AQUI <<<
-                let espessuraSeta = 1.5; 
+                let espessuraSeta = 0.5; 
                 // >>> TESTE TAMANHO DO TRIÂNGULO DA SETA AQUI <<<
-                let tamanhoPonta = 8; 
+                let tamanhoPonta = 4; 
                 
                 let line = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
                     stroke: currentColor, strokeWidth: espessuraSeta, selectable: false, evented: false,
@@ -4126,7 +4133,7 @@
                 lastPosY = o.e.clientY;
             }
 
-            if (currentTool === 'icon') return;
+            if (currentTool === 'icon' || currentTool === 'text') return;
 
             const pointer = canvas.getPointer(o.e);
 
@@ -4180,7 +4187,6 @@
                 saveHistory(currentObra);
             }
         }
-
         function saveHistory(obra) {
             if (isHistoryUpdating) return; 
             const state = pdfStates[obra || currentObra];

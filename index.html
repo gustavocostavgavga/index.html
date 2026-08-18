@@ -127,6 +127,9 @@
             -webkit-font-smoothing: antialiased; 
             -moz-osx-font-smoothing: grayscale; 
             transition: background 0.4s ease, color 0.4s ease; 
+            /* Blindagem para Mobile: */
+            max-width: 100vw;
+            overflow-x: hidden;
         }
 
         .home-page {
@@ -535,6 +538,99 @@
         
         @media (max-width: 992px) {
             .ranking-grid-3 { grid-template-columns: 1fr; }
+        }
+/* =========================================================================
+           RESPONSIVIDADE TOTAL MESTRE (SMARTPHONES E TABLETS)
+           ========================================================================= */
+        
+        @media (max-width: 1200px) {
+            /* Quebra a grade de 6 colunas de KPI para 3 colunas */
+            .kpi-grid { grid-template-columns: repeat(3, 1fr) !important; }
+        }
+
+        @media (max-width: 992px) {
+            /* Quebra a grade de KPI para 2 colunas */
+            .kpi-grid { grid-template-columns: repeat(2, 1fr) !important; }
+            .sobre-container { flex-direction: column; }
+            .sobre-image-wrapper { aspect-ratio: 16/9; }
+            .executive { grid-template-columns: 1fr !important; }
+            .ranking-grid-3 { grid-template-columns: 1fr; }
+            
+            /* Projetos (PDF) Responsivo: Transforma o menu lateral em botões no topo */
+            .projetos-container { flex-direction: column; align-items: stretch; }
+            .projetos-sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .projeto-btn { flex: 1 1 30%; text-align: center; font-size: 0.8rem; padding: 10px; }
+            .projetos-content { height: 60vh; min-height: 500px; width: 100%; }
+            .pdf-toolbar { flex-wrap: wrap; justify-content: center; overflow: visible; }
+            
+            /* Fluxo de Desembolsos (Summary): Empilha as caixas e gira os operadores matemáticos (+, =, |) */
+            .summary-container { flex-direction: column !important; align-items: stretch !important; gap: 10px; }
+            .summary-box { min-height: 80px; padding: 15px; }
+            .summary-operator { transform: rotate(90deg); margin: 5px auto !important; font-size: 1.5rem !important; }
+        }
+
+        @media (max-width: 768px) {
+            /* Header e Títulos */
+            header { flex-direction: column; padding-bottom: 10px; }
+            header h1 { font-size: 1.1rem; padding: 0; text-align: center; margin: 10px 0; line-height: 1.4; }
+            header .title-section { flex-direction: column; gap: 10px; padding: 15px; }
+            .logo-container { width: 100%; justify-content: center; }
+            .header-controls-block { width: 100%; align-items: center; }
+            .home-title { font-size: 1.8rem; }
+            
+            /* Abas: Os botões vão quebrar em 2 por linha */
+            .tab-btn { flex: 1 1 45%; padding: 10px; font-size: 0.85rem; text-align: center; }
+            .sub-tab-btn { flex: 1 1 45%; padding: 8px; font-size: 0.75rem; text-align: center; }
+            .analysis-tab-btn { flex: 1 1 100%; text-align: center; }
+            
+            /* Gráficos e Caixas */
+            .chart-grid-top { grid-template-columns: 1fr; }
+            .chart-container-large { height: 500px; padding: 10px; }
+            .chart-container-disponivel { height: 400px; padding: 10px; }
+            
+            /* Textos das Etapas e Top 5 Impacto - Ocuparão 100% da tela */
+            .top5-item-container { width: 100% !important; margin-bottom: 15px !important; }
+            .top5-item-row { flex-direction: column; align-items: flex-start; gap: 5px; }
+            .top5-bar-track { width: 100% !important; }
+            .top5-item-values { width: 100%; justify-content: space-between; }
+            .vigentes-item { flex-direction: column; gap: 5px; font-size: 0.85rem; border-bottom: 1px dashed var(--planejamento-border); padding-bottom: 10px; }
+            .vigentes-total { font-size: 1rem; flex-direction: column; align-items: flex-end; }
+            .vigentes-total span:first-child { align-self: flex-start; }
+            .hierarchical-list .level-1, .hierarchical-list .level-2 { font-size: 0.85rem; }
+            
+            /* Galeria */
+            .gallery-container { grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; }
+            .gallery-item { aspect-ratio: 1; }
+            
+            /* Carousel de Insights no Mobile */
+            .insights-carousel-track { transform: translateX(5%) !important; }
+            .insights-carousel-track .insight-card { flex: 0 0 90%; max-width: 90%; margin: 0 5%; }
+            
+            /* Modais (Popups) */
+            .gauge-modal-box { width: 95%; padding: 20px 15px; }
+            .gauge-details { grid-template-columns: 1fr; gap: 10px; }
+            .gauge-chart-wrap { width: 180px; height: 180px; }
+            .gauge-center-label #gaugePercent { font-size: 1.8rem; }
+            .modal-prev { left: 5px !important; font-size: 2rem !important; }
+            .modal-next { right: 5px !important; font-size: 2rem !important; }
+            .table-container { overflow-x: auto; width: 100%; }
+            
+            /* Botões Flutuantes mais ergonômicos */
+            #btn-voltar, #btn-insights { font-size: 0.8rem; padding: 10px 15px; }
+            #btn-insights { left: 15px; bottom: 15px; }
+            #btn-voltar { right: 15px; bottom: 15px; }
+            .resumo-btn { position: relative; right: 0; top: 0; margin-bottom: 15px; display: block; width: 100%; }
+        }
+
+        @media (max-width: 480px) {
+            /* Celulares bem pequenos */
+            .kpi-grid { grid-template-columns: 1fr !important; }
+            .gallery-container { grid-template-columns: 1fr; }
+            .tab-btn, .sub-tab-btn { flex: 1 1 100%; }
+            .home-title { font-size: 1.6rem; }
+            .gauge-chart-wrap { width: 160px; height: 160px; }
+            .gauge-center-label #gaugePercent { font-size: 1.5rem; }
+            .prazos-card p { font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -4015,36 +4111,29 @@ async function loadPDF(filename, btnElement) {
                 return;
             }
 
-           // LOGICA DO TEXTO CONTÍNUO E EDITÁVEL
+          // LOGICA DO TEXTO CONTÍNUO E EDITÁVEL
             if (currentTool === 'text') {
-                if (activeTextObj) {
-                    // Se o texto está selecionado ou em edição e o usuário clica fora, apenas tiramos a seleção
-                    if (canvas.getActiveObject() === activeTextObj || activeTextObj.isEditing) {
-                        if (activeTextObj.isEditing) {
-                            activeTextObj.exitEditing();
-                        }
-                        canvas.discardActiveObject();
-                        canvas.requestRenderAll();
-                        return; 
-                    } else {
-                        // Se o texto já estava sem seleção e o usuário clicou numa área limpa, travamos ele e criamos outro
-                        activeTextObj.set({ selectable: false, evented: false });
-                        saveHistory(currentObra);
-                        activeTextObj = null;
-                    }
+                // Se já houver um objeto selecionado (como a caixa de texto atual),
+                // a intenção do usuário ao clicar no vazio é apenas DESELECIONAR.
+                // Portanto, retornamos para não criar uma nova caixa indevidamente.
+                if (canvas.getActiveObject()) {
+                    return; 
                 }
-                
-                activeTextObj = new fabric.IText('Digite...', { 
+
+                // O próximo clique em uma área limpa (quando NADA estiver selecionado) cria a NOVA caixa.
+                const text = new fabric.IText('Digite...', { 
                     left: pointer.x, top: pointer.y, 
+                    // >>> TESTE TAMANHO DA FONTE INICIAL DO TEXTO AQUI <<<
                     fontSize: 12, 
                     fill: currentColor, fontFamily: 'Montserrat', 
                     originX: 'center', originY: 'center',
                     selectable: true, evented: true 
                 });
-                canvas.add(activeTextObj);
-                canvas.setActiveObject(activeTextObj);
-                activeTextObj.enterEditing();
-                activeTextObj.selectAll();
+                canvas.add(text);
+                canvas.setActiveObject(text);
+                text.enterEditing();
+                text.selectAll();
+                saveHistory(currentObra);
                 return;
             }
 

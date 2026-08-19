@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -9,10 +10,13 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
-
+    
+    <!-- BIBLIOTECA DO GANTT -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  
     <style>
         /* Aplicação global e irrestrita da fonte Montserrat */
         * { 
@@ -516,6 +520,10 @@
             .insights-carousel-track { transform: translateX(7.5%); }
             .insights-carousel-track .insight-card { flex: 0 0 80%; max-width: 80%; margin: 0 2.5%; }
         }
+	
+	/* Botões de Filtro do Gráfico de Gantt */
+        .gantt-btn { background: var(--sub-tab-btn-bg); border: 1px solid var(--sub-tab-btn-border); color: var(--sub-tab-btn-text); padding: 6px 16px; border-radius: 6px; cursor: pointer; font-weight: 700; transition: all 0.4s; font-size: 0.8rem; }
+        .gantt-btn.active, .gantt-btn:hover { background: var(--active-hover-color); color: var(--active-text); border-color: var(--active-hover-color); }
 
         /* Estilos das barras interativas e Rankings (Novo Design) */
         .top5-item-container { display: flex; flex-direction: column; margin-bottom: 20px; width: 75%; margin-left: auto; margin-right: auto; transition: transform 0.3s ease; cursor: default; }
@@ -811,6 +819,7 @@
                         <div class="summary-box result-extrapolacao"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 240.603,78</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Extrapolação</div></div>
                     </div>
                 </div>
+                      
                 <div class="chart-container" style="margin-bottom: 20px; height: 620px; padding-bottom: 30px;">
                     <div class="chart-title">Orçado x Investido x Projetado por Etapa</div>
                     <canvas id="chartMiranteBar" style="max-height: 100%;"></canvas>
@@ -822,8 +831,26 @@
             </div>
             
             <div class="sub-tab-content" id="subtab-planejamento-mirante">
-                <div class="planejamento-container">
-                    <div class="planejamento-card">
+                <div class="planejamento-container" style="width: 100%;">
+                    <!-- GRÁFICO DE GANTT (MIRANTE) ATUALIZADO COM BOTÕES -->
+                    <div class="planejamento-card" style="max-width: 100%; width: 100%; padding-bottom: 10px;">
+                        <h3>📊 Cronograma Executivo de Obras - Gráfico de Gantt</h3>
+                        
+                        <div class="gantt-filter-buttons" style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;">
+                            <button class="gantt-btn active" onclick="filterGanttMirante('todos', this)">Período Total</button>
+                            <button class="gantt-btn" onclick="filterGanttMirante(2023, this)">2023</button>
+                            <button class="gantt-btn" onclick="filterGanttMirante(2024, this)">2024</button>
+                            <button class="gantt-btn" onclick="filterGanttMirante(2025, this)">2025</button>
+                            <button class="gantt-btn" onclick="filterGanttMirante(2026, this)">2026</button>
+                        </div>
+
+                        <div style="overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch;">
+                            <div id="gantt_mirante" style="min-width: 1200px;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- QUADROS VIGENTES ESTICADOS PARA 100% DE LARGURA -->
+                    <div class="planejamento-card" style="max-width: 100%; width: 100%;">
                         <h3>⚙️ Etapas vigentes ou contratadas</h3>
                         <div class="vigentes-header" style="display: flex; justify-content: space-between; font-weight: 700; color: var(--title-color); border-bottom: 2px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9rem;"><span>Atividades</span><span>Em investimento</span></div>
                         <div class="vigentes-item"><span>Recapeamento viário</span><span>R$ 1.681.000,00</span></div>
@@ -835,7 +862,7 @@
                         <div class="vigentes-item"><span>Terraplenagem do parque linear e aterro do lote comercial</span><span>R$ 119.402,50</span></div>
                         <div class="vigentes-total"><span>TOTAL</span><span>R$ 2.331.235,70</span></div>
                     </div>
-                    <div class="planejamento-card">
+                    <div class="planejamento-card" style="max-width: 100%; width: 100%;">
                         <h3>🕒 Próximas ativações</h3>
                         <div class="vigentes-header" style="display: flex; justify-content: space-between; font-weight: 700; color: var(--title-color); border-bottom: 2px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9rem;"><span>Atividades</span><span>Previsão de investimento</span></div>
                         <ul class="hierarchical-list">
@@ -4394,7 +4421,13 @@ async function loadPDF(filename, btnElement) {
                 document.getElementById(targetSubTabId).classList.add('active');
                 
                 checkInsightsVisibility(this.dataset.subtab); // Checa se mostra o botão
-            });
+
+		// Aciona o desenho do Gráfico de Gantt imediatamente ao clicar na aba de planejamento
+                if (this.dataset.subtab === 'planejamento-mirante' && typeof drawGanttMirante === 'function') {
+                    setTimeout(drawGanttMirante, 100); 
+                }
+	});
+
         });
 
         document.querySelectorAll('.analysis-tab-btn').forEach(btn => {
@@ -4412,6 +4445,291 @@ async function loadPDF(filename, btnElement) {
                 closeAllModals();
                 document.getElementById('modalInsightsGlobal').classList.remove('active');
             }
+        });
+
+// =========================================================================
+        // CRONOGRAMAS DE GANTT (GOOGLE CHARTS) - MIRANTE DA LAGOA
+        // =========================================================================
+        
+        // Força a linguagem pt-BR para traduzir os balões de informação
+        google.charts.load('current', {'packages':['gantt'], 'language': 'pt-BR'});
+        
+        let currentGanttYearMirante = 'todos';
+
+        function filterGanttMirante(year, btnElement) {
+            currentGanttYearMirante = year;
+            if(btnElement) {
+                const parent = btnElement.closest('.gantt-filter-buttons');
+                if(parent) {
+                    parent.querySelectorAll('.gantt-btn').forEach(b => b.classList.remove('active'));
+                    btnElement.classList.add('active');
+                }
+            }
+            drawGanttMirante();
+        }
+
+        const datasIniciaisMirante = [
+            new Date(2024, 10, 1),  // TOPOGRAFIA E CONTROLE
+            new Date(2024, 2, 1),   // MANUTENÇÕES / AS BUILTS
+            new Date(2024, 5, 1),   // TERRAPLANAGEM
+            new Date(2024, 8, 1),   // DRENAGEM
+            new Date(2024, 8, 1),   // REDE DE ÁGUA POTÁVEL
+            new Date(2025, 1, 1),   // RESERVATÓRIO / ADUTORA
+            new Date(2024, 8, 1),   // SISTEMA DE ESGOTO SANITÁRIO
+            new Date(2025, 5, 1),   // ESTAÇÃO ELEVATÓRIA DE ESGOTO
+            new Date(2025, 8, 1),   // GUIAS E SARJETAS
+            new Date(2025, 7, 1),   // PAVIMENTAÇÃO TOTAL
+            new Date(2023, 9, 1),   // ELETRIFICAÇÃO
+            new Date(2024, 10, 1),  // MEIO AMBIENTE
+            new Date(2024, 0, 1),   // TOPOGRAFIA DE ENTREGA
+            new Date(2023, 9, 1)    // INDIRETO DE OBRAS
+        ];
+
+        const datasFinaisMirante = [
+            new Date(2026, 5, 30),  // TOPOGRAFIA E CONTROLE
+            new Date(2026, 7, 31),  // MANUTENÇÕES / AS BUILTS
+            new Date(2026, 2, 31),  // TERRAPLANAGEM
+            new Date(2026, 10, 30), // DRENAGEM
+            new Date(2026, 8, 30),  // REDE DE ÁGUA POTÁVEL
+            new Date(2026, 8, 30),  // RESERVATÓRIO / ADUTORA
+            new Date(2026, 10, 30), // SISTEMA DE ESGOTO SANITÁRIO
+            new Date(2026, 8, 30),  // ESTAÇÃO ELEVATÓRIA DE ESGOTO
+            new Date(2026, 8, 30),  // GUIAS E SARJETAS
+            new Date(2026, 10, 30), // PAVIMENTAÇÃO TOTAL
+            new Date(2026, 8, 30),  // ELETRIFICAÇÃO
+            new Date(2026, 11, 31), // MEIO AMBIENTE
+            new Date(2026, 8, 30),  // TOPOGRAFIA DE ENTREGA
+            new Date(2026, 11, 31)  // INDIRETO DE OBRAS
+        ];
+
+        // MANTÉM AS CORES VARIADAS PARA AS BARRAS HORIZONTAIS
+        const coresVariadas = ['#3498DB','#E74C3C','#9B59B6','#F1C40F','#E67E22','#1ABC9C','#34495E','#D35400','#2980B9','#8E44AD','#C0392B','#16A085','#F39C12','#27AE60'];
+
+        function populateGanttData(yearFilter) {
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'ID Tarefa');
+    data.addColumn('string', 'Etapa');
+    data.addColumn('string', 'Recurso');
+    data.addColumn('date', 'Data de Início');
+    data.addColumn('date', 'Data de Término');
+    data.addColumn('number', 'Duração');
+    data.addColumn('number', 'Progresso (%)');
+    data.addColumn('string', 'Dependências');
+
+    let rows = [];
+    let palette = [];
+    let addedResources = [];
+    
+    // Objeto global temporário para mapear as cores das etapas ativas e colorir o texto depois
+    window.coresEtapasAtuais = {};
+
+    for (let i = 0; i < miranteEtapas.length; i++) {
+        let start = new Date(datasIniciaisMirante[i]);
+        let end = new Date(datasFinaisMirante[i]);
+        let isActive = true;
+
+        if (yearFilter !== 'todos') {
+            let yStart = new Date(yearFilter, 0, 1);
+            let yEnd = new Date(yearFilter, 11, 31);
+            // Se a etapa termina antes do ano escolhido ou começa depois, ela some
+            if (end < yStart || start > yEnd) {
+                isActive = false;
+            } else {
+                if (start < yStart) start = yStart;
+                if (end > yEnd) end = yEnd;
+            }
+        }
+
+        // Apenas adiciona ao gráfico as etapas que tiveram movimentação no período
+        if (isActive) {
+            let resourceName = miranteEtapas[i];
+            
+            if (!addedResources.includes(resourceName)) {
+                addedResources.push(resourceName);
+                let colorIdx = (addedResources.length - 1) % coresVariadas.length;
+                let cor = coresVariadas[colorIdx];
+                palette.push({ color: cor, dark: cor, light: cor });
+                window.coresEtapasAtuais[resourceName] = cor; // Salva a cor designada
+            }
+
+            rows.push([
+                'plan_mir_' + i, 
+                miranteEtapas[i], 
+                resourceName, 
+                start, 
+                end, 
+                null, 
+                miranteFisicoRaw[i], 
+                null
+            ]);
+        }
+    }
+    
+    data.addRows(rows);
+    return { data: data, palette: palette, rowCount: rows.length };
+}
+
+// NOVA FUNÇÃO: Aplica a cor exata da barra no texto e ajusta os meses e linhas para o Modo Noturno
+function applyColorToText(container) {
+    let isDark = document.body.classList.contains('dark-mode');
+    let colorTopo = isDark ? '#e0e0e0' : '#2c3e50';
+
+    let texts = container.getElementsByTagName('text');
+    for (let i = 0; i < texts.length; i++) {
+        let texto = texts[i].textContent;
+        
+	// TRADUÇÃO FORÇADA PARA O BALÃO DE HOVER E REMOÇÃO DE TEXTOS
+        if (texto.includes('days')) {
+            texts[i].textContent = texto.replace('days', 'dias');
+            texto = texts[i].textContent;
+        } else if (texto.includes('day')) {
+            texts[i].textContent = texto.replace('day', 'dia');
+            texto = texts[i].textContent;
+        }
+
+        if (texto.includes('months')) {
+            texts[i].textContent = texto.replace('months', 'meses');
+            texto = texts[i].textContent;
+        } else if (texto.includes('month')) {
+            texts[i].textContent = texto.replace('month', 'mês');
+            texto = texts[i].textContent;
+        }
+
+        if (texto.includes('Percent done')) {
+            texts[i].textContent = texto.replace('Percent done', 'Avanço');
+            texto = texts[i].textContent;
+        }
+     
+        if (texto.includes('years')) {
+            texts[i].textContent = texto.replace('years', 'anos');
+            texto = texts[i].textContent;
+        }
+	
+	if (texto.includes('year')) {
+            texts[i].textContent = texto.replace('year', 'ano');
+            texto = texts[i].textContent;
+        }
+
+	if (texto.includes('Resource')) {
+            texts[i].textContent = texto.replace('Resource', 'Etapa');
+            texto = texts[i].textContent;
+        }
+
+        if (texto.includes('Duration')) {
+            texts[i].textContent = texto.replace('Duration', 'Duração');
+            texto = texts[i].textContent;
+        }
+
+        if (texto.includes('Is on critical path')) {
+            texts[i].textContent = texto.replace('Is on critical path', ''); // Remove o texto substituindo por vazio
+            texto = texts[i].textContent;
+        }
+
+        // Se for o texto de uma etapa (Macro etapa) - Pinta da cor da barra
+        if (window.coresEtapasAtuais && window.coresEtapasAtuais[texto]) {
+            let cor = window.coresEtapasAtuais[texto];
+            let currentFill = texts[i].getAttribute('fill');
+            let currentWeight = texts[i].getAttribute('font-weight');
+            
+            // =========================================================
+            // ESCOLHA AQUI: 'bold' para negrito ou 'normal' para padrão
+            let pesoDesejado = 'normal'; 
+            // =========================================================
+
+            if (currentFill !== cor || currentWeight !== pesoDesejado) {
+                texts[i].setAttribute('fill', cor); 
+                texts[i].setAttribute('font-weight', pesoDesejado);
+            }
+        } else {
+            // Se for os textos do topo (meses, trimestres) - Pinta de claro/escuro adaptável
+            if (texts[i].getAttribute('fill') !== colorTopo) {
+                texts[i].setAttribute('fill', colorTopo);
+            }
+        }
+    }
+
+    // Pinta as linhas verticais (grid) para adaptar ao modo escuro
+    let paths = container.getElementsByTagName('path');
+    let corLinha = isDark ? '#1f5027' : '#e0e0e0';
+    for (let j = 0; j < paths.length; j++) {
+        // Altera apenas linhas de grade (evita quebrar as setas de dependência do Google)
+        let strokeColor = paths[j].getAttribute('stroke');
+        if (strokeColor === '#e0e0e0' || strokeColor === '#ffffff' || strokeColor === '#cccccc' || strokeColor === '#1f5027') {
+            paths[j].setAttribute('stroke', corLinha);
+        }
+    }
+}	
+
+    function drawGanttMirante() {
+    const abaPlanejamento = document.getElementById('subtab-planejamento-mirante');
+    if(!abaPlanejamento || !abaPlanejamento.classList.contains('active')) return;
+
+    // Atualizado para receber apenas 1 argumento (o filtro)
+    const result = populateGanttData(currentGanttYearMirante);
+    const container = document.getElementById('gantt_mirante');
+    
+    // Se o ano não tiver NENHUMA atividade, evite erro no gráfico zerando o height
+    if (result.rowCount === 0) {
+        container.innerHTML = '<div style="padding: 30px; text-align: center; color: var(--subtitle-color); font-weight: 600; width: 100%;">Nenhuma atividade neste período.</div>';
+        container.style.height = '100px';
+        return;
+    }
+
+    if (currentGanttYearMirante === 'todos') {
+        container.style.minWidth = '2800px';
+        container.style.width = '2800px';
+    } else if (currentGanttYearMirante === 2023) {
+        container.style.minWidth = '500px';
+        container.style.width = '500px';
+    } else {
+        container.style.minWidth = '1200px'; 
+        container.style.width = '100%';
+    }
+
+    const chartHeight = result.rowCount * 35 + 50;
+    container.style.height = chartHeight + 'px';
+
+    const isDark = document.body.classList.contains('dark-mode');
+
+    var options = {
+        height: chartHeight, 
+        backgroundColor: { fill: 'transparent' }, // Fica transparente para puxar a cor exata do seu card escuro/claro
+        gantt: {
+            trackHeight: 30,
+            labelStyle: { fontName: 'Montserrat', fontSize: 11, color: isDark ? '#e0e0e0' : '#2c3e50' }, 
+            palette: result.palette, 
+            innerGridTrack: { fill: isDark ? '#0f2d16' : '#f5f5f5' }, // Cor da trilha 1 adaptável
+            innerGridDarkTrack: { fill: isDark ? '#163a1e' : '#e0e0e0' } // Cor da trilha 2 adaptável
+        }
+    };
+
+    var chart = new google.visualization.Gantt(container);
+    
+    // Escuta quando o gráfico renderiza e colore os textos
+    google.visualization.events.addListener(chart, 'ready', function () {
+        applyColorToText(container);
+        
+        // Cria um "vigia" para impedir que o gráfico desfaça a cor e a fonte no hover
+        if (!window.miranteObserver) {
+            window.miranteObserver = new MutationObserver(() => applyColorToText(container));
+            window.miranteObserver.observe(container, { 
+                childList: true, 
+                subtree: true, 
+                attributes: true, 
+                attributeFilter: ['font-weight', 'fill'] 
+            });
+        }
+    });
+
+    chart.draw(result.data, options);
+}
+
+               google.charts.setOnLoadCallback(() => {
+            drawGanttMirante();
+        });
+
+        window.addEventListener('resize', () => {
+            drawGanttMirante();
         });
 
     </script>

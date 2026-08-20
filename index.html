@@ -856,7 +856,8 @@
                                 <!-- A tabela será gerada via JavaScript aqui dentro -->
                             </table>
                         </div>
-                        <div style="text-align: right; margin-top: 15px;">
+                        <div style="text-align: right; margin-top: 15px; display: flex; justify-content: flex-end; gap: 10px;">
+                            <button class="gantt-btn" onclick="gerarCodigoSalvamento('mirante')">💾 Salvar Padrão</button>
                             <button class="gantt-btn" onclick="limparMapaFisico()">🗑️ Limpar Tudo</button>
                         </div>
                     </div>
@@ -1219,7 +1220,8 @@
                                 <!-- A tabela será gerada via JavaScript -->
                             </table>
                         </div>
-                        <div style="text-align: right; margin-top: 15px;">
+                       <div style="text-align: right; margin-top: 15px; display: flex; justify-content: flex-end; gap: 10px;">
+                            <button class="gantt-btn" onclick="gerarCodigoSalvamento('joaquim')">💾 Salvar Padrão</button>
                             <button class="gantt-btn" onclick="limparMapaFisicoJoaquim()">🗑️ Limpar Tudo</button>
                         </div>
                     </div>
@@ -1550,13 +1552,12 @@
                         <p style="text-align: center; font-size: 0.8rem; color: var(--subtitle-color); margin-bottom: 15px;">
                             Clique nos quadrados em branco para marcar/desmarcar os meses em que houve avanço físico real.
                         </p>
-
+                     
                         <div class="gantt-filter-buttons" style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;">
                             <button class="gantt-btn active" onclick="filterMapaFisicoParque('todos', this)">Período Total</button>
-                            <button class="gantt-btn" onclick="filterMapaFisicoParque(2023, this)">2023</button>
-                            <button class="gantt-btn" onclick="filterMapaFisicoParque(2024, this)">2024</button>
                             <button class="gantt-btn" onclick="filterMapaFisicoParque(2025, this)">2025</button>
                             <button class="gantt-btn" onclick="filterMapaFisicoParque(2026, this)">2026</button>
+                            <button class="gantt-btn" onclick="filterMapaFisicoParque(2027, this)">2027</button>
                         </div>
                         
                         <div style="overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; border: 1px solid var(--border-color); border-radius: 8px;">
@@ -1564,7 +1565,8 @@
                                 <!-- A tabela será gerada via JavaScript -->
                             </table>
                         </div>
-                        <div style="text-align: right; margin-top: 15px;">
+                        <div style="text-align: right; margin-top: 15px; display: flex; justify-content: flex-end; gap: 10px;">
+                            <button class="gantt-btn" onclick="gerarCodigoSalvamento('parque')">💾 Salvar Padrão</button>
                             <button class="gantt-btn" onclick="limparMapaFisicoParque()">🗑️ Limpar Tudo</button>
                         </div>
                     </div>
@@ -4518,7 +4520,7 @@ async function loadPDF(filename, btnElement) {
         const coresVariadas = ['#3498DB','#E74C3C','#9B59B6','#F1C40F','#E67E22','#1ABC9C','#34495E','#D35400','#2980B9','#8E44AD','#C0392B','#16A085','#F39C12','#27AE60'];
 
         // Memória global para guardar os cliques mesmo quando mudar de ano
-        if (!window.mapaFisicoState) window.mapaFisicoState = {};
+        if (!window.mapaFisicoState) window.mapaFisicoState = {"0_Nov/24":true,"0_Fev/25":true,"0_Mar/25":true,"0_Abr/25":true,"0_Mai/25":true,"0_Jun/25":true,"0_Jul/25":true,"0_Out/25":true,"0_Nov/25":true,"0_Dez/25":true,"0_Abr/26":true,"0_Jun/26":true,"1_Mar/24":true,"1_Abr/24":true,"1_Jun/24":true,"1_Jul/24":true,"1_Ago/24":true,"1_Out/24":true,"1_Nov/24":true,"1_Jan/25":true,"1_Fev/25":true,"1_Mar/25":true,"1_Abr/25":true,"1_Mai/25":true,"1_Jun/25":true,"1_Jul/25":true,"1_Ago/25":true,"1_Set/25":true,"1_Out/25":true,"1_Nov/25":true,"1_Abr/26":true,"1_Mai/26":true,"1_Jun/26":true,"1_Jul/26":true,"1_Ago/26":true,"1_Set/26":true,"2_Jun/24":true,"2_Jul/24":true,"2_Ago/24":true,"2_Nov/24":true,"2_Dez/24":true,"2_Jan/25":true,"2_Dez/25":true,"2_Jan/26":true,"2_Mar/26":true,"3_Set/24":true,"3_Fev/25":true,"3_Mar/25":true,"3_Abr/25":true,"3_Mai/25":true,"3_Jun/25":true,"3_Jul/25":true,"3_Set/25":true,"3_Out/25":true,"3_Nov/25":true,"3_Dez/25":true,"3_Jan/26":true,"3_Fev/26":true,"3_Mar/26":true,"3_Abr/26":true,"3_Mai/26":true,"3_Ago/26":true,"4_Set/24":true,"4_Out/24":true,"4_Fev/25":true,"4_Abr/25":true,"4_Mai/25":true,"4_Jun/25":true,"4_Jul/25":true,"4_Ago/25":true,"4_Set/25":true,"4_Out/25":true,"4_Nov/25":true,"4_Dez/25":true,"4_Jan/26":true,"4_Fev/26":true,"4_Mai/26":true,"4_Jun/26":true,"4_Jul/26":true,"4_Ago/26":true,"5_Fev/25":true,"5_Mar/25":true,"5_Abr/25":true,"5_Jun/25":true,"5_Jul/25":true,"5_Ago/25":true,"5_Set/25":true,"5_Out/25":true,"5_Nov/25":true,"5_Dez/25":true,"5_Jan/26":true,"5_Fev/26":true,"5_Mai/26":true,"5_Jun/26":true,"5_Jul/26":true,"5_Ago/26":true,"5_Set/26":true,"6_Set/24":true,"6_Fev/25":true,"6_Mar/25":true,"6_Abr/25":true,"6_Mai/25":true,"6_Jun/25":true,"6_Jul/25":true,"6_Ago/25":true,"6_Set/25":true,"6_Out/25":true,"6_Nov/25":true,"6_Dez/25":true,"6_Jan/26":true,"6_Jun/26":true,"6_Ago/26":true,"7_Mai/25":true,"7_Jun/25":true,"7_Jul/25":true,"7_Ago/25":true,"7_Set/25":true,"7_Out/25":true,"7_Nov/25":true,"7_Dez/25":true,"7_Jan/26":true,"7_Mar/26":true,"7_Jun/26":true,"7_Jul/26":true,"7_Ago/26":true,"7_Set/26":true,"8_Ago/25":true,"8_Set/25":true,"8_Out/25":true,"8_Nov/25":true,"8_Dez/25":true,"8_Jan/26":true,"8_Fev/26":true,"8_Mar/26":true,"8_Abr/26":true,"8_Ago/26":true,"8_Set/26":true,"9_Ago/25":true,"9_Set/25":true,"9_Out/25":true,"9_Nov/25":true,"9_Dez/25":true,"9_Jan/26":true,"9_Fev/26":true,"9_Ago/26":true,"9_Set/26":true,"10_Mar/25":true,"10_Abr/25":true,"10_Jul/25":true,"10_Ago/25":true,"10_Jan/26":true,"10_Fev/26":true,"10_Mar/26":true,"10_Abr/26":true,"11_Nov/24":true,"11_Dez/24":true,"11_Jan/25":true,"11_Fev/25":true,"11_Mar/25":true,"11_Abr/25":true,"11_Mai/25":true,"11_Jun/25":true,"11_Jul/25":true,"11_Ago/25":true,"11_Set/25":true,"11_Out/25":true,"11_Nov/25":true,"11_Dez/25":true,"11_Jan/26":true,"11_Fev/26":true,"11_Mar/26":true,"11_Abr/26":true,"11_Mai/26":true,"11_Jun/26":true,"11_Jul/26":true,"11_Ago/26":true,"11_Set/26":true,"12_Jan/24":true,"12_Fev/24":true,"12_Mar/24":true,"12_Abr/24":true,"12_Jun/24":true,"12_Set/24":true,"12_Dez/24":true,"12_Jan/25":true,"12_Fev/25":true,"12_Mar/25":true,"12_Abr/25":true,"12_Nov/25":true,"12_Dez/25":true,"12_Jul/26":true,"12_Ago/26":true,"13_Jan/25":true,"13_Fev/25":true,"13_Mar/25":true,"13_Abr/25":true,"13_Mai/25":true,"13_Jun/25":true,"13_Jul/25":true,"13_Ago/25":true,"13_Set/25":true,"13_Out/25":true,"13_Nov/25":true,"13_Dez/25":true,"13_Jan/26":true,"13_Fev/26":true,"13_Mar/26":true,"13_Abr/26":true,"13_Mai/26":true,"13_Jun/26":true,"13_Jul/26":true,"13_Ago/26":true,"13_Set/26":true,"3_Set/26":true,"4_Mar/26":true,"4_Abr/26":true,"4_Mar/25":true,"10_Ago/26":true,"13_Out/23":true,"13_Nov/23":true,"13_Dez/23":true};
         function drawInteractiveProgressMap(yearFilter = 'todos') {
             const table = document.getElementById('interactive-progress-table');
             if(!table) return;
@@ -4613,7 +4615,7 @@ async function loadPDF(filename, btnElement) {
 	// =========================================================================
         // LÓGICA DO MAPA DE AVANÇO FÍSICO INTERATIVO (JOAQUIM LEME)
         // =========================================================================
-        if (!window.mapaFisicoStateJoaquim) window.mapaFisicoStateJoaquim = {};
+        if (!window.mapaFisicoStateJoaquim) window.mapaFisicoStateJoaquim = {"2_Mar/24":true,"2_Set/24":true,"2_Nov/24":true,"2_Dez/24":true,"2_Jan/25":true,"2_Fev/25":true,"2_Abr/25":true,"2_Mai/25":true,"2_Jun/25":true,"2_Set/25":true,"2_Out/25":true,"2_Nov/25":true,"2_Dez/25":true,"2_Jan/26":true,"2_Fev/26":true,"2_Mai/26":true,"2_Jul/26":true,"2_Ago/26":true,"3_Mar/25":true,"3_Abr/25":true,"3_Out/25":true,"3_Nov/25":true,"3_Dez/25":true,"3_Jan/26":true,"3_Fev/26":true,"3_Mar/26":true,"4_Mar/25":true,"4_Abr/25":true,"4_Nov/25":true,"4_Dez/25":true,"4_Jan/26":true,"4_Fev/26":true,"5_Fev/25":true,"5_Mar/25":true,"5_Abr/25":true,"5_Mai/25":true,"5_Jun/25":true,"5_Set/25":true,"5_Out/25":true,"5_Nov/25":true,"5_Dez/25":true,"5_Jan/26":true,"5_Fev/26":true,"5_Jun/26":true,"5_Jul/26":true,"5_Ago/26":true,"5_Set/26":true,"6_Mar/25":true,"6_Abr/25":true,"6_Jul/25":true,"6_Ago/25":true,"6_Set/25":true,"6_Out/25":true,"6_Nov/25":true,"6_Dez/25":true,"6_Jan/26":true,"6_Fev/26":true,"6_Mar/26":true,"6_Abr/26":true,"6_Jun/26":true,"6_Ago/26":true,"6_Set/26":true,"8_Mar/26":true,"8_Abr/26":true,"10_Ago/25":true,"10_Set/25":true,"10_Out/25":true,"10_Nov/25":true,"10_Dez/25":true,"10_Jan/26":true,"10_Mar/26":true,"10_Abr/26":true,"0_Out/23":true,"0_Nov/23":true,"13_Mar/25":true,"13_Abr/25":true,"13_Mai/25":true,"13_Jun/25":true,"13_Jul/25":true,"13_Ago/25":true,"13_Set/25":true,"13_Out/25":true,"13_Nov/25":true,"13_Dez/25":true,"13_Jan/26":true,"13_Fev/26":true,"13_Mar/26":true,"13_Abr/26":true,"13_Mai/26":true,"13_Jun/26":true,"13_Jul/26":true,"13_Ago/26":true,"13_Set/26":true,"13_Out/26":true,"13_Nov/26":true,"6_Out/26":true,"7_Set/26":true,"7_Out/26":true,"7_Nov/26":true,"8_Out/26":true,"9_Out/26":true,"8_Nov/26":true,"9_Nov/26":true,"10_Fev/26":true,"11_Out/26":true,"11_Nov/26":true,"12_Out/26":true,"12_Nov/26":true,"0_Nov/26":true,"3_Out/26":true};
 
         function drawInteractiveProgressMapJoaquim(yearFilter = 'todos') {
             const table = document.getElementById('interactive-progress-table-joaquim');
@@ -4683,16 +4685,22 @@ async function loadPDF(filename, btnElement) {
         // =========================================================================
         // LÓGICA DO MAPA DE AVANÇO FÍSICO INTERATIVO (PARQUE DAS NAÇÕES)
         // =========================================================================
-        if (!window.mapaFisicoStateParque) window.mapaFisicoStateParque = {};
+        if (!window.mapaFisicoStateParque) window.mapaFisicoStateParque = {"0_Mar/26":true,"0_Jun/26":true,"1_Mar/26":true,"1_Mai/26":true,"1_Jul/26":true,"1_Ago/26":true,"1_Set/26":true,"16_Out/25":true,"3_Jun/26":true,"3_Mai/26":true,"3_Abr/26":true,"17_Ago/25":true,"17_Set/25":true,"17_Dez/25":true,"20_Mai/26":true,"20_Jun/26":true,"20_Jul/26":true,"20_Ago/26":true,"21_Set/26":true,"21_Ago/26":true,"21_Jul/26":true,"21_Jun/26":true,"21_Mai/26":true,"21_Out/26":true,"21_Nov/26":true,"21_Dez/26":true,"21_Jan/27":true,"21_Mar/27":true,"21_Fev/27":true,"1_Dez/26":true,"2_Ago/26":true,"2_Set/26":true,"3_Out/26":true,"3_Set/26":true,"4_Out/26":true,"4_Nov/26":true,"5_Nov/26":true,"5_Dez/26":true,"6_Dez/26":true,"6_Nov/26":true,"7_Set/26":true,"7_Out/26":true,"8_Out/26":true,"8_Nov/26":true,"9_Set/26":true,"9_Out/26":true,"9_Nov/26":true,"10_Nov/26":true,"10_Dez/26":true,"10_Jan/27":true,"12_Dez/26":true,"12_Jan/27":true,"13_Fev/27":true,"13_Mar/27":true,"15_Jan/27":true,"15_Dez/26":true,"16_Set/26":true,"16_Nov/26":true,"16_Jan/27":true,"17_Set/26":true,"20_Set/26":true};
 
         function drawInteractiveProgressMapParque(yearFilter = 'todos') {
             const table = document.getElementById('interactive-progress-table-parque');
             if(!table) return;
 
-            let startYear = 2023, startMonth = 9, endYear = 2026, endMonth = 11;
+           // Período exclusivo do Parque: Ago/2025 (mês 7) a Jul/2027 (mês 6)
+            let startYear = 2025, startMonth = 7, endYear = 2027, endMonth = 6;
+            
             if (yearFilter !== 'todos') {
-                startYear = parseInt(yearFilter); endYear = parseInt(yearFilter);
-                startMonth = (startYear === 2023) ? 9 : 0; endMonth = 11; 
+                startYear = parseInt(yearFilter); 
+                endYear = parseInt(yearFilter);
+                // Se for 2025, começa em Agosto (7). Se não, começa em Janeiro (0).
+                startMonth = (startYear === 2025) ? 7 : 0; 
+                // Se for 2027, termina em Julho (6). Se não, termina em Dezembro (11).
+                endMonth = (endYear === 2027) ? 6 : 11; 
             }
 
             const startDate = new Date(startYear, startMonth, 1); 
@@ -4749,7 +4757,27 @@ async function loadPDF(filename, btnElement) {
             let year = activeBtn && !activeBtn.innerText.includes('Total') ? activeBtn.innerText : 'todos';
             drawInteractiveProgressMapParque(year);
         }
-             
+
+// =========================================================================
+        // FERRAMENTA PARA GERAR CÓDIGO DE SALVAMENTO DEFINITIVO (ATUALIZADA)
+        // =========================================================================
+        function gerarCodigoSalvamento(obra) {
+            let stateObj = {};
+            if (obra === 'mirante') stateObj = window.mapaFisicoState;
+            else if (obra === 'joaquim') stateObj = window.mapaFisicoStateJoaquim;
+            else if (obra === 'parque') stateObj = window.mapaFisicoStateParque;
+
+            let jsonStr = JSON.stringify(stateObj);
+            
+            // Copia o texto gigante direto para o "Ctrl+C" do seu computador
+            navigator.clipboard.writeText(jsonStr).then(() => {
+                alert("✅ HISTÓRICO COPIADO COM SUCESSO!\n\nO código inteiro (sem cortes) já está na sua área de transferência.\n\nBasta ir no seu arquivo HTML e colar (Ctrl+V) substituindo as chaves {}.");
+            }).catch(err => {
+                // Plano B caso o navegador seja muito restrito e bloqueie a cópia
+                console.log(jsonStr);
+                alert("O navegador bloqueou a cópia automática.\n\nAperte a tecla F12, vá na aba 'Console' e copie o texto gigante de lá!");
+            });
+        }             
     </script>
 </body>
 </html>

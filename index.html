@@ -7,10 +7,10 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>    
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-    
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     
     <!-- BIBLIOTECA DO GANTT -->
@@ -849,6 +849,7 @@
                             <button class="gantt-btn" onclick="filterMapaFisico(2024, this)">2024</button>
                             <button class="gantt-btn" onclick="filterMapaFisico(2025, this)">2025</button>
                             <button class="gantt-btn" onclick="filterMapaFisico(2026, this)">2026</button>
+			    <button class="gantt-btn" id="btn-print-mirante" onclick="downloadGanttImage('mirante', this)" style="display: none; background-color: #1976d2; color: #fff; border-color: #1565c0;">🖨️ Print</button>
                         </div>
                         
                         <div style="overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; border: 1px solid var(--border-color); border-radius: 8px;">
@@ -858,7 +859,7 @@
                         </div>
                         <div style="text-align: right; margin-top: 15px; display: flex; justify-content: flex-end; gap: 10px;">
                             <button class="gantt-btn" onclick="gerarCodigoSalvamento('mirante')">💾 Salvar Padrão</button>
-                            <button class="gantt-btn" onclick="limparMapaFisico()">🗑️ Limpar Tudo</button>
+                           <button class="gantt-btn" onclick="desfazerMapaFisico('mirante')">↩️ Desfazer</button>
                         </div>
                     </div>
                
@@ -1213,6 +1214,7 @@
                             <button class="gantt-btn" onclick="filterMapaFisicoJoaquim(2024, this)">2024</button>
                             <button class="gantt-btn" onclick="filterMapaFisicoJoaquim(2025, this)">2025</button>
                             <button class="gantt-btn" onclick="filterMapaFisicoJoaquim(2026, this)">2026</button>
+  			    <button class="gantt-btn" id="btn-print-joaquim" onclick="downloadGanttImage('joaquim', this)" style="display: none; background-color: #1976d2; color: #fff; border-color: #1565c0;">🖨️ Print</button>
                         </div>
                         
                         <div style="overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; border: 1px solid var(--border-color); border-radius: 8px;">
@@ -1222,7 +1224,7 @@
                         </div>
                        <div style="text-align: right; margin-top: 15px; display: flex; justify-content: flex-end; gap: 10px;">
                             <button class="gantt-btn" onclick="gerarCodigoSalvamento('joaquim')">💾 Salvar Padrão</button>
-                            <button class="gantt-btn" onclick="limparMapaFisicoJoaquim()">🗑️ Limpar Tudo</button>
+                            <button class="gantt-btn" onclick="desfazerMapaFisico('joaquim')">↩️ Desfazer</button>
                         </div>
                     </div>
                     <div class="planejamento-card">
@@ -1558,6 +1560,7 @@
                             <button class="gantt-btn" onclick="filterMapaFisicoParque(2025, this)">2025</button>
                             <button class="gantt-btn" onclick="filterMapaFisicoParque(2026, this)">2026</button>
                             <button class="gantt-btn" onclick="filterMapaFisicoParque(2027, this)">2027</button>
+			    <button class="gantt-btn" id="btn-print-parque" onclick="downloadGanttImage('parque', this)" style="display: none; background-color: #1976d2; color: #fff; border-color: #1565c0;">🖨️ Print</button>
                         </div>
                         
                         <div style="overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; border: 1px solid var(--border-color); border-radius: 8px;">
@@ -1567,7 +1570,7 @@
                         </div>
                         <div style="text-align: right; margin-top: 15px; display: flex; justify-content: flex-end; gap: 10px;">
                             <button class="gantt-btn" onclick="gerarCodigoSalvamento('parque')">💾 Salvar Padrão</button>
-                            <button class="gantt-btn" onclick="limparMapaFisicoParque()">🗑️ Limpar Tudo</button>
+                           <button class="gantt-btn" onclick="desfazerMapaFisico('parque')">↩️ Desfazer</button>
                         </div>
                     </div>
                     <div class="planejamento-card">
@@ -2125,6 +2128,393 @@
             if (pdfStates && pdfStates[obraId] && !pdfStates[obraId].canvas) {
                 if(typeof initFabricCanvas === 'function') initFabricCanvas(obraId);
             }
+        }
+
+	// =========================================================================
+        // PDF.js + Fabric.js LOGIC (Motor do Visualizador de Projetos)
+        // =========================================================================
+        
+        const pdfStates = {
+            'mirante': { canvas: null, pdfDoc: null, currentPdf: null, history: [], historyStep: -1 },
+            'joaquim': { canvas: null, pdfDoc: null, currentPdf: null, history: [], historyStep: -1 },
+            'parque': { canvas: null, pdfDoc: null, currentPdf: null, history: [], historyStep: -1 }
+        };
+
+        let currentTool = 'pan';
+        let currentColor = '#e53935';
+        let currentIcon = '📍';
+        let isDrawing = false;
+        let startPoint = null;
+        let shapeObj = null;
+        let activeIconObj = null; 
+        let activeTextObj = null; 
+        let isHistoryUpdating = false; 
+
+        // Variáveis para funcionalidade Polígono (Área)
+        let polygonPoints = [];
+        let polygonTempObjs = [];
+        let activeLine = null;
+
+        function initFabricCanvas(obra) {
+            const canvasElement = document.getElementById(`pdf-fabric-${obra}`);
+            if(!canvasElement) return;
+            pdfStates[obra].canvas = new fabric.Canvas(canvasElement, { selection: false, isDrawingMode: false });
+            
+            const canvas = pdfStates[obra].canvas;
+
+            canvas.on('mouse:wheel', function(opt) {
+                var delta = opt.e.deltaY;
+                var zoom = canvas.getZoom();
+                zoom *= 0.999 ** delta;
+                if (zoom > 10) zoom = 10;
+                if (zoom < 0.1) zoom = 0.1;
+                canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
+                opt.e.preventDefault();
+                opt.e.stopPropagation();
+            });
+
+            canvas.on('mouse:down', onMouseDown);
+            canvas.on('mouse:move', onMouseMove);
+            canvas.on('mouse:up', onMouseUp);
+            
+            canvas.on('path:created', () => saveHistory(obra));
+            canvas.on('object:modified', () => saveHistory(obra));
+        }
+
+        function clearPolygonDraft() {
+            const canvas = pdfStates[currentObra].canvas;
+            if (canvas) {
+                polygonTempObjs.forEach(obj => canvas.remove(obj));
+                if (activeLine) canvas.remove(activeLine);
+            }
+            polygonPoints = [];
+            polygonTempObjs = [];
+            activeLine = null;
+        }
+
+        function setTool(tool, btnElement, iconVal = null) {
+            if (currentTool === 'polygon' && tool !== 'polygon') clearPolygonDraft();
+
+            currentTool = tool;
+            if(iconVal) currentIcon = iconVal;
+            
+            const canvas = pdfStates[currentObra].canvas;
+            
+            if (activeIconObj) { activeIconObj.set({ selectable: false, evented: false }); activeIconObj = null; }
+            if (activeTextObj) { activeTextObj.set({ selectable: false, evented: false }); activeTextObj = null; }
+            
+            const toolbar = btnElement.closest('.pdf-toolbar');
+            toolbar.querySelectorAll('.tool-mode').forEach(b => b.classList.remove('active'));
+            if(btnElement) btnElement.classList.add('active');
+
+            if(!canvas) return;
+
+            canvas.isDrawingMode = (tool === 'brush');
+            if(tool === 'brush') {
+                canvas.freeDrawingBrush.color = currentColor;
+                canvas.freeDrawingBrush.width = 0.5; 
+            }
+
+            if(tool === 'pan') {
+                canvas.selection = true;
+                canvas.defaultCursor = 'default';
+                canvas.getObjects().forEach(o => { 
+                    if(o !== canvas.backgroundImage) { o.selectable = true; o.evented = true; } 
+                });
+            } else {
+                canvas.selection = false;
+                canvas.defaultCursor = 'crosshair';
+                canvas.getObjects().forEach(o => { 
+                    if(o !== canvas.backgroundImage) { o.selectable = false; o.evented = false; } 
+                });
+            }
+        }
+
+        function selectColor(color, element, e) {
+            e.stopPropagation();
+            currentColor = color;
+            const parent = element.closest('.color-picker-menu');
+            parent.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+            element.classList.add('active');
+            if(currentTool === 'brush' && pdfStates[currentObra].canvas) {
+                pdfStates[currentObra].canvas.freeDrawingBrush.color = color;
+            }
+        }
+
+        function selectIcon(icon, element, e) {
+            e.stopPropagation();
+            currentIcon = icon;
+            const parent = element.closest('.color-picker-menu');
+            parent.querySelectorAll('.icon-dot').forEach(d => d.classList.remove('active'));
+            element.classList.add('active');
+            if(currentTool !== 'icon') {
+                const btn = element.closest('.tool-wrapper').querySelector('.pdf-tool-btn');
+                setTool('icon', btn, icon);
+            }
+        }
+
+        async function loadPDF(filename, btnElement) {
+            const obra = currentObra;
+            const container = document.getElementById(`pdf-container-${obra}`);
+            const emptyState = document.getElementById(`empty-state-${obra}`);
+            const parent = document.getElementById(`viewer-area-${obra}`);
+            
+            const sidebar = btnElement.closest('.projetos-sidebar');
+            sidebar.querySelectorAll('.projeto-btn').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            container.style.display = 'none';
+            emptyState.style.display = 'block';
+            emptyState.innerText = "Carregando PDF...";
+
+            try {
+                if(!pdfStates[obra].canvas) initFabricCanvas(obra);
+                const canvas = pdfStates[obra].canvas;
+                canvas.clear();
+                
+                const loadingTask = pdfjsLib.getDocument(filename);
+                pdfStates[obra].pdfDoc = await loadingTask.promise;
+                pdfStates[obra].currentPdf = filename;
+                
+                const page = await pdfStates[obra].pdfDoc.getPage(1);
+                const viewport = page.getViewport({ scale: 2.0 });
+                
+                const pdfCanvas = document.createElement('canvas');
+                const ctx = pdfCanvas.getContext('2d');
+                pdfCanvas.width = viewport.width;
+                pdfCanvas.height = viewport.height;
+                
+                await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+                
+                fabric.Image.fromURL(pdfCanvas.toDataURL(), function(img) {
+                    canvas.setWidth(parent.clientWidth);
+                    canvas.setHeight(parent.clientHeight);
+                    const scale = Math.min(parent.clientWidth / img.width, parent.clientHeight / img.height);
+                    img.set({ scaleX: scale, scaleY: scale, originX: 'center', originY: 'center', left: canvas.width/2, top: canvas.height/2, selectable: false, evented: false });
+                    
+                    canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+                    emptyState.style.display = 'none';
+                    container.style.display = 'block';
+                    
+                    pdfStates[obra].history = [];
+                    pdfStates[obra].historyStep = -1;
+                    saveHistory(obra);
+                });
+            } catch (error) {
+                emptyState.innerText = "PDF não encontrado ou falha no carregamento.\nVerifique se o arquivo '" + filename + "' está na mesma pasta no GitHub.";
+                container.style.display = 'none';
+            }
+        }
+
+        let isPanning = false, lastPosX, lastPosY;
+        function onMouseDown(o) {
+            const canvas = pdfStates[currentObra].canvas;
+            if(!canvas) return;
+
+            if(currentTool === 'pan' && !canvas.getActiveObject()) {
+                isPanning = true;
+                canvas.defaultCursor = 'grabbing';
+                lastPosX = o.e.clientX;
+                lastPosY = o.e.clientY;
+                return;
+            }
+
+            if ((currentTool === 'icon' || currentTool === 'text') && o.target) return;
+            if(currentTool === 'pan' || currentTool === 'brush') return;
+            if(isDrawing) return; 
+            
+            const pointer = canvas.getPointer(o.e);
+
+            if (currentTool === 'icon') {
+                if (activeIconObj) {
+                    activeIconObj.set({ selectable: false, evented: false });
+                    canvas.discardActiveObject();
+                    saveHistory(currentObra);
+                }
+                activeIconObj = new fabric.Text(currentIcon, { 
+                    left: pointer.x, top: pointer.y, 
+                    fontSize: 24, 
+                    originX: 'center', originY: 'center', 
+                    selectable: true, evented: true 
+                });
+                canvas.add(activeIconObj);
+                canvas.setActiveObject(activeIconObj);
+                return;
+            }
+
+            if (currentTool === 'text') {
+                if (o.target) { activeTextObj = o.target; return; }
+                if (activeTextObj) { activeTextObj = null; saveHistory(currentObra); return; }
+
+                activeTextObj = new fabric.IText('Digite...', { 
+                    left: pointer.x, top: pointer.y, 
+                    fontSize: 12, fill: currentColor, fontFamily: 'Montserrat', 
+                    originX: 'center', originY: 'center', selectable: true, evented: true 
+                });
+                canvas.add(activeTextObj);
+                canvas.setActiveObject(activeTextObj);
+                saveHistory(currentObra);
+                return;
+            }
+
+            if (currentTool === 'polygon') {
+                if (polygonPoints.length === 0) {
+                    polygonPoints.push({ x: pointer.x, y: pointer.y });
+                    const circle = new fabric.Circle({ radius: 0.5, fill: currentColor, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', selectable: false, evented: false });
+                    polygonTempObjs.push(circle);
+                    canvas.add(circle);
+                    activeLine = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], { strokeWidth: 0.5, fill: currentColor, stroke: currentColor, originX: 'center', originY: 'center', selectable: false, evented: false });
+                    canvas.add(activeLine);
+                } else {
+                    const startPointPol = polygonPoints[0];
+                    const dist = Math.sqrt(Math.pow(startPointPol.x - pointer.x, 2) + Math.pow(startPointPol.y - pointer.y, 2));
+                    
+                   if (dist < 4 && polygonPoints.length > 2) {
+                        if (activeLine) canvas.remove(activeLine);
+                        polygonTempObjs.forEach(obj => canvas.remove(obj));
+                        const poly = new fabric.Polygon(polygonPoints, { fill: currentColor + '40', stroke: currentColor, strokeWidth: 0.5, selectable: (currentTool === 'pan'), evented: (currentTool === 'pan') });
+                        canvas.add(poly);
+                        saveHistory(currentObra);
+                        clearPolygonDraft();
+                    } else {
+                        polygonPoints.push({ x: pointer.x, y: pointer.y });
+                        activeLine.set({ x2: pointer.x, y2: pointer.y });
+                        const circle = new fabric.Circle({ radius: 0.5, fill: currentColor, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', selectable: false, evented: false });
+                        polygonTempObjs.push(circle);
+                        canvas.add(circle);
+                        activeLine = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], { strokeWidth: 0.5, fill: currentColor, stroke: currentColor, originX: 'center', originY: 'center', selectable: false, evented: false });
+                        canvas.add(activeLine);
+                    }
+                }
+                return;
+            }
+
+            isDrawing = true;
+            startPoint = pointer;
+
+            if (currentTool === 'circle') {
+                shapeObj = new fabric.Circle({ left: pointer.x, top: pointer.y, radius: 1, fill: 'transparent', stroke: currentColor, strokeWidth: 0.5, originX: 'center', originY: 'center', selectable: false, evented: false });
+                canvas.add(shapeObj);
+            } else if (currentTool === 'arrow') {
+                let espessuraSeta = 0.5; let tamanhoPonta = 4; 
+                let line = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], { stroke: currentColor, strokeWidth: espessuraSeta, selectable: false, evented: false, originX: 'center', originY: 'center' });
+                let head = new fabric.Triangle({ fill: currentColor, width: tamanhoPonta, height: tamanhoPonta, left: pointer.x, top: pointer.y, originX: 'center', originY: 'center', selectable: false, evented: false, angle: 90 });
+                shapeObj = { line: line, head: head, type: 'arrow', pontaOffset: tamanhoPonta/2 };
+                canvas.add(line, head);
+            }
+        }
+
+        function onMouseMove(o) {
+            const canvas = pdfStates[currentObra].canvas;
+            if(isPanning && currentTool === 'pan') {
+                const vpt = canvas.viewportTransform;
+                vpt[4] += o.e.clientX - lastPosX;
+                vpt[5] += o.e.clientY - lastPosY;
+                canvas.requestRenderAll();
+                lastPosX = o.e.clientX;
+                lastPosY = o.e.clientY;
+            }
+
+            if (currentTool === 'icon' || currentTool === 'text') return;
+            const pointer = canvas.getPointer(o.e);
+
+            if (currentTool === 'polygon' && activeLine && activeLine.class !== 'Polygon') {
+                activeLine.set({ x2: pointer.x, y2: pointer.y });
+                canvas.renderAll();
+                return;
+            }
+
+            if(!isDrawing || !shapeObj) return;
+
+            if (currentTool === 'circle') {
+                let radius = Math.max(Math.abs(startPoint.x - pointer.x), Math.abs(startPoint.y - pointer.y));
+                shapeObj.set({ radius: radius });
+                canvas.renderAll();
+            } else if (currentTool === 'arrow') {
+                let dx = pointer.x - startPoint.x;
+                let dy = pointer.y - startPoint.y;
+                let angle = Math.atan2(dy, dx);
+                let lineEndX = pointer.x - (shapeObj.pontaOffset * Math.cos(angle));
+                let lineEndY = pointer.y - (shapeObj.pontaOffset * Math.sin(angle));
+                shapeObj.line.set({ x2: lineEndX, y2: lineEndY });
+                shapeObj.head.set({ left: pointer.x, top: pointer.y, angle: (angle * 180 / Math.PI) + 90 });
+                canvas.renderAll();
+            }
+        }
+
+        function onMouseUp(o) {
+            const canvas = pdfStates[currentObra].canvas;
+            if(isPanning) { isPanning = false; canvas.defaultCursor = 'default'; }
+            if(!isDrawing) return;
+            isDrawing = false;
+            
+            if(shapeObj) {
+                if (shapeObj.type === 'arrow') {
+                    shapeObj.line.setCoords();
+                    shapeObj.head.setCoords();
+                    let group = new fabric.Group([shapeObj.line, shapeObj.head], { selectable: (currentTool === 'pan'), evented: (currentTool === 'pan') });
+                    canvas.remove(shapeObj.line, shapeObj.head);
+                    canvas.add(group);
+                } else { shapeObj.setCoords(); }
+                shapeObj = null;
+                saveHistory(currentObra);
+            }
+        }
+
+        function saveHistory(obra) {
+            if (isHistoryUpdating) return; 
+            const state = pdfStates[obra || currentObra];
+            if(!state.canvas) return;
+            const json = state.canvas.toJSON();
+            state.history = state.history.slice(0, state.historyStep + 1);
+            state.history.push(JSON.stringify(json));
+            state.historyStep++;
+        }
+
+        function undoPdfAction() {
+            const state = pdfStates[currentObra];
+            if(state.historyStep > 0) {
+                isHistoryUpdating = true; 
+                state.historyStep--;
+                state.canvas.loadFromJSON(state.history[state.historyStep], function() {
+                    state.canvas.renderAll();
+                    isHistoryUpdating = false; 
+                });
+            }
+        }
+
+        function redoPdfAction() {
+            const state = pdfStates[currentObra];
+            if(state.historyStep < state.history.length - 1) {
+                isHistoryUpdating = true; 
+                state.historyStep++;
+                state.canvas.loadFromJSON(state.history[state.historyStep], function() {
+                    state.canvas.renderAll();
+                    isHistoryUpdating = false; 
+                });
+            }
+        }
+
+        function clearPdfCanvas() {
+            if(confirm("Tem certeza que deseja apagar todas as anotações?")) {
+                const state = pdfStates[currentObra];
+                const bg = state.canvas.backgroundImage;
+                state.canvas.clear();
+                if(bg) { state.canvas.setBackgroundImage(bg, state.canvas.renderAll.bind(state.canvas)); }
+                saveHistory(currentObra);
+            }
+        }
+
+        function exportPDF() {
+            const canvas = pdfStates[currentObra].canvas;
+            if(!canvas) return;
+            const dataURL = canvas.toDataURL({ format: 'jpeg', quality: 0.9 });
+            const link = document.createElement('a');
+            link.download = `Marcacao_${currentObra}_Projeto.jpg`;
+            link.href = dataURL;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         // =========================================================================
@@ -4520,6 +4910,8 @@ async function loadPDF(filename, btnElement) {
         const coresVariadas = ['#3498DB','#E74C3C','#9B59B6','#F1C40F','#E67E22','#1ABC9C','#34495E','#D35400','#2980B9','#8E44AD','#C0392B','#16A085','#F39C12','#27AE60'];
 
         // Memória global para guardar os cliques mesmo quando mudar de ano
+	// Memória do histórico de cliques (Para a função Desfazer)
+        if (!window.mapaFisicoHistory) window.mapaFisicoHistory = { mirante: [], joaquim: [], parque: [] };
         if (!window.mapaFisicoState) window.mapaFisicoState = {"0_Nov/24":true,"0_Fev/25":true,"0_Mar/25":true,"0_Abr/25":true,"0_Mai/25":true,"0_Jun/25":true,"0_Jul/25":true,"0_Out/25":true,"0_Nov/25":true,"0_Dez/25":true,"0_Abr/26":true,"0_Jun/26":true,"1_Mar/24":true,"1_Abr/24":true,"1_Jun/24":true,"1_Jul/24":true,"1_Ago/24":true,"1_Out/24":true,"1_Nov/24":true,"1_Jan/25":true,"1_Fev/25":true,"1_Mar/25":true,"1_Abr/25":true,"1_Mai/25":true,"1_Jun/25":true,"1_Jul/25":true,"1_Ago/25":true,"1_Set/25":true,"1_Out/25":true,"1_Nov/25":true,"1_Abr/26":true,"1_Mai/26":true,"1_Jun/26":true,"1_Jul/26":true,"1_Ago/26":true,"1_Set/26":true,"2_Jun/24":true,"2_Jul/24":true,"2_Ago/24":true,"2_Nov/24":true,"2_Dez/24":true,"2_Jan/25":true,"2_Dez/25":true,"2_Jan/26":true,"2_Mar/26":true,"3_Set/24":true,"3_Fev/25":true,"3_Mar/25":true,"3_Abr/25":true,"3_Mai/25":true,"3_Jun/25":true,"3_Jul/25":true,"3_Set/25":true,"3_Out/25":true,"3_Nov/25":true,"3_Dez/25":true,"3_Jan/26":true,"3_Fev/26":true,"3_Mar/26":true,"3_Abr/26":true,"3_Mai/26":true,"3_Ago/26":true,"4_Set/24":true,"4_Out/24":true,"4_Fev/25":true,"4_Abr/25":true,"4_Mai/25":true,"4_Jun/25":true,"4_Jul/25":true,"4_Ago/25":true,"4_Set/25":true,"4_Out/25":true,"4_Nov/25":true,"4_Dez/25":true,"4_Jan/26":true,"4_Fev/26":true,"4_Mai/26":true,"4_Jun/26":true,"4_Jul/26":true,"4_Ago/26":true,"5_Fev/25":true,"5_Mar/25":true,"5_Abr/25":true,"5_Jun/25":true,"5_Jul/25":true,"5_Ago/25":true,"5_Set/25":true,"5_Out/25":true,"5_Nov/25":true,"5_Dez/25":true,"5_Jan/26":true,"5_Fev/26":true,"5_Mai/26":true,"5_Jun/26":true,"5_Jul/26":true,"5_Ago/26":true,"5_Set/26":true,"6_Set/24":true,"6_Fev/25":true,"6_Mar/25":true,"6_Abr/25":true,"6_Mai/25":true,"6_Jun/25":true,"6_Jul/25":true,"6_Ago/25":true,"6_Set/25":true,"6_Out/25":true,"6_Nov/25":true,"6_Dez/25":true,"6_Jan/26":true,"6_Jun/26":true,"6_Ago/26":true,"7_Mai/25":true,"7_Jun/25":true,"7_Jul/25":true,"7_Ago/25":true,"7_Set/25":true,"7_Out/25":true,"7_Nov/25":true,"7_Dez/25":true,"7_Jan/26":true,"7_Mar/26":true,"7_Jun/26":true,"7_Jul/26":true,"7_Ago/26":true,"7_Set/26":true,"8_Ago/25":true,"8_Set/25":true,"8_Out/25":true,"8_Nov/25":true,"8_Dez/25":true,"8_Jan/26":true,"8_Fev/26":true,"8_Mar/26":true,"8_Abr/26":true,"8_Ago/26":true,"8_Set/26":true,"9_Ago/25":true,"9_Set/25":true,"9_Out/25":true,"9_Nov/25":true,"9_Dez/25":true,"9_Jan/26":true,"9_Fev/26":true,"9_Ago/26":true,"9_Set/26":true,"10_Mar/25":true,"10_Abr/25":true,"10_Jul/25":true,"10_Ago/25":true,"10_Jan/26":true,"10_Fev/26":true,"10_Mar/26":true,"10_Abr/26":true,"11_Nov/24":true,"11_Dez/24":true,"11_Jan/25":true,"11_Fev/25":true,"11_Mar/25":true,"11_Abr/25":true,"11_Mai/25":true,"11_Jun/25":true,"11_Jul/25":true,"11_Ago/25":true,"11_Set/25":true,"11_Out/25":true,"11_Nov/25":true,"11_Dez/25":true,"11_Jan/26":true,"11_Fev/26":true,"11_Mar/26":true,"11_Abr/26":true,"11_Mai/26":true,"11_Jun/26":true,"11_Jul/26":true,"11_Ago/26":true,"11_Set/26":true,"12_Jan/24":true,"12_Fev/24":true,"12_Mar/24":true,"12_Abr/24":true,"12_Jun/24":true,"12_Set/24":true,"12_Dez/24":true,"12_Jan/25":true,"12_Fev/25":true,"12_Mar/25":true,"12_Abr/25":true,"12_Nov/25":true,"12_Dez/25":true,"12_Jul/26":true,"12_Ago/26":true,"13_Jan/25":true,"13_Fev/25":true,"13_Mar/25":true,"13_Abr/25":true,"13_Mai/25":true,"13_Jun/25":true,"13_Jul/25":true,"13_Ago/25":true,"13_Set/25":true,"13_Out/25":true,"13_Nov/25":true,"13_Dez/25":true,"13_Jan/26":true,"13_Fev/26":true,"13_Mar/26":true,"13_Abr/26":true,"13_Mai/26":true,"13_Jun/26":true,"13_Jul/26":true,"13_Ago/26":true,"13_Set/26":true,"3_Set/26":true,"4_Mar/26":true,"4_Abr/26":true,"4_Mar/25":true,"10_Ago/26":true,"13_Out/23":true,"13_Nov/23":true,"13_Dez/23":true};
         function drawInteractiveProgressMap(yearFilter = 'todos') {
             const table = document.getElementById('interactive-progress-table');
@@ -4582,14 +4974,17 @@ async function loadPDF(filename, btnElement) {
             let targetColor = coresVariadas[colorIdx];
             let cellKey = stageIndex + '_' + monthString;
             
+            // Grava a ação no histórico
+            window.mapaFisicoHistory.mirante.push(cellKey);
+            
             if (cell.style.backgroundColor === 'transparent' || cell.style.backgroundColor === '' || cell.style.backgroundColor === 'rgba(0, 0, 0, 0)') {
                 cell.style.backgroundColor = targetColor;
                 cell.style.boxShadow = "inset 0 0 0 1px rgba(0,0,0,0.1)";
-                window.mapaFisicoState[cellKey] = true; // Salva na memória
+                window.mapaFisicoState[cellKey] = true; 
             } else {
                 cell.style.backgroundColor = 'transparent';
                 cell.style.boxShadow = "none";
-                delete window.mapaFisicoState[cellKey]; // Remove da memória
+                delete window.mapaFisicoState[cellKey]; 
             }
         }
 
@@ -4601,17 +4996,11 @@ async function loadPDF(filename, btnElement) {
                     btnElement.classList.add('active');
                 }
             }
+            let printBtn = document.getElementById('btn-print-mirante');
+            if (printBtn) printBtn.style.display = (year == 2026) ? 'inline-block' : 'none';
             drawInteractiveProgressMap(year);
         }
-
-        function limparMapaFisico() {
-            window.mapaFisicoState = {}; // Apaga a memória inteira
-            // Redesenha a tabela mantendo o botão de ano atual focado
-            let activeBtn = document.querySelector('.gantt-filter-buttons .gantt-btn.active');
-            let year = activeBtn && !activeBtn.innerText.includes('Total') ? activeBtn.innerText : 'todos';
-            drawInteractiveProgressMap(year);
-        }
-
+     
 	// =========================================================================
         // LÓGICA DO MAPA DE AVANÇO FÍSICO INTERATIVO (JOAQUIM LEME)
         // =========================================================================
@@ -4660,6 +5049,9 @@ async function loadPDF(filename, btnElement) {
         function toggleCellColorJoaquim(cell, stageIndex, monthString) {
             let targetColor = coresVariadas[stageIndex % coresVariadas.length];
             let cellKey = stageIndex + '_' + monthString;
+            
+            window.mapaFisicoHistory.joaquim.push(cellKey); // Grava histórico
+            
             if (cell.style.backgroundColor === 'transparent' || cell.style.backgroundColor === '' || cell.style.backgroundColor === 'rgba(0, 0, 0, 0)') {
                 cell.style.backgroundColor = targetColor; cell.style.boxShadow = "inset 0 0 0 1px rgba(0,0,0,0.1)"; window.mapaFisicoStateJoaquim[cellKey] = true;
             } else {
@@ -4667,22 +5059,17 @@ async function loadPDF(filename, btnElement) {
             }
         }
 
-        function filterMapaFisicoJoaquim(year, btnElement) {
+       function filterMapaFisicoJoaquim(year, btnElement) {
             if(btnElement) {
                 const parent = btnElement.closest('.gantt-filter-buttons');
                 if(parent) { parent.querySelectorAll('.gantt-btn').forEach(b => b.classList.remove('active')); btnElement.classList.add('active'); }
             }
+            let printBtn = document.getElementById('btn-print-joaquim');
+            if (printBtn) printBtn.style.display = (year == 2026) ? 'inline-block' : 'none';
             drawInteractiveProgressMapJoaquim(year);
         }
 
-        function limparMapaFisicoJoaquim() {
-            window.mapaFisicoStateJoaquim = {};
-            let activeBtn = document.querySelector('#subtab-planejamento-joaquim .gantt-filter-buttons .gantt-btn.active');
-            let year = activeBtn && !activeBtn.innerText.includes('Total') ? activeBtn.innerText : 'todos';
-            drawInteractiveProgressMapJoaquim(year);
-        }
-
-        // =========================================================================
+               // =========================================================================
         // LÓGICA DO MAPA DE AVANÇO FÍSICO INTERATIVO (PARQUE DAS NAÇÕES)
         // =========================================================================
         if (!window.mapaFisicoStateParque) window.mapaFisicoStateParque = {"0_Mar/26":true,"0_Jun/26":true,"1_Mar/26":true,"1_Mai/26":true,"1_Jul/26":true,"1_Ago/26":true,"1_Set/26":true,"16_Out/25":true,"3_Jun/26":true,"3_Mai/26":true,"3_Abr/26":true,"17_Ago/25":true,"17_Set/25":true,"17_Dez/25":true,"20_Mai/26":true,"20_Jun/26":true,"20_Jul/26":true,"20_Ago/26":true,"21_Set/26":true,"21_Ago/26":true,"21_Jul/26":true,"21_Jun/26":true,"21_Mai/26":true,"21_Out/26":true,"21_Nov/26":true,"21_Dez/26":true,"21_Jan/27":true,"21_Mar/27":true,"21_Fev/27":true,"1_Dez/26":true,"2_Ago/26":true,"2_Set/26":true,"3_Out/26":true,"3_Set/26":true,"4_Out/26":true,"4_Nov/26":true,"5_Nov/26":true,"5_Dez/26":true,"6_Dez/26":true,"6_Nov/26":true,"7_Set/26":true,"7_Out/26":true,"8_Out/26":true,"8_Nov/26":true,"9_Set/26":true,"9_Out/26":true,"9_Nov/26":true,"10_Nov/26":true,"10_Dez/26":true,"10_Jan/27":true,"12_Dez/26":true,"12_Jan/27":true,"13_Fev/27":true,"13_Mar/27":true,"15_Jan/27":true,"15_Dez/26":true,"16_Set/26":true,"16_Nov/26":true,"16_Jan/27":true,"17_Set/26":true,"20_Set/26":true};
@@ -4733,9 +5120,12 @@ async function loadPDF(filename, btnElement) {
             html += '</tbody>'; table.innerHTML = html;
         }
 
-        function toggleCellColorParque(cell, stageIndex, monthString) {
+       function toggleCellColorParque(cell, stageIndex, monthString) {
             let targetColor = coresVariadas[stageIndex % coresVariadas.length];
             let cellKey = stageIndex + '_' + monthString;
+            
+            window.mapaFisicoHistory.parque.push(cellKey); // Grava histórico
+            
             if (cell.style.backgroundColor === 'transparent' || cell.style.backgroundColor === '' || cell.style.backgroundColor === 'rgba(0, 0, 0, 0)') {
                 cell.style.backgroundColor = targetColor; cell.style.boxShadow = "inset 0 0 0 1px rgba(0,0,0,0.1)"; window.mapaFisicoStateParque[cellKey] = true;
             } else {
@@ -4743,25 +5133,105 @@ async function loadPDF(filename, btnElement) {
             }
         }
 
-        function filterMapaFisicoParque(year, btnElement) {
+       function filterMapaFisicoParque(year, btnElement) {
             if(btnElement) {
                 const parent = btnElement.closest('.gantt-filter-buttons');
-                if(parent) { parent.querySelectorAll('.gantt-btn').forEach(b => b.classList.remove('active')); btnElement.classList.add('active'); }
+                if(parent) { 
+                    parent.querySelectorAll('.gantt-btn').forEach(b => b.classList.remove('active')); 
+                    btnElement.classList.add('active'); 
+                }
             }
+            let printBtn = document.getElementById('btn-print-parque');
+            
+            // Alterado: O botão Print agora aparece se o ano for 2026 OU 2027
+            if (printBtn) printBtn.style.display = (year == 2026 || year == 2027) ? 'inline-block' : 'none';
+            
             drawInteractiveProgressMapParque(year);
         }
 
-        function limparMapaFisicoParque() {
-            window.mapaFisicoStateParque = {};
-            let activeBtn = document.querySelector('#subtab-planejamento-parque .gantt-filter-buttons .gantt-btn.active');
-            let year = activeBtn && !activeBtn.innerText.includes('Total') ? activeBtn.innerText : 'todos';
-            drawInteractiveProgressMapParque(year);
-        }
-
-// =========================================================================
-        // FERRAMENTA PARA GERAR CÓDIGO DE SALVAMENTO DEFINITIVO (ATUALIZADA)
+	// =========================================================================
+        // FUNÇÃO UNIFICADA DE DESFAZER (CTRL+Z) PARA OS MAPAS FÍSICOS
         // =========================================================================
-        function gerarCodigoSalvamento(obra) {
+        function desfazerMapaFisico(obra) {
+            let historyStack = window.mapaFisicoHistory[obra];
+            
+            // Se o histórico estiver vazio, não faz nada
+            if (!historyStack || historyStack.length === 0) return; 
+
+            // Puxa a última ação e tira ela do histórico
+            let lastCellKey = historyStack.pop(); 
+            let stateObj, drawFunc, activeTabSelector;
+
+            // Identifica qual obra estamos desfazendo
+            if (obra === 'mirante') {
+                stateObj = window.mapaFisicoState;
+                drawFunc = drawInteractiveProgressMap;
+                activeTabSelector = '.gantt-filter-buttons .gantt-btn.active'; // Do mirante
+            } else if (obra === 'joaquim') {
+                stateObj = window.mapaFisicoStateJoaquim;
+                drawFunc = drawInteractiveProgressMapJoaquim;
+                activeTabSelector = '#subtab-planejamento-joaquim .gantt-filter-buttons .gantt-btn.active';
+            } else if (obra === 'parque') {
+                stateObj = window.mapaFisicoStateParque;
+                drawFunc = drawInteractiveProgressMapParque;
+                activeTabSelector = '#subtab-planejamento-parque .gantt-filter-buttons .gantt-btn.active';
+            }
+
+            // Inverte o estado da última célula alterada
+            if (stateObj[lastCellKey]) {
+                delete stateObj[lastCellKey]; // Se estava pintado, apaga
+            } else {
+                stateObj[lastCellKey] = true; // Se estava apagado, pinta de novo
+            }
+
+            // Manda redesenhar a tabela mantendo o botão de ano que você estava usando
+            let activeBtn = document.querySelector(activeTabSelector);
+            let year = activeBtn && !activeBtn.innerText.includes('Total') ? activeBtn.innerText : 'todos';
+            drawFunc(year);
+        }
+       // =========================================================================
+        // FUNÇÃO DE PRINT (EXPORTAR CRONOGRAMA EM PNG)
+        // =========================================================================
+        function downloadGanttImage(obra, btnElement) {
+            // Identifica qual é a tabela certa
+            let tableId = '';
+            if (obra === 'mirante') tableId = 'interactive-progress-table';
+            else if (obra === 'joaquim') tableId = 'interactive-progress-table-joaquim';
+            else if (obra === 'parque') tableId = 'interactive-progress-table-parque';
+
+            const table = document.getElementById(tableId);
+            if (!table) return;
+
+            // Busca o 'quadro' (card) inteiro que envolve a tabela e os botões
+            const cardElement = table.closest('.planejamento-card');
+            
+            // Muda o texto do botão temporariamente para dar um feedback visual
+            const originalText = btnElement.innerText;
+            btnElement.innerText = "⏳ Gerando...";
+            btnElement.style.opacity = "0.7";
+
+            // html2canvas tira um "print" do elemento mantendo todas as cores
+            html2canvas(cardElement, { 
+                scale: 2, // Maior resolução
+                backgroundColor: document.body.classList.contains('dark-mode') ? '#112d16' : '#ffffff' 
+            }).then(canvas => {
+                // Restaura o botão
+                btnElement.innerText = originalText;
+                btnElement.style.opacity = "1";
+
+                // Converte a imagem em um link e faz o download
+                let link = document.createElement('a');
+                link.download = `Cronograma_Executivo_${obra.toUpperCase()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }).catch(err => {
+                console.error("Erro ao gerar a imagem:", err);
+                btnElement.innerText = originalText;
+                btnElement.style.opacity = "1";
+                alert("Ocorreu um erro ao tentar exportar a imagem.");
+            });
+        }
+	function gerarCodigoSalvamento(obra) {
             let stateObj = {};
             if (obra === 'mirante') stateObj = window.mapaFisicoState;
             else if (obra === 'joaquim') stateObj = window.mapaFisicoStateJoaquim;

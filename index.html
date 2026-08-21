@@ -993,8 +993,84 @@
                     </div>
                                                         
                     <div class="analysis-inner-content" id="matriz-kraljic-mirante">
-                        <div class="empty-state">Módulo "Matriz de Kraljic" em desenvolvimento.</div>
-                    </div>                                   
+                        <div class="abc-header">
+                            <h3>Matriz de Kraljic - Gestão Estratégica de Compras</h3>
+                            <p style="font-size: 0.8rem; color: var(--subtitle-color); margin-top: -15px; margin-bottom: 20px;">Classificação baseada na Complexidade do Mercado versus Importância da Compra.</p>
+                        </div>
+                        
+                        <div style="position: relative; padding-left: 35px; padding-bottom: 35px; max-width: 900px; margin: 0 auto;">
+                            <!-- Eixo Y (Vertical) -->
+                            <div style="position: absolute; left: 0; top: 0; bottom: 35px; width: 25px; display: flex; align-items: center; justify-content: center; border-right: 2px solid var(--border-color);">
+                                <div style="transform: rotate(-90deg); white-space: nowrap; font-size: 0.75rem; font-weight: 700; color: var(--title-color); letter-spacing: 1px; text-transform: uppercase;">Baixa ⟵ Importância da Compra ⟶ Alta</div>
+                            </div>
+                            
+                            <!-- Eixo X (Horizontal) -->
+                            <div style="position: absolute; left: 35px; right: 0; bottom: 0; height: 25px; display: flex; align-items: center; justify-content: center; border-top: 2px solid var(--border-color);">
+                                <div style="font-size: 0.75rem; font-weight: 700; color: var(--title-color); letter-spacing: 1px; text-transform: uppercase;">Baixa ⟵ Complexidade no Mercado ⟶ Alta</div>
+                            </div>
+
+                            <!-- Grade 2x2 -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding-top: 5px; padding-left: 5px;">
+                                
+                                <!-- 1. ALAVANCAGEM (Rosa/Magenta) -->
+                                <div style="background: var(--insight-bg); border: 2px solid #e91e63; border-radius: 12px; padding: 20px; transition: transform 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                                    <h4 style="color: #c2185b; margin-bottom: 4px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">📈 Gestão de materiais</h4>
+                                    <p style="font-size: 0.75rem; color: #e91e63; margin-bottom: 12px; font-style: italic; font-weight: 600;">itens de alavancagem</p>
+                                    <ul style="list-style: none; font-size: 0.75rem; color: var(--text-color-base); font-weight: 500;">
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Critérios de performance:</strong> custo/preço e gestão do fluxo de materiais</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Origem:</strong> múltiplos fornecedores locais</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Horizonte temporal:</strong> entre 12 e 24 meses</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Itens comprados:</strong> mix de commodities e materiais com especificações</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Suprimento:</strong> abundante</li>
+                                        <li><strong>Decisão:</strong> majoritariamente descentralizada</li>
+                                    </ul>
+                                </div>
+
+                                <!-- 2. ESTRATÉGICOS (Laranja) -->
+                                <div style="background: var(--insight-bg); border: 2px solid #ff5722; border-radius: 12px; padding: 20px; transition: transform 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                                    <h4 style="color: #e64a19; margin-bottom: 4px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">🎯 Gestão de suprimentos</h4>
+                                    <p style="font-size: 0.75rem; color: #ff5722; margin-bottom: 12px; font-style: italic; font-weight: 600;">itens estratégicos</p>
+                                    <ul style="list-style: none; font-size: 0.75rem; color: var(--text-color-base); font-weight: 500;">
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Critérios de performance:</strong> disponibilidade no longo prazo</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Origem:</strong> fornecedores globais</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Horizonte temporal:</strong> longo prazo (10 anos)</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Itens comprados:</strong> escassos e/ou materiais de alto valor</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Suprimento:</strong> naturalmente escasso</li>
+                                        <li><strong>Decisão:</strong> centralizada</li>
+                                    </ul>
+                                </div>
+
+                                <!-- 3. NÃO CRÍTICOS / ROTINEIROS (Amarelo) -->
+                                <div style="background: var(--insight-bg); border: 2px solid #ffb300; border-radius: 12px; padding: 20px; transition: transform 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                                    <h4 style="color: #f57f17; margin-bottom: 4px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">✅ Gestão de compras</h4>
+                                    <p style="font-size: 0.75rem; color: #ffb300; margin-bottom: 12px; font-style: italic; font-weight: 600;">itens não críticos</p>
+                                    <ul style="list-style: none; font-size: 0.75rem; color: var(--text-color-base); font-weight: 500;">
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Critérios de performance:</strong> eficiência funcional</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Origem:</strong> fornecedores locais</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Horizonte temporal:</strong> no máximo 12 meses</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Itens comprados:</strong> commodities e materiais com especificações</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Característica do suprimento:</strong> abundante</li>
+                                        <li><strong>Decisão:</strong> descentralizada</li>
+                                    </ul>
+                                </div>
+
+                                <!-- 4. GARGALO (Verde) -->
+                                <div style="background: var(--insight-bg); border: 2px solid #4caf50; border-radius: 12px; padding: 20px; transition: transform 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                                    <h4 style="color: #388e3c; margin-bottom: 4px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">⚠️ Gestão de sourcing</h4>
+                                    <p style="font-size: 0.75rem; color: #4caf50; margin-bottom: 12px; font-style: italic; font-weight: 600;">itens de gargalo</p>
+                                    <ul style="list-style: none; font-size: 0.75rem; color: var(--text-color-base); font-weight: 500;">
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Critérios de performance:</strong> gestão de custos e sourcing confiável de curto prazo</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Origem:</strong> global, com novas tecnologias</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Horizonte temporal:</strong> depende do tradeoff entre disponibilidade e flexibilidade no curto prazo</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Itens comprados:</strong> materiais com especificações</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Característica do suprimento:</strong> escassez baseada em produção</li>
+                                        <li><strong>Decisão:</strong> descentralizada com gestão centralizada</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>                                  
                 </div>
             </div>
 
@@ -1351,8 +1427,84 @@
                     </div>
                     
                     <div class="analysis-inner-content" id="matriz-kraljic-joaquim">
-                        <div class="empty-state">Módulo "Matriz de Kraljic" em desenvolvimento.</div>
-                    </div>                   
+                        <div class="abc-header">
+                            <h3>Matriz de Kraljic - Gestão Estratégica de Compras</h3>
+                            <p style="font-size: 0.8rem; color: var(--subtitle-color); margin-top: -15px; margin-bottom: 20px;">Classificação baseada na Complexidade do Mercado versus Importância da Compra.</p>
+                        </div>
+                        
+                        <div style="position: relative; padding-left: 35px; padding-bottom: 35px; max-width: 900px; margin: 0 auto;">
+                            <!-- Eixo Y (Vertical) -->
+                            <div style="position: absolute; left: 0; top: 0; bottom: 35px; width: 25px; display: flex; align-items: center; justify-content: center; border-right: 2px solid var(--border-color);">
+                                <div style="transform: rotate(-90deg); white-space: nowrap; font-size: 0.75rem; font-weight: 700; color: var(--title-color); letter-spacing: 1px; text-transform: uppercase;">Baixa ⟵ Importância da Compra ⟶ Alta</div>
+                            </div>
+                            
+                            <!-- Eixo X (Horizontal) -->
+                            <div style="position: absolute; left: 35px; right: 0; bottom: 0; height: 25px; display: flex; align-items: center; justify-content: center; border-top: 2px solid var(--border-color);">
+                                <div style="font-size: 0.75rem; font-weight: 700; color: var(--title-color); letter-spacing: 1px; text-transform: uppercase;">Baixa ⟵ Complexidade no Mercado ⟶ Alta</div>
+                            </div>
+
+                            <!-- Grade 2x2 -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding-top: 5px; padding-left: 5px;">
+                                
+                                <!-- 1. ALAVANCAGEM (Rosa/Magenta) -->
+                                <div style="background: var(--insight-bg); border: 2px solid #e91e63; border-radius: 12px; padding: 20px; transition: transform 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                                    <h4 style="color: #c2185b; margin-bottom: 4px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">📈 Gestão de materiais</h4>
+                                    <p style="font-size: 0.75rem; color: #e91e63; margin-bottom: 12px; font-style: italic; font-weight: 600;">itens de alavancagem</p>
+                                    <ul style="list-style: none; font-size: 0.75rem; color: var(--text-color-base); font-weight: 500;">
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Critérios de performance:</strong> custo/preço e gestão do fluxo de materiais</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Origem:</strong> múltiplos fornecedores locais</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Horizonte temporal:</strong> entre 12 e 24 meses</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Itens comprados:</strong> mix de commodities e materiais com especificações</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Suprimento:</strong> abundante</li>
+                                        <li><strong>Decisão:</strong> majoritariamente descentralizada</li>
+                                    </ul>
+                                </div>
+
+                                <!-- 2. ESTRATÉGICOS (Laranja) -->
+                                <div style="background: var(--insight-bg); border: 2px solid #ff5722; border-radius: 12px; padding: 20px; transition: transform 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                                    <h4 style="color: #e64a19; margin-bottom: 4px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">🎯 Gestão de suprimentos</h4>
+                                    <p style="font-size: 0.75rem; color: #ff5722; margin-bottom: 12px; font-style: italic; font-weight: 600;">itens estratégicos</p>
+                                    <ul style="list-style: none; font-size: 0.75rem; color: var(--text-color-base); font-weight: 500;">
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Critérios de performance:</strong> disponibilidade no longo prazo</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Origem:</strong> fornecedores globais</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Horizonte temporal:</strong> longo prazo (10 anos)</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Itens comprados:</strong> escassos e/ou materiais de alto valor</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Suprimento:</strong> naturalmente escasso</li>
+                                        <li><strong>Decisão:</strong> centralizada</li>
+                                    </ul>
+                                </div>
+
+                                <!-- 3. NÃO CRÍTICOS / ROTINEIROS (Amarelo) -->
+                                <div style="background: var(--insight-bg); border: 2px solid #ffb300; border-radius: 12px; padding: 20px; transition: transform 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                                    <h4 style="color: #f57f17; margin-bottom: 4px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">✅ Gestão de compras</h4>
+                                    <p style="font-size: 0.75rem; color: #ffb300; margin-bottom: 12px; font-style: italic; font-weight: 600;">itens não críticos</p>
+                                    <ul style="list-style: none; font-size: 0.75rem; color: var(--text-color-base); font-weight: 500;">
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Critérios de performance:</strong> eficiência funcional</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Origem:</strong> fornecedores locais</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Horizonte temporal:</strong> no máximo 12 meses</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Itens comprados:</strong> commodities e materiais com especificações</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Característica do suprimento:</strong> abundante</li>
+                                        <li><strong>Decisão:</strong> descentralizada</li>
+                                    </ul>
+                                </div>
+
+                                <!-- 4. GARGALO (Verde) -->
+                                <div style="background: var(--insight-bg); border: 2px solid #4caf50; border-radius: 12px; padding: 20px; transition: transform 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                                    <h4 style="color: #388e3c; margin-bottom: 4px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">⚠️ Gestão de sourcing</h4>
+                                    <p style="font-size: 0.75rem; color: #4caf50; margin-bottom: 12px; font-style: italic; font-weight: 600;">itens de gargalo</p>
+                                    <ul style="list-style: none; font-size: 0.75rem; color: var(--text-color-base); font-weight: 500;">
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Critérios de performance:</strong> gestão de custos e sourcing confiável de curto prazo</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Origem:</strong> global, com novas tecnologias</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Horizonte temporal:</strong> depende do tradeoff entre disponibilidade e flexibilidade no curto prazo</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Itens comprados:</strong> materiais com especificações</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Característica do suprimento:</strong> escassez baseada em produção</li>
+                                        <li><strong>Decisão:</strong> descentralizada com gestão centralizada</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>                
                 </div>
             </div>
 
@@ -1722,8 +1874,84 @@
                     </div>
                     
                     <div class="analysis-inner-content" id="matriz-kraljic-parque">
-                        <div class="empty-state">Módulo "Matriz de Kraljic" em desenvolvimento.</div>
-                    </div>               
+                        <div class="abc-header">
+                            <h3>Matriz de Kraljic - Gestão Estratégica de Compras</h3>
+                            <p style="font-size: 0.8rem; color: var(--subtitle-color); margin-top: -15px; margin-bottom: 20px;">Classificação baseada na Complexidade do Mercado versus Importância da Compra.</p>
+                        </div>
+                        
+                        <div style="position: relative; padding-left: 35px; padding-bottom: 35px; max-width: 900px; margin: 0 auto;">
+                            <!-- Eixo Y (Vertical) -->
+                            <div style="position: absolute; left: 0; top: 0; bottom: 35px; width: 25px; display: flex; align-items: center; justify-content: center; border-right: 2px solid var(--border-color);">
+                                <div style="transform: rotate(-90deg); white-space: nowrap; font-size: 0.75rem; font-weight: 700; color: var(--title-color); letter-spacing: 1px; text-transform: uppercase;">Baixa ⟵ Importância da Compra ⟶ Alta</div>
+                            </div>
+                            
+                            <!-- Eixo X (Horizontal) -->
+                            <div style="position: absolute; left: 35px; right: 0; bottom: 0; height: 25px; display: flex; align-items: center; justify-content: center; border-top: 2px solid var(--border-color);">
+                                <div style="font-size: 0.75rem; font-weight: 700; color: var(--title-color); letter-spacing: 1px; text-transform: uppercase;">Baixa ⟵ Complexidade no Mercado ⟶ Alta</div>
+                            </div>
+
+                            <!-- Grade 2x2 -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding-top: 5px; padding-left: 5px;">
+                                
+                                <!-- 1. ALAVANCAGEM (Rosa/Magenta) -->
+                                <div style="background: var(--insight-bg); border: 2px solid #e91e63; border-radius: 12px; padding: 20px; transition: transform 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                                    <h4 style="color: #c2185b; margin-bottom: 4px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">📈 Gestão de materiais</h4>
+                                    <p style="font-size: 0.75rem; color: #e91e63; margin-bottom: 12px; font-style: italic; font-weight: 600;">itens de alavancagem</p>
+                                    <ul style="list-style: none; font-size: 0.75rem; color: var(--text-color-base); font-weight: 500;">
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Critérios de performance:</strong> custo/preço e gestão do fluxo de materiais</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Origem:</strong> múltiplos fornecedores locais</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Horizonte temporal:</strong> entre 12 e 24 meses</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Itens comprados:</strong> mix de commodities e materiais com especificações</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Suprimento:</strong> abundante</li>
+                                        <li><strong>Decisão:</strong> majoritariamente descentralizada</li>
+                                    </ul>
+                                </div>
+
+                                <!-- 2. ESTRATÉGICOS (Laranja) -->
+                                <div style="background: var(--insight-bg); border: 2px solid #ff5722; border-radius: 12px; padding: 20px; transition: transform 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                                    <h4 style="color: #e64a19; margin-bottom: 4px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">🎯 Gestão de suprimentos</h4>
+                                    <p style="font-size: 0.75rem; color: #ff5722; margin-bottom: 12px; font-style: italic; font-weight: 600;">itens estratégicos</p>
+                                    <ul style="list-style: none; font-size: 0.75rem; color: var(--text-color-base); font-weight: 500;">
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Critérios de performance:</strong> disponibilidade no longo prazo</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Origem:</strong> fornecedores globais</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Horizonte temporal:</strong> longo prazo (10 anos)</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Itens comprados:</strong> escassos e/ou materiais de alto valor</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Suprimento:</strong> naturalmente escasso</li>
+                                        <li><strong>Decisão:</strong> centralizada</li>
+                                    </ul>
+                                </div>
+
+                                <!-- 3. NÃO CRÍTICOS / ROTINEIROS (Amarelo) -->
+                                <div style="background: var(--insight-bg); border: 2px solid #ffb300; border-radius: 12px; padding: 20px; transition: transform 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                                    <h4 style="color: #f57f17; margin-bottom: 4px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">✅ Gestão de compras</h4>
+                                    <p style="font-size: 0.75rem; color: #ffb300; margin-bottom: 12px; font-style: italic; font-weight: 600;">itens não críticos</p>
+                                    <ul style="list-style: none; font-size: 0.75rem; color: var(--text-color-base); font-weight: 500;">
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Critérios de performance:</strong> eficiência funcional</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Origem:</strong> fornecedores locais</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Horizonte temporal:</strong> no máximo 12 meses</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Itens comprados:</strong> commodities e materiais com especificações</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Característica do suprimento:</strong> abundante</li>
+                                        <li><strong>Decisão:</strong> descentralizada</li>
+                                    </ul>
+                                </div>
+
+                                <!-- 4. GARGALO (Verde) -->
+                                <div style="background: var(--insight-bg); border: 2px solid #4caf50; border-radius: 12px; padding: 20px; transition: transform 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                                    <h4 style="color: #388e3c; margin-bottom: 4px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">⚠️ Gestão de sourcing</h4>
+                                    <p style="font-size: 0.75rem; color: #4caf50; margin-bottom: 12px; font-style: italic; font-weight: 600;">itens de gargalo</p>
+                                    <ul style="list-style: none; font-size: 0.75rem; color: var(--text-color-base); font-weight: 500;">
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Critérios de performance:</strong> gestão de custos e sourcing confiável de curto prazo</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Origem:</strong> global, com novas tecnologias</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Horizonte temporal:</strong> depende do tradeoff entre disponibilidade e flexibilidade no curto prazo</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Itens comprados:</strong> materiais com especificações</li>
+                                        <li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Característica do suprimento:</strong> escassez baseada em produção</li>
+                                        <li><strong>Decisão:</strong> descentralizada com gestão centralizada</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>            
                  </div>
             </div>
 

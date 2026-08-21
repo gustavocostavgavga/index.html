@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -972,12 +971,28 @@
                         </div>
                     </div>
 
-                    <div class="analysis-inner-content" id="mapa-fornecedores-mirante">
+                   <div class="analysis-inner-content" id="mapa-fornecedores-mirante">
                         <div class="abc-header">
                             <h3>Mapa Geográfico de Fornecedores e Distâncias Logísticas</h3>
-                            <p style="font-size: 0.8rem; color: var(--subtitle-color); margin-top: -15px; margin-bottom: 20px;">Clique em um estado colorido para ampliar a região. As setas animadas demonstram o fluxo até o canteiro de obras (Bocaiúva-MG).</p>
+                            <p style="font-size: 0.8rem; color: var(--subtitle-color); margin-top: -15px; margin-bottom: 20px;">Navegue pelo mapa (zoom e arraste). Os dados laterais são atualizados com base no cadastro de parceiros.</p>
                         </div>
-                        <div id="mapChartContainerMirante" style="width: 50%; min-width: 600px; margin: 0 auto; height: 600px; background: var(--bg-color-1); border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: inset 0 0 10px rgba(0,0,0,0.05);"></div>
+                        
+                        <div style="display: flex; gap: 20px; align-items: stretch; flex-wrap: wrap;">
+                            <!-- MAPA (Esquerda) -->
+                            <div style="flex: 1; min-width: 500px; height: 800px; background: var(--bg-color-1); border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); position: relative;">
+                                <!-- Botão de emergência para centralizar o mapa -->
+                                <button onclick="if(mapChartMiranteInstance) mapChartMiranteInstance.setOption({ geo: { center: [-50, -15], zoom: 1.2 } })" style="position: absolute; top: 15px; right: 15px; z-index: 999; background: var(--card-bg); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.75rem; font-weight: 700; color: var(--title-color); box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">🎯 Centralizar Mapa</button>
+                                
+                                <div id="mapChartContainerMirante" style="width: 100%; height: 100%;"></div>
+                            </div>
+                            
+                            <!-- RANKINGS DE FORNECEDORES (Direita) -->
+                            <div style="width: 380px; display: flex; flex-direction: column; gap: 15px; height: 800px; overflow-y: auto; padding-right: 8px; flex-grow: 1; max-width: 480px;" id="fornecedores-rankings-mirante">
+                                <!-- Os 5 quadros serão gerados via JavaScript aqui dentro -->
+                            </div>
+                        </div>
+                    </div>
+                        
                     </div>
                     
                     <div class="analysis-inner-content" id="matriz-kraljic-mirante">
@@ -4863,7 +4878,7 @@ async function loadPDF(filename, btnElement) {
         let mapChartMiranteInstance = null;
         let brazilGeoJson = null;
 
-       async function initMapMirante() {
+      async function initMapMirante() {
             const container = document.getElementById('mapChartContainerMirante');
             if (!container) return;
 
@@ -4882,10 +4897,11 @@ async function loadPDF(filename, btnElement) {
                     echarts.registerMap('brazil', brazilGeoJson);
                 }
 
-                // Coordenada da Obra: Bocaiúva-MG
-                const coordObra = [-43.814, -17.106]; 
+                // ==========================================
+                // 1. DADOS DO MAPA (Fornecedores Geográficos)
+                // ==========================================
+                const coordObra = [-43.814, -17.106]; // Bocaiúva-MG
 
-                // Tabela de Fornecedores
                 const fornecedoresMap = {
                     "MONTES CLAROS": { coords: [-43.861, -16.735], uf: "MG", km: 42, fornecedores: ["FLORICULTURA RENASCER (Meio Ambiente)", "LABORATÓRIO AMBIMETRIC (Meio Ambiente)"] },
                     "BOCAIÚVA": { coords: [-43.814, -17.106], uf: "MG", km: 0, fornecedores: ["DAVI FONSECA GUIMARAIS (Indireto de Obras)", "MINERO MINAS (Reservatório / Adutora)"] },
@@ -4896,16 +4912,14 @@ async function loadPDF(filename, btnElement) {
                 const scatterData = [];
                 const linesData = [];
 
-                // Ponto Central (O Canteiro de Obras em Vermelho - Agora carrega os fornecedores locais)
                 scatterData.push({
                     name: "OBRA: MIRANTE DA LAGOA",
                     value: [coordObra[0], coordObra[1], 0],
                     isObra: true,
-                    fornecedores: fornecedoresMap["BOCAIÚVA"].fornecedores, // Liga a lista de Bocaiúva aqui
+                    fornecedores: fornecedoresMap["BOCAIÚVA"].fornecedores,
                     label: { show: true, formatter: 'BOCAIÚVA-MG', position: 'right', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#d32f2f', padding: [4, 6], borderRadius: 4 }
                 });
 
-                // Pinos dos Fornecedores Interestaduais e Intermunicipais
                 Object.keys(fornecedoresMap).forEach(cidade => {
                     let f = fornecedoresMap[cidade];
                     if (cidade !== "BOCAIÚVA") {
@@ -4915,30 +4929,13 @@ async function loadPDF(filename, btnElement) {
                             fornecedores: f.fornecedores,
                             uf: f.uf,
                             km: f.km,
-                            label: { 
-                                show: true, 
-                                formatter: `${cidade}-${f.uf}`, 
-                                position: 'right', 
-                                color: '#ffffff', 
-                                fontWeight: 'bold', 
-                                backgroundColor: '#1b5e20', 
-                                padding: [4, 6], 
-                                borderRadius: 4,
-                                fontSize: 10
-                            }
+                            label: { show: true, formatter: `${cidade}-${f.uf}`, position: 'right', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#1b5e20', padding: [4, 6], borderRadius: 4, fontSize: 10 }
                         });
-                        linesData.push({
-                            coords: [f.coords, coordObra],
-                            km: f.km
-                        });
+                        linesData.push({ coords: [f.coords, coordObra], km: f.km });
                     }
                 });
 
-                const greenGradient = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                    { offset: 0, color: '#a5d6a7' }, 
-                    { offset: 1, color: '#2e7d32' }  
-                ]);
-
+                const greenGradient = new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: '#a5d6a7' }, { offset: 1, color: '#2e7d32' }]);
                 let isDark = document.body.classList.contains('dark-mode');
 
                 const option = {
@@ -4951,14 +4948,9 @@ async function loadPDF(filename, btnElement) {
                         formatter: function (params) {
                             if (params.seriesType === 'scatter') {
                                 let list = params.data.fornecedores ? params.data.fornecedores.map(f => `• ${f}`).join('<br/>') : '';
-                                
-                                // Tooltip exclusiva da Obra (Mostra fornecedores, omite KM)
                                 if (params.data.isObra) {
-                                    return `<strong style="color:#d32f2f; font-size: 1.1rem;">Cidade do empreendimento Mirante da Lagoa</strong><br/>Bocaiúva - MG<br/><br/>
-                                            <div style="font-size:0.85rem">${list}</div>`;
+                                    return `<strong style="color:#d32f2f; font-size: 1.1rem;">Cidade do empreendimento Mirante da Lagoa</strong><br/>Bocaiúva - MG<br/><br/><div style="font-size:0.85rem">${list}</div>`;
                                 }
-                                
-                                // Tooltip padrão dos fornecedores externos
                                 return `<strong style="color:#1b5e20; font-size: 1.1rem;">${params.data.name} - ${params.data.uf}</strong><br/>
                                         <span style="font-size: 0.85rem; color: ${isDark ? '#a3e635' : '#7f8c8d'};">Distância Logística: <strong>${params.data.km} km</strong></span><br/><br/>
                                         <div style="font-size:0.85rem">${list}</div>`;
@@ -4970,51 +4962,112 @@ async function loadPDF(filename, btnElement) {
                     },
                     geo: {
                         map: 'brazil',
-                        roam: true, // DEVOLVIDO: O arraste livre do mapa voltou a funcionar
+                        roam: true,
                         center: [-50, -15], 
                         zoom: 1.2,
-                        itemStyle: { 
-                            areaColor: isDark ? '#0a140d' : '#b0bec5', // ALTERADO: Cinza mais escuro para contraste
-                            borderColor: isDark ? '#1f5027' : '#ffffff', 
-                            borderWidth: 1 
-                        },
-                        emphasis: {
-                            itemStyle: { areaColor: '#c8e6c9', shadowBlur: 10, shadowColor: 'rgba(0,0,0,0.4)' },
-                            label: { show: false }
-                        },
-                        regions: [
-                            { name: 'Minas Gerais', itemStyle: { areaColor: greenGradient } },
-                            { name: 'Paraná', itemStyle: { areaColor: greenGradient } }
-                        ]
+                        itemStyle: { areaColor: isDark ? '#0a140d' : '#b0bec5', borderColor: isDark ? '#1f5027' : '#ffffff', borderWidth: 1 },
+                        emphasis: { itemStyle: { areaColor: '#c8e6c9', shadowBlur: 10, shadowColor: 'rgba(0,0,0,0.4)' }, label: { show: false } },
+                        regions: [{ name: 'Minas Gerais', itemStyle: { areaColor: greenGradient } }, { name: 'Paraná', itemStyle: { areaColor: greenGradient } }]
                     },
                     series: [
-                        {
-                            type: 'lines',
-                            coordinateSystem: 'geo',
-                            data: linesData,
-                            effect: { show: true, period: 4, trailLength: 0.3, symbol: 'arrow', symbolSize: 8, color: '#ff6d00' },
-                            lineStyle: { color: '#558b2f', width: 2.5, opacity: 0.8, curveness: 0.3 }
-                        },
-                        {
-                            type: 'scatter',
-                            coordinateSystem: 'geo',
-                            data: scatterData,
-                            symbolSize: function(val, params) { return params.data.isObra ? 18 : 12; },
-                            itemStyle: { 
-                                color: function(params) { return params.data.isObra ? '#d32f2f' : '#1b5e20'; }, 
-                                borderColor: '#ffffff', 
-                                borderWidth: 2,
-                                shadowBlur: 8,
-                                shadowColor: 'rgba(0,0,0,0.5)'
-                            },
-                            emphasis: { itemStyle: { color: '#ff6d00', borderColor: '#ffffff' }, scale: true },
-                            zlevel: 1
-                        }
+                        { type: 'lines', coordinateSystem: 'geo', data: linesData, effect: { show: true, period: 4, trailLength: 0.3, symbol: 'arrow', symbolSize: 8, color: '#ff6d00' }, lineStyle: { color: '#558b2f', width: 2.5, opacity: 0.8, curveness: 0.3 } },
+                        { type: 'scatter', coordinateSystem: 'geo', data: scatterData, symbolSize: function(val, params) { return params.data.isObra ? 18 : 12; }, itemStyle: { color: function(params) { return params.data.isObra ? '#d32f2f' : '#1b5e20'; }, borderColor: '#ffffff', borderWidth: 2, shadowBlur: 8, shadowColor: 'rgba(0,0,0,0.5)' }, emphasis: { itemStyle: { color: '#ff6d00', borderColor: '#ffffff' }, scale: true }, zlevel: 1 }
                     ]
                 };
 
                 mapChartMiranteInstance.setOption(option);
                 mapChartMiranteInstance.hideLoading();
+
+                // ==========================================
+                // 2. RENDERIZAÇÃO DOS 5 QUADROS LATERAIS
+                // ==========================================
+                
+                // DADOS TEMPORÁRIOS (Serão substituídos pela lista real depois)
+                const rankConcentracao = [
+                    { name: 'Belo Horizonte - MG', value: 12 },
+                    { name: 'Montes Claros - MG', value: 8 },
+                    { name: 'Bocaiúva - MG', value: 5 },
+                    { name: 'São Paulo - SP', value: 3 },
+                    { name: 'Mandaguari - PR', value: 1 }
+                ];
+                const rankImpacto = [
+                    { name: 'Cros Construções (Pavimentação)', value: 1540000 },
+                    { name: 'Minero Minas (Adutora)', value: 850000 },
+                    { name: 'Sanevia Tubos (Saneamento)', value: 420000 },
+                    { name: 'Floricultura Renascer (Paisagismo)', value: 110000 },
+                    { name: 'Onix Distribuidora (Elétrica)', value: 85000 }
+                ];
+                const rankCriticidade = [
+                    { name: 'Asfalto CBUQ (Cros)', value: 9.5 },
+                    { name: 'Tubos PEAD (Sanevia)', value: 8.8 },
+                    { name: 'Cabos de Alumínio (Onix)', value: 8.2 },
+                    { name: 'Bombas Hidráulicas (Minero)', value: 7.5 },
+                    { name: 'Mudas e Gramas (Renascer)', value: 4.0 }
+                ];
+                const rankEstrategicos = [
+                    { name: 'Minero Minas', value: 9.8 },
+                    { name: 'Cros Construções', value: 9.0 },
+                    { name: 'Laboratório Ambimetric', value: 8.5 },
+                    { name: 'Onix Distribuidora', value: 8.0 },
+                    { name: 'Sanevia Tubos', value: 7.5 }
+                ];
+                const rankAvaliacao = [
+                    { name: 'Floricultura Renascer', value: 9.9 },
+                    { name: 'Minero Minas', value: 9.6 },
+                    { name: 'Cros Construções', value: 9.4 },
+                    { name: 'Laboratório Ambimetric', value: 9.0 },
+                    { name: 'Davi Fonseca Guimaraes', value: 8.8 }
+                ];
+
+                function buildSupplierRankingHTML(title, data, valueFormat, legenda) {
+                    let maxVal = Math.max(...data.map(d => d.value)) || 1;
+                    let html = `<div class="ranking-col" style="margin-bottom: 0;">`;
+                    html += `<div class="chart-title" style="margin-bottom: 15px; font-size: 0.90rem; text-align: center;">${title}</div>`;
+                    
+                    data.forEach((item, index) => {
+                        let pctBarra = Math.max((item.value / maxVal) * 100, 5);
+                        let valStr = "";
+                        
+                        // Lógica para formatar cada tipo de número corretamente
+                        if (valueFormat === 'currency') valStr = `R$ ${Math.round(item.value).toLocaleString('pt-BR')}`;
+                        else if (valueFormat === 'score') valStr = `${item.value.toFixed(1)} / 10`;
+                        else if (valueFormat === 'qtd') valStr = `${item.value} emp.`;
+                        
+                        const cores = ['#1b5e20', '#2e7d32', '#388e3c', '#4caf50', '#81c784'];
+                        let cor = cores[index % cores.length];
+
+                        html += `
+                        <div class="top5-item-container" style="margin-bottom: 12px; width: 95%; margin-left: auto; margin-right: auto; cursor: default;">
+                            <div class="top5-item-title" style="font-size: 0.65rem; font-weight: 700; color: var(--text-color-base); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px;">${item.name}</div>
+                            <div class="top5-item-row" style="display: flex; align-items: center; gap: 10px; width: 100%;">
+                                <div class="top5-bar-track" style="flex: 1; height: 12px; background: var(--gauge-fill-base); border-radius: 2px; overflow: hidden;">
+                                    <div class="top5-bar-fill-new" style="width: ${pctBarra}%; height: 100%; background-color: ${cor}; transition: width 0.8s ease;"></div>
+                                </div>
+                                <div class="top5-item-values" style="font-size: 0.70rem; font-weight: 700; color: var(--text-color-base); white-space: nowrap; text-align: right;">
+                                    ${valStr}
+                                </div>
+                            </div>
+                        </div>
+                        `;
+                    });
+
+                    if (legenda) {
+                        html += `<div class="ranking-warning" style="font-size: 0.65rem; color: var(--text-color-base); font-style: italic; margin-top: auto; line-height: 1.4; border-top: 1px dashed var(--border-color); padding-top: 10px; text-align: justify; opacity: 0.8;">${legenda}</div>`;
+                    }
+                    html += `</div>`;
+                    return html;
+                }
+
+                // Injera os 5 quadros no container da direita
+                const rightCol = document.getElementById('fornecedores-rankings-mirante');
+                if(rightCol) {
+                    rightCol.innerHTML = 
+                        buildSupplierRankingHTML('📍 Maiores Concentrações de Fornecedores', rankConcentracao, 'qtd', 'As 5 cidades com o maior volume de empresas ativas atendendo diretamente ao canteiro de obras.') +
+                        buildSupplierRankingHTML('💰 Fornecedores de Maior Impacto', rankImpacto, 'currency', 'Ranking de parceiros classificados pelo maior volume financeiro desembolsado no projeto.') +
+                        buildSupplierRankingHTML('⚠️ Fornecimentos com Maior Criticidade', rankCriticidade, 'score', 'Principais gargalos de distribuição e fornecimento mapeados (Escala de risco de atraso: 0 a 10).') +
+                        buildSupplierRankingHTML('🤝 Fornecedores Estratégicos', rankEstrategicos, 'score', 'Parceiros que atuaram de forma decisiva para solucionar problemas críticos e evitar gargalos (Escala: 0 a 10).') +
+                        buildSupplierRankingHTML('⭐ Fornecedores de Melhor Avaliação', rankAvaliacao, 'score', 'Classificação de excelência em entrega e relacionamento para fidelização em novos negócios (Escala: 0 a 10).');
+                }
 
             } catch (err) {
                 console.error("Erro ao gerar a telemetria do mapa:", err);

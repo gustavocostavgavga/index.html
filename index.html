@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -4909,15 +4910,193 @@ async function loadPDF(filename, btnElement) {
         }
 	let mapInstances = { mirante: null, joaquim: null, parque: null };
         let brazilGeoJson = null;
-        let fornecedoresDataCache = null;
-        
-        // Cache de coordenadas (Evita sobrecarregar a API pública)
-        let geoCache = {
-            "BOCAIÚVA - MG": [-43.814, -17.106],
-            "ITUIUTABA - MG": [-49.465, -18.969],
-            "CAMPANHA - MG": [-45.400, -21.833],
-            "BELO HORIZONTE - MG": [-43.937, -19.920],
-            "MONTES CLAROS - MG": [-43.861, -16.735]
+
+        // Dicionário para pintar os estados no mapa
+        const stateNamesMap = { 'MG': 'Minas Gerais', 'SP': 'São Paulo', 'RJ': 'Rio de Janeiro', 'ES': 'Espírito Santo', 'PR': 'Paraná', 'BA': 'Bahia', 'GO': 'Goiás' };
+
+        // BANCO DE DADOS DE FORNECEDORES EMBUTIDO (Carregamento Instantâneo)
+        const fornecedoresFixos = {
+            'mirante': [
+                ['ARAXA AMBIENTAL', 'Meio Ambiente', 'ARAXÁ/MG', -19.59, -46.94],
+                ['EXPONENCIAL', 'Elétrica', 'BELO HORIZONTE/MG', -19.92, -43.93],
+                ['SEF ENERGIA', 'Elétrica', 'BELO HORIZONTE/MG', -19.92, -43.93],
+                ['ACK ENGENHARIA', 'Mão de obra serviços gerais', 'BELO HORIZONTE/MG', -19.92, -43.93],
+                ['TERRAPLANNUS GESTAO', 'Mão de obra serviços gerais', 'BELO HORIZONTE/MG', -19.92, -43.93],
+                ['PRIME PROJETOS', 'Meio Ambiente', 'BELO HORIZONTE/MG', -19.92, -43.93],
+                ['CROS CONSTRUCÕES', 'Pavimentação', 'BELO HORIZONTE/MG', -19.92, -43.93],
+                ['LV ARQUITETURA', 'Projetos', 'BELO HORIZONTE/MG', -19.92, -43.93],
+                ['VIA SANEAMENTO', 'Saneamento', 'BELO HORIZONTE/MG', -19.92, -43.93],
+                ['SANEVIA', 'Saneamento', 'BELO HORIZONTE/MG', -19.92, -43.93],
+                ['POLIFASE ELETRICA', 'Saneamento', 'BELO HORIZONTE/MG', -19.92, -43.93],
+                ['GOUVEA E RODRIGUES', 'Saneamento', 'BELO HORIZONTE/MG', -19.92, -43.93],
+                ['RODOCAP', 'Transportadora', 'BELO HORIZONTE/MG', -19.92, -43.93],
+                ['SLC POSTO', 'Combustíveis', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['CENTRAL MIX', 'Concreteira', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['COMEPI', 'Consultoria', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['ANTONIO MARCOS', 'Elétrica', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['HOTEL PONTUAL', 'Hospedagem', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['MARCOS FABRICIO', 'Locação de Máquinas', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['DAVI FONSECA', 'Aluguel para Canteiro de Obras', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['LOCBEM', 'Locação de Máquinas', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['AEZ LOCACOES', 'Locação de Máquinas', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['LOCACOES E SERVICOS OGS', 'Locação de Máquinas', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['R.R. DE ANDRADE', 'Locação de Máquinas', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['SANTOS FELIX', 'Locação de Máquinas', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['JOSE DJALMA', 'Mão de obra serviços gerais', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['VITORINO', 'Mão de obra serviços gerais', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['AMORIM E MACEDO', 'Mão de obra serviços gerais', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['REINALDO GONCALVES PEREIRA', 'Mão de obra serviços gerais', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['MINERO MINAS', 'Mão de obra serviços gerais', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['FERNANDO PEREIRA', 'Mão de obra serviços gerais', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['ANTONIO GOMES DOS SANTOS', 'Mão de obra serviços gerais', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['ALAIR JOSÉ', 'Mão de obra serviços gerais', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['SERRALHERIA MARANATA', 'Mão de obra serviços gerais', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['L A EUCALIPTOS', 'Materiais de Construção', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['BELLA MINEIRA', 'Materiais de Construção', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['FERBOC', 'Materiais de Construção', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['PREBOC', 'Materiais de Construção', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['ATACADAO DO EUCALIPTO', 'Materiais de Construção', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['ELISANGELA DOS SANTOS', 'Materiais de Construção', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['PAULO ROBERTO', 'Materiais de Construção', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['V e A MATERIAIS DE CONSTRUCAO', 'Materiais de Construção', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['VERGALHOES NORTE', 'Materiais de Construção', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['CENTRAL ELETRICA', 'Materiais de Construção', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['DEYVID ALEX', 'Materiais de Construção', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['SV MATERIAIS DE CONTRUÇÃO', 'Materiais de Construção', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['RIMA INDUSTRIAL', 'Materiais de Construção', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['SC MADEIRAS', 'Materiais de Construção', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['BOC TINTAS', 'Materiais de Construção', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['CRIARTE', 'Plotagem', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['SORAIA PIMENTA', 'Projetos', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['HERMES XAVIER', 'Terraplenagem', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['EDILSON BRAZ', 'Topografia', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['AEM TRANSPORTES', 'Transportadora', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['FALCÕES SEGURANÇA', 'Vigilância', 'BOCAIÚVA/MG', -17.1, -43.81],
+                ['RODOFAL TRANSPORTE', 'Transportadora', 'CARMO DA MATA/MG', -20.55, -44.97],
+                ['AMORIM TRANSPORTE', 'Transportadora', 'CONSELHEIRO LAFAIETE/MG', -20.65, -43.78],
+                ['TRANSPORTADORA JEG', 'Transportadora', 'CONTAGEM/MG', -19.93, -44.05],
+                ['RECARBON', 'Locação de Máquinas', 'CORINTO/MG', -18.36, -44.45],
+                ['AGEN LOCACOES', 'Locação de Máquinas', 'GUARACIAMA/MG', -17.03, -43.85],
+                ['AGROTERRA TERRAPLENAGEM', 'Locação de Máquinas', 'GUARACIAMA/MG', -17.03, -43.85],
+                ['ROMAGNOLE', 'Elétrica', 'MANDAGUARI/PR', -23.53, -51.67],
+                ['ONIX DISTRIBUIDORA', 'Elétrica', 'MANDAGUARI/PR', -23.53, -51.67],
+                ['FIBRASANE', 'Saneamento', 'MAUÁ/SP', -23.66, -46.46],
+                ['ROMA MAQUINAS', 'Locação de Máquinas', 'MIRABELA/MG', -16.26, -44.15],
+                ['POLIMIX', 'Concreteira', 'MONTES CLAROS/MG', -16.73, -43.86],
+                ['ANDRE CRISTIANO', 'Locação de Máquinas', 'MONTES CLAROS/MG', -16.73, -43.86],
+                ['OK GERADORES', 'Locação de Máquinas', 'MONTES CLAROS/MG', -16.73, -43.86],
+                ['LOKAFORT', 'Locação de Máquinas', 'MONTES CLAROS/MG', -16.73, -43.86],
+                ['LUCAS MACEDO', 'Locação de Máquinas', 'MONTES CLAROS/MG', -16.73, -43.86],
+                ['MONTES CLAROS', 'Locação de Máquinas', 'MONTES CLAROS/MG', -16.73, -43.86],
+                ['NORTE CONSTRUTORA', 'Mão de obra serviços gerais', 'MONTES CLAROS/MG', -16.73, -43.86],
+                ['IDEAL ENGENHARIA', 'Mão de obra serviços gerais', 'MONTES CLAROS/MG', -16.73, -43.86],
+                ['MOLDHARTE', 'Materiais de Construção', 'MONTES CLAROS/MG', -16.73, -43.86],
+                ['NORTE E TELAS', 'Materiais de Construção', 'MONTES CLAROS/MG', -16.73, -43.86],
+                ['FERRAMENTAS SAO JOSE', 'Materiais de Construção', 'MONTES CLAROS/MG', -16.73, -43.86],
+                ['LABORATORIO AMBIMETRIC', 'Meio Ambiente', 'MONTES CLAROS/MG', -16.73, -43.86],
+                ['FLORICULTURA RENASCER', 'Paisagismo', 'MONTES CLAROS/MG', -16.73, -43.86],
+                ['HELLEN FERNANDA', 'Projetos', 'MONTES CLAROS/MG', -16.73, -43.86],
+                ['RAFAEL SILVA', 'Projetos', 'MONTES CLAROS/MG', -16.73, -43.86],
+                ['SISTEMIG', 'Saneamento', 'MONTES CLAROS/MG', -16.73, -43.86],
+                ['DILTON ALVES', 'Locação de Máquinas', "OLHOS-D'ÁGUA/MG", -17.2, -43.57],
+                ['AGROGEO', 'Topografia', 'PADRE PARAÍSO/MG', -17.07, -41.48],
+                ['MR TOPOGRAFIA', 'Topografia', 'PADRE PARAÍSO/MG', -17.07, -41.48],
+                ['ASPERBRAS TUBOS', 'Saneamento', 'PENÁPOLIS/SP', -21.42, -50.07],
+                ['SHALOM', 'Saneamento', 'RIBEIRÃO DAS NEVES/MG', -19.76, -44.08],
+                ['CSN CIMENTOS', 'Materiais de Construção', 'RIO DE JANEIRO/RJ', -22.9, -43.2],
+                ['ELETRICSAN', 'Saneamento', 'RIO GRANDE DA SERRA/SP', -23.74, -46.39],
+                ['R A DE CARVALHO', 'Projetos', 'SANTA LUZIA/MG', -19.76, -43.85],
+                ['KPL SOLUCOES', 'Transportadora', 'SANTO ANDRÉ/SP', -23.66, -46.53],
+                ['ICAL', 'Materiais de Construção', 'SÃO JOSÉ DA LAPA/MG', -19.69, -43.94],
+                ['DISBRAL', 'Pavimentação', 'SARZEDO/MG', -20.03, -44.14],
+                ['ALC TUBOS', 'Saneamento', 'SERRA/ES', -20.12, -40.3],
+                ['ILUMATIC', 'Elétrica', 'SOORETAMA/ES', -19.19, -40.09],
+                ['FSC CONSULTORIA', 'Acompanhamento de obras', 'VARGINHA/MG', -21.55, -45.43],
+                ['LOCALIZA', 'Aluguel de Veículos', 'VARGINHA/MG', -21.55, -45.43],
+                ['DISTAKPLOT', 'Plotagem', 'VARGINHA/MG', -21.55, -45.43],
+                ['NOG ENGENHARIA', 'Projetos', 'VARGINHA/MG', -21.55, -45.43],
+                ['GNT MOBILIDADE', 'Sinalização', 'VARGINHA/MG', -21.55, -45.43]
+            ],
+            'joaquim': [
+                ['VALLE METALURGICA', 'Reservatório Metálico', 'ABADIA DE GOIÁS/GO', -16.75, -49.44],
+                ['LCSOARES', 'Projetos', 'BELO HORIZONTE/MG', -19.92, -43.93],
+                ['CeC ENGENHARIA', 'Projetos', 'BELO HORIZONTE/MG', -19.92, -43.93],
+                ['FUNDICAO ALEA LTDA', 'Saneamento', 'CARMO DA MATA/MG', -20.55, -44.97],
+                ['SUZY GARCIA', 'Acompanhamento de obras', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['LIRIA GODOI', 'Aluguel Canteiro', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['JULIO CÉSAR', 'Aluguel Canteiro', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['VALTER FELICIANO', 'Aluguel Canteiro', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['FAS COMERCIO', 'Aluguel Canteiro', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['MACRO AUTO POSTO', 'Combustíveis', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['MACRO CONCRETEIRA', 'Concreteira', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['ELETROE', 'Elétrica', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['LIDER HOTEL', 'Hospedagem', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['HOTEL BERNAL LTDA', 'Hospedagem', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['CLAYTON SOUZA', 'Locação de máquinas', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['YONAMINE', 'Locação de máquinas', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['JONAS OSVALDO', 'Locação de máquinas', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['BELISARIO SERVICO', 'Mão de obra', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['VINICIUS APARECIDO', 'Mão de obra', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['ADILSON DE ARAUJO', 'Mão de obra', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['NAIDE MARIA', 'Mão de obra', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['RODRIGO GONCALVES', 'Materiais de construção', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['MARCO AURELIO', 'Materiais de construção', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['MADEIREIRA MACRO', 'Materiais de construção', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['UNIAO', 'Materiais de construção', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['MADEIREIRA PONTAL', 'Materiais de construção', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['PREMOLDADOS PONTAL', 'Materiais de construção', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['LAJES E PREMOLDADOS SETE', 'Materiais de construção', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['CARLOS ROBERTO', 'Materiais de construção', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['AM MULTI PEDRAS', 'Materiais de construção', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['ALEXANDER GERVASIO', 'Materiais de construção', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['TINTORETTO SCOTCH', 'Materiais de construção', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['W e W BRITAGEM', 'Materiais de construção', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['PALACIO DO EUCALIPTO', 'Materiais de construção', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['TRIANGULO', 'Materiais de construção', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['CARLO ALBERTO', 'Materiais de construção', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['LECO MATERIAIS', 'Materiais de construção', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['IRMAOS SOARES', 'Materiais de construção', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['JAPA COPIAS', 'Plotagem', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['DANIELLE FERNANDA', 'Plotagem', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['RAFAEL MARTINS', 'Vigilância', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['FORTSHIELD', 'Vigilância', 'ITUIUTABA/MG', -18.96, -49.46],
+                ['A2N INFRAESTRUTURA', 'Mão de obra serviços gerais', 'PASSOS/MG', -20.71, -46.61],
+                ['MARCOS ANTÔNIO', 'Mão de obra serviços gerais', 'SÃO PAULO/SP', -23.55, -46.63],
+                ['HIDROTAM', 'Saneamento', 'TAMBAÚ/SP', -21.6, -47.27],
+                ['CAUNETTO SUPORTE', 'Projetos', 'TUPÃ/SP', -21.93, -50.51],
+                ['RIBEIRO BARROSO', 'Elétrica', 'UBERLÂNDIA/MG', -18.91, -48.27],
+                ['CONFIGEO', 'Locação de máquinas', 'UBERLÂNDIA/MG', -18.91, -48.27],
+                ['GENERATI', 'Locação de máquinas', 'UBERLÂNDIA/MG', -18.91, -48.27],
+                ['ACOSUL', 'Materiais de construção', 'UBERLÂNDIA/MG', -18.91, -48.27],
+                ['A M - CORTE E DOBRA', 'Materiais de construção', 'UBERLÂNDIA/MG', -18.91, -48.27],
+                ['MKA TOPOGRAFIA', 'Topografia', 'UBERLÂNDIA/MG', -18.91, -48.27],
+                ['FSC CONSULTORIA', 'Acompanhamento de obras', 'VARGINHA/MG', -21.55, -45.43],
+                ['DISTAKPLOT', 'Plotagem', 'VARGINHA/MG', -21.55, -45.43],
+                ['NOG ENGENHARIA', 'Projetos', 'VARGINHA/MG', -21.55, -45.43]
+            ],
+            'parque': [
+                ['FREIRE ENGENHARIA', 'Projetos', 'ALFENAS/MG', -21.42, -45.94],
+                ['JESSE RODRIGUES', 'Alimentação', 'CAMPANHA/MG', -21.83, -45.4],
+                ['POSTO SHEEP', 'Combustíveis', 'CAMPANHA/MG', -21.83, -45.4],
+                ['BRAGA TERRAPLANAGENS', 'Locação de Máquinas', 'CAMPANHA/MG', -21.83, -45.4],
+                ['FABIO VALIM', 'Materiais de Construção', 'CAMPANHA/MG', -21.83, -45.4],
+                ['CANDEIA DE MADEIRA', 'Materiais de Construção', 'CAMPANHA/MG', -21.83, -45.4],
+                ['BIANCA RAMOS', 'Materiais de Construção', 'CAMPANHA/MG', -21.83, -45.4],
+                ['MAURILIO FONSECA', 'Materiais de Construção', 'CAMPANHA/MG', -21.83, -45.4],
+                ['EBAZAR', 'Materiais de Construção', 'EXTREMA/MG', -22.85, -46.31],
+                ['DEGRAUS ANDAIMES', 'Locação de Máquinas', 'POUSO ALEGRE/MG', -22.23, -45.93],
+                ['TONINA COMERCIO', 'Materiais de Construção', 'SÃO PAULO/SP', -23.55, -46.63],
+                ['ALEX AX', 'Materiais de Construção', 'SÃO PAULO/SP', -23.55, -46.63],
+                ['CIMENTOLÂNDIA', 'Materiais de Construção', 'TRÊS CORAÇÕES/MG', -21.69, -45.25],
+                ['EDSON SILVERIO VILELA', 'Mão de obra serviços gerais', 'TRÊS PONTAS/MG', -21.37, -45.46],
+                ['FSC CONSULTORIA', 'Acompanhamento de Obras', 'VARGINHA/MG', -21.55, -45.43],
+                ['WTERRA', 'Locação de Máquinas', 'VARGINHA/MG', -21.55, -45.43],
+                ['CRABI', 'Materiais de Construção', 'VARGINHA/MG', -21.55, -45.43],
+                ['CASTROFER', 'Materiais de Construção', 'VARGINHA/MG', -21.55, -45.43],
+                ['DISTAKPLOT', 'Plotagem', 'VARGINHA/MG', -21.55, -45.43],
+                ['NOG ENGENHARIA', 'Projetos', 'VARGINHA/MG', -21.55, -45.43],
+                ['XPRO PROJETOS', 'Topografia', 'VARGINHA/MG', -21.55, -45.43]
+            ]
         };
 
         // BANCO DE DADOS DOS RANKINGS LATERAIS (PREENCHA AQUI SEUS TOP 5)
@@ -4930,14 +5109,14 @@ async function loadPDF(filename, btnElement) {
                 avaliacao: [ { name: 'Floricultura Renascer', value: 9.9 }, { name: 'Minero Minas', value: 9.6 }, { name: 'Cros Construções', value: 9.4 }, { name: 'Laboratório Ambimetric', value: 9.0 }, { name: 'Davi Fonseca', value: 8.8 } ]
             },
             'joaquim': {
-                concentracao: [ { name: 'A Preencher - SP', value: 0 }, { name: 'A Preencher - MG', value: 0 } ],
+                concentracao: [ { name: 'A Preencher', value: 0 } ],
                 impacto: [ { name: 'A Preencher (Area)', value: 0 } ],
                 criticidade: [ { name: 'A Preencher (Produto)', value: 0 } ],
                 estrategicos: [ { name: 'A Preencher Fornecedor', value: 0 } ],
                 avaliacao: [ { name: 'A Preencher Fornecedor', value: 0 } ]
             },
             'parque': {
-                concentracao: [ { name: 'A Preencher - SP', value: 0 }, { name: 'A Preencher - MG', value: 0 } ],
+                concentracao: [ { name: 'A Preencher', value: 0 } ],
                 impacto: [ { name: 'A Preencher (Area)', value: 0 } ],
                 criticidade: [ { name: 'A Preencher (Produto)', value: 0 } ],
                 estrategicos: [ { name: 'A Preencher Fornecedor', value: 0 } ],
@@ -4945,47 +5124,13 @@ async function loadPDF(filename, btnElement) {
             }
         };
 
-        // Função de Haversine para calcular distância em KM
+        // Função Matemática para distância logística
         function calcDistancia(lat1, lon1, lat2, lon2) {
             const R = 6371;
             const dLat = (lat2 - lat1) * Math.PI / 180;
             const dLon = (lon2 - lon1) * Math.PI / 180;
             const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
             return Math.round(R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))));
-        }
-
-        // Função que busca Coordenadas da Cidade usando o OpenStreetMap
-        async function getCoordenadas(cidadeUF) {
-            const key = cidadeUF.toUpperCase().trim();
-            if (geoCache[key]) return geoCache[key];
-            try {
-                await new Promise(r => setTimeout(r, 600)); // Delay para a API não nos bloquear
-                let query = cidadeUF.replace('/', ',').replace('-', ',') + ', Brasil';
-                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
-                const data = await res.json();
-                if (data && data.length > 0) {
-                    const coords = [parseFloat(data[0].lon), parseFloat(data[0].lat)];
-                    geoCache[key] = coords;
-                    return coords;
-                }
-            } catch (e) { console.warn('Falha geocoding para:', cidadeUF); }
-            geoCache[key] = [0, 0];
-            return [0, 0];
-        }
-
-        async function carregarPlanilhaFornecedores() {
-            if (fornecedoresDataCache) return fornecedoresDataCache;
-            try {
-                const response = await fetch('./Fornecedores.xlsx');
-                if (!response.ok) throw new Error("Planilha ausente.");
-                const arrayBuffer = await response.arrayBuffer();
-                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-                fornecedoresDataCache = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { defval: "" });
-                return fornecedoresDataCache;
-            } catch (error) {
-                console.warn("Aviso: Fornecedores.xlsx não encontrada no GitHub.", error);
-                return [];
-            }
         }
 
         async function initMap(obraId) {
@@ -4995,77 +5140,105 @@ async function loadPDF(filename, btnElement) {
             if (mapInstances[obraId]) { mapInstances[obraId].resize(); return; }
 
             mapInstances[obraId] = echarts.init(container);
-            mapInstances[obraId].showLoading({ text: 'Lendo Excel e Mapeando Fornecedores...', color: '#558b2f' });
+            mapInstances[obraId].showLoading({ text: 'Carregando Mapa de Fornecedores...', color: '#558b2f' });
 
             try {
+                // Se ainda não baixou os polígonos do mapa do Brasil, baixa 1 única vez
                 if (!brazilGeoJson) {
                     const resGeo = await fetch('https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson');
                     brazilGeoJson = await resGeo.json();
                     echarts.registerMap('brazil', brazilGeoJson);
                 }
 
-                const jsonFornecedores = await carregarPlanilhaFornecedores();
+                // Identifica a obra e as coordenadas centrais
+                let coordsObra = [];
+                let nomeObraDisplay = "";
+                if (obraId === 'mirante') { coordsObra = [-17.1000, -43.8100]; nomeObraDisplay = "BOCAIÚVA-MG"; } 
+                else if (obraId === 'joaquim') { coordsObra = [-18.9600, -49.4600]; nomeObraDisplay = "ITUIUTABA-MG"; } 
+                else if (obraId === 'parque') { coordsObra = [-21.8300, -45.4000]; nomeObraDisplay = "CAMPANHA-MG"; }
 
-                // Identifica qual é a cidade base da obra
-                let cidadeObraFiltro = "", coordsObra = [], nomeObraDisplay = "";
-                if (obraId === 'mirante') { cidadeObraFiltro = "BOCAIÚVA"; coordsObra = geoCache["BOCAIÚVA - MG"]; nomeObraDisplay = "MIRANTE DA LAGOA"; } 
-                else if (obraId === 'joaquim') { cidadeObraFiltro = "ITUIUTABA"; coordsObra = geoCache["ITUIUTABA - MG"]; nomeObraDisplay = "JOAQUIM LEME"; } 
-                else if (obraId === 'parque') { cidadeObraFiltro = "CAMPANHA"; coordsObra = geoCache["CAMPANHA - MG"]; nomeObraDisplay = "PARQUE DAS NAÇÕES"; }
-
-                // Filtra as linhas do Excel onde a "Cidade da obra" coincide com a nossa
-                let fornecedoresObra = jsonFornecedores.filter(row => {
-                    return row["Cidade da obra"] && row["Cidade da obra"].toString().toUpperCase().includes(cidadeObraFiltro);
-                });
-
-                // Estrutura de Agrupamento
+                const dadosObra = fornecedoresFixos[obraId] || [];
                 let fornecedoresMap = {};
-                fornecedoresMap[cidadeObraFiltro] = { coords: coordsObra, nomeReal: cidadeObraFiltro, uf: "MG", km: 0, fornecedores: [] };
+                let activeStates = new Set();
 
-                for (let row of fornecedoresObra) {
-                    let cidUF = row["Cidade/UF"] ? row["Cidade/UF"].toString().trim().toUpperCase() : "";
-                    if (!cidUF) continue;
+                // Processa a lista embutida no código
+                for (let item of dadosObra) {
+                    let fornStr = `${item[0]} (${item[1]})`;
+                    let cidUF = item[2];
+                    let lat = item[3];
+                    let lon = item[4];
+                    
+                    let uf = cidUF.includes('/') ? cidUF.split('/')[1].trim().toUpperCase() : '';
+                    if (uf && stateNamesMap[uf]) activeStates.add(stateNamesMap[uf]);
 
-                    let fornecedorStr = `${row["Fornecedor"] || "Desconhecido"} (${row["Área"] || "Geral"})`;
-                    let separador = cidUF.includes('/') ? '/' : '-';
-                    let partes = cidUF.split(separador);
-                    let nomeCidade = partes.length > 1 ? partes.slice(0, -1).join(separador).trim() : cidUF;
-                    let uf = partes.length > 1 ? partes[partes.length-1].trim() : "";
+                    // Descobre se o fornecedor é da mesma cidade da obra
+                    let isLocal = (obraId === 'mirante' && cidUF.includes('BOCAIÚVA')) ||
+                                  (obraId === 'joaquim' && cidUF.includes('ITUIUTABA')) ||
+                                  (obraId === 'parque' && cidUF.includes('CAMPANHA'));
 
-                    if (!fornecedoresMap[cidUF]) {
-                        let coord = await getCoordenadas(cidUF);
-                        let dist = (coord[0] === 0) ? 0 : calcDistancia(coordsObra[1], coordsObra[0], coord[1], coord[0]);
-                        fornecedoresMap[cidUF] = { coords: coord, nomeReal: nomeCidade, uf: uf, km: dist, fornecedores: [] };
+                    let mapKey = isLocal ? "LOCAL_SUPPLIERS" : cidUF;
+
+                    if (!fornecedoresMap[mapKey]) {
+                        let dist = isLocal ? 0 : calcDistancia(coordsObra[0], coordsObra[1], lat, lon);
+                        
+                        // OFFSET (Deslocamento): Se for local, move a bolinha levemente pro lado (0.15)
+                        let plotLat = isLocal ? lat - 0.15 : lat;
+                        let plotLon = isLocal ? lon + 0.15 : lon;
+                        
+                        let nomeCidade = cidUF.includes('/') ? cidUF.split('/')[0].trim() : cidUF;
+                        
+                        fornecedoresMap[mapKey] = { 
+                            coords: [plotLon, plotLat], 
+                            nomeReal: isLocal ? "Fornecedores Locais" : nomeCidade, 
+                            uf: uf, 
+                            km: dist, 
+                            fornecedores: [],
+                            isLocal: isLocal
+                        };
                     }
-                    fornecedoresMap[cidUF].fornecedores.push(fornecedorStr);
+                    fornecedoresMap[mapKey].fornecedores.push(fornStr);
                 }
 
                 const scatterData = [];
                 const linesData = [];
 
+                // Cria a bolinha principal da OBRA
                 scatterData.push({
-                    name: `OBRA: ${nomeObraDisplay}`,
-                    value: [coordsObra[0], coordsObra[1], 0],
+                    name: `Empreendimento`,
+                    value: [coordsObra[1], coordsObra[0], 0], // Echarts inverte lon/lat
                     isObra: true,
-                    fornecedores: fornecedoresMap[cidadeObraFiltro].fornecedores,
-                    label: { show: true, formatter: `${cidadeObraFiltro}-MG`, position: 'right', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#d32f2f', padding: [4, 6], borderRadius: 4 }
+                    fornecedores: [],
+                    label: { show: true, formatter: nomeObraDisplay, position: 'right', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#d32f2f', padding: [4, 6], borderRadius: 4 }
                 });
 
+                // Cria as bolinhas dos FORNECEDORES e traça as linhas 3D
                 Object.keys(fornecedoresMap).forEach(key => {
                     let f = fornecedoresMap[key];
-                    if (key !== cidadeObraFiltro && f.coords[0] !== 0) { // Ignora se não achou coordenada
-                        scatterData.push({
-                            name: f.nomeReal,
-                            value: [f.coords[0], f.coords[1], f.km],
-                            fornecedores: f.fornecedores,
-                            uf: f.uf,
-                            km: f.km,
-                            label: { show: true, formatter: `${f.nomeReal}-${f.uf}`, position: 'right', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#1b5e20', padding: [4, 6], borderRadius: 4, fontSize: 10 }
-                        });
-                        linesData.push({ coords: [f.coords, coordsObra], km: f.km });
+                    let labelStr = f.isLocal ? "Fornecedores Locais" : `${f.nomeReal}-${f.uf}`;
+                    
+                    scatterData.push({
+                        name: f.nomeReal,
+                        value: [f.coords[0], f.coords[1], f.km],
+                        fornecedores: f.fornecedores,
+                        uf: f.uf,
+                        km: f.km,
+                        isLocal: f.isLocal,
+                        label: { show: true, formatter: labelStr, position: 'right', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#1b5e20', padding: [4, 6], borderRadius: 4, fontSize: 10 }
+                    });
+                    
+                    // Só cria a linha 3D se não for local (km > 0)
+                    if (!f.isLocal) {
+                        linesData.push({ coords: [f.coords, [coordsObra[1], coordsObra[0]]], km: f.km });
                     }
                 });
 
+                // Define as cores dos estados baseadas no modo noturno
                 const greenGradient = new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: '#a5d6a7' }, { offset: 1, color: '#2e7d32' }]);
+                let regionsConfig = [];
+                activeStates.forEach(estado => {
+                    regionsConfig.push({ name: estado, itemStyle: { areaColor: greenGradient } });
+                });
+
                 let isDark = document.body.classList.contains('dark-mode');
 
                 const option = {
@@ -5078,9 +5251,9 @@ async function loadPDF(filename, btnElement) {
                         formatter: function (params) {
                             if (params.seriesType === 'scatter') {
                                 let list = params.data.fornecedores ? params.data.fornecedores.map(f => `• ${f}`).join('<br/>') : '';
-                                if (params.data.isObra) return `<strong style="color:#d32f2f; font-size: 1.1rem;">Cidade do Empreendimento</strong><br/>${nomeObraDisplay}<br/><br/><div style="font-size:0.85rem">${list}</div>`;
-                                return `<strong style="color:#1b5e20; font-size: 1.1rem;">${params.data.name} - ${params.data.uf}</strong><br/><span style="font-size: 0.85rem; color: ${isDark ? '#a3e635' : '#7f8c8d'};">Distância Logística: <strong>${params.data.km} km</strong></span><br/><br/><div style="font-size:0.85rem">${list}</div>`;
-                            } else if (params.seriesType === 'lines') return `Trajeto em linha reta: <strong>${params.data.km} km</strong>`;
+                                if (params.data.isObra) return `<strong style="color:#d32f2f; font-size: 1.1rem;">Cidade do Empreendimento</strong><br/>${nomeObraDisplay}<br/>`;
+                                return `<strong style="color:#1b5e20; font-size: 1.1rem;">${params.data.name} ${params.data.uf ? '- ' + params.data.uf : ''}</strong><br/><span style="font-size: 0.85rem; color: ${isDark ? '#a3e635' : '#7f8c8d'};">Distância Logística: <strong>${params.data.km} km</strong></span><br/><br/><div style="font-size:0.85rem; max-height: 250px; overflow-y: auto;">${list}</div>`;
+                            } else if (params.seriesType === 'lines') return `Trajeto Logístico: <strong>${params.data.km} km</strong>`;
                             return `<strong>Estado: ${params.name}</strong>`;
                         }
                     },
@@ -5088,7 +5261,7 @@ async function loadPDF(filename, btnElement) {
                         map: 'brazil', roam: true, center: [-50, -15], zoom: 1.2,
                         itemStyle: { areaColor: isDark ? '#0a140d' : '#b0bec5', borderColor: isDark ? '#1f5027' : '#ffffff', borderWidth: 1 },
                         emphasis: { itemStyle: { areaColor: '#c8e6c9', shadowBlur: 10, shadowColor: 'rgba(0,0,0,0.4)' }, label: { show: false } },
-                        regions: [{ name: 'Minas Gerais', itemStyle: { areaColor: greenGradient } }, { name: 'Paraná', itemStyle: { areaColor: greenGradient } }, { name: 'São Paulo', itemStyle: { areaColor: greenGradient } }]
+                        regions: regionsConfig
                     },
                     series: [
                         { type: 'lines', coordinateSystem: 'geo', data: linesData, effect: { show: true, period: 4, trailLength: 0.3, symbol: 'arrow', symbolSize: 8, color: '#ff6d00' }, lineStyle: { color: '#558b2f', width: 2.5, opacity: 0.8, curveness: 0.3 } },
@@ -5099,7 +5272,7 @@ async function loadPDF(filename, btnElement) {
                 mapInstances[obraId].setOption(option);
                 mapInstances[obraId].hideLoading();
 
-                // LÓGICA DO CONSTRUTOR DE RANKING HTML
+                // LÓGICA DO CONSTRUTOR DE RANKING HTML LATERAIS
                 function buildSupplierRankingHTML(title, data, valueFormat, legenda) {
                     let maxVal = Math.max(...data.map(d => d.value)) || 1;
                     let html = `<div class="ranking-col" style="margin-bottom: 0;"><div class="chart-title" style="margin-bottom: 15px; font-size: 0.90rem; text-align: center;">${title}</div>`;
@@ -5125,7 +5298,7 @@ async function loadPDF(filename, btnElement) {
                     return html;
                 }
 
-                // Injera os 5 quadros no container específico da obra
+                // INSERE OS QUADROS NA LATERAL DA RESPECTIVA OBRA
                 const db = rankingsFornecedoresDB[obraId];
                 const rightCol = document.getElementById(`fornecedores-rankings-${obraId}`);
                 if (rightCol && db) {
@@ -5138,7 +5311,7 @@ async function loadPDF(filename, btnElement) {
                 }
 
             } catch (err) {
-                console.error("Erro ao gerar a telemetria do mapa:", err);
+                console.error("Erro ao carregar mapa:", err);
                 mapInstances[obraId].hideLoading();
             }
         }

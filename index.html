@@ -931,8 +931,7 @@
                         <button class="analysis-tab-btn active" data-antab="abc-mirante">Curva ABC</button>
                         <button class="analysis-tab-btn" data-antab="insights-mirante">Insights Técnicos</button>
                         <button class="analysis-tab-btn" data-antab="mapa-fornecedores-mirante">Mapa de Fornecedores</button>
-                        <button class="analysis-tab-btn" data-antab="matriz-kraljic-mirante">Matriz de Kraljic</button>
-                        <button class="analysis-tab-btn" data-antab="proporcao-desembolsos-mirante">Proporção de Desembolsos</button>
+                        <button class="analysis-tab-btn" data-antab="matriz-kraljic-mirante">Matriz de Kraljic</button>               
                     </div>
 
                     <div class="analysis-inner-content active" id="abc-mirante">
@@ -995,11 +994,7 @@
                                                         
                     <div class="analysis-inner-content" id="matriz-kraljic-mirante">
                         <div class="empty-state">Módulo "Matriz de Kraljic" em desenvolvimento.</div>
-                    </div>
-                    
-                    <div class="analysis-inner-content" id="proporcao-desembolsos-mirante">
-                        <div class="empty-state">Módulo "Proporção de Desembolsos" em desenvolvimento.</div>
-                    </div>
+                    </div>                                   
                 </div>
             </div>
 
@@ -1298,8 +1293,7 @@
                         <button class="analysis-tab-btn active" data-antab="abc-joaquim">Curva ABC</button>
                         <button class="analysis-tab-btn" data-antab="insights-joaquim">Insights Técnicos</button>
                         <button class="analysis-tab-btn" data-antab="mapa-fornecedores-joaquim">Mapa de Fornecedores</button>
-                        <button class="analysis-tab-btn" data-antab="matriz-kraljic-joaquim">Matriz de Kraljic</button>
-                        <button class="analysis-tab-btn" data-antab="proporcao-desembolsos-joaquim">Proporção de Desembolsos</button>
+                        <button class="analysis-tab-btn" data-antab="matriz-kraljic-joaquim">Matriz de Kraljic</button>                  
                     </div>
 
                     <div class="analysis-inner-content active" id="abc-joaquim">
@@ -1358,11 +1352,7 @@
                     
                     <div class="analysis-inner-content" id="matriz-kraljic-joaquim">
                         <div class="empty-state">Módulo "Matriz de Kraljic" em desenvolvimento.</div>
-                    </div>
-                    
-                    <div class="analysis-inner-content" id="proporcao-desembolsos-joaquim">
-                        <div class="empty-state">Módulo "Proporção de Desembolsos" em desenvolvimento.</div>
-                    </div>
+                    </div>                   
                 </div>
             </div>
 
@@ -1675,8 +1665,7 @@
                         <button class="analysis-tab-btn" data-antab="insights-parque">Insights Técnicos</button>
                         <button class="analysis-tab-btn" data-antab="mapa-fornecedores-parque">Mapa de Fornecedores</button>
                         <button class="analysis-tab-btn" data-antab="matriz-kraljic-parque">Matriz de Kraljic</button>
-                        <button class="analysis-tab-btn" data-antab="proporcao-desembolsos-parque">Proporção de Desembolsos</button>
-                    </div>
+                     </div>
 
                     <div class="analysis-inner-content active" id="abc-parque">
                         <div class="abc-header"><h3>Curva ABC de Desembolsos por Etapa</h3></div>
@@ -1734,12 +1723,8 @@
                     
                     <div class="analysis-inner-content" id="matriz-kraljic-parque">
                         <div class="empty-state">Módulo "Matriz de Kraljic" em desenvolvimento.</div>
-                    </div>
-                    
-                    <div class="analysis-inner-content" id="proporcao-desembolsos-parque">
-                        <div class="empty-state">Módulo "Proporção de Desembolsos" em desenvolvimento.</div>
-                    </div>
-                </div>
+                    </div>               
+                 </div>
             </div>
 
             <div class="sub-tab-content" id="subtab-projetos-parque">
@@ -2113,7 +2098,18 @@
             </div>
         </div>
     </div>
-
+    <!-- MODAL: Busca de Fornecedores por Área -->
+    <div class="modal gauge-modal" id="modalBuscaFornecedores" onclick="if(event.target===this) closeAllModals()">
+        <div class="gauge-modal-box" style="max-width: 500px; padding: 25px; text-align: left; max-height: 85vh; display: flex; flex-direction: column;">
+            <span class="gauge-modal-close" onclick="closeAllModals()">&times;</span>
+            <h3 style="margin-bottom: 5px; text-align: center; color: var(--title-color);">🔍 Resultados da Busca</h3>
+            <p id="buscaFornecedoresSubtitle" style="text-align: center; font-size: 0.8rem; color: var(--subtitle-color); margin-bottom: 20px; font-weight: 600;"></p>
+            
+            <div style="overflow-y: auto; flex: 1; padding-right: 10px;" id="buscaFornecedoresList">
+                <!-- Resultados injetados via JS -->
+            </div>
+        </div>
+    </div>
     <script>
         const insightStates = { mirante: 0, joaquim: 0, parque: 0 };
         function moveInsight(obra, direction) {
@@ -2677,6 +2673,7 @@
             document.getElementById('modalBreakdownProjetado').classList.remove('active');
             document.getElementById('modalDesembolsoComprometido').classList.remove('active');
             document.getElementById('modalDesembolsoMes').classList.remove('active');
+	    document.getElementById('modalBuscaFornecedores').classList.remove('active');
             
             // Fecha o novo modal de Insights
             const modalInsights = document.getElementById('modalInsightsGlobal');
@@ -5099,28 +5096,28 @@ async function loadPDF(filename, btnElement) {
             ]
         };
 
-        // BANCO DE DADOS DOS RANKINGS LATERAIS (PREENCHA AQUI SEUS TOP 5)
+       // BANCO DE DADOS DOS RANKINGS LATERAIS (PREENCHA AQUI SEUS TOP 5)
         const rankingsFornecedoresDB = {
             'mirante': {
-                concentracao: [ { name: 'Belo Horizonte - MG', value: 12 }, { name: 'Montes Claros - MG', value: 8 }, { name: 'Bocaiúva - MG', value: 5 }, { name: 'São Paulo - SP', value: 3 }, { name: 'Mandaguari - PR', value: 1 } ],
-                impacto: [ { name: 'Cros Construções', value: 1540000 }, { name: 'Minero Minas', value: 850000 }, { name: 'Sanevia Tubos', value: 420000 }, { name: 'Floricultura Renascer', value: 110000 }, { name: 'Onix Distribuidora', value: 85000 } ],
-                criticidade: [ { name: 'Cros Construções', value: 9.5 }, { name: 'Sanevia Tubos', value: 8.8 }, { name: 'Onix Distribuidora', value: 8.2 }, { name: 'Minero Minas', value: 7.5 }, { name: 'Floricultura Renascer', value: 4.0 } ],
-                estrategicos: [ { name: 'Minero Minas', value: 9.8 }, { name: 'Cros Construções', value: 9.0 }, { name: 'Laboratório Ambimetric', value: 8.5 }, { name: 'Onix Distribuidora', value: 8.0 }, { name: 'Sanevia Tubos', value: 7.5 } ],
-                avaliacao: [ { name: 'Floricultura Renascer', value: 9.9 }, { name: 'Minero Minas', value: 9.6 }, { name: 'Cros Construções', value: 9.4 }, { name: 'Laboratório Ambimetric', value: 9.0 }, { name: 'Davi Fonseca', value: 8.8 } ]
+                concentracao: [ { name: 'Bocaiúva - MG', value: 42 }, { name: 'Montes Claros - MG', value: 16 }, { name: 'Belo Horizonte - MG', value: 12 }, { name: 'Varginha - MG', value: 5 }, { name: 'Guaraciama - MG', value: 2 } ],
+                impacto: [ { name: 'CROS Construções', value: 3743280.65 }, { name: 'Terraplannus', value: 512000.00 }, { name: 'SEF Energia', value: 357600.00 }, { name: 'Romagnole', value: 218000.00 }, { name: 'Ideal Engenharia', value: 195000.00 } ],
+                criticidade: [ { name: 'Tubos, válvulas e conexões', value: 10 }, { name: 'Mão de obra serv. gerais', value: 9.5 }, { name: 'Projetos Técnicos', value: 9 }, { name: 'Agregados (Areia e brita)', value: 8.5 }, { name: 'Asfalto (CBUQ, BGS, EAI)', value: 8 } ],
+                estrategicos: [ { name: 'CROS Construções', value: 10 }, { name: 'Minero Minas', value: 9.8 }, { name: 'Terraplannus', value: 9.5 }, { name: 'Sanevia', value: 9.0 }, { name: 'SEF Energia', value: 8.5 } ],
+                avaliacao: [ { name: 'CROS Construções', value: 9.6 }, { name: 'Minero Minas', value: 9.5 }, { name: 'Terraplannus', value: 9.5 }, { name: 'Sanevia', value: 9.2 }, { name: 'V&A - Rede Construir', value: 9.2 } ]
             },
             'joaquim': {
-                concentracao: [ { name: 'A Preencher', value: 0 } ],
-                impacto: [ { name: 'A Preencher (Area)', value: 0 } ],
-                criticidade: [ { name: 'A Preencher (Produto)', value: 0 } ],
-                estrategicos: [ { name: 'A Preencher Fornecedor', value: 0 } ],
-                avaliacao: [ { name: 'A Preencher Fornecedor', value: 0 } ]
+                concentracao: [ { name: 'Ituiutaba - MG', value: 38 }, { name: 'Uberlândia - MG', value: 6 }, { name: 'Varginha - MG', value: 3 }, { name: 'Belo Horizonte - MG', value: 2 }, { name: 'Abadia de Goiás - GO', value: 1 } ],
+                impacto: [ { name: 'Ribeiro Barroso', value: 1856764.81 }, { name: 'Valle Metalúrgica', value: 333000.00 }, { name: 'Naide Maria', value: 257658.35 }, { name: 'Sanevia', value: 140311.07 }, { name: 'Fortshield', value: 116330.00 } ],
+                criticidade: [ { name: 'Mão de obra serv. gerais', value: 10 }, { name: 'Reservação de água', value: 9.5 }, { name: 'Projetos Técnicos', value: 9 }, { name: 'Tubos, válvulas e conexões', value: 8.5 }, { name: 'Estação Elevat. de Esgoto', value: 8 } ],
+                estrategicos: [ { name: 'Valle Metalúrgica', value: 10 }, { name: 'Ribeiro Barroso', value: 9.8 }, { name: 'Naide Maria', value: 9.5 }, { name: 'Hidrotam', value: 9.0 }, { name: 'Fortshield', value: 8.5 } ],
+                avaliacao: [ { name: 'Ribeiro Barroso', value: 9.6 }, { name: 'Fortshield', value: 9.5 }, { name: 'Hidrotam', value: 9.4 }, { name: 'Sanevia', value: 9.4 }, { name: 'Valle Metalúrgica', value: 9.2 } ]
             },
             'parque': {
-                concentracao: [ { name: 'A Preencher', value: 0 } ],
-                impacto: [ { name: 'A Preencher (Area)', value: 0 } ],
-                criticidade: [ { name: 'A Preencher (Produto)', value: 0 } ],
-                estrategicos: [ { name: 'A Preencher Fornecedor', value: 0 } ],
-                avaliacao: [ { name: 'A Preencher Fornecedor', value: 0 } ]
+                concentracao: [ { name: 'Campanha - MG', value: 7 }, { name: 'Varginha - MG', value: 7 }, { name: 'São Paulo - SP', value: 7 }, { name: 'Alfenas - MG', value: 1 }, { name: 'Pouso Alegre - MG', value: 1 } ],
+                impacto: [ { name: 'A2N Infraestrutura', value: 207857.20 }, { name: 'Crabi', value: 75960.60 }, { name: 'Posto Sheep', value: 35124.72 }, { name: 'Wterra', value: 33777.07 }, { name: 'Degraus Máquinas', value: 31387.66 } ],
+                criticidade: [ { name: 'Mão de obra serv. gerais', value: 10 }, { name: 'Tubos, válvulas e conexões', value: 9.5 }, { name: 'Projetos Técnicos', value: 9 }, { name: 'Asfalto (CBUQ, BGS, EAI)', value: 8.5 }, { name: 'Locação de Máquinas', value: 8 } ],
+                estrategicos: [ { name: 'Crabi', value: 10 }, { name: 'A2N Infraestrutura', value: 9.8 }, { name: 'Wterra', value: 9.5 }, { name: 'XPRO Projetos', value: 9.0 }, { name: 'Braga Terraplenagem', value: 8.5 } ],
+                avaliacao: [ { name: 'A2N Infraestrutura', value: 9.5 }, { name: 'Crabi', value: 9.4 }, { name: 'Braga Terraplenagem', value: 9.4 }, { name: 'XPRO Projetos', value: 9.4 }, { name: 'Wterra', value: 9.2 } ]
             }
         };
 
@@ -5133,7 +5130,7 @@ async function loadPDF(filename, btnElement) {
             return Math.round(R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))));
         }
 
-        async function initMap(obraId) {
+       async function initMap(obraId) {
             const container = document.getElementById(`mapChartContainer-${obraId}`);
             if (!container) return;
 
@@ -5143,14 +5140,12 @@ async function loadPDF(filename, btnElement) {
             mapInstances[obraId].showLoading({ text: 'Carregando Mapa de Fornecedores...', color: '#558b2f' });
 
             try {
-                // Se ainda não baixou os polígonos do mapa do Brasil, baixa 1 única vez
                 if (!brazilGeoJson) {
                     const resGeo = await fetch('https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson');
                     brazilGeoJson = await resGeo.json();
                     echarts.registerMap('brazil', brazilGeoJson);
                 }
 
-                // Identifica a obra e as coordenadas centrais
                 let coordsObra = [];
                 let nomeObraDisplay = "";
                 if (obraId === 'mirante') { coordsObra = [-17.1000, -43.8100]; nomeObraDisplay = "BOCAIÚVA-MG"; } 
@@ -5158,20 +5153,34 @@ async function loadPDF(filename, btnElement) {
                 else if (obraId === 'parque') { coordsObra = [-21.8300, -45.4000]; nomeObraDisplay = "CAMPANHA-MG"; }
 
                 const dadosObra = fornecedoresFixos[obraId] || [];
+                const totalFornecedores = dadosObra.length;
+
+                // 2.4 INJETA O CONTADOR DE FORNECEDORES NO CANTO DO MAPA
+                const parentMap = container.parentElement;
+                let totalDiv = parentMap.querySelector('.map-total-fornecedores');
+                if(!totalDiv) {
+                    totalDiv = document.createElement('div');
+                    totalDiv.className = 'map-total-fornecedores';
+                    totalDiv.style = "position: absolute; top: 15px; left: 15px; z-index: 999; background: var(--card-bg); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; color: var(--title-color); box-shadow: 0 4px 10px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 8px;";
+                    parentMap.appendChild(totalDiv);
+                }
+                totalDiv.innerHTML = `<span style="font-size: 1.4rem;">🏭</span> <span style="display: flex; flex-direction: column; line-height: 1.2;"><span style="font-size: 0.65rem; color: var(--subtitle-color); text-transform: uppercase;">Total de Fornecedores</span><span>${totalFornecedores} empresas</span></span>`;
+
                 let fornecedoresMap = {};
                 let activeStates = new Set();
+                let areasUnicas = new Set();
 
-                // Processa a lista embutida no código
                 for (let item of dadosObra) {
                     let fornStr = `${item[0]} (${item[1]})`;
                     let cidUF = item[2];
                     let lat = item[3];
                     let lon = item[4];
                     
+                    areasUnicas.add(item[1]); // Coleta as áreas para a busca
+
                     let uf = cidUF.includes('/') ? cidUF.split('/')[1].trim().toUpperCase() : '';
                     if (uf && stateNamesMap[uf]) activeStates.add(stateNamesMap[uf]);
 
-                    // Descobre se o fornecedor é da mesma cidade da obra
                     let isLocal = (obraId === 'mirante' && cidUF.includes('BOCAIÚVA')) ||
                                   (obraId === 'joaquim' && cidUF.includes('ITUIUTABA')) ||
                                   (obraId === 'parque' && cidUF.includes('CAMPANHA'));
@@ -5180,21 +5189,11 @@ async function loadPDF(filename, btnElement) {
 
                     if (!fornecedoresMap[mapKey]) {
                         let dist = isLocal ? 0 : calcDistancia(coordsObra[0], coordsObra[1], lat, lon);
-                        
-                        // OFFSET (Deslocamento): Se for local, move a bolinha levemente pro lado (0.15)
                         let plotLat = isLocal ? lat - 0.15 : lat;
                         let plotLon = isLocal ? lon + 0.15 : lon;
-                        
                         let nomeCidade = cidUF.includes('/') ? cidUF.split('/')[0].trim() : cidUF;
                         
-                        fornecedoresMap[mapKey] = { 
-                            coords: [plotLon, plotLat], 
-                            nomeReal: isLocal ? "Fornecedores Locais" : nomeCidade, 
-                            uf: uf, 
-                            km: dist, 
-                            fornecedores: [],
-                            isLocal: isLocal
-                        };
+                        fornecedoresMap[mapKey] = { coords: [plotLon, plotLat], nomeReal: isLocal ? "Fornecedores Locais" : nomeCidade, uf: uf, km: dist, fornecedores: [], isLocal: isLocal };
                     }
                     fornecedoresMap[mapKey].fornecedores.push(fornStr);
                 }
@@ -5202,43 +5201,24 @@ async function loadPDF(filename, btnElement) {
                 const scatterData = [];
                 const linesData = [];
 
-                // Cria a bolinha principal da OBRA
                 scatterData.push({
-                    name: `Empreendimento`,
-                    value: [coordsObra[1], coordsObra[0], 0], // Echarts inverte lon/lat
-                    isObra: true,
-                    fornecedores: [],
+                    name: `Empreendimento`, value: [coordsObra[1], coordsObra[0], 0], isObra: true, fornecedores: [],
                     label: { show: true, formatter: nomeObraDisplay, position: 'right', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#d32f2f', padding: [4, 6], borderRadius: 4 }
                 });
 
-                // Cria as bolinhas dos FORNECEDORES e traça as linhas 3D
                 Object.keys(fornecedoresMap).forEach(key => {
                     let f = fornecedoresMap[key];
                     let labelStr = f.isLocal ? "Fornecedores Locais" : `${f.nomeReal}-${f.uf}`;
-                    
                     scatterData.push({
-                        name: f.nomeReal,
-                        value: [f.coords[0], f.coords[1], f.km],
-                        fornecedores: f.fornecedores,
-                        uf: f.uf,
-                        km: f.km,
-                        isLocal: f.isLocal,
+                        name: f.nomeReal, value: [f.coords[0], f.coords[1], f.km], fornecedores: f.fornecedores, uf: f.uf, km: f.km, isLocal: f.isLocal,
                         label: { show: true, formatter: labelStr, position: 'right', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#1b5e20', padding: [4, 6], borderRadius: 4, fontSize: 10 }
                     });
-                    
-                    // Só cria a linha 3D se não for local (km > 0)
-                    if (!f.isLocal) {
-                        linesData.push({ coords: [f.coords, [coordsObra[1], coordsObra[0]]], km: f.km });
-                    }
+                    if (!f.isLocal) linesData.push({ coords: [f.coords, [coordsObra[1], coordsObra[0]]], km: f.km });
                 });
 
-                // Define as cores dos estados baseadas no modo noturno
                 const greenGradient = new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: '#a5d6a7' }, { offset: 1, color: '#2e7d32' }]);
                 let regionsConfig = [];
-                activeStates.forEach(estado => {
-                    regionsConfig.push({ name: estado, itemStyle: { areaColor: greenGradient } });
-                });
-
+                activeStates.forEach(estado => { regionsConfig.push({ name: estado, itemStyle: { areaColor: greenGradient } }); });
                 let isDark = document.body.classList.contains('dark-mode');
 
                 const option = {
@@ -5272,16 +5252,18 @@ async function loadPDF(filename, btnElement) {
                 mapInstances[obraId].setOption(option);
                 mapInstances[obraId].hideLoading();
 
-                // LÓGICA DO CONSTRUTOR DE RANKING HTML LATERAIS
+                // LÓGICA DO CONSTRUTOR DE RANKING HTML LATERAIS (Ocultando notas quando "hidden")
                 function buildSupplierRankingHTML(title, data, valueFormat, legenda) {
                     let maxVal = Math.max(...data.map(d => d.value)) || 1;
                     let html = `<div class="ranking-col" style="margin-bottom: 0;"><div class="chart-title" style="margin-bottom: 15px; font-size: 0.90rem; text-align: center;">${title}</div>`;
                     data.forEach((item, index) => {
                         let pctBarra = Math.max((item.value / maxVal) * 100, 5);
                         let valStr = "";
+                        
                         if (valueFormat === 'currency') valStr = `R$ ${Math.round(item.value).toLocaleString('pt-BR')}`;
                         else if (valueFormat === 'score') valStr = `${item.value.toFixed(1)} / 10`;
                         else if (valueFormat === 'qtd') valStr = `${item.value} emp.`;
+                        else if (valueFormat === 'hidden') valStr = ``; // DEIXA SEM TEXTO!
                         
                         const cores = ['#1b5e20', '#2e7d32', '#388e3c', '#4caf50', '#81c784'];
                         let cor = cores[index % cores.length];
@@ -5298,22 +5280,73 @@ async function loadPDF(filename, btnElement) {
                     return html;
                 }
 
-                // INSERE OS QUADROS NA LATERAL DA RESPECTIVA OBRA
+                // CONSTRÓI A CAIXA DE BUSCA COM AS ÁREAS DISPONÍVEIS
+                let areasArray = Array.from(areasUnicas).sort();
+                let checkboxesHTML = areasArray.map(a => `<label style="display: block; font-size: 0.75rem; margin-bottom: 6px; cursor: pointer; color: var(--text-color-base);"><input type="checkbox" value="${a}" class="chk-area-${obraId}" style="margin-right: 8px;"> ${a}</label>`).join('');
+                
+                let searchBoxHTML = `
+                <div style="background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 15px; margin-bottom: 15px; flex-shrink: 0; transition: all 0.3s;">
+                    <h4 style="font-size: 0.85rem; color: var(--title-color); margin-bottom: 10px; display: flex; align-items: center; gap: 5px;"><span>🔍</span> Buscar Fornecedores por Área</h4>
+                    <div style="max-height: 130px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; margin-bottom: 12px; background: var(--insight-bg);">
+                        ${checkboxesHTML}
+                    </div>
+                    <button onclick="buscarFornecedoresArea('${obraId}')" style="width: 100%; background: var(--active-color); color: #ffffff; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">Localizar Fornecedores</button>
+                </div>`;
+
                 const db = rankingsFornecedoresDB[obraId];
                 const rightCol = document.getElementById(`fornecedores-rankings-${obraId}`);
                 if (rightCol && db) {
-                    rightCol.innerHTML = 
-                        buildSupplierRankingHTML('📍 Maiores Concentrações de Fornecedores', db.concentracao, 'qtd', 'As 5 cidades com o maior volume de empresas ativas atendendo diretamente ao canteiro de obras.') +
-                        buildSupplierRankingHTML('💰 Fornecedores de Maior Impacto', db.impacto, 'currency', 'Ranking de parceiros classificados pelo maior volume financeiro desembolsado no projeto.') +
-                        buildSupplierRankingHTML('⚠️ Fornecimentos com Maior Criticidade', db.criticidade, 'score', 'Principais gargalos de distribuição e fornecimento mapeados (Escala de risco de atraso: 0 a 10).') +
-                        buildSupplierRankingHTML('🤝 Fornecedores Estratégicos', db.estrategicos, 'score', 'Parceiros que atuaram de forma decisiva para solucionar problemas críticos e evitar gargalos (Escala: 0 a 10).') +
-                        buildSupplierRankingHTML('⭐ Fornecedores de Melhor Avaliação', db.avaliacao, 'score', 'Classificação de excelência em entrega e relacionamento para fidelização em novos negócios (Escala: 0 a 10).');
+                    // Aqui usamos "hidden" para ocultar as notas dos dois quadros solicitados
+                    rightCol.innerHTML = searchBoxHTML +
+                        buildSupplierRankingHTML('📍 Cidades com mais fornecedores', db.concentracao, 'qtd', 'As 5 cidades com o maior volume de empresas ativas atendendo diretamente ao canteiro de obras.') +
+                        buildSupplierRankingHTML('💰 Fornecedores de maior impacto orçamentário', db.impacto, 'currency', 'Ranking de parceiros classificados pelo maior volume financeiro desembolsado no projeto.') +
+                        buildSupplierRankingHTML('⚠️ Fornecimentos de Maior Criticidade', db.criticidade, 'hidden', 'Principais gargalos de distribuição e fornecimento mapeados.') +
+                        buildSupplierRankingHTML('🤝 Fornecedores Estratégicos', db.estrategicos, 'hidden', 'Parceiros que atuaram de forma decisiva para solucionar problemas críticos e evitar gargalos.') +
+                        buildSupplierRankingHTML('⭐ Fornecedores com Melhores Avaliações', db.avaliacao, 'score', 'Classificação de excelência em entrega e relacionamento para fidelização em novos negócios (Escala: 0 a 10).');
                 }
 
             } catch (err) {
                 console.error("Erro ao carregar mapa:", err);
                 mapInstances[obraId].hideLoading();
             }
+        }
+
+        // FUNÇÃO QUE EXECUTA A BUSCA E ABRE O MODAL
+        function buscarFornecedoresArea(obraId) {
+            const checkboxes = document.querySelectorAll(`.chk-area-${obraId}:checked`);
+            const selectedAreas = Array.from(checkboxes).map(c => c.value);
+
+            if (selectedAreas.length === 0) {
+                alert('Por favor, marque pelo menos uma área na lista para buscar.');
+                return;
+            }
+
+            const dadosObra = fornecedoresFixos[obraId] || [];
+            const resultados = dadosObra.filter(item => selectedAreas.includes(item[1])); // O índice 1 é a Área
+
+            const listContainer = document.getElementById('buscaFornecedoresList');
+            listContainer.innerHTML = '';
+
+            if (resultados.length === 0) {
+                listContainer.innerHTML = '<p style="text-align:center; padding: 20px; color: var(--subtitle-color);">Nenhum fornecedor encontrado.</p>';
+            } else {
+                resultados.forEach(item => {
+                    const forn = item[0];
+                    const area = item[1];
+                    const cid = item[2];
+
+                    listContainer.innerHTML += `
+                    <div style="background: var(--insight-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; margin-bottom: 12px; transition: all 0.3s;" onmouseover="this.style.borderColor='var(--active-color)'" onmouseout="this.style.borderColor='var(--border-color)'">
+                        <div style="font-size: 0.75rem; color: var(--subtitle-color); font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">Área: <span style="color: var(--active-color); background: var(--table-th-bg); padding: 2px 6px; border-radius: 4px;">${area}</span></div>
+                        <div style="font-size: 1rem; color: var(--title-color); font-weight: 700; margin-bottom: 6px;">Fornecedor: ${forn}</div>
+                        <div style="font-size: 0.85rem; color: var(--text-color-base);">Cidade: <strong>${cid}</strong></div>
+                    </div>`;
+                });
+            }
+
+            let nomeObraDisplay = obraId === 'mirante' ? "MIRANTE DA LAGOA" : (obraId === 'joaquim' ? "JOAQUIM LEME" : "PARQUE DAS NAÇÕES");
+            document.getElementById('buscaFornecedoresSubtitle').textContent = nomeObraDisplay;
+            document.getElementById('modalBuscaFornecedores').classList.add('active');
         }
 
 	function gerarCodigoSalvamento(obra) {

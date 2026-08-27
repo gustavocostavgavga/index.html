@@ -1,4 +1,6 @@
 
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -14,6 +16,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  
     
     <!-- BIBLIOTECA DO GANTT -->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -281,17 +284,36 @@
         .prazos-card p { font-size: 0.95rem; color: var(--text-color-base); margin: 5px 0; transition: color 0.4s; }
         .prazos-card strong { font-weight: 700; color: var(--title-color); transition: color 0.4s; }
         
-        .tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 25px; flex-wrap: wrap; }
-        .tab-btn { background: var(--tab-btn-bg); border: 2px solid var(--border-color); color: var(--tab-btn-text); padding: 12px 28px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.4s; font-size: 0.95rem; }
-        .tab-btn.active, .tab-btn:hover { background: var(--active-color); color: var(--active-text); border-color: var(--active-color); box-shadow: 0 0 20px rgba(85,139,47,0.3); }
+      .main-menu-wrapper { display: flex; flex-direction: column; align-items: center; margin-bottom: 0px; }
+        
+        /* Força a permanência na mesma linha (nowrap) no desktop */
+        .nav-prazos-row { display: flex; flex-wrap: nowrap; justify-content: center; align-items: stretch; gap: 15px; margin-bottom: 25px; width: 100%; }
+        .nav-prazos-row .sub-tabs { margin: 0 !important; display: flex; align-items: stretch; flex-wrap: nowrap; }
+        .nav-prazos-row .prazos-header-container { margin: 0 !important; display: flex; align-items: stretch; }
+        
+        /* Prazos-card agora tem a MESMA borda e fundo do quadro de abas para ficar idêntico */
+        .nav-prazos-row .prazos-card { margin: 0 !important; display: flex; flex-direction: column; justify-content: center; padding: 0 20px; height: auto; border-radius: 12px; border: 1px solid var(--border-color); background: var(--table-th-bg); box-shadow: none; }
+
+        .tabs { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 40px; padding: 6px; display: inline-flex; gap: 5px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); flex-wrap: wrap; justify-content: center; margin-bottom: 10px; }
+        
+        .tab-btn { background: transparent; border: none; color: var(--title-color); padding: 10px 24px; border-radius: 30px; cursor: pointer; font-weight: 700; transition: all 0.4s; font-size: 0.9rem; }
+        .tab-btn.active, .tab-btn:hover { background: var(--active-color); color: var(--active-text); box-shadow: 0 4px 12px rgba(85,139,47,0.3); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         
-        .sub-tabs { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; }
-        .sub-tab-btn { background: var(--sub-tab-btn-bg); border: 1px solid var(--sub-tab-btn-border); color: var(--sub-tab-btn-text); padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 400; transition: all 0.4s; font-size: 0.85rem; }
-        .sub-tab-btn.active, .sub-tab-btn:hover { background: var(--active-hover-color); color: var(--active-text); border-color: var(--active-hover-color); }
+        .sub-tabs { background: var(--table-th-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 6px; display: flex; width: auto; max-width: fit-content; margin: 0 auto 25px auto; gap: 5px; justify-content: center; }
+        
+        /* white-space: nowrap impede que o texto dos botões quebre para outra linha */
+        .sub-tab-btn { background: transparent; border: none; color: var(--title-color); padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
+        .sub-tab-btn.active, .sub-tab-btn:hover { background: var(--active-color); color: var(--active-text); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
         .sub-tab-content { display: none; }
         .sub-tab-content.active { display: block; }
+
+        /* Comportamento responsivo: Se a tela for de celular ou tablet, permite quebrar para não bugar o painel */
+        @media (max-width: 1350px) {
+            .nav-prazos-row { flex-wrap: wrap; }
+            .nav-prazos-row .sub-tabs { flex-wrap: wrap; }
+        }
         
         .analysis-tabs-container { display: flex; gap: 10px; margin-bottom: 25px; justify-content: flex-start; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; flex-wrap: wrap; }
         .analysis-tab-btn { background: var(--analysis-tab-btn-bg); border: 1px solid var(--analysis-tab-btn-border); color: var(--analysis-tab-btn-text); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.4s; font-size: 0.85rem; }
@@ -715,21 +737,18 @@
                 </div>
             </div>
         </header>
-<div class="tabs">
-            <button class="tab-btn active" data-tab="mirante" onclick="setActiveObraPdf('mirante')"><strong>MIRANTE DA LAGOA</strong></button>
-            <button class="tab-btn" data-tab="joaquim" onclick="setActiveObraPdf('joaquim')"><strong>JOAQUIM LEME</strong></button>
-            <button class="tab-btn" data-tab="parque" onclick="setActiveObraPdf('parque')"><strong>PARQUE DAS NAÇÕES</strong></button>
-            <button class="tab-btn" data-tab="geral"><strong>VISÃO GERAL</strong></button>
+<div class="main-menu-wrapper">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="mirante" onclick="setActiveObraPdf('mirante')">MIRANTE DA LAGOA</button>
+                <button class="tab-btn" data-tab="joaquim" onclick="setActiveObraPdf('joaquim')">JOAQUIM LEME</button>
+                <button class="tab-btn" data-tab="parque" onclick="setActiveObraPdf('parque')">PARQUE DAS NAÇÕES</button>
+                <button class="tab-btn" data-tab="geral">VISÃO GERAL</button>
+            </div>
         </div>
         
         <!-- INÍCIO MIRANTE -->
         <div class="tab-content active" id="tab-mirante">
-            <div class="prazos-header-container">
-                <div class="prazos-card">
-                    <p>Prazo final de entrega: <strong>31/07/2026</strong> &nbsp;&nbsp;|&nbsp;&nbsp; Prazo previsto de entrega: <strong>31/08/2026</strong></p>
-                </div>
-            </div>
-            
+           <!-- 1. KPIs no Topo -->
             <div class="kpi-grid" style="grid-template-columns: repeat(6, 1fr);">
                 <div class="kpi-card"><div class="label">Orçamento Total Aprovado</div><div class="value">R$ 7.859.182</div></div>
                <div class="kpi-card">
@@ -757,16 +776,25 @@
                 </div>
             </div>
 
-            <div class="sub-tabs">
-                <button class="sub-tab-btn active" data-subtab="detalhe-mirante">Detalhamento por Etapa</button>
-                <button class="sub-tab-btn" data-subtab="historico-mirante">Fluxo de Desembolsos</button>
-                <button class="sub-tab-btn" data-subtab="planejamento-mirante">Planejamento</button>
-                <button class="sub-tab-btn" data-subtab="fotos-mirante">Galeria de Fotos</button>
-                <button class="sub-tab-btn" data-subtab="analises-mirante">Análises</button>
-                <button class="sub-tab-btn" data-subtab="projetos-mirante">Projetos</button>
-                <button class="sub-tab-btn" data-subtab="sobre-mirante">Sobre</button>
+            <!-- 2. Abas e Prazos Lado a Lado -->
+            <div class="nav-prazos-row">
+                <div class="sub-tabs">
+                    <button class="sub-tab-btn active" data-subtab="detalhe-mirante">Detalhamento por Etapa</button>
+                    <button class="sub-tab-btn" data-subtab="historico-mirante">Fluxo de Desembolsos</button>
+                    <button class="sub-tab-btn" data-subtab="planejamento-mirante">Planejamento</button>
+                    <button class="sub-tab-btn" data-subtab="analises-mirante">Análises</button>
+                    <button class="sub-tab-btn" data-subtab="projetos-mirante">Projetos</button>
+                    <button class="sub-tab-btn" data-subtab="fotos-mirante">Galeria de Fotos</button>
+                    <button class="sub-tab-btn" data-subtab="sobre-mirante">Sobre</button>
+                </div>
+                
+                <div class="prazos-header-container">
+                    <div class="prazos-card">
+                        <p style="margin:0;">Prazo final de entrega: <strong>31/07/2026</strong> &nbsp;|&nbsp; Prazo previsto: <strong>31/08/2026</strong></p>
+                    </div>
+                </div>
             </div>
-            
+
             <div class="sub-tab-content active" id="subtab-detalhe-mirante">
                 <div class="chart-grid-top">
                     <!-- 1. Gráfico Distribuição Percentual -->
@@ -866,7 +894,7 @@
                     </div>
                
                     <!-- QUADROS VIGENTES ESTICADOS PARA 100% DE LARGURA -->
-                    <div class="planejamento-card" style="max-width: 100%; width: 100%;">
+                    <div class="planejamento-card">
                         <h3>⚙️ Etapas vigentes ou contratadas</h3>
                         <div class="vigentes-header" style="display: flex; justify-content: space-between; font-weight: 700; color: var(--title-color); border-bottom: 2px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9rem;"><span>Atividades</span><span>Em investimento</span></div>
                         <div class="vigentes-item"><span>Recapeamento viário</span><span>R$ 1.681.000,00</span></div>
@@ -878,7 +906,7 @@
                         <div class="vigentes-item"><span>Terraplenagem do parque linear e aterro do lote comercial</span><span>R$ 119.402,50</span></div>
                         <div class="vigentes-total"><span>TOTAL</span><span>R$ 2.331.235,70</span></div>
                     </div>
-                    <div class="planejamento-card" style="max-width: 100%; width: 100%;">
+                    <div class="planejamento-card">
                         <h3>🕒 Próximas ativações</h3>
                         <div class="vigentes-header" style="display: flex; justify-content: space-between; font-weight: 700; color: var(--title-color); border-bottom: 2px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9rem;"><span>Atividades</span><span>Previsão de investimento</span></div>
                         <ul class="hierarchical-list">
@@ -1181,12 +1209,7 @@
         
         <!-- INÍCIO JOAQUIM -->
         <div class="tab-content" id="tab-joaquim">
-            <div class="prazos-header-container">
-                <div class="prazos-card">
-                    <p>Prazo final de entrega: <strong>31/08/2026</strong> &nbsp;&nbsp;|&nbsp;&nbsp; Prazo previsto de entrega: <strong>31/08/2026</strong></p>
-                </div>
-            </div>
-            
+            <!-- 1. KPIs no Topo -->
             <div class="kpi-grid" style="grid-template-columns: repeat(6, 1fr);">
                 <div class="kpi-card"><div class="label">Orçamento Total Aprovado</div><div class="value">R$ 5.019.403</div></div>
                <div class="kpi-card">
@@ -1214,14 +1237,22 @@
                 </div>
             </div>
 
-            <div class="sub-tabs">
-                <button class="sub-tab-btn active" data-subtab="detalhe-joaquim">Detalhamento por Etapa</button>
-                <button class="sub-tab-btn" data-subtab="historico-joaquim">Fluxo de Desembolsos</button>
-                <button class="sub-tab-btn" data-subtab="planejamento-joaquim">Planejamento</button>
-                <button class="sub-tab-btn" data-subtab="fotos-joaquim">Galeria de Fotos</button>
-                <button class="sub-tab-btn" data-subtab="analises-joaquim">Análises</button>
-                <button class="sub-tab-btn" data-subtab="projetos-joaquim">Projetos</button>
-                <button class="sub-tab-btn" data-subtab="sobre-joaquim">Sobre</button>
+            <!-- 2. Abas e Prazos Lado a Lado -->
+            <div class="nav-prazos-row">
+                <div class="sub-tabs">
+                    <button class="sub-tab-btn active" data-subtab="detalhe-joaquim">Detalhamento por Etapa</button>
+                    <button class="sub-tab-btn" data-subtab="historico-joaquim">Fluxo de Desembolsos</button>
+                    <button class="sub-tab-btn" data-subtab="planejamento-joaquim">Planejamento</button>
+                    <button class="sub-tab-btn" data-subtab="analises-joaquim">Análises</button>
+                    <button class="sub-tab-btn" data-subtab="projetos-joaquim">Projetos</button>
+                    <button class="sub-tab-btn" data-subtab="fotos-joaquim">Galeria de Fotos</button>
+                    <button class="sub-tab-btn" data-subtab="sobre-joaquim">Sobre</button>
+                </div>
+                <div class="prazos-header-container">
+                    <div class="prazos-card">
+                        <p style="margin:0;">Prazo final de entrega: <strong>31/08/2026</strong> &nbsp;|&nbsp; Prazo previsto: <strong>31/08/2026</strong></p>
+                    </div>
+                </div>
             </div>
             
            <div class="sub-tab-content active" id="subtab-detalhe-joaquim">
@@ -1610,12 +1641,7 @@
         
         <!-- INÍCIO PARQUE -->
         <div class="tab-content" id="tab-parque">
-            <div class="prazos-header-container">
-                <div class="prazos-card">
-                    <p>Prazo final de entrega: <strong>A definir</strong> &nbsp;&nbsp;|&nbsp;&nbsp; Prazo previsto de entrega: <strong>A definir</strong></p>
-                </div>
-            </div>
-            
+            <!-- 1. KPIs no Topo -->
             <div class="kpi-grid" style="grid-template-columns: repeat(6, 1fr);">
                 <div class="kpi-card"><div class="label">Orçamento Total Aprovado</div><div class="value">R$ 5.852.117</div></div>
                 <div class="kpi-card">
@@ -1643,14 +1669,22 @@
                 </div>
             </div>
 
-            <div class="sub-tabs">
-                <button class="sub-tab-btn active" data-subtab="detalhe-parque">Detalhamento por Etapa</button>
-                <button class="sub-tab-btn" data-subtab="historico-parque">Fluxo de Desembolsos</button>
-                <button class="sub-tab-btn" data-subtab="planejamento-parque">Planejamento</button>
-                <button class="sub-tab-btn" data-subtab="fotos-parque">Galeria de Fotos</button>
-                <button class="sub-tab-btn" data-subtab="analises-parque">Análises</button>
-                <button class="sub-tab-btn" data-subtab="projetos-parque">Projetos</button>
-                <button class="sub-tab-btn" data-subtab="sobre-parque">Sobre</button>
+            <!-- 2. Abas e Prazos Lado a Lado -->
+            <div class="nav-prazos-row">
+                <div class="sub-tabs">
+                    <button class="sub-tab-btn active" data-subtab="detalhe-parque">Detalhamento por Etapa</button>
+                    <button class="sub-tab-btn" data-subtab="historico-parque">Fluxo de Desembolsos</button>
+                    <button class="sub-tab-btn" data-subtab="planejamento-parque">Planejamento</button>
+                    <button class="sub-tab-btn" data-subtab="analises-parque">Análises</button>
+                    <button class="sub-tab-btn" data-subtab="projetos-parque">Projetos</button>
+                    <button class="sub-tab-btn" data-subtab="fotos-parque">Galeria de Fotos</button>
+                    <button class="sub-tab-btn" data-subtab="sobre-parque">Sobre</button>
+                </div>
+                <div class="prazos-header-container">
+                    <div class="prazos-card">
+                        <p style="margin:0;">Prazo final de entrega: <strong>A definir</strong> &nbsp;|&nbsp; Prazo previsto: <strong>A definir</strong></p>
+                    </div>
+                </div>
             </div>
             
             <div class="sub-tab-content active" id="subtab-detalhe-parque">

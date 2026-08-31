@@ -5426,7 +5426,7 @@ async function loadPDF(filename, btnElement) {
             return Math.round(R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))));
         }
 
-       async function initMap(obraId) {
+      async function initMap(obraId) {
             const container = document.getElementById(`mapChartContainer-${obraId}`);
             if (!container) return;
 
@@ -5465,6 +5465,7 @@ async function loadPDF(filename, btnElement) {
                 let fornecedoresMap = {};
                 let activeStates = new Set();
                 let areasUnicas = new Set();
+                let fornecedoresObraLocal = [];
 
                 for (let item of dadosObra) {
                     let fornStr = `${item[0]} (${item[1]})`;
@@ -5472,7 +5473,7 @@ async function loadPDF(filename, btnElement) {
                     let lat = item[3];
                     let lon = item[4];
                     
-                    areasUnicas.add(item[1]); // Coleta as áreas para a busca
+                    areasUnicas.add(item[1]);
 
                     let uf = cidUF.includes('/') ? cidUF.split('/')[1].trim().toUpperCase() : '';
                     if (uf && stateNamesMap[uf]) activeStates.add(stateNamesMap[uf]);
@@ -5481,35 +5482,39 @@ async function loadPDF(filename, btnElement) {
                                   (obraId === 'joaquim' && cidUF.includes('ITUIUTABA')) ||
                                   (obraId === 'parque' && cidUF.includes('CAMPANHA'));
 
-                    let mapKey = isLocal ? "LOCAL_SUPPLIERS" : cidUF;
-
-                    if (!fornecedoresMap[mapKey]) {
-                        let dist = isLocal ? 0 : calcDistancia(coordsObra[0], coordsObra[1], lat, lon);
-                        let plotLat = isLocal ? lat - 0.15 : lat;
-                        let plotLon = isLocal ? lon + 0.15 : lon;
-                        let nomeCidade = cidUF.includes('/') ? cidUF.split('/')[0].trim() : cidUF;
-                        
-                        fornecedoresMap[mapKey] = { coords: [plotLon, plotLat], nomeReal: isLocal ? "Fornecedores Locais" : nomeCidade, uf: uf, km: dist, fornecedores: [], isLocal: isLocal };
+                    if (isLocal) {
+                        fornecedoresObraLocal.push(fornStr);
+                    } else {
+                        let mapKey = cidUF;
+                        if (!fornecedoresMap[mapKey]) {
+                            let dist = calcDistancia(coordsObra[0], coordsObra[1], lat, lon);
+                            let nomeCidade = cidUF.includes('/') ? cidUF.split('/')[0].trim() : cidUF;
+                            fornecedoresMap[mapKey] = { coords: [lon, lat], nomeReal: nomeCidade, uf: uf, km: dist, fornecedores: [] };
+                        }
+                        fornecedoresMap[mapKey].fornecedores.push(fornStr);
                     }
-                    fornecedoresMap[mapKey].fornecedores.push(fornStr);
                 }
 
                 const scatterData = [];
                 const linesData = [];
 
                 scatterData.push({
-                    name: `Empreendimento`, value: [coordsObra[1], coordsObra[0], 0], isObra: true, fornecedores: [],
+                    name: nomeObraDisplay.split('-')[0],
+                    value: [coordsObra[1], coordsObra[0], 0],
+                    isObra: true,
+                    uf: nomeObraDisplay.split('-')[1],
+                    km: 0,
+                    fornecedores: fornecedoresObraLocal,
                     label: { show: true, formatter: nomeObraDisplay, position: 'right', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#d32f2f', padding: [4, 6], borderRadius: 4 }
                 });
 
                 Object.keys(fornecedoresMap).forEach(key => {
                     let f = fornecedoresMap[key];
-                    let labelStr = f.isLocal ? "Fornecedores Locais" : `${f.nomeReal}-${f.uf}`;
                     scatterData.push({
-                        name: f.nomeReal, value: [f.coords[0], f.coords[1], f.km], fornecedores: f.fornecedores, uf: f.uf, km: f.km, isLocal: f.isLocal,
-                        label: { show: true, formatter: labelStr, position: 'right', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#1b5e20', padding: [4, 6], borderRadius: 4, fontSize: 10 }
+                        name: f.nomeReal, value: [f.coords[0], f.coords[1], f.km], fornecedores: f.fornecedores, uf: f.uf, km: f.km, isObra: false,
+                        label: { show: true, formatter: `${f.nomeReal}-${f.uf}`, position: 'right', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#1b5e20', padding: [4, 6], borderRadius: 4, fontSize: 10 }
                     });
-                    if (!f.isLocal) linesData.push({ coords: [f.coords, [coordsObra[1], coordsObra[0]]], km: f.km });
+                    linesData.push({ coords: [f.coords, [coordsObra[1], coordsObra[0]]], km: f.km });
                 });
 
                 const greenGradient = new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: '#a5d6a7' }, { offset: 1, color: '#2e7d32' }]);
@@ -5521,16 +5526,30 @@ async function loadPDF(filename, btnElement) {
                     backgroundColor: 'transparent',
                     tooltip: {
                         trigger: 'item',
+                        triggerOn: 'click', 
+                        enterable: true,    
+                        hideDelay: 300,     
+                        extraCssText: 'pointer-events: auto;', 
                         backgroundColor: isDark ? 'rgba(17, 45, 22, 0.95)' : 'rgba(255, 255, 255, 0.95)',
                         borderColor: '#558b2f',
+                        borderWidth: 1,
                         textStyle: { color: isDark ? '#ffffff' : '#2c3e50', fontFamily: 'Montserrat' },
                         formatter: function (params) {
-                            if (params.seriesType === 'scatter') {
-                                let list = params.data.fornecedores ? params.data.fornecedores.map(f => `• ${f}`).join('<br/>') : '';
-                                if (params.data.isObra) return `<strong style="color:#d32f2f; font-size: 1.1rem;">Cidade do Empreendimento</strong><br/>${nomeObraDisplay}<br/>`;
-                                return `<strong style="color:#1b5e20; font-size: 1.1rem;">${params.data.name} ${params.data.uf ? '- ' + params.data.uf : ''}</strong><br/><span style="font-size: 0.85rem; color: ${isDark ? '#a3e635' : '#7f8c8d'};">Distância Logística: <strong>${params.data.km} km</strong></span><br/><br/><div style="font-size:0.85rem; max-height: 250px; overflow-y: auto;">${list}</div>`;
-                            } else if (params.seriesType === 'lines') return `Trajeto Logístico: <strong>${params.data.km} km</strong>`;
-                            return `<strong>Estado: ${params.name}</strong>`;
+                            if (params.seriesType === 'lines') return `Trajeto Logístico: <strong>${params.data.km} km</strong>`;
+                            if (params.seriesType !== 'scatter') return `<strong>Estado: ${params.name}</strong>`;
+
+                            let list = params.data.fornecedores && params.data.fornecedores.length > 0 
+                                ? params.data.fornecedores.map(f => `<div style="margin-bottom: 4px;">• ${f}</div>`).join('') 
+                                : 'Nenhum fornecedor registrado.';
+                            
+                            let headerColor = params.data.isObra ? '#d32f2f' : '#1b5e20';
+                            let isObraTag = params.data.isObra ? '<br/><span style="font-size: 0.75rem; color: #d32f2f; text-transform: uppercase;">Sede do Empreendimento</span>' : '';
+                            
+                            let header = `<strong style="color:${headerColor}; font-size: 1.1rem;">${params.data.name} ${params.data.uf ? '- ' + params.data.uf : ''}</strong>${isObraTag}`;
+                            let distInfo = `<br/><span style="font-size: 0.85rem; color: ${isDark ? '#a3e635' : '#7f8c8d'};">Distância Logística: <strong>${params.data.km} km</strong></span>`;
+                            let scrollableList = `<div style="font-size:0.85rem; margin-top: 10px; max-height: 180px; overflow-y: auto; padding-right: 15px; border-top: 1px dashed var(--border-color); padding-top: 10px; pointer-events: auto;">${list}</div>`;
+                            
+                            return header + distInfo + scrollableList;
                         }
                     },
                     geo: {
@@ -5546,9 +5565,15 @@ async function loadPDF(filename, btnElement) {
                 };
 
                 mapInstances[obraId].setOption(option);
+                
+                // Cursor vira "mãozinha" para indicar que a bolinha é clicável
+                mapInstances[obraId].on('mouseover', function(params) {
+                    if(params.seriesType === 'scatter') mapInstances[obraId].getZr().setCursorStyle('pointer');
+                });
+                
                 mapInstances[obraId].hideLoading();
 
-                // LÓGICA DO CONSTRUTOR DE RANKING HTML LATERAIS (Ocultando notas quando "hidden")
+                // LÓGICA DO CONSTRUTOR DE RANKING HTML LATERAIS
                 function buildSupplierRankingHTML(title, data, valueFormat, legenda) {
                     let maxVal = Math.max(...data.map(d => d.value)) || 1;
                     let html = `<div class="ranking-col" style="margin-bottom: 0;"><div class="chart-title" style="margin-bottom: 15px; font-size: 0.90rem; text-align: center;">${title}</div>`;
@@ -5559,7 +5584,7 @@ async function loadPDF(filename, btnElement) {
                         if (valueFormat === 'currency') valStr = `R$ ${Math.round(item.value).toLocaleString('pt-BR')}`;
                         else if (valueFormat === 'score') valStr = `${item.value.toFixed(1)} / 10`;
                         else if (valueFormat === 'qtd') valStr = `${item.value} emp.`;
-                        else if (valueFormat === 'hidden') valStr = ``; // DEIXA SEM TEXTO!
+                        else if (valueFormat === 'hidden') valStr = ``;
                         
                         const cores = ['#1b5e20', '#2e7d32', '#388e3c', '#4caf50', '#81c784'];
                         let cor = cores[index % cores.length];
@@ -5592,7 +5617,6 @@ async function loadPDF(filename, btnElement) {
                 const db = rankingsFornecedoresDB[obraId];
                 const rightCol = document.getElementById(`fornecedores-rankings-${obraId}`);
                 if (rightCol && db) {
-                    // Aqui usamos "hidden" para ocultar as notas dos dois quadros solicitados
                     rightCol.innerHTML = searchBoxHTML +
                         buildSupplierRankingHTML('📍 Cidades com mais fornecedores', db.concentracao, 'qtd', 'As 5 cidades com o maior volume de empresas ativas atendendo diretamente ao canteiro de obras.') +
                         buildSupplierRankingHTML('💰 Fornecedores de maior impacto orçamentário', db.impacto, 'currency', 'Ranking de parceiros classificados pelo maior volume financeiro desembolsado no projeto.') +
@@ -5603,10 +5627,9 @@ async function loadPDF(filename, btnElement) {
 
             } catch (err) {
                 console.error("Erro ao carregar mapa:", err);
-                mapInstances[obraId].hideLoading();
+                if (mapInstances[obraId]) mapInstances[obraId].hideLoading();
             }
         }
-
         // FUNÇÃO QUE EXECUTA A BUSCA E ABRE O MODAL
         function buscarFornecedoresArea(obraId) {
             const checkboxes = document.querySelectorAll(`.chk-area-${obraId}:checked`);

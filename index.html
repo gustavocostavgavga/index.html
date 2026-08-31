@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -281,7 +283,7 @@
         .prazos-card p { font-size: 0.95rem; color: var(--text-color-base); margin: 5px 0; transition: color 0.4s; }
         .prazos-card strong { font-weight: 700; color: var(--title-color); transition: color 0.4s; }
         
-      .main-menu-wrapper { display: flex; flex-direction: column; align-items: center; margin-bottom: 0px; }
+      .main-menu-wrapper { display: flex; flex-direction: column; align-items: center; margin-bottom: 25px; }
         
         /* Força a permanência na mesma linha (nowrap) no desktop */
         .nav-prazos-row { display: flex; flex-wrap: nowrap; justify-content: center; align-items: stretch; gap: 15px; margin-bottom: 25px; width: 100%; }
@@ -289,7 +291,7 @@
         .nav-prazos-row .prazos-header-container { margin: 0 !important; display: flex; align-items: stretch; }
         
         /* Prazos-card agora tem a MESMA borda e fundo do quadro de abas para ficar idêntico */
-        .nav-prazos-row .prazos-card { margin: 0 !important; display: flex; flex-direction: column; justify-content: center; padding: 0 20px; height: auto; border-radius: 12px; border: 1px solid var(--border-color); background: var(--table-th-bg); box-shadow: none; }
+        .nav-prazos-row .prazos-card { margin: 0 !important; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 0 20px; height: auto; border-radius: 12px; border: 1px solid var(--border-color); background: var(--table-th-bg); box-shadow: none; }
 
         .tabs { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 40px; padding: 6px; display: inline-flex; gap: 5px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); flex-wrap: wrap; justify-content: center; margin-bottom: 10px; }
         
@@ -774,7 +776,17 @@
             </div>
 
             <!-- 2. Abas e Prazos Lado a Lado -->
+           <!-- 2. Abas e Prazos Lado a Lado -->
             <div class="nav-prazos-row">
+                <div class="prazos-header-container">
+                    <div class="prazos-card">
+                        <p style="margin:0; text-align: left; line-height: 1.5; font-size: 0.85rem;">
+                            Prazo final de entrega: <strong>31/07/2026</strong><br>
+                            Prazo previsto de entrega: <strong>31/08/2026</strong>
+                        </p>
+                    </div>
+                </div>
+
                 <div class="sub-tabs">
                     <button class="sub-tab-btn active" data-subtab="detalhe-mirante">Detalhamento por Etapa</button>
                     <button class="sub-tab-btn" data-subtab="historico-mirante">Fluxo de Desembolsos</button>
@@ -783,12 +795,6 @@
                     <button class="sub-tab-btn" data-subtab="projetos-mirante">Projetos</button>
                     <button class="sub-tab-btn" data-subtab="fotos-mirante">Galeria de Fotos</button>
                     <button class="sub-tab-btn" data-subtab="sobre-mirante">Sobre</button>
-                </div>
-                
-                <div class="prazos-header-container">
-                    <div class="prazos-card">
-                        <p style="margin:0;">Prazo final de entrega: <strong>31/07/2026</strong> &nbsp;|&nbsp; Prazo previsto: <strong>31/08/2026</strong></p>
-                    </div>
                 </div>
             </div>
 
@@ -947,6 +953,14 @@
                     <div class="gallery-item" onclick="openPhotoModal('PQLINEAR07_MIRANTEDALAGOA.jpg', this)"><img src="PQLINEAR07_MIRANTEDALAGOA.jpg" alt="Parque Linear 07"></div>
                     <div class="gallery-item" onclick="openPhotoModal('PQLINEAR08_MIRANTEDALAGOA.jpg', this)"><img src="PQLINEAR08_MIRANTEDALAGOA.jpg" alt="Parque Linear 08"></div>
                     <div class="gallery-item" onclick="openPhotoModal('PQLINEAR09_MIRANTEDALAGOA.jpg', this)"><img src="PQLINEAR09_MIRANTEDALAGOA.jpg" alt="Parque Linear 09"></div>
+                </div>
+
+                <h3 style="color: var(--title-color); margin-bottom: 15px; text-align: center; font-size: 1.1rem; margin-top: 15px;">RECAPEAMENTO VIÁRIO</h3>
+                <div class="gallery-container">
+                    <div class="gallery-item" onclick="openPhotoModal('RECAPEAMENTO_MIRANTEDALAGOA01.jpg', this)"><img src="RECAPEAMENTO_MIRANTEDALAGOA01.jpg" alt="Recapeamento Viário 01"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('RECAPEAMENTO_MIRANTEDALAGOA02.jpg', this)"><img src="RECAPEAMENTO_MIRANTEDALAGOA02.jpg" alt="Recapeamento Viário 02"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('RECAPEAMENTO_MIRANTEDALAGOA03.jpg', this)"><img src="RECAPEAMENTO_MIRANTEDALAGOA03.jpg" alt="Recapeamento Viário 03"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('RECAPEAMENTO_MIRANTEDALAGOA04.jpg', this)"><img src="RECAPEAMENTO_MIRANTEDALAGOA04.jpg" alt="Recapeamento Viário 04"></div>
                 </div>
             </div>
             
@@ -1236,6 +1250,15 @@
 
             <!-- 2. Abas e Prazos Lado a Lado -->
             <div class="nav-prazos-row">
+                <div class="prazos-header-container">
+                    <div class="prazos-card">
+                        <p style="margin:0; text-align: left; line-height: 1.5; font-size: 0.85rem;">
+                            Prazo final de entrega: <strong>31/08/2026</strong><br>
+                            Prazo previsto de entrega: <strong>31/08/2026</strong>
+                        </p>
+                    </div>
+                </div>
+
                 <div class="sub-tabs">
                     <button class="sub-tab-btn active" data-subtab="detalhe-joaquim">Detalhamento por Etapa</button>
                     <button class="sub-tab-btn" data-subtab="historico-joaquim">Fluxo de Desembolsos</button>
@@ -1244,11 +1267,6 @@
                     <button class="sub-tab-btn" data-subtab="projetos-joaquim">Projetos</button>
                     <button class="sub-tab-btn" data-subtab="fotos-joaquim">Galeria de Fotos</button>
                     <button class="sub-tab-btn" data-subtab="sobre-joaquim">Sobre</button>
-                </div>
-                <div class="prazos-header-container">
-                    <div class="prazos-card">
-                        <p style="margin:0;">Prazo final de entrega: <strong>31/08/2026</strong> &nbsp;|&nbsp; Prazo previsto: <strong>31/08/2026</strong></p>
-                    </div>
                 </div>
             </div>
             
@@ -1383,11 +1401,28 @@
                 </div>
             </div>
             
-            <div class="sub-tab-content" id="subtab-fotos-joaquim">
+           <div class="sub-tab-content" id="subtab-fotos-joaquim">
                 <h3 style="color: var(--title-color); margin-bottom: 15px; text-align: center; font-size: 1.1rem; margin-top: 10px;">VISTA AÉREA</h3>
                 <div class="gallery-container">
                     <div class="gallery-item" onclick="openPhotoModal('DJI_0369.JPG', this)"><img src="DJI_0369.JPG" alt="Foto"></div>
                     <div class="gallery-item" onclick="openPhotoModal('DJI_0389.JPG', this)"><img src="DJI_0389.JPG" alt="Foto"></div>
+                </div>
+
+                <h3 style="color: var(--title-color); margin-bottom: 15px; text-align: center; font-size: 1.1rem; margin-top: 15px;">INTERLIGAÇÕES DO RESERVATÓRIO</h3>
+                <div class="gallery-container">
+                    <div class="gallery-item" onclick="openPhotoModal('INTERLIGAÇÃOJL01.jpeg', this)"><img src="INTERLIGAÇÃOJL01.jpeg" alt="Interligação 01"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('INTERLIGAÇÃOJL02.jpeg', this)"><img src="INTERLIGAÇÃOJL02.jpeg" alt="Interligação 02"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('INTERLIGAÇÃOJL03.jpeg', this)"><img src="INTERLIGAÇÃOJL03.jpeg" alt="Interligação 03"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('INTERLIGAÇÃOJL04.jpeg', this)"><img src="INTERLIGAÇÃOJL04.jpeg" alt="Interligação 04"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('INTERLIGAÇÃOJL05.jpeg', this)"><img src="INTERLIGAÇÃOJL05.jpeg" alt="Interligação 05"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('INTERLIGAÇÃOJL06.jpeg', this)"><img src="INTERLIGAÇÃOJL06.jpeg" alt="Interligação 06"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('INTERLIGAÇÃOJL07.jpeg', this)"><img src="INTERLIGAÇÃOJL07.jpeg" alt="Interligação 07"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('INTERLIGAÇÃOJL08.jpeg', this)"><img src="INTERLIGAÇÃOJL08.jpeg" alt="Interligação 08"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('INTERLIGAÇÃOJL09.jpeg', this)"><img src="INTERLIGAÇÃOJL09.jpeg" alt="Interligação 09"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('INTERLIGAÇÃOJL10.jpeg', this)"><img src="INTERLIGAÇÃOJL10.jpeg" alt="Interligação 10"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('INTERLIGAÇÃOJL11.jpeg', this)"><img src="INTERLIGAÇÃOJL11.jpeg" alt="Interligação 11"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('INTERLIGAÇÃOJL12.jpeg', this)"><img src="INTERLIGAÇÃOJL12.jpeg" alt="Interligação 12"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('INTERLIGAÇÃOJL13.jpeg', this)"><img src="INTERLIGAÇÃOJL13.jpeg" alt="Interligação 13"></div>
                 </div>
             </div>
             
@@ -1666,8 +1701,17 @@
                 </div>
             </div>
 
-            <!-- 2. Abas e Prazos Lado a Lado -->
+           <!-- 2. Abas e Prazos Lado a Lado -->
             <div class="nav-prazos-row">
+                <div class="prazos-header-container">
+                    <div class="prazos-card">
+                        <p style="margin:0; text-align: left; line-height: 1.5; font-size: 0.85rem;">
+                            Prazo final de entrega: <strong>A definir</strong><br>
+                            Prazo previsto de entrega: <strong>A definir</strong>
+                        </p>
+                    </div>
+                </div>
+
                 <div class="sub-tabs">
                     <button class="sub-tab-btn active" data-subtab="detalhe-parque">Detalhamento por Etapa</button>
                     <button class="sub-tab-btn" data-subtab="historico-parque">Fluxo de Desembolsos</button>
@@ -1676,11 +1720,6 @@
                     <button class="sub-tab-btn" data-subtab="projetos-parque">Projetos</button>
                     <button class="sub-tab-btn" data-subtab="fotos-parque">Galeria de Fotos</button>
                     <button class="sub-tab-btn" data-subtab="sobre-parque">Sobre</button>
-                </div>
-                <div class="prazos-header-container">
-                    <div class="prazos-card">
-                        <p style="margin:0;">Prazo final de entrega: <strong>A definir</strong> &nbsp;|&nbsp; Prazo previsto: <strong>A definir</strong></p>
-                    </div>
                 </div>
             </div>
             

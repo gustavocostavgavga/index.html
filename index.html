@@ -442,7 +442,7 @@
             .resumo-btn { position: relative; right: 0; top: 0; margin-bottom: 15px; display: block; width: 100%; }
         }
         
-        .executive { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
+        .executive { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; align-items: start; }
         @media (max-width: 992px) { .executive { grid-template-columns: 1fr !important; } }
 
         .executive-column { display: flex; flex-direction: column; }
@@ -688,6 +688,7 @@
                 <button class="home-btn" onclick="goToDashboard('mirante')">Mirante da Lagoa</button>
                 <button class="home-btn" onclick="goToDashboard('joaquim')">Joaquim Leme</button>
                 <button class="home-btn" onclick="goToDashboard('parque')">Parque das Nações</button>
+                <button class="home-btn" onclick="goToDashboard('cidadenova')">Cidade Nova</button>
                 <button class="home-btn" onclick="goToDashboard('geral')">Visão Geral</button>
             </div>
         </div>
@@ -739,6 +740,7 @@
                 <button class="tab-btn active" data-tab="mirante" onclick="setActiveObraPdf('mirante')">MIRANTE DA LAGOA</button>
                 <button class="tab-btn" data-tab="joaquim" onclick="setActiveObraPdf('joaquim')">JOAQUIM LEME</button>
                 <button class="tab-btn" data-tab="parque" onclick="setActiveObraPdf('parque')">PARQUE DAS NAÇÕES</button>
+                <button class="tab-btn" data-tab="cidadenova" onclick="setActiveObraPdf('cidadenova')">CIDADE NOVA</button>
                 <button class="tab-btn" data-tab="geral">VISÃO GERAL</button>
             </div>
         </div>
@@ -2126,7 +2128,188 @@
             </div>
 
         </div>
-        
+        <!-- INÍCIO CIDADE NOVA -->
+        <div class="tab-content" id="tab-cidadenova">
+            <!-- 1. KPIs no Topo -->
+            <div class="kpi-grid" style="grid-template-columns: repeat(6, 1fr);">
+                <div class="kpi-card"><div class="label">Orçamento Total Aprovado</div><div class="value">R$ 0</div></div>
+                <div class="kpi-card">
+                    <div class="label">Investimento Atual</div>
+                    <div class="value" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        R$ 0
+                        <span style="font-size: 0.7rem; color: #ffffff; background-color: var(--active-color); padding: 3px 6px; border-radius: 6px; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" title="Avanço sobre o Orçamento">📈 0%</span>
+                    </div>
+                </div>
+                <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 0</div></div>
+                <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 0</div></div>
+                <div class="kpi-card">
+                    <div class="label">Desvio Orçamentário</div>
+                    <div class="value" id="kpiDesvioCidadeNova"></div>
+                    <div class="sublabel" style="text-transform: none; letter-spacing: 0;">(R$ 0 / R$ 0) - 1</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Custo/Lote</div>
+                    <div class="kpi-sublist">
+                        <div class="kpi-sublist-item"><span class="sublist-label">Orçado:</span><span class="sublist-value">R$ 0</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 0</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 0</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 0</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Abas e Prazos Lado a Lado -->
+            <div class="nav-prazos-row">
+                <div class="prazos-header-container">
+                    <div class="prazos-card">
+                        <p style="margin:0; text-align: left; line-height: 1.5; font-size: 0.85rem;">
+                            Prazo final de entrega: <strong>A definir</strong><br>
+                            Prazo previsto de entrega: <strong>A definir</strong>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="sub-tabs">
+                    <button class="sub-tab-btn active" data-subtab="detalhe-cidadenova">Detalhamento por Etapa</button>
+                    <button class="sub-tab-btn" data-subtab="historico-cidadenova">Fluxo de Desembolsos</button>
+                    <button class="sub-tab-btn" data-subtab="planejamento-cidadenova">Planejamento</button>
+                    <button class="sub-tab-btn" data-subtab="analises-cidadenova">Análises</button>
+                    <button class="sub-tab-btn" data-subtab="projetos-cidadenova">Projetos</button>
+                    <button class="sub-tab-btn" data-subtab="fotos-cidadenova">Galeria de Fotos</button>
+                    <button class="sub-tab-btn" data-subtab="sobre-cidadenova">Sobre</button>
+                </div>
+            </div>
+            
+            <div class="sub-tab-content active" id="subtab-detalhe-cidadenova">
+                <div class="chart-grid-top">
+                    <div class="chart-container-pie">
+                        <div class="chart-title">Distribuição percentual por etapa</div>
+                        <div style="width: 100%; height: 350px;"><canvas id="chartCidadeNovaPie"></canvas></div>
+                    </div>
+                    <div class="chart-container-pie" style="display: flex; flex-direction: column;">
+                        <div class="chart-title" style="margin-bottom: 15px;">Etapas de maior impacto orçamentário</div>
+                        <div id="top5-container-cidadenova" style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 5px 10px;"></div>
+                    </div>
+                </div>
+                      
+                <div class="ranking-grid-3" id="ranking-cidadenova">
+                    <div class="ranking-col" id="rank-inv-cidadenova"></div>
+                    <div class="ranking-col" id="rank-proj-cidadenova"></div>
+                    <div class="ranking-col" id="rank-desv-cidadenova"></div>
+                </div>
+
+                <div class="chart-grid-bottom" style="margin-top: 20px;">
+                    <div class="chart-container-disponivel" style="height: 400px; padding-bottom: 20px; display: flex; flex-direction: column;">
+                        <div class="chart-title" style="flex-shrink: 0; margin-bottom: 15px;">Avanço do orçamento aprovado por etapa</div>
+                        <div style="flex: 1; position: relative; width: 100%;"><canvas id="chartCidadeNovaDisponivel"></canvas></div>
+                    </div>
+                </div>
+    
+                <div class="chart-grid-bottom">
+                    <div class="chart-container-large">
+                        <button class="resumo-btn" onclick="openResumoPendencias('cidadenova')">📋 Resumo de Pendências</button>
+                        <div class="chart-title" style="margin-bottom: 5px;">Avanço Físico-Financeiro por Etapa</div>
+                        <canvas id="chartCidadeNovaFisicoFin"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sub-tab-content" id="subtab-historico-cidadenova">
+                <div class="chart-container" style="margin-bottom: 20px; position: relative;">
+                    <div class="chart-title">Histórico e Projeção de Desembolsos</div>
+                    <canvas id="chartCidadeNovaHistorico"></canvas>
+                    <div class="summary-container">
+                        <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 0,00</div></div>
+                        <div class="summary-operator">+</div>
+                        <div class="summary-box projected"><div class="summary-title">Valor Total de Desembolso Projetado</div><div class="summary-value">R$ 0,00</div></div>
+                        <div class="summary-operator">=</div>
+                        <div class="summary-box executed-projected"><div class="summary-title">Valor de Execução Projetado</div><div class="summary-value">R$ 0,00</div></div>
+                        <div class="summary-operator">|</div>
+                        <div class="summary-box result-economia"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 0,00</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Economia</div></div>
+                    </div>
+                </div>
+                <div class="chart-container" style="margin-bottom: 20px; height: 620px; padding-bottom: 30px;">
+                    <div class="chart-title">Orçado x Investido x Projetado por Etapa</div>
+                    <canvas id="chartCidadeNovaBar" style="max-height: 100%;"></canvas>
+                </div>
+                <p class="table-hint">Clique em uma etapa para visualizar o avanço no painel flutuante</p>
+                <div class="table-container"><table id="tableCidadeNova"></table></div>
+            </div>
+            
+            <div class="sub-tab-content" id="subtab-planejamento-cidadenova">
+                <div class="planejamento-container">
+                    <div class="planejamento-card" style="max-width: 100%; width: 100%; padding-bottom: 15px; margin-bottom: 30px;">
+                        <h3>📊 Cronograma Executivo de Obras - Gráfico de Gantt</h3>
+                        <p style="text-align: center; font-size: 0.8rem; color: var(--subtitle-color); margin-bottom: 15px;">
+                            Clique nos quadrados em branco para marcar/desmarcar os meses em que houve avanço físico real.
+                        </p>
+                        <div class="gantt-filter-buttons" style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;">
+                            <button class="gantt-btn active" onclick="filterMapaFisicoCidadeNova('todos', this)">Período Total</button>
+                        </div>
+                        <div style="overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; border: 1px solid var(--border-color); border-radius: 8px;">
+                            <table id="interactive-progress-table-cidadenova" style="width: 100%; border-collapse: collapse; font-size: 0.75rem; min-width: 800px;">
+                                <!-- A tabela será gerada via JavaScript -->
+                            </table>
+                        </div>
+                        <div style="text-align: right; margin-top: 15px; display: flex; justify-content: flex-end; gap: 10px;">
+                            <button class="gantt-btn" onclick="gerarCodigoSalvamento('cidadenova')">💾 Salvar Padrão</button>
+                           <button class="gantt-btn" onclick="desfazerMapaFisico('cidadenova')">↩ Desfazer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sub-tab-content" id="subtab-fotos-cidadenova">
+                <h3 style="color: var(--title-color); margin-bottom: 15px; text-align: center; font-size: 1.1rem; margin-top: 10px;">VISTA AÉREA</h3>
+                <div class="empty-state">As imagens da obra Cidade Nova serão carregadas em breve.</div>
+            </div>
+            
+            <div class="sub-tab-content" id="subtab-analises-cidadenova">
+                <div class="analyses-container">
+                    <div class="analysis-tabs-container">
+                        <button class="analysis-tab-btn active" data-antab="abc-cidadenova">Curva ABC</button>
+                        <button class="analysis-tab-btn" data-antab="insights-cidadenova">Insights Técnicos</button>
+                     </div>
+
+                    <div class="analysis-inner-content active" id="abc-cidadenova">
+                        <div class="abc-header"><h3>Curva ABC de Desembolsos por Etapa</h3></div>
+                        <div class="chart-container"><canvas id="chartCidadeNovaABC"></canvas></div>
+                        <div class="table-container"><table id="tableABCCidadeNova"></table></div>
+                    </div>
+
+                    <div class="analysis-inner-content" id="insights-cidadenova">
+                        <div class="abc-header"><h3></h3></div>
+                        <div class="insights-carousel-container">
+                            <button class="insight-nav-btn prev" onclick="moveInsight('cidadenova', -1)">&#10094;</button>
+                            <div class="insights-carousel-track" id="track-cidadenova">
+                                <div class="insight-card active">
+                                    <div><strong style="color: var(--title-color);">🏗️ 1. Aguardando Dados:</strong></div><span style="color: var(--text-color-base);">Informações e diagnósticos desta obra estão sendo processados.</span>
+                                </div>
+                            </div>
+                            <button class="insight-nav-btn next" onclick="moveInsight('cidadenova', 1)">&#10095;</button>
+                        </div>
+                    </div>           
+                 </div>
+            </div>
+
+            <div class="sub-tab-content" id="subtab-projetos-cidadenova">
+                <div class="projetos-container">
+                    <div class="projetos-content">
+                        <div class="empty-state">Área reservada para os PDF's da Cidade Nova.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sub-tab-content" id="subtab-sobre-cidadenova">
+                <div class="sobre-container">
+                    <div class="sobre-text">
+                        <h3>Sobre o Empreendimento</h3>
+                        <p>Informações detalhadas sobre o empreendimento Cidade Nova serão adicionadas futuramente.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="tab-content" id="tab-geral">
             <div class="prazos-header-container">
                 <div class="prazos-card">
@@ -2205,6 +2388,24 @@
                             <div class="main-gauge-wrapper">
                                 <canvas id="gaugeMainParqueGeral"></canvas>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NOVO CARD DA CIDADE NOVA NA VISÃO GERAL -->
+                <div class="executive-column">
+                    <div class="executive-card">
+                        <h3>CIDADE NOVA</h3>
+                        <div class="kpi-item"><span class="label">Cidade</span><span class="value">-</span></div>
+                        <div class="kpi-item"><span class="label">Estado</span><span class="value">-</span></div>
+                        <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">0</span></div>
+                        <div class="kpi-item"><span class="label">Orçamento Total Aprovado</span><span class="value">R$ 0</span></div>
+                        <div class="kpi-item"><span class="label">Investimento Atual</span><span class="value">R$ 0</span></div>
+                        <div class="kpi-item"><span class="label">Verba Projetada para Conclusão</span><span class="value">R$ 0</span></div>
+                        <div class="kpi-item"><span class="label">Valor de Execução Projetado</span><span class="value">R$ 0</span></div>
+                        <div class="chart-container-gauge-integrated">
+                            <div class="chart-title" style="font-size: 0.95rem; margin-bottom: 5px;">Avanço Financeiro</div>
+                            <div class="main-gauge-wrapper"><canvas id="gaugeMainCidadeNovaGeral"></canvas></div>
                         </div>
                     </div>
                 </div>
@@ -2803,16 +3004,26 @@
         const parqueComprometido = [0.00, 27410.00, 0.00, 388297.64, 0.00, 250.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 4400.00, 0.00, 0.00, 0.00, 0.00, 94529.20, 0.00, 0.00, 6987.50, 63964.17];
         const parqueProjetadoFuturo = [0.00, 66599.99, 50400.00, 115047.96, 45500.00, 16075.00, 134625.00, 200000.00, 47830.00, 466961.00, 3155066.32, 0.00, 704342.80, 0.00, 0.00, 59235.00, 50000.00, 20600.00, 0.00, 0.00, 88583.00, 44096.31];
         const parqueFisicoRaw = [50.0, 80.0, 80.0, 85.0, 90.0, 80.0, 80.0, 80.0, 0.0, 80.0, 20.0, 90.0, 0.0, 0.0, 0.0, 0.0, 0.0, 70.3, 0.0, 0.0, 17.9, 0.0];
+	const cidadenovaEtapas = ['ETAPA BASE'];
+        const cidadenovaOrcado = [0.00];
+        const cidadenovaRealizado = [0.00];
+        const cidadenovaValorApropriado = [0.00];
+        const cidadenovaComprometido = [0.00];
+        const cidadenovaProjetadoFuturo = [0.00];
+        const cidadenovaFisicoRaw = [0.0];
+        const pendenciasCidadeNova = { 'ETAPA BASE': ['Aguardando informações.'] };
 
         const dataMaps = {
             'mirante': { labels: miranteEtapas, orcado: miranteOrcado, investido: miranteComprometido, projetado: miranteProjetadoFuturo, pendencias: pendenciasMirante },
             'joaquim': { labels: joaquimEtapas, orcado: joaquimOrcado, investido: joaquimComprometido, projetado: joaquimProjetadoFuturo, pendencias: pendenciasJoaquim },
-            'parque': { labels: parqueEtapas, orcado: parqueOrcado, investido: parqueComprometido, projetado: parqueProjetadoFuturo, pendencias: pendenciasParque }
+            'parque': { labels: parqueEtapas, orcado: parqueOrcado, investido: parqueComprometido, projetado: parqueProjetadoFuturo, pendencias: pendenciasParque },
+            'cidadenova': { labels: cidadenovaEtapas, orcado: cidadenovaOrcado, investido: cidadenovaComprometido, projetado: cidadenovaProjetadoFuturo, pendencias: pendenciasCidadeNova }
         };
 
         const miranteDisponivelGrafico = miranteOrcado.map((orc, idx) => orc - (miranteComprometido[idx] + miranteProjetadoFuturo[idx]));
         const joaquimDisponivelGrafico = joaquimOrcado.map((orc, idx) => orc - (joaquimComprometido[idx] + joaquimProjetadoFuturo[idx]));
         const parqueDisponivelGrafico = parqueOrcado.map((orc, idx) => orc - (parqueComprometido[idx] + parqueProjetadoFuturo[idx]));
+	const cidadenovaDisponivelGrafico = cidadenovaOrcado.map((orc, idx) => orc - (cidadenovaComprometido[idx] + cidadenovaProjetadoFuturo[idx]));
 
         const mesesHistorico = ['ago/23','set/23','out/23','nov/23','dez/23','jan/24','fev/24','mar/24','abr/24','mai/24','jun/24','jul/24','ago/24','set/24','out/24','nov/24','dez/24','jan/25','fev/25','mar/25','abr/25','mai/25','jun/25','jul/25','ago/25','set/25','out/25','nov/25','dez/25','jan/26','fev/26','mar/26','abr/26','mai/26','jun/26','jul/26','ago/26','set/26','out/26','nov/26','dez/26','jan/27','fev/27','mar/27','abr/27','mai/27'];
         
@@ -2821,6 +3032,8 @@
         const desembolsosJoaquim = [9197, 5000, 7500, 6900, 0, 0, 0, 8000, 0, 0, 400, 0, 0, 5000, 0, 2950, 0, 2950, 85000, 76195, 68195, 97659, 265327.74, 2102.26, 613930.53, 126801.17, 846921.19, 49210.11, 464746.28, 126667.07, 162154.90, 388592.62, 15427.32, 29049.43, 6057.65, 25722.90, 33623.25, 702019.67, 583552.82, -61633.14, -61633.14, -73585.02, -73585.02, 0, 0, 0, 0];
 
         const desembolsosParque = [0, 0, 7500, 4110, 0, 0, 0, 0, 0, 0, 8900, 5100, 7100, 2000, 0, 0, 0, 0, 0, 0, 0, 20000, 19260, 0, 37280, 9500, 3159, 0, 1750, 6059.30, 0, 7479, 17587.13, 83696.26, 176415.24, 64491.34, 70775.96, 610114.51, 298288.06, 1210876.83, 1720890.72, 1418063.73, 14203.56, 14203.56, 7060.70, 7060.70];
+
+	const desembolsosCidadeNova = new Array(47).fill(0);
 
         function fmtNum(n) { return Math.ceil(n).toLocaleString('pt-BR'); }
         function fmtMoney(n) { 
@@ -2963,16 +3176,17 @@
         }
 
         function openBreakdownModal(obra) {
-            if (obra !== 'MIRANTE DA LAGOA' && obra !== 'JOAQUIM LEME' && obra !== 'PARQUE DAS NAÇÕES') return;
+            if (!['MIRANTE DA LAGOA', 'JOAQUIM LEME', 'PARQUE DAS NAÇÕES', 'CIDADE NOVA'].includes(obra)) return;
             const tbody = document.getElementById('breakdownTableBody');
             tbody.innerHTML = '';
             
             let totComp = 0, totProj = 0, totGeral = 0;
             const isMirante = obra === 'MIRANTE DA LAGOA';
             const isJoaquim = obra === 'JOAQUIM LEME';
-            const etapasArray = isMirante ? miranteEtapas : isJoaquim ? joaquimEtapas : parqueEtapas;
-            const compArray = isMirante ? miranteValorApropriado : isJoaquim ? joaquimValorApropriado : parqueValorApropriado;
-            const projArray = isMirante ? miranteProjetadoFuturo : isJoaquim ? joaquimProjetadoFuturo : parqueProjetadoFuturo;
+            const isCidadeNova = obra === 'CIDADE NOVA';
+            const etapasArray = isMirante ? miranteEtapas : isJoaquim ? joaquimEtapas : isCidadeNova ? cidadenovaEtapas : parqueEtapas;
+            const compArray = isMirante ? miranteValorApropriado : isJoaquim ? joaquimValorApropriado : isCidadeNova ? cidadenovaValorApropriado : parqueValorApropriado;
+            const projArray = isMirante ? miranteProjetadoFuturo : isJoaquim ? joaquimProjetadoFuturo : isCidadeNova ? cidadenovaProjetadoFuturo : parqueProjetadoFuturo;
             
             const titleEl = document.getElementById('breakdownTitleObra');
             if(titleEl) titleEl.textContent = obra;
@@ -3000,16 +3214,17 @@
         }
 
         function openDesembolsoModal(obra) {
-            if (obra !== 'MIRANTE DA LAGOA' && obra !== 'JOAQUIM LEME' && obra !== 'PARQUE DAS NAÇÕES') return;
+            if (!['MIRANTE DA LAGOA', 'JOAQUIM LEME', 'PARQUE DAS NAÇÕES', 'CIDADE NOVA'].includes(obra)) return;
             const tbody = document.getElementById('desembolsoTableBody');
             tbody.innerHTML = '';
             
             let totDes = 0, totComp = 0, totGeral = 0;
             const isMirante = obra === 'MIRANTE DA LAGOA';
             const isJoaquim = obra === 'JOAQUIM LEME';
-            const etapasArray = isMirante ? miranteEtapas : isJoaquim ? joaquimEtapas : parqueEtapas;
-            const invAtualArray = isMirante ? miranteComprometido : isJoaquim ? joaquimComprometido : parqueComprometido;
-            const aprArray = isMirante ? miranteValorApropriado : isJoaquim ? joaquimValorApropriado : parqueValorApropriado;
+            const isCidadeNova = obra === 'CIDADE NOVA';
+            const etapasArray = isMirante ? miranteEtapas : isJoaquim ? joaquimEtapas : isCidadeNova ? cidadenovaEtapas : parqueEtapas;
+            const invAtualArray = isMirante ? miranteComprometido : isJoaquim ? joaquimComprometido : isCidadeNova ? cidadenovaComprometido : parqueComprometido;
+            const aprArray = isMirante ? miranteValorApropriado : isJoaquim ? joaquimValorApropriado : isCidadeNova ? cidadenovaValorApropriado : parqueValorApropriado;
             
             const titleEl = document.getElementById('desembolsoTitleObra');
             if(titleEl) titleEl.textContent = obra;
@@ -3103,6 +3318,7 @@
             if(obraId === 'mirante') tituloStr = 'MIRANTE DA LAGOA';
             else if(obraId === 'joaquim') tituloStr = 'JOAQUIM LEME';
             else if(obraId === 'parque') tituloStr = 'PARQUE DAS NAÇÕES';
+	       else if(obraId === 'cidadenova') tituloStr = 'CIDADE NOVA';
 
             document.getElementById('resumoObraTitle').textContent = tituloStr;
             const listEl = document.getElementById('resumoPendenciasList');
@@ -3476,7 +3692,7 @@
                                 listeners: {
                                     click: function(context) {
                                         const chartId = context.chart.canvas.id;
-                                        const obraId = chartId.includes('Mirante') ? 'mirante' : chartId.includes('Joaquim') ? 'joaquim' : 'parque';
+                                        const obraId = chartId.includes('Mirante') ? 'mirante' : chartId.includes('Joaquim') ? 'joaquim' : chartId.includes('CidadeNova') ? 'cidadenova' : 'parque';
                                         currentChartObra = obraId; currentChartLabel = context.chart.data.labels[context.dataIndex];
                                         currentChartModalType = 'financial'; updateChartModal();
                                         document.getElementById('modalFinancialInfo').classList.add('active');
@@ -4178,7 +4394,9 @@
                 { icon: '🌧️', title: 'Drenagem', text: 'Identificou-se um desvio projetado de 15% nesta etapa devido à necessidade de corrigir diversas patologias apontadas durante o diagnóstico e a reconstrução da rede. Para finalizar, resta a execução das caixas das bocas de lobo e o alteamento dos poços de visita.' },
                 { icon: '🛡️', title: 'Ações Preventivas', text: 'Intensificar campanhas de sondagem prévias e controle tecnológico rigoroso antes da liberação das frentes de infraestrutura pesada, para balizar os orçamentos vindouros.' },
                 { icon: '🔄', title: 'Saneamento', text: 'Com a drenagem quase concluída (90%), o foco agora se volta para os desafios de validar e diagnosticar as redes de água e esgoto existentes. Estratégias já foram traçadas para resolver essas pendências e destravar as próximas fases. Ao mesmo tempo, novos pacotes de serviços estão sendo montados para garantir a finalização completa do saneamento e a entrega do loteamento conforme o planejado.' }
-            ]
+            ],
+	
+	'cidadenova': [ { icon: '🏗️', title: 'Aguardando Dados', text: 'Informações e diagnósticos desta obra serão processados futuramente.' } ]
         };
 
        function openGlobalInsightsModal() {
@@ -4315,6 +4533,23 @@
                 elParque.innerHTML = `⬇ ${desvioParqueCalc.toFixed(2).replace('.', ',')}%`;
             }
 
+           // --- INÍCIO DA INICIALIZAÇÃO DA CIDADE NOVA ---
+            createMainGauge('gaugeMainCidadeNovaGeral', 1, 0, 0, { desembolso: 'Desembolso Total', comprometido: 'Execução Projetada' });
+            createPieChart('chartCidadeNovaPie', cidadenovaEtapas, cidadenovaOrcado);
+            renderTop5Impacto('top5-container-cidadenova', cidadenovaEtapas, cidadenovaOrcado);
+            renderTopRankings('cidadenova', cidadenovaEtapas, cidadenovaOrcado, cidadenovaComprometido, cidadenovaProjetadoFuturo);
+
+            const sortedCidadeNova = sortChartData(cidadenovaEtapas, cidadenovaOrcado, cidadenovaComprometido, cidadenovaProjetadoFuturo, cidadenovaFisicoRaw);
+            const cidadenovaEacPct = sortedCidadeNova.eac.map((v, i) => sortedCidadeNova.orcado[i] > 0 ? (v / sortedCidadeNova.orcado[i] * 100) : 0);
+            createFisicoFinChart('chartCidadeNovaFisicoFin', sortedCidadeNova.labels, null, sortedCidadeNova.fisico, cidadenovaEacPct, sortedCidadeNova.fisico, sortedCidadeNova.orcado, sortedCidadeNova.eac, 'A definir');
+
+            createBarChart('chartCidadeNovaBar', cidadenovaEtapas, cidadenovaOrcado, cidadenovaComprometido, cidadenovaProjetadoFuturo);
+            createDisponivelChartVertical('chartCidadeNovaDisponivel', cidadenovaEtapas, cidadenovaOrcado, cidadenovaComprometido);
+            createTable('tableCidadeNova', 'CIDADE NOVA', cidadenovaEtapas, cidadenovaOrcado, cidadenovaComprometido, cidadenovaProjetadoFuturo, cidadenovaDisponivelGrafico, cidadenovaFisicoRaw);
+            runABCEngine('chartCidadeNovaABC', 'tableABCCidadeNova', cidadenovaEtapas, cidadenovaComprometido);
+            createColumnChart('chartCidadeNovaHistorico', mesesHistorico, desembolsosCidadeNova);
+            // --- FIM DA INICIALIZAÇÃO DA CIDADE NOVA ---
+
             applyChartThemes('light');
 
             const photoModalImg = document.getElementById('photoGlobalImage');
@@ -4362,7 +4597,8 @@
         const pdfStates = {
             'mirante': { canvas: null, pdfDoc: null, currentPdf: null, history: [], historyStep: -1 },
             'joaquim': { canvas: null, pdfDoc: null, currentPdf: null, history: [], historyStep: -1 },
-            'parque': { canvas: null, pdfDoc: null, currentPdf: null, history: [], historyStep: -1 }
+            'parque': { canvas: null, pdfDoc: null, currentPdf: null, history: [], historyStep: -1 },
+	    'cidadenova': { canvas: null, pdfDoc: null, currentPdf: null, history: [], historyStep: -1 }
         };
 
       let currentTool = 'pan';
@@ -4904,7 +5140,8 @@ async function loadPDF(filename, btnElement) {
 
         // Memória global para guardar os cliques mesmo quando mudar de ano
 	// Memória do histórico de cliques (Para a função Desfazer)
-        if (!window.mapaFisicoHistory) window.mapaFisicoHistory = { mirante: [], joaquim: [], parque: [] };
+       if (!window.mapaFisicoHistory) window.mapaFisicoHistory = { mirante: [], joaquim: [], parque: [], cidadenova: [] };
+        if (!window.mapaFisicoStateCidadeNova) window.mapaFisicoStateCidadeNova = {};
         if (!window.mapaFisicoState) window.mapaFisicoState = {"0_Nov/24":true,"0_Fev/25":true,"0_Mar/25":true,"0_Abr/25":true,"0_Mai/25":true,"0_Jun/25":true,"0_Jul/25":true,"0_Out/25":true,"0_Nov/25":true,"0_Dez/25":true,"0_Abr/26":true,"0_Jun/26":true,"1_Mar/24":true,"1_Abr/24":true,"1_Jun/24":true,"1_Jul/24":true,"1_Ago/24":true,"1_Out/24":true,"1_Nov/24":true,"1_Jan/25":true,"1_Fev/25":true,"1_Mar/25":true,"1_Abr/25":true,"1_Mai/25":true,"1_Jun/25":true,"1_Jul/25":true,"1_Ago/25":true,"1_Set/25":true,"1_Out/25":true,"1_Nov/25":true,"1_Abr/26":true,"1_Mai/26":true,"1_Jun/26":true,"1_Jul/26":true,"1_Ago/26":true,"1_Set/26":true,"2_Jun/24":true,"2_Jul/24":true,"2_Ago/24":true,"2_Nov/24":true,"2_Dez/24":true,"2_Jan/25":true,"2_Dez/25":true,"2_Jan/26":true,"2_Mar/26":true,"3_Set/24":true,"3_Fev/25":true,"3_Mar/25":true,"3_Abr/25":true,"3_Mai/25":true,"3_Jun/25":true,"3_Jul/25":true,"3_Set/25":true,"3_Out/25":true,"3_Nov/25":true,"3_Dez/25":true,"3_Jan/26":true,"3_Fev/26":true,"3_Mar/26":true,"3_Abr/26":true,"3_Mai/26":true,"3_Ago/26":true,"4_Set/24":true,"4_Out/24":true,"4_Fev/25":true,"4_Abr/25":true,"4_Mai/25":true,"4_Jun/25":true,"4_Jul/25":true,"4_Ago/25":true,"4_Set/25":true,"4_Out/25":true,"4_Nov/25":true,"4_Dez/25":true,"4_Jan/26":true,"4_Fev/26":true,"4_Mai/26":true,"4_Jun/26":true,"4_Jul/26":true,"4_Ago/26":true,"5_Fev/25":true,"5_Mar/25":true,"5_Abr/25":true,"5_Jun/25":true,"5_Jul/25":true,"5_Ago/25":true,"5_Set/25":true,"5_Out/25":true,"5_Nov/25":true,"5_Dez/25":true,"5_Jan/26":true,"5_Fev/26":true,"5_Mai/26":true,"5_Jun/26":true,"5_Jul/26":true,"5_Ago/26":true,"5_Set/26":true,"6_Set/24":true,"6_Fev/25":true,"6_Mar/25":true,"6_Abr/25":true,"6_Mai/25":true,"6_Jun/25":true,"6_Jul/25":true,"6_Ago/25":true,"6_Set/25":true,"6_Out/25":true,"6_Nov/25":true,"6_Dez/25":true,"6_Jan/26":true,"6_Jun/26":true,"6_Ago/26":true,"7_Mai/25":true,"7_Jun/25":true,"7_Jul/25":true,"7_Ago/25":true,"7_Set/25":true,"7_Out/25":true,"7_Nov/25":true,"7_Dez/25":true,"7_Jan/26":true,"7_Mar/26":true,"7_Jun/26":true,"7_Jul/26":true,"7_Ago/26":true,"7_Set/26":true,"8_Ago/25":true,"8_Set/25":true,"8_Out/25":true,"8_Nov/25":true,"8_Dez/25":true,"8_Jan/26":true,"8_Fev/26":true,"8_Mar/26":true,"8_Abr/26":true,"8_Ago/26":true,"8_Set/26":true,"9_Ago/25":true,"9_Set/25":true,"9_Out/25":true,"9_Nov/25":true,"9_Dez/25":true,"9_Jan/26":true,"9_Fev/26":true,"9_Ago/26":true,"9_Set/26":true,"10_Mar/25":true,"10_Abr/25":true,"10_Jul/25":true,"10_Ago/25":true,"10_Jan/26":true,"10_Fev/26":true,"10_Mar/26":true,"10_Abr/26":true,"11_Nov/24":true,"11_Dez/24":true,"11_Jan/25":true,"11_Fev/25":true,"11_Mar/25":true,"11_Abr/25":true,"11_Mai/25":true,"11_Jun/25":true,"11_Jul/25":true,"11_Ago/25":true,"11_Set/25":true,"11_Out/25":true,"11_Nov/25":true,"11_Dez/25":true,"11_Jan/26":true,"11_Fev/26":true,"11_Mar/26":true,"11_Abr/26":true,"11_Mai/26":true,"11_Jun/26":true,"11_Jul/26":true,"11_Ago/26":true,"11_Set/26":true,"12_Jan/24":true,"12_Fev/24":true,"12_Mar/24":true,"12_Abr/24":true,"12_Jun/24":true,"12_Set/24":true,"12_Dez/24":true,"12_Jan/25":true,"12_Fev/25":true,"12_Mar/25":true,"12_Abr/25":true,"12_Nov/25":true,"12_Dez/25":true,"12_Jul/26":true,"12_Ago/26":true,"13_Jan/25":true,"13_Fev/25":true,"13_Mar/25":true,"13_Abr/25":true,"13_Mai/25":true,"13_Jun/25":true,"13_Jul/25":true,"13_Ago/25":true,"13_Set/25":true,"13_Out/25":true,"13_Nov/25":true,"13_Dez/25":true,"13_Jan/26":true,"13_Fev/26":true,"13_Mar/26":true,"13_Abr/26":true,"13_Mai/26":true,"13_Jun/26":true,"13_Jul/26":true,"13_Ago/26":true,"13_Set/26":true,"3_Set/26":true,"4_Mar/26":true,"4_Abr/26":true,"4_Mar/25":true,"10_Ago/26":true,"13_Out/23":true,"13_Nov/23":true,"13_Dez/23":true};
         function drawInteractiveProgressMap(yearFilter = 'todos') {
             const table = document.getElementById('interactive-progress-table');
@@ -5224,7 +5461,7 @@ async function loadPDF(filename, btnElement) {
                 alert("Ocorreu um erro ao tentar exportar a imagem.");
             });
         }
-	let mapInstances = { mirante: null, joaquim: null, parque: null };
+	let mapInstances = { mirante: null, joaquim: null, parque: null, cidadenova: null };
         let brazilGeoJson = null;
 
         // Dicionário para pintar os estados no mapa
@@ -5711,3 +5948,4 @@ async function loadPDF(filename, btnElement) {
     </script>
 </body>
 </html>
+

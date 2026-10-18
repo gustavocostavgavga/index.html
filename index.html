@@ -442,7 +442,7 @@
             .resumo-btn { position: relative; right: 0; top: 0; margin-bottom: 15px; display: block; width: 100%; }
         }
         
-        .executive { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; align-items: start; }
+        .executive { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; align-items: start; }
         @media (max-width: 992px) { .executive { grid-template-columns: 1fr !important; } }
 
         .executive-column { display: flex; flex-direction: column; }
@@ -694,7 +694,7 @@
         </div>
 
         <div class="home-frame home-footer-frame">
-            <p class="home-date" id="home-date">Última atualização: 11/08/2026</p>
+            <p class="home-date" id="home-date">Última atualização: 01/10/2026</p>
         </div>
     </div>
 
@@ -731,7 +731,7 @@
                         <span class="icon" id="modeIcon">🌙</span>
                         <span id="modeText">Modo Noturno</span>
                     </button>
-                    <div class="update-date-lbl" id="update-date-lbl">Última atualização: 11/08/2026</div>
+                    <div class="update-date-lbl" id="update-date-lbl">Última atualização: 01/10/2026</div>
                 </div>
             </div>
         </header>
@@ -753,24 +753,25 @@
                <div class="kpi-card">
                     <div class="label">Investimento Atual</div>
                     <div class="value" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-                        R$ 7.581.550
-                        <span style="font-size: 0.7rem; color: #ffffff; background-color: var(--active-color); padding: 3px 6px; border-radius: 6px; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" title="Avanço sobre o Orçamento">📈 96,5%</span>
+                        R$ 591.432
+                        <span style="font-size: 0.7rem; color: #ffffff; background-color: var(--active-color); padding: 3px 6px; border-radius: 6px; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" title="Avanço sobre o Orçamento">📈 10,1%</span>
                     </div>
                 </div>
-                <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 545.849</div></div>
-                <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 8.127.399</div></div>
+                <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 5.278.818</div></div>
+                <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 5.870.250</div></div>
                 <div class="kpi-card">
                     <div class="label">Desvio Orçamentário</div>
-                    <div class="value" id="kpiDesvioMirante"></div>
-                    <div class="sublabel" style="text-transform: none; letter-spacing: 0;">(R$ 8.127.399 / R$ 7.859.182) - 1</div>
+                    <!-- Valor fixado direto no HTML na cor vermelha de alerta -->
+                    <div class="value" style="color: var(--alert-color);">⬆ +0,31%</div>
+                    <div class="sublabel" style="text-transform: none; letter-spacing: 0;">(R$ 5.870.250 / R$ 5.852.117) - 1</div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Custo/Lote</div>
                     <div class="kpi-sublist">
-                        <div class="kpi-sublist-item"><span class="sublist-label">Orçado:</span><span class="sublist-value">R$ 11.148</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 10.754</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 11.528</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 31.954</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Orçado:</span><span class="sublist-value">R$ 16.077</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 1.625</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 16.127</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 35.151</span></div>
                     </div>
                 </div>
             </div>
@@ -846,13 +847,13 @@
                     <div class="chart-title">Histórico e Projeção de Desembolsos</div>
                     <canvas id="chartMiranteHistorico"></canvas>
                     <div class="summary-container">
-                        <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 6.542.863,96</div></div>
+                        <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 7.239.699,07</div></div>
                         <div class="summary-operator">+</div>
-                        <div class="summary-box projected"><div class="summary-title">Valor Total de Desembolso Projetado</div><div class="summary-value">R$ 1.584.535,50</div></div>
+                        <div class="summary-box projected"><div class="summary-title">Valor Total de Desembolso Projetado</div><div class="summary-value">R$ 877.442,68</div></div>
                         <div class="summary-operator">=</div>
-                        <div class="summary-box executed-projected"><div class="summary-title">Valor de Execução Projetado</div><div class="summary-value">R$ 8.127.399,46</div></div>
+                        <div class="summary-box executed-projected"><div class="summary-title">Valor de Execução Projetado</div><div class="summary-value">R$ 8.117.141,75</div></div>
                         <div class="summary-operator">|</div>
-                        <div class="summary-box result-extrapolacao"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 268.217,57</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Extrapolação</div></div>
+                        <div class="summary-box result-extrapolacao"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 257.959,86</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Extrapolação</div></div>
                     </div>
                 </div>
                       
@@ -900,33 +901,25 @@
                     <div class="planejamento-card">
                         <h3>⚙️ Etapas vigentes ou contratadas</h3>
                         <div class="vigentes-header" style="display: flex; justify-content: space-between; font-weight: 700; color: var(--title-color); border-bottom: 2px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9rem;"><span>Atividades</span><span>Em investimento</span></div>
-                        <div class="vigentes-item"><span>Recapeamento viário</span><span>R$ 1.681.000,00</span></div>
-                        <div class="vigentes-item"><span>Reparos da rede de saneamento (Água potável e Esgoto sanitário)</span><span>R$ 300.000,00</span></div>
-                        <div class="vigentes-item"><span>Finalização da infraestrutura elétrica para manobra de energização</span><span>R$ 144.300,00</span></div>
-                        <div class="vigentes-item"><span>Construção do cercamento dos poços</span><span>R$ 21.184,20</span></div>
-                        <div class="vigentes-item"><span>Construção das casas de química</span><span>R$ 39.360,00</span></div>
-                        <div class="vigentes-item"><span>Ligação do tratamento preliminar de esgoto</span><span>R$ 25.989,00</span></div>
-                        <div class="vigentes-item"><span>Terraplenagem do parque linear e aterro do lote comercial</span><span>R$ 119.402,50</span></div>
-                        <div class="vigentes-total"><span>TOTAL</span><span>R$ 2.331.235,70</span></div>
+                        <div class="vigentes-item"><span>Pintura das casas de química</span><span>R$ 3.000,00</span></div>
+                        <div class="vigentes-item"><span>Finalização das obras do tratamento preliminar de esgoto</span><span>R$ 15.000,00</span></div>
+                        <div class="vigentes-item"><span>Automação dos poços artesianos</span><span>R$ 36.839,56</span></div>
+                        <div class="vigentes-item"><span>Construção da calçada do parque linear</span><span>R$ 150.000,00</span></div>
+                        <div class="vigentes-item"><span>Sinalização do empreendimento</span><span>R$ 17.500,00</span></div>
+                        <div class="vigentes-item"><span>Paisagismo do parque linear e áreas verdes</span><span>R$ 25.000,00</span></div>
+                        <div class="vigentes-total"><span>TOTAL</span><span>R$ 247.339,56</span></div>
                     </div>
                     <div class="planejamento-card">
                         <h3>🕒 Próximas ativações</h3>
                         <div class="vigentes-header" style="display: flex; justify-content: space-between; font-weight: 700; color: var(--title-color); border-bottom: 2px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9rem;"><span>Atividades</span><span>Previsão de investimento</span></div>
                         <ul class="hierarchical-list">
-                            <li class="level-1"><span>1) Implantação das casas de química</span><span>R$ 34.875,94</span></li>
-                            <li class="level-2"><span class="enum">1.1</span> Automação e eletrificação dos poços</li>
-                            <li class="level-1"><span>2) Finalização do tratamento preliminar</span><span>R$ 40.120,00</span></li>
-                            <li class="level-2"><span class="enum">4.1</span> Instalação de grelha e comportas</li>
-                            <li class="level-2"><span class="enum">4.2</span> Execução de contrapartida ao invés do poço de sucção</li>
-                            <li class="level-1"><span>3) Paisagismo</span><span>R$ 60.000,00</span></li>
-                            <li class="level-2"><span class="enum">5.1</span> Plantio de mudas</li>
-                            <li class="level-2"><span class="enum">5.2</span> Pintura de meios-fios</li>
-                            <li class="level-1"><span>4) Sinalização viária</span><span>R$ 30.000,00</span></li>
-                            <li class="level-1"><span>5) Processo de entrega</span><span>-</span></li>
-                            <li class="level-2"><span class="enum">7.1</span> Entre SAE (Água e Esgoto)</li>
-                            <li class="level-2"><span class="enum">7.2</span> Entrega Prefeitura</li>
+                            <li class="level-1"><span>1) Revitalização como contrapartida ao SAE - E.E.E</span><span>R$ 44.684,50</span></li>
+                            <li class="level-2"><span class="enum">1.1</span> Execução de contrapartida ao invés do poço de sucção</li>
+                            <li class="level-1"><span>2) Processo de entrega</span><span>R$ 0,00</span></li>
+                            <li class="level-2"><span class="enum">2.1</span> Entre SAE (Água e Esgoto)</li>
+                            <li class="level-2"><span class="enum">2.2</span> Entrega Prefeitura</li>
                         </ul>
-                        <div class="vigentes-total" style="border-top: 2px solid var(--border-color); padding-top: 10px; margin-top: 5px;"><span>TOTAL</span><span>R$ 164.995,94</span></div>
+                        <div class="vigentes-total" style="border-top: 2px solid var(--border-color); padding-top: 10px; margin-top: 5px;"><span>TOTAL</span><span>R$ 44.684,50</span></div>
                     </div>
                 </div>
             </div>
@@ -1226,24 +1219,24 @@
                 <div class="kpi-card">
                     <div class="label">Investimento Atual</div>
                     <div class="value" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-                        R$ 3.629.120
-                        <span style="font-size: 0.7rem; color: #ffffff; background-color: var(--active-color); padding: 3px 6px; border-radius: 6px; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" title="Avanço sobre o Orçamento">📈 72,3%</span>
+                        R$ 3.686.659
+                        <span style="font-size: 0.7rem; color: #ffffff; background-color: var(--active-color); padding: 3px 6px; border-radius: 6px; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" title="Avanço sobre o Orçamento">📈 73,4%</span>
                     </div>
                 </div>
-                <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 917.296</div></div>
-                <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 4.546.417</div></div>
+                <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 793.200</div></div>
+                <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 4.479.860</div></div>
                 <div class="kpi-card">
                     <div class="label">Desvio Orçamentário</div>
                     <div class="value" id="kpiDesvioJoaquim"></div>
-                    <div class="sublabel" style="text-transform: none; letter-spacing: 0;">(R$ 4.546.417 / R$ 5.019.403) - 1</div>
+                    <div class="sublabel" style="text-transform: none; letter-spacing: 0;">(R$ 4.479.860 / R$ 5.019.403) - 1</div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Custo/Lote</div>
                     <div class="kpi-sublist">
                         <div class="kpi-sublist-item"><span class="sublist-label">Orçado:</span><span class="sublist-value">R$ 8.714</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 6.301</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 7.893</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 26.391</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 6.400</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 7.778</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 38.977</span></div>
                     </div>
                 </div>
             </div>
@@ -1253,7 +1246,7 @@
                 <div class="prazos-header-container">
                     <div class="prazos-card">
                         <p style="margin:0; text-align: left; line-height: 1.5; font-size: 0.85rem;">
-                            Prazo final de entrega: <strong>31/08/2026</strong><br>
+                            Prazo final de entrega: <strong>31/10/2026</strong><br>
                             Prazo previsto de entrega: <strong>16/10/2026</strong>
                         </p>
                     </div>
@@ -1318,13 +1311,13 @@
                     <div class="chart-title">Histórico e Projeção de Desembolsos</div>
                     <canvas id="chartJoaquimHistorico"></canvas>
                     <div class="summary-container">
-                        <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 3.531.280,41</div></div>
+                        <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 3.573.488,38</div></div>
                         <div class="summary-operator">+</div>
-                        <div class="summary-box projected"><div class="summary-title">Valor Total de Desembolso Projetado</div><div class="summary-value">R$ 1.015.136,17</div></div>
+                        <div class="summary-box projected"><div class="summary-title">Valor Total de Desembolso Projetado</div><div class="summary-value">R$ 906.371,29</div></div>
                         <div class="summary-operator">=</div>
-                        <div class="summary-box executed-projected"><div class="summary-title">Valor de Execução Projetado</div><div class="summary-value">R$ 4.546.416,58</div></div>
+                        <div class="summary-box executed-projected"><div class="summary-title">Valor de Execução Projetado</div><div class="summary-value">R$ 4.479.859,67</div></div>
                         <div class="summary-operator">|</div>
-                        <div class="summary-box result-economia"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 472.986,42</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Economia</div></div>
+                        <div class="summary-box result-economia"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 539.543,33</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Economia</div></div>
                     </div>
 		</div>
                 <div class="chart-container" style="margin-bottom: 20px; height: 620px; padding-bottom: 30px;">
@@ -1366,37 +1359,36 @@
                     <div class="planejamento-card">
                         <h3>⚙️ Etapas vigentes ou contratadas</h3>
                         <div class="vigentes-header" style="display: flex; justify-content: space-between; font-weight: 700; color: var(--title-color); border-bottom: 2px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9rem;"><span>Atividades</span><span>Em investimento</span></div>
-                        <div class="vigentes-item"><span>Construção da rede adutora</span><span>R$ 77.508,21</span></div>
-                        <div class="vigentes-item"><span>Interligações do reservatório metálico de água e execução de parte hidráulica</span><span>R$ 35.000,00</span></div>
-                        <div class="vigentes-total"><span>TOTAL</span><span>R$ 112.508,21</span></div>
+                        <div class="vigentes-item"><span>Recapeamento viário interno</span><span>R$ 63.000,00</span></div>
+                        <div class="vigentes-item"><span>Aquisição e instalação do booster de esgoto</span><span>R$ 75.000,00</span></div>
+                        <div class="vigentes-item"><span>Construção da elevatória de esgoto</span><span>R$ 45.000,00</span></div>
+                        <div class="vigentes-item"><span>Construção da rede interceptora de esgoto</span><span>R$ 90.000,00</span></div>
+                        <div class="vigentes-item"><span>Construção da linha de recalque de esgoto</span><span>R$ 30.000,00</span></div>
+                        <div class="vigentes-total"><span>TOTAL</span><span>R$ 303.000,00</span></div>
                     </div>
                     <div class="planejamento-card">
                         <h3>🕒 Próximas ativações</h3>
                         <div class="vigentes-header" style="display: flex; justify-content: space-between; font-weight: 700; color: var(--title-color); border-bottom: 2px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9rem;"><span>Atividades</span><span>Previsão de investimento</span></div>
                         <ul class="hierarchical-list">
-                            <li class="level-1"><span>1) Execução da rede de recalque de esgoto e Booster</span><span>R$ 309.017,91</span></li>
-                            <li class="level-2"><span class="enum">1.1</span> Recebimento do projeto</li>
-                            <li class="level-2"><span class="enum">1.2</span> Construção da rede de recalque</li>
-                            <li class="level-2"><span class="enum">1.3</span> Aquisição e instalação do Booster</li>
-                            <li class="level-2"><span class="enum">1.4</span> Construção da casa de abrigo do Booster</li>
-                            <li class="level-2"><span class="enum">1.5</span> Construção do interceptor de esgoto</li>
-                            <li class="level-1"><span>2) Recapeamento viário (Tapa-Buracos)</span><span>R$ 146.000,00</span></li>
-                            <li class="level-1"><span>3) Meio-fio e sarjeta</span><span>R$ 56.500,00</span></li>
-                            <li class="level-2"><span class="enum">4.1</span> Revitalização e reparo de meios-fios</li>
-                            <li class="level-1"><span>4) Obra de acesso</span><span>R$ 435.000,00</span></li>
-                            <li class="level-2"><span class="enum">5.1</span> Construção do acesso ao empreendimento</li>
-                            <li class="level-1"><span>5) Paisagismo e praças</span><span>R$ 56.750,00</span></li>
-                            <li class="level-2"><span class="enum">6.1</span> Execução do paisagismo de canteiros</li>
-                            <li class="level-2"><span class="enum">6.2</span> Construção de praça na rotatória</li>
-                            <li class="level-1"><span>6) Sinalização viária</span><span>R$ 20.000,00</span></li>
-                            <li class="level-2"><span class="enum">7.1</span> Estudo e contratação de projeto</li>
-                            <li class="level-2"><span class="enum">7.2</span> Execução da sinalização</li>
-                            <li class="level-1"><span>7) Processo de entrega</span><span>-</span></li>
-                            <li class="level-2"><span class="enum">8.1</span> Entrega SAE (Água e Esgoto)</li>
-                            <li class="level-2"><span class="enum">8.2</span> Entrega Secretaria de Obras (Drenagem)</li>
-                            <li class="level-2"><span class="enum">8.3</span> Entrega Prefeitura</li>
+                            <li class="level-1"><span>1) Meio-fio e sarjeta</span><span>R$ 56.500,00</span></li>
+                            <li class="level-2"><span class="enum">1.1</span> Reforma pontual e pintura de meios-fios</li>
+                            <li class="level-1"><span>2) Obra de acesso</span><span>R$ 435.000,00</span></li>
+                            <li class="level-2"><span class="enum">2.1</span> Construção do acesso ao empreendimento</li>
+                            <li class="level-1"><span>3) Paisagismo e praças</span><span>R$ 56.750,00</span></li>
+                            <li class="level-2"><span class="enum">3.1</span> Execução do paisagismo de canteiros</li>
+                            <li class="level-2"><span class="enum">3.2</span> Construção de praça na rotatória</li>
+                            <li class="level-1"><span>4) Sinalização viária</span><span>R$ 20.000,00</span></li>
+                            <li class="level-2"><span class="enum">4.1</span> Estudo e contratação de projeto</li>
+                            <li class="level-2"><span class="enum">4.2</span> Execução da sinalização</li>
+                            <li class="level-1"><span>5) Travessia Método Não Destrutivo</span><span>R$ 75.000,00</span></li>
+                            <li class="level-2"><span class="enum">5.1</span> Travessia da rede adutora</li>
+                            <li class="level-2"><span class="enum">5.2</span> Travessia da linha de recalque de esgoto</li>
+                            <li class="level-1"><span>6) Processo de entrega</span><span>-</span></li>
+                            <li class="level-2"><span class="enum">6.1</span> Entrega SAE (Água e Esgoto)</li>
+                            <li class="level-2"><span class="enum">6.2</span> Entrega Secretaria de Obras (Drenagem)</li>
+                            <li class="level-2"><span class="enum">6.3</span> Entrega Prefeitura</li>
                         </ul>
-                        <div class="vigentes-total" style="border-top: 2px solid var(--border-color); padding-top: 10px; margin-top: 5px;"><span>TOTAL</span><span>R$ 1.023.267,91</span></div>
+                        <div class="vigentes-total" style="border-top: 2px solid var(--border-color); padding-top: 10px; margin-top: 5px;"><span>TOTAL</span><span>R$ 643.250,00</span></div>
                     </div>
                 </div>
             </div>
@@ -1779,13 +1771,13 @@
                     <div class="chart-title">Histórico e Projeção de Desembolsos</div>
                     <canvas id="chartParqueHistorico"></canvas>
                     <div class="summary-container">
-                        <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 550.038,51</div></div>
+                        <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 554.081,68</div></div>
                         <div class="summary-operator">+</div>
-                        <div class="summary-box projected"><div class="summary-title">Valor Total de Desembolso Projetado</div><div class="summary-value">R$ 5.300.762,38</div></div>
+                        <div class="summary-box projected"><div class="summary-title">Valor Total de Desembolso Projetado</div><div class="summary-value">R$ 5.316.167,82</div></div>
                         <div class="summary-operator">=</div>
-                        <div class="summary-box executed-projected"><div class="summary-title">Valor de Execução Projetado</div><div class="summary-value">R$ 5.850.800,89</div></div>
+                        <div class="summary-box executed-projected"><div class="summary-title">Valor de Execução Projetado</div><div class="summary-value">R$ 5.870.249,50</div></div>
                         <div class="summary-operator">|</div>
-                        <div class="summary-box result-economia"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 1.315,97</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Economia</div></div>
+                        <div class="summary-box result-extrapolacao"><div class="summary-title">Resultado Final Projetado</div><div class="summary-value">R$ 18.132,64</div><div style="font-size: 0.75rem; font-weight: 700; margin-top: 4px; text-transform: uppercase;">Extrapolação</div></div>
                     </div>
                 </div>
                 <div class="chart-container" style="margin-bottom: 20px; height: 620px; padding-bottom: 30px;">
@@ -1826,9 +1818,9 @@
                     <div class="planejamento-card">
                         <h3>⚙️ Etapas vigentes ou contratadas</h3>
                         <div class="vigentes-header" style="display: flex; justify-content: space-between; font-weight: 700; color: var(--title-color); border-bottom: 2px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9rem;"><span>Atividades</span><span>Em investimento</span></div>
-                        <div class="vigentes-item"><span>Diagnóstico, reparos, adequações e execução da rede de esgoto</span><span>R$ 86.597,14</span></div>
-                        <div class="vigentes-item"><span>Construção das bocas de lobo de drenagem</span><span>R$ 81.725,60</span></div>
-                        <div class="vigentes-total"><span>TOTAL</span><span>R$ 168.322,74</span></div>
+                        <div class="vigentes-item"><span>Diagnóstico, reparos, adequações e execução da rede de esgoto</span><span>R$ 199.597,14</span></div>
+                        <div class="vigentes-item"><span>Construção das bocas de lobo de drenagem</span><span>R$ 113.000,00</span></div>
+                        <div class="vigentes-total"><span>TOTAL</span><span>R$ 312.597,14</span></div>
                     </div>
                     <div class="planejamento-card">
                         <h3>🕒 Próximas ativações</h3>
@@ -1836,26 +1828,27 @@
                         <ul class="hierarchical-list">
                             <li class="level-1"><span>1) Execução da rede de água potável e reservatório</span><span>R$ 241.248,00</span></li>
                             <li class="level-2"><span class="enum">1.1</span> Sondagem da rede de distribuição</li>
-                            <li class="level-2"><span class="enum">1.2</span> Resolução de pendências SIMO/Cadastro COPASA</li>
-                            <li class="level-2"><span class="enum">1.4</span> Mapeamento e execução de reparos (Registros e Rede)</li>
-                            <li class="level-2"><span class="enum">1.5</span> Interligação do reservatório na adução e distribuição</li>
-                            <li class="level-1"><span>2) Terraplenagem, pavimentação, recapeamento, guias e sarjetas</span><span>R$ 3.494.930,22</span></li>
-                            <li class="level-2"><span class="enum">3.1</span> Pavimentação completo da área pendente</li>
-                            <li class="level-2"><span class="enum">3.2</span> Reparo de guias e sarjetas</li>
-                            <li class="level-2"><span class="enum">3.3</span> Pintura de guias</li>
-                            <li class="level-1"><span>3) Paisagismo</span><span>R$ 899.440,00</span></li>
-                            <li class="level-2"><span class="enum">4.1</span> Plantio de mudas</li>
-                            <li class="level-2"><span class="enum">4.2</span> Sinalização viária</li>
+                            <li class="level-2"><span class="enum">1.2</span> Mapeamento e execução de reparos (Registros e Rede)</li>
+                            <li class="level-2"><span class="enum">1.3</span> Interligação do reservatório na adução e distribuição</li>
+                            <li class="level-1"><span>2) Terraplenagem, pavimentação, recapeamento, guias e sarjetas</span><span>R$ 3.621.961,00</span></li>
+                            <li class="level-2"><span class="enum">2.1</span> Pavimentação completo da área pendente</li>
+                            <li class="level-2"><span class="enum">2.2</span> Reparo de guias e sarjetas</li>
+                            <li class="level-2"><span class="enum">2.3</span> Pintura de guias</li>
+                            <li class="level-1"><span>3) Paisagismo</span><span>R$ 59.235,00</span></li>
+                            <li class="level-2"><span class="enum">3.1</span> Plantio de mudas</li>
+                            <li class="level-2"><span class="enum">3.2</span> Sinalização viária</li>
                             <li class="level-1"><span>4) Topografia de entrega</span><span>R$ 66.600,00</span></li>
-                            <li class="level-2"><span class="enum">5.1</span> Demarcação topográfica e implantação de marcos</li>
-                            <li class="level-1"><span>4) Obra de acesso</span><span>-</span></li>
+                            <li class="level-2"><span class="enum">4.1</span> Demarcação topográfica e implantação de marcos</li>
+                            <li class="level-1"><span>5) Obra de acesso</span><span>R$ 705.000,00</span></li>
                             <li class="level-2"><span class="enum">5.1</span> Construção do acesso ao empreendimento</li>
-                            <li class="level-1"><span>5) Entrega do loteamento</span><span>-</span></li>
-                            <li class="level-2"><span class="enum">6.1</span> Entrega COPASA (Água e Esgoto)</li>
-                            <li class="level-2"><span class="enum">6.2</span> Entrega Secretaria de Obras (Drenagem)</li>
-                            <li class="level-2"><span class="enum">6.3</span> Entrega Final Prefeitura</li>
+                            <li class="level-1"><span>6) Proteção de obras</span><span>R$ 50.000,00</span></li>
+                            <li class="level-2"><span class="enum">6.1</span> Obras de contenção e proteção contras chuvas</li>
+                            <li class="level-1"><span>7) Entrega do loteamento</span><span>-</span></li>
+                            <li class="level-2"><span class="enum">7.1</span> Entrega COPASA (Água e Esgoto)</li>
+                            <li class="level-2"><span class="enum">7.2</span> Entrega Secretaria de Obras (Drenagem)</li>
+                            <li class="level-2"><span class="enum">7.3</span> Entrega Final Prefeitura</li>
                         </ul>
-                        <div class="vigentes-total" style="border-top: 2px solid var(--border-color); padding-top: 10px; margin-top: 5px;"><span>TOTAL</span><span>R$ 4.702.218,22</span></div>
+                        <div class="vigentes-total" style="border-top: 2px solid var(--border-color); padding-top: 10px; margin-top: 5px;"><span>TOTAL</span><span>R$ 4.744.044,00</span></div>
                     </div>
                 </div>
             </div>
@@ -2312,10 +2305,21 @@
 
         <div class="tab-content" id="tab-geral">
             <div class="prazos-header-container">
-                <div class="prazos-card">
+                <div class="prazos-card" style="margin-bottom: 25px;">
                     <p>Mirante da Lagoa &nbsp;&raquo;&nbsp; Prazo final: <strong>31/07/2026</strong> | Prazo previsto: <strong>31/08/2026</strong></p>
-                    <p style="margin-top: 8px; border-top: 1px dashed var(--border-color); padding-top: 8px;">Joaquim Leme &nbsp;&raquo;&nbsp; Prazo final: <strong>31/08/2026</strong> | Prazo previsto: <strong>31/08/2026</strong></p>
+                    <p style="margin-top: 8px; border-top: 1px dashed var(--border-color); padding-top: 8px;">Joaquim Leme &nbsp;&raquo;&nbsp; Prazo final: <strong>31/10/2026</strong> | Prazo previsto: <strong>20/11/2026</strong></p>
                     <p style="margin-top: 8px; border-top: 1px dashed var(--border-color); padding-top: 8px;">Parque das Nações &nbsp;&raquo;&nbsp; Prazo final: <strong>A definir</strong> | Prazo previsto: <strong>A definir</strong></p>
+                </div>
+            </div>
+
+            <!-- NOVO QUADRO DE GRÁFICOS COMPARATIVOS -->
+            <div class="executive-card" style="margin-bottom: 25px; padding: 25px;">
+                <h3 style="text-align: center; margin-bottom: 20px; font-size: 1.2rem;">COMPARATIVO GLOBAL DO PORTFÓLIO</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;" id="comparativos-gerais-container">
+                    <div id="comp-orcamentos"></div>
+                    <div id="comp-lotes"></div>
+                    <div id="comp-custolote"></div>
+                    <div id="comp-investimento"></div>
                 </div>
             </div>
             
@@ -2327,13 +2331,13 @@
                         					<div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
                         					<div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">705</span></div>
                         					<div class="kpi-item"><span class="label">Orçamento Total Aprovado</span><span class="value">R$ 7.859.182</span></div>
-                      					    <div class="kpi-item"><span class="label">Investimento Atual</span><span class="value">R$ 7.581.550</span></div>
-                      					       <div class="kpi-item"><span class="label">Verba Projetada para Conclusão</span><span class="value">R$ 545.849</span></div>
-                        				   <div class="kpi-item"><span class="label">Valor de Execução Projetado</span><span class="value">R$ 8.127.399</span></div>
-                        			               <div class="kpi-item"><span class="label">Custo/Lote (Orçado)</span><span class="value">R$ 11.148</span></div>
-                        				       <div class="kpi-item"><span class="label">Custo/Lote (Atual)</span><span class="value">R$ 10.754</span></div>
-                    					       <div class="kpi-item"><span class="label">Custo/Lote (Projetado)</span><span class="value">R$ 11.528</span></div>
-                        				      <div class="kpi-item"><span class="label">Custo/Lote (Global)</span><span class="value">R$ 31.954</span></div>
+                      					    <div class="kpi-item"><span class="label">Investimento Atual</span><span class="value">R$ 7.762.981</span></div>
+                        <div class="kpi-item"><span class="label">Verba Projetada para Conclusão</span><span class="value">R$ 354.161</span></div>
+                        <div class="kpi-item"><span class="label">Valor de Execução Projetado</span><span class="value">R$ 8.117.142</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Orçado)</span><span class="value">R$ 11.148</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Atual)</span><span class="value">R$ 11.011</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Projetado)</span><span class="value">R$ 11.514</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Global)</span><span class="value">R$ 31.940</span></div>
                         
                         <div class="chart-container-gauge-integrated">
                             <div class="chart-title" style="font-size: 0.95rem; margin-bottom: 5px;">Avanço Financeiro</div>
@@ -2351,13 +2355,13 @@
                         <div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
                         <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">576</span></div>
                         <div class="kpi-item"><span class="label">Orçamento Total Aprovado</span><span class="value">R$ 5.019.403</span></div>
-                        <div class="kpi-item"><span class="label">Investimento Atual</span><span class="value">R$ 3.629.120</span></div>
-                        <div class="kpi-item"><span class="label">Verba Projetada para Conclusão</span><span class="value">R$ 917.296</span></div>
-                        <div class="kpi-item"><span class="label">Valor de Execução Projetado</span><span class="value">R$ 4.546.417</span></div>
+                        <div class="kpi-item"><span class="label">Investimento Atual</span><span class="value">R$ 3.686.659</span></div>
+                        <div class="kpi-item"><span class="label">Verba Projetada para Conclusão</span><span class="value">R$ 793.200</span></div>
+                        <div class="kpi-item"><span class="label">Valor de Execução Projetado</span><span class="value">R$ 4.479.860</span></div>
                         <div class="kpi-item"><span class="label">Custo/Lote (Orçado)</span><span class="value">R$ 8.714</span></div>
-                        <div class="kpi-item"><span class="label">Custo/Lote (Atual)</span><span class="value">R$ 6.301</span></div>
-                        <div class="kpi-item"><span class="label">Custo/Lote (Projetado)</span><span class="value">R$ 7.893</span></div>
-                        <div class="kpi-item"><span class="label">Custo/Lote (Global)</span><span class="value">R$ 26.391</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Atual)</span><span class="value">R$ 6.400</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Projetado)</span><span class="value">R$ 7.778</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Global)</span><span class="value">R$ 38.977</span></div>
                         
                         <div class="chart-container-gauge-integrated">
                             <div class="chart-title" style="font-size: 0.95rem; margin-bottom: 5px;">Avanço Financeiro</div>
@@ -2375,12 +2379,12 @@
                         <div class="kpi-item"><span class="label">Estado</span><span class="value">Minas Gerais</span></div>
                         <div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">364</span></div>
                         <div class="kpi-item"><span class="label">Orçamento Total Aprovado</span><span class="value">R$ 5.852.117</span></div>
-                        <div class="kpi-item"><span class="label">Investimento Atual</span><span class="value">R$ 585.839</span></div>
-                        <div class="kpi-item"><span class="label">Verba Projetada para Conclusão</span><span class="value">R$ 5.264.962</span></div>
-                        <div class="kpi-item"><span class="label">Valor de Execução Projetado</span><span class="value">R$ 5.850.801</span></div>
+                        <div class="kpi-item"><span class="label">Investimento Atual</span><span class="value">R$ 591.432</span></div>
+                        <div class="kpi-item"><span class="label">Verba Projetada para Conclusão</span><span class="value">R$ 5.278.818</span></div>
+                        <div class="kpi-item"><span class="label">Valor de Execução Projetado</span><span class="value">R$ 5.870.250</span></div>
                         <div class="kpi-item"><span class="label">Custo/Lote (Orçado)</span><span class="value">R$ 16.077</span></div>
-                        <div class="kpi-item"><span class="label">Custo/Lote (Atual)</span><span class="value">R$ 1.610</span></div>
-                        <div class="kpi-item"><span class="label">Custo/Lote (Projetado)</span><span class="value">R$ 16.074</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Atual)</span><span class="value">R$ 1.625</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Projetado)</span><span class="value">R$ 16.127</span></div>
                         <div class="kpi-item"><span class="label">Custo/Lote (Global)</span><span class="value">R$ 35.151</span></div>
                         
                         <div class="chart-container-gauge-integrated">
@@ -2767,7 +2771,7 @@
                     ctx.textBaseline = 'bottom';
                     
                     const headerDateEl = document.getElementById('update-date-lbl');
-                    let dateStr = "11/08/2026";
+                    let dateStr = "01/10/2026";
                     if (headerDateEl) {
                         const parts = headerDateEl.textContent.split(':');
                         if (parts.length > 1) dateStr = parts[1].trim();
@@ -2983,26 +2987,26 @@
         
       const miranteEtapas = ['TOPOGRAFIA E CONTROLE', 'MANUTENÇÕES / AS BUILTS', 'TERRAPLANAGEM', 'DRENAGEM', 'REDE DE ÁGUA POTÁVEL', 'RESERVATÓRIO / ADUTORA', 'SISTEMA DE ESGOTO SANITÁRIO', 'ESTAÇÃO ELEVATÓRIA DE ESGOTO', 'GUIAS E SARJETAS', 'PAVIMENTAÇÃO TOTAL', 'ELETRIFICAÇÃO', 'MEIO AMBIENTE', 'TOPOGRAFIA DE ENTREGA', 'INDIRETO DE OBRAS'];
         const miranteOrcado = [36057.70, 234986.23, 134826.68, 278796.63, 207210.79, 645418.69, 176835.76, 313662.78, 597885.26, 2774330.81, 790022.37, 1316034.53, 94960.90, 258152.78];
-        const miranteRealizado = [37257.72, 214865.82, 137826.68, 273216.91, 510816.87, 568499.51, 171635.73, 178941.24, 543203.95, 2427431.74, 664799.29, 451042.38, 106261.10, 257065.02];
-        const miranteValorApropriado = [0.00, 0.00, 0.00, 74326.27, 21306.00, 85807.30, 14700.00, 48697.98, 36173.35, 585456.39, 144300.00, 5210.00, 0.00, 22708.75];
-        const miranteComprometido = [37257.72, 214865.82, 137826.68, 347543.18, 532122.87, 654306.81, 186335.73, 227639.22, 579377.30, 3012888.13, 809099.29, 456252.38, 106261.10, 279773.77];
-        const miranteProjetadoFuturo = [0.00, 42508.95, 0.00, -53906.27, 73590.00, 70151.01, -1500.00, 32825.52, 2520.00, 0.00, 84000.00, 278460.00, 0.00, 17200.25];
+        const miranteRealizado = [37257.72, 221848.61, 240101.64, 276366.91, 599056.10, 593355.91, 173335.73, 178941.24, 549117.20, 2709631.48, 897347.92, 377601.91, 106410.50, 279326.20];
+        const miranteValorApropriado = [0.00, 0.00, 0.00, 8100.00, 0.00, 63548.28, 0.00, 48549.98, 9167.91, 303256.13, 0.00, 75621.08, 0.00, 15038.21];
+        const miranteComprometido = [37257.72, 221848.61, 240101.64, 284466.91, 599056.10, 656904.19, 173335.73, 227491.22, 558285.11, 3012887.61, 897347.92, 453222.99, 106410.50, 294364.41];
+        const miranteProjetadoFuturo = [0.00, 18121.45, 0.00, 12320.00, 25000.00, 38691.27, 35000.00, 32473.52, 20752.09, 0.00, 0.00, 162534.22, 0.00, 9268.54];
         const miranteFisicoRaw = [95.0, 95.0, 100.0, 98.0, 98.0, 95.0, 95.0, 80.0, 95.0, 85.0, 95.0, 20.0, 100.0, 92.0];
 
         const joaquimEtapas = ['OBRA DE ACESSO', 'TOPOGRAFIA e CONTROLE', 'MANUTENÇÕES / AS BUILTS', 'DRENAGEM', 'REDE DE ÁGUA POTÁVEL', 'RESERVATÓRIO / ADUTORA', 'SISTEMA DE ESGOTO SANITÁRIO', 'ESTAÇÃO ELEVATÓRIA DE ESGOTO', 'GUIAS E SARJETAS', 'PAVIMENTAÇÃO VIÁRIA', 'ENERGIA / ILUMINAÇÃO', 'MEIO AMBIENTE / PRAÇAS', 'TOPOGRAFIA DE ENTREGA', 'INDIRETO DE OBRAS'];
         const joaquimOrcado = [448834.00, 6000.00, 146722.83, 205220.00, 84333.64, 1184518.92, 320633.13, 273976.19, 104745.00, 146000.00, 1846124.81, 69219.58, 32000.00, 151075.26];
-        const joaquimRealizado = [14400.00, 0.00, 118257.93, 190220.00, 49733.64, 1074840.50, 35575.13, 0.00, 7231.00, 0.00, 1835484.81, 20379.58, 0.00, 185157.82];
-        const joaquimValorApropriado = [0.00, 0.00, 1408.34, 0.00, 0.00, 16029.85, 22586.25, 10406.25, 0.00, 0.00, 0.00, 1080.00, 0.00, 46329.04];
-        const joaquimComprometido = [14400.00, 0.00, 119666.27, 190220.00, 49733.64, 1090870.35, 58161.38, 10406.25, 7231.00, 0.00, 1835484.81, 21459.58, 0.00, 231486.86];
-        const joaquimProjetadoFuturo = [434434.00, 7500.00, 34723.49, 150000.00, 34600.00, -413667.97, 166971.88, 153854.53, 56500.00, 146000.00, 10640.00, 56750.00, 80000.00, -1009.49];
+        const joaquimRealizado = [14400.00, 0.00, 118397.93, 190220.00, 49733.64, 1101355.70, 35575.13, 0.00, 7231.00, 0.00, 1835484.81, 20919.58, 0.00, 200170.59];
+                   const joaquimValorApropriado = [0.00, 0.00, 1408.34, 0.00, 0.00, 9354.00, 22586.25, 10406.25, 0.00, 37000.00, 0.00, 0.00, 0.00, 32416.27];
+                   const joaquimComprometido = [14400.00, 0.00, 119806.27, 190220.00, 49733.64, 1110709.70, 58161.38, 10406.25, 7231.00, 37000.00, 1835484.81, 20919.58, 0.00, 232586.86];
+                   const joaquimProjetadoFuturo = [434434.00, 7500.00, 35591.66, 150000.00, 34600.00, -429402.62, 206092.54, 118255.85, 56500.00, 35000.00, 10640.00, 57290.00, 80000.00, -3301.24];
         const joaquimFisicoRaw = [0.0, 0.0, 92.0, 90.0, 90.0, 95.0, 80.0, 0.0, 80.0, 80.0, 100.0, 30.0, 0.0, 70.0];
 
         const parqueEtapas = ['CANTEIRO DE OBRAS', 'TOPOGRAFIA', 'TERRAPLANAGEM', 'DRENAGEM', 'REDE DE ÁGUA - DISTRIBUIÇÃO', 'REDE DE ÁGUA - ADUÇÃO', 'REDE DE ÁGUA - RESERVAÇÃO', 'REDE COLETORA DE ESGOTO', 'REDE DE RECALQUE / ETE', 'GUIAS E SARJETAS', 'PAVIMENTAÇÃO', 'ELÉTRICA', 'ACESSO', 'SINALIZAÇÃO HORIZ/VERT', 'OBRIGAÇÕES AMBIENTAIS', 'PARQUES E PAISAGISMO', 'CONTENÇÕES/PROTEÇÕES', 'LIMPEZA / MANUTENÇÕES', 'MULTAS', 'REPARAÇÃO DANOS TERC.', 'DIAGNÓSTICO OBRA EXIST.', 'INDIRETO DE OBRAS'];
         const parqueOrcado = [439.90, 87400.04, 50400.00, 439893.31, 45500.00, 15850.00, 134625.00, 152170.00, 47830.00, 466961.00, 3155066.32, 0.00, 704342.80, 0.00, 0.00, 59235.00, 50000.00, 133752.30, 0.00, 0.00, 129288.00, 179363.13];
-        const parqueRealizado = [0.00, 20600.00, 0.00, 115047.96, 45500.00, 16075.00, 134625.00, 200000.00, 47830.00, 466961.00, 3155066.32, 0.00, 704342.80, 0.00, 0.00, 59235.00, 50000.00, 88583.00, 0.00, 0.00, 73646.31, 72849.99];
-        const parqueValorApropriado = [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 6250.00, 0.00, 0.00, 0.00, 29550.00];
-        const parqueComprometido = [0.00, 27410.00, 0.00, 388297.64, 0.00, 250.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 4400.00, 0.00, 0.00, 0.00, 0.00, 94529.20, 0.00, 0.00, 6987.50, 63964.17];
-        const parqueProjetadoFuturo = [0.00, 66599.99, 50400.00, 115047.96, 45500.00, 16075.00, 134625.00, 200000.00, 47830.00, 466961.00, 3155066.32, 0.00, 704342.80, 0.00, 0.00, 59235.00, 50000.00, 20600.00, 0.00, 0.00, 88583.00, 44096.31];
+        const parqueRealizado = [150.00, 27410.00, 0.00, 388297.64, 0.00, 325.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 4400.00, 0.00, 0.00, 0.00, 0.00, 88279.20, 0.00, 0.00, 6987.50, 38232.34];
+        const parqueValorApropriado = [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 6250.00, 0.00, 0.00, 0.00, 31100.00];
+        const parqueComprometido = [150.00, 27410.00, 0.00, 388297.64, 0.00, 325.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 4400.00, 0.00, 0.00, 0.00, 0.00, 94529.20, 0.00, 0.00, 6987.50, 69332.34];
+        const parqueProjetadoFuturo = [0.00, 66599.99, 50400.00, 113800.00, 45500.00, 16075.00, 134625.00, 200000.00, 47830.00, 466961.00, 3155066.32, 0.00, 704342.80, 0.00, 0.00, 59235.00, 50000.00, 41200.00, 0.00, 0.00, 88583.00, 38599.71];
         const parqueFisicoRaw = [50.0, 80.0, 80.0, 85.0, 90.0, 80.0, 80.0, 80.0, 0.0, 80.0, 20.0, 90.0, 0.0, 0.0, 0.0, 0.0, 0.0, 70.3, 0.0, 0.0, 17.9, 0.0];
 	const cidadenovaEtapas = ['ETAPA BASE'];
         const cidadenovaOrcado = [0.00];
@@ -3027,11 +3031,11 @@
 
         const mesesHistorico = ['ago/23','set/23','out/23','nov/23','dez/23','jan/24','fev/24','mar/24','abr/24','mai/24','jun/24','jul/24','ago/24','set/24','out/24','nov/24','dez/24','jan/25','fev/25','mar/25','abr/25','mai/25','jun/25','jul/25','ago/25','set/25','out/25','nov/25','dez/25','jan/26','fev/26','mar/26','abr/26','mai/26','jun/26','jul/26','ago/26','set/26','out/26','nov/26','dez/26','jan/27','fev/27','mar/27','abr/27','mai/27'];
         
-        const desembolsosMirante = [0, 0, 15941, 10938, 1000, 7000, 7500, 9500, 19220, 0, 27359, 17200, 13036, 13800, 16900, 44080, 31408, 37084, 142367, 113630, 189413, 78009, 87416, 112178, 215158, 477827, 531463, 523136, 1012576, 353551, 286552, 165518, 90625, 305676, 400779.98, 469166.98, 711854.95, 1111597.91, 420123.74, 40580.13, 12233.74, 0, 0, 0, 0, 0, 0];
+        const desembolsosMirante = [0, 0, 15941, 10938, 1000, 7000, 7500, 9500, 19220, 0, 27359, 17200, 13036, 13800, 16900, 44080, 31408, 37084, 142367, 113630, 189413, 78009, 87416, 112178, 215158, 477827, 531463, 523136, 1012576, 353551, 286552, 165518, 90625, 305676, 400779.98, 469166.98, 711854.95, 700709.32, 817431.61, 44978.33, 15032.73, 0, 0, 0, 0, 0, 0];
         
-        const desembolsosJoaquim = [9197, 5000, 7500, 6900, 0, 0, 0, 8000, 0, 0, 400, 0, 0, 5000, 0, 2950, 0, 2950, 85000, 76195, 68195, 97659, 265327.74, 2102.26, 613930.53, 126801.17, 846921.19, 49210.11, 464746.28, 126667.07, 162154.90, 388592.62, 15427.32, 29049.43, 6057.65, 25722.90, 33623.25, 702019.67, 583552.82, -61633.14, -61633.14, -73585.02, -73585.02, 0, 0, 0, 0];
+        const desembolsosJoaquim = [9197, 5000, 7500, 6900, 0, 0, 0, 8000, 0, 0, 400, 0, 0, 5000, 0, 2950, 0, 2950, 85000, 76195, 68195, 97659, 265327.74, 2102.26, 613930.53, 126801.17, 846921.19, 49210.11, 464746.28, 126667.07, 162154.90, 388592.62, 15427.32, 29049.43, 6057.65, 25722.90, 33623.25, 42206.12, 609347.63, 304014.41, 61439.65, 61439.65, -56285.02, -73585.02, 0, 0, 0];
 
-        const desembolsosParque = [0, 0, 7500, 4110, 0, 0, 0, 0, 0, 0, 8900, 5100, 7100, 2000, 0, 0, 0, 0, 0, 0, 0, 20000, 19260, 0, 37280, 9500, 3159, 0, 1750, 6059.30, 0, 7479, 17587.13, 83696.26, 176415.24, 64491.34, 70775.96, 610114.51, 298288.06, 1210876.83, 1720890.72, 1418063.73, 14203.56, 14203.56, 7060.70, 7060.70];
+        const desembolsosParque = [0, 0, 7500, 4110, 0, 0, 0, 0, 0, 0, 8900, 5100, 7100, 2000, 0, 0, 0, 0, 0, 0, 0, 20000, 19260, 0, 37280, 9500, 3159, 0, 1750, 6059.30, 0, 7479, 17587.13, 83696.26, 176415.24, 64491.34, 70775.96, 4043.17, 189945.92, 398808.67, 1534654.06, 1596797.97, 1564790.47, 15945.80, 7612.46, 7612.46];
 
 	const desembolsosCidadeNova = new Array(47).fill(0);
 
@@ -4194,7 +4198,8 @@
                 if(label.includes('/27')) return '#f39c12';
                 if(label.includes('/26')) {
                     const mes = label.split('/')[0];
-                    const mesesFuturos = ['set', 'out', 'nov', 'dez'];
+                    // Removido 'set' da lista, pois agora é um mês consolidado (verde)
+                    const mesesFuturos = ['out', 'nov', 'dez'];
                     if(mesesFuturos.includes(mes)) return '#f39c12';
                 }
                 return '#558b2f';
@@ -4236,9 +4241,11 @@
                         datalabels: { display: false }, 
                         tooltip: { 
                             enabled: true,
+                            intersect: false,
+                            mode: 'index',
                             filter: function(tooltipItem) {
-                                // Ignora o tooltip (caixa preta) se for a linha (dataset índice 0)
-                                return tooltipItem.datasetIndex !== 0; 
+                                // Mostra o valor ao passar o mouse em qualquer altura da linha, desativando a necessidade de mirar na coluna!
+                                return tooltipItem.datasetIndex === 0; 
                             }
                         } 
                     },
@@ -4462,14 +4469,14 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('home-date').textContent = 'Última atualização: 11/08/2026';
+            document.getElementById('home-date').textContent = 'Última atualização: 01/10/2026';
 	    drawInteractiveProgressMap();
 	    drawInteractiveProgressMapJoaquim();
             drawInteractiveProgressMapParque();
 
-            createMainGauge('gaugeMainMirante', 7859182, 6542863.96, 8127399.46, { desembolso: 'Desembolso Total', comprometido: 'Execução Projetada' });
-            createMainGauge('gaugeMainJoaquim', 5019403, 3431280.41, 4546416.58, { desembolso: 'Desembolso Total', comprometido: 'Execução Projetada' });
-            createMainGauge('gaugeMainParqueGeral', 5852117, 550038.51, 5850800.89, { desembolso: 'Desembolso Total', comprometido: 'Execução Projetada' });
+            createMainGauge('gaugeMainMirante', 7859182, 7239699.07, 8117141.75, { desembolso: 'Desembolso Total', comprometido: 'Execução Projetada' });
+            createMainGauge('gaugeMainJoaquim', 5019403, 3573488.38, 4479859.67, { desembolso: 'Desembolso Total', comprometido: 'Execução Projetada' });
+            createMainGauge('gaugeMainParqueGeral', 5852117, 554081.68, 5870249.50, { desembolso: 'Desembolso Total', comprometido: 'Execução Projetada' });
             
             createPieChart('chartMirantePie', miranteEtapas, miranteOrcado);
             createPieChart('chartJoaquimPie', joaquimEtapas, joaquimOrcado);
@@ -4495,7 +4502,7 @@
             const parqueEacPct = sortedParque.eac.map((v, i) => sortedParque.orcado[i] > 0 ? (v / sortedParque.orcado[i] * 100) : 0);
 
             createFisicoFinChart('chartMiranteFisicoFin', sortedMirante.labels, null, sortedMirante.fisico, miranteEacPct, sortedMirante.fisico, sortedMirante.orcado, sortedMirante.eac, '31/08/2026');
-            createFisicoFinChart('chartJoaquimFisicoFin', sortedJoaquim.labels, null, sortedJoaquim.fisico, joaquimEacPct, sortedJoaquim.fisico, sortedJoaquim.orcado, sortedJoaquim.eac, '31/08/2026');
+            createFisicoFinChart('chartJoaquimFisicoFin', sortedJoaquim.labels, null, sortedJoaquim.fisico, joaquimEacPct, sortedJoaquim.fisico, sortedJoaquim.orcado, sortedJoaquim.eac, '31/10/2026');
             createFisicoFinChart('chartParqueFisicoFin', sortedParque.labels, null, sortedParque.fisico, parqueEacPct, sortedParque.fisico, sortedParque.orcado, sortedParque.eac, 'A definir');
             
             createBarChart('chartMiranteBar', miranteEtapas, miranteOrcado, miranteComprometido, miranteProjetadoFuturo);
@@ -4516,22 +4523,75 @@
             runABCEngine('chartParqueABC', 'tableABCParque', parqueEtapas, parqueComprometido);
 
             createColumnChart('chartMiranteHistorico', mesesHistorico.slice(0, 41), desembolsosMirante.slice(0, 41));
-            createColumnChart('chartJoaquimHistorico', mesesHistorico.slice(0, 43), desembolsosJoaquim.slice(0, 43)); // Mudou de 42 para 43 para incluir Fev/27
+            createColumnChart('chartJoaquimHistorico', mesesHistorico.slice(0, 44), desembolsosJoaquim.slice(0, 44)); // Mudou para 44 para exibir Mar/27
             createColumnChart('chartParqueHistorico', mesesHistorico, desembolsosParque);
             
-            let desvioMiranteCalc = ((8127399.46 / 7859181.89) - 1) * 100;
+            // --- INÍCIO DOS CÁLCULOS DE DESVIO ORÇAMENTÁRIO (CARDS) ---
+            let desvioMiranteCalc = ((8117141.75 / 7859182.00) - 1) * 100;
             let elMirante = document.getElementById('kpiDesvioMirante');
             if (elMirante) {
                 elMirante.style.color = 'var(--alert-color)';
-                elMirante.innerHTML = `⬆ +${desvioMiranteCalc.toFixed(1).replace('.', ',')}%`;
+                elMirante.innerHTML = `⬆ +${Math.abs(desvioMiranteCalc).toFixed(2).replace('.', ',')}%`;
             }
 
+            let desvioJoaquimCalc = ((4479859.67 / 5019403.00) - 1) * 100;
+            let elJoaquim = document.getElementById('kpiDesvioJoaquim');
+            if (elJoaquim) {
+                elJoaquim.style.color = '#1976d2'; 
+                elJoaquim.innerHTML = `⬇ -${Math.abs(desvioJoaquimCalc).toFixed(2).replace('.', ',')}%`;
+            }
+
+            let desvioParqueCalc = ((5870249.50 / 5852116.86) - 1) * 100;
             let elParque = document.getElementById('kpiDesvioParque');
             if (elParque) {
-                let desvioParqueCalc = ((5850800.89 / 5852116.86) - 1) * 100;
-                elParque.style.color = 'var(--active-color)';
-                elParque.innerHTML = `⬇ ${desvioParqueCalc.toFixed(2).replace('.', ',')}%`;
+                elParque.style.color = 'var(--alert-color)'; 
+                elParque.innerHTML = `⬆ +${Math.abs(desvioParqueCalc).toFixed(2).replace('.', ',')}%`;
             }
+            // --- FIM DOS CÁLCULOS DE DESVIO ORÇAMENTÁRIO ---
+
+	// --- GRÁFICOS COMPARATIVOS VISÃO GERAL ---
+            function renderComparativosGeral() {
+                const obras = [
+                    { nome: 'Mirante da Lagoa', orc: 7859182, lotes: 705, custo: 11148, inv: 7762981, cor: '#1b5e20' },
+                    { nome: 'Joaquim Leme', orc: 5019403, lotes: 576, custo: 8714, inv: 3686659, cor: '#2e7d32' },
+                    { nome: 'Parque das Nações', orc: 5852117, lotes: 364, custo: 16077, inv: 591432, cor: '#388e3c' },
+                    { nome: 'Cidade Nova', orc: 0, lotes: 0, custo: 0, inv: 0, cor: '#4caf50' }
+                ];
+
+                function renderBlock(containerId, title, field, isMoney) {
+                    let sorted = [...obras].sort((a, b) => b[field] - a[field]);
+                    let maxVal = sorted[0][field] || 1;
+                    
+                    let html = `<div style="font-size: 0.85rem; font-weight: 700; color: var(--title-color); text-align: center; margin-bottom: 15px; border-bottom: 2px solid var(--border-color); padding-bottom: 8px;">${title}</div>`;
+                    sorted.forEach(item => {
+                        let pctBarra = item[field] > 0 ? Math.max((item[field] / maxVal) * 100, 2) : 2;
+                        let valStr = isMoney ? `R$ ${Math.round(item[field]).toLocaleString('pt-BR')}` : Math.round(item[field]).toLocaleString('pt-BR');
+                        
+                        html += `
+                        <div style="margin-bottom: 12px; width: 100%; cursor: default; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <div style="font-size: 0.65rem; font-weight: 700; color: var(--text-color-base); text-transform: uppercase; margin-bottom: 4px;">${item.nome}</div>
+                            <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
+                                <div style="flex: 1; height: 16px; background: var(--gauge-fill-base); border-radius: 4px; overflow: hidden;">
+                                    <div style="width: ${pctBarra}%; height: 100%; border-radius: 4px; transition: width 0.8s ease; background-color: ${item.cor};"></div>
+                                </div>
+                                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-color-base); white-space: nowrap; width: 85px; text-align: right;">
+                                    ${valStr}
+                                </div>
+                            </div>
+                        </div>
+                        `;
+                    });
+                    const el = document.getElementById(containerId);
+                    if (el) el.innerHTML = html;
+                }
+
+                renderBlock('comp-orcamentos', 'Maiores Orçamentos', 'orc', true);
+                renderBlock('comp-lotes', 'Maior Qtd. de Lotes', 'lotes', false);
+                renderBlock('comp-custolote', 'Maior Custo/Lote (Orçado)', 'custo', true);
+                renderBlock('comp-investimento', 'Maior Investimento Atual', 'inv', true);
+            }
+            renderComparativosGeral();
+            // --- FIM DOS GRÁFICOS COMPARATIVOS ---
 
            // --- INÍCIO DA INICIALIZAÇÃO DA CIDADE NOVA ---
             createMainGauge('gaugeMainCidadeNovaGeral', 1, 0, 0, { desembolso: 'Desembolso Total', comprometido: 'Execução Projetada' });

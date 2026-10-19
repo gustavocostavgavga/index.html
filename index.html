@@ -442,19 +442,23 @@
             .resumo-btn { position: relative; right: 0; top: 0; margin-bottom: 15px; display: block; width: 100%; }
         }
         
-        .executive { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; align-items: start; }
-        @media (max-width: 992px) { .executive { grid-template-columns: 1fr !important; } }
+        /* Layout flexível para 3 colunas em cima e 1 centralizada embaixo */
+        .executive { display: flex !important; flex-wrap: wrap !important; justify-content: center !important; gap: 20px; width: 100%; align-items: stretch; }
+        @media (max-width: 1200px) { .executive-column { flex: 1 1 calc(50% - 20px) !important; max-width: none !important; } }
+        @media (max-width: 992px) { .executive-column { flex: 1 1 100% !important; max-width: none !important; } }
 
-        .executive-column { display: flex; flex-direction: column; }
-        .executive-card { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 20px; transition: all 0.4s; }
+        .executive-column { display: flex; flex-direction: column; flex: 1 1 calc(33.333% - 20px) !important; min-width: 380px !important; max-width: 480px !important; }
+        .executive-card { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 20px; transition: all 0.4s; height: 100%; }
         .executive-card:hover { transform: translateY(-6px); box-shadow: 0 10px 25px rgba(85,139,47,0.15); border-color: var(--active-color); }
         body.dark-mode .executive-card:hover { box-shadow: 0 10px 25px rgba(163, 230, 53, 0.15); border-color: var(--subtitle-color); }
         
-        .executive-card h3 { color: var(--title-color); margin-bottom: 15px; font-size: 1.1rem; transition: color 0.4s; }
-        .executive-card .kpi-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--table-border); transition: border 0.4s; }
+        .executive-card h3 { color: var(--title-color); margin-bottom: 15px; font-size: 1.1rem; transition: color 0.4s; text-align: center; }
+        /* O "align-items: center" e o "gap" mantêm as informações separadas de forma harmônica */
+        .executive-card .kpi-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--table-border); transition: border 0.4s; gap: 15px; }
         .executive-card .kpi-item:last-child { border: none; }
-        .executive-card .kpi-item .label { color: var(--text-color-base); transition: color 0.4s; }
-        .executive-card .kpi-item .value { font-weight: 600; color: var(--text-color-base); transition: color 0.4s; }
+        .executive-card .kpi-item .label { color: var(--text-color-base); transition: color 0.4s; flex: 1; }
+        /* O "white-space: nowrap !important" é a trava mágica que impede o R$ de pular de linha */
+        .executive-card .kpi-item .value { font-weight: 600; color: var(--text-color-base); transition: color 0.4s; white-space: nowrap !important; text-align: right; }
         .executive-card .kpi-item .value.alert-value { color: var(--alert-color); font-weight: 700; }
         .executive-card .kpi-item .value.ok-value { color: var(--active-color); font-weight: 700; }
         
@@ -753,25 +757,24 @@
                <div class="kpi-card">
                     <div class="label">Investimento Atual</div>
                     <div class="value" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-                        R$ 591.432
-                        <span style="font-size: 0.7rem; color: #ffffff; background-color: var(--active-color); padding: 3px 6px; border-radius: 6px; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" title="Avanço sobre o Orçamento">📈 10,1%</span>
+                        R$ 7.762.981
+                        <span style="font-size: 0.7rem; color: #ffffff; background-color: var(--active-color); padding: 3px 6px; border-radius: 6px; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" title="Avanço sobre o Orçamento">📈 98,8%</span>
                     </div>
                 </div>
-                <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 5.278.818</div></div>
-                <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 5.870.250</div></div>
+                <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 877.443</div></div>
+                <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 8.117.142</div></div>
                 <div class="kpi-card">
                     <div class="label">Desvio Orçamentário</div>
-                    <!-- Valor fixado direto no HTML na cor vermelha de alerta -->
-                    <div class="value" style="color: var(--alert-color);">⬆ +0,31%</div>
-                    <div class="sublabel" style="text-transform: none; letter-spacing: 0;">(R$ 5.870.250 / R$ 5.852.117) - 1</div>
+                    <div class="value" style="color: var(--alert-color);">⬆ +3,28%</div>
+                    <div class="sublabel" style="text-transform: none; letter-spacing: 0;">(R$ 8.117.142 / R$ 7.859.182) - 1</div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Custo/Lote</div>
                     <div class="kpi-sublist">
-                        <div class="kpi-sublist-item"><span class="sublist-label">Orçado:</span><span class="sublist-value">R$ 16.077</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 1.625</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 16.127</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 35.151</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Orçado:</span><span class="sublist-value">R$ 11.148</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 11.011</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 11.514</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 31.940</span></div>
                     </div>
                 </div>
             </div>
@@ -1236,7 +1239,7 @@
                         <div class="kpi-sublist-item"><span class="sublist-label">Orçado:</span><span class="sublist-value">R$ 8.714</span></div>
                         <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 6.400</span></div>
                         <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 7.778</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 38.977</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 26.275</span></div>
                     </div>
                 </div>
             </div>
@@ -1674,24 +1677,24 @@
                 <div class="kpi-card">
                     <div class="label">Investimento Atual</div>
                     <div class="value" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-                        R$ 585.839
-                        <span style="font-size: 0.7rem; color: #ffffff; background-color: var(--active-color); padding: 3px 6px; border-radius: 6px; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" title="Avanço sobre o Orçamento">📈 10,0%</span>
+                        R$ 591.432
+                        <span style="font-size: 0.7rem; color: #ffffff; background-color: var(--active-color); padding: 3px 6px; border-radius: 6px; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" title="Avanço sobre o Orçamento">📈 10,1%</span>
                     </div>
                 </div>
-                <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 5.264.962</div></div>
-                <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 5.850.801</div></div>
+                <div class="kpi-card"><div class="label">Verba Projetada para Conclusão</div><div class="value">R$ 5.278.818</div></div>
+                <div class="kpi-card"><div class="label">Valor de Execução Projetado</div><div class="value">R$ 5.870.250</div></div>
                 <div class="kpi-card">
                     <div class="label">Desvio Orçamentário</div>
-                    <div class="value" id="kpiDesvioParque"></div>
-                    <div class="sublabel" style="text-transform: none; letter-spacing: 0;">(R$ 5.850.801 / R$ 5.852.117) - 1</div>
+                    <div class="value" style="color: var(--alert-color);">⬆ +0,31%</div>
+                    <div class="sublabel" style="text-transform: none; letter-spacing: 0;">(R$ 5.870.250 / R$ 5.852.117) - 1</div>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Custo/Lote</div>
                     <div class="kpi-sublist">
                         <div class="kpi-sublist-item"><span class="sublist-label">Orçado:</span><span class="sublist-value">R$ 16.077</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 1.610</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 16.074</span></div>
-                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 35.151</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Atual:</span><span class="sublist-value">R$ 1.625</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Projetado:</span><span class="sublist-value">R$ 16.127</span></div>
+                        <div class="kpi-sublist-item"><span class="sublist-label">Global:</span><span class="sublist-value">R$ 35.204</span></div>
                     </div>
                 </div>
             </div> 
@@ -2305,17 +2308,18 @@
 
         <div class="tab-content" id="tab-geral">
             <div class="prazos-header-container">
-                <div class="prazos-card" style="margin-bottom: 25px;">
+                <!-- A margem interna foi removida para equilibrar a distância superior e inferior -->
+                <div class="prazos-card">
                     <p>Mirante da Lagoa &nbsp;&raquo;&nbsp; Prazo final: <strong>31/07/2026</strong> | Prazo previsto: <strong>31/08/2026</strong></p>
                     <p style="margin-top: 8px; border-top: 1px dashed var(--border-color); padding-top: 8px;">Joaquim Leme &nbsp;&raquo;&nbsp; Prazo final: <strong>31/10/2026</strong> | Prazo previsto: <strong>20/11/2026</strong></p>
                     <p style="margin-top: 8px; border-top: 1px dashed var(--border-color); padding-top: 8px;">Parque das Nações &nbsp;&raquo;&nbsp; Prazo final: <strong>A definir</strong> | Prazo previsto: <strong>A definir</strong></p>
                 </div>
             </div>
 
-            <!-- NOVO QUADRO DE GRÁFICOS COMPARATIVOS -->
-            <div class="executive-card" style="margin-bottom: 25px; padding: 25px;">
+            <!-- QUADRO DE GRÁFICOS COMPARATIVOS ATUALIZADO -->
+            <div class="executive-card" style="margin-bottom: 25px; padding: 20px;">
                 <h3 style="text-align: center; margin-bottom: 20px; font-size: 1.2rem;">COMPARATIVO GLOBAL DO PORTFÓLIO</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;" id="comparativos-gerais-container">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 15px;" id="comparativos-gerais-container">
                     <div id="comp-orcamentos"></div>
                     <div id="comp-lotes"></div>
                     <div id="comp-custolote"></div>
@@ -2332,7 +2336,7 @@
                         					<div class="kpi-item"><span class="label">Quantidade de Lotes</span><span class="value">705</span></div>
                         					<div class="kpi-item"><span class="label">Orçamento Total Aprovado</span><span class="value">R$ 7.859.182</span></div>
                       					    <div class="kpi-item"><span class="label">Investimento Atual</span><span class="value">R$ 7.762.981</span></div>
-                        <div class="kpi-item"><span class="label">Verba Projetada para Conclusão</span><span class="value">R$ 354.161</span></div>
+                        <div class="kpi-item"><span class="label">Verba Projetada para Conclusão</span><span class="value">R$ 877.443</span></div>
                         <div class="kpi-item"><span class="label">Valor de Execução Projetado</span><span class="value">R$ 8.117.142</span></div>
                         <div class="kpi-item"><span class="label">Custo/Lote (Orçado)</span><span class="value">R$ 11.148</span></div>
                         <div class="kpi-item"><span class="label">Custo/Lote (Atual)</span><span class="value">R$ 11.011</span></div>
@@ -2407,6 +2411,10 @@
                         <div class="kpi-item"><span class="label">Investimento Atual</span><span class="value">R$ 0</span></div>
                         <div class="kpi-item"><span class="label">Verba Projetada para Conclusão</span><span class="value">R$ 0</span></div>
                         <div class="kpi-item"><span class="label">Valor de Execução Projetado</span><span class="value">R$ 0</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Orçado)</span><span class="value">R$ 0</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Atual)</span><span class="value">R$ 0</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Projetado)</span><span class="value">R$ 0</span></div>
+                        <div class="kpi-item"><span class="label">Custo/Lote (Global)</span><span class="value">R$ 0</span></div>
                         <div class="chart-container-gauge-integrated">
                             <div class="chart-title" style="font-size: 0.95rem; margin-bottom: 5px;">Avanço Financeiro</div>
                             <div class="main-gauge-wrapper"><canvas id="gaugeMainCidadeNovaGeral"></canvas></div>
@@ -4551,44 +4559,73 @@
 
 	// --- GRÁFICOS COMPARATIVOS VISÃO GERAL ---
             function renderComparativosGeral() {
+                // 1. Injeção de CSS Dinâmico para resolver cores, tema noturno e centralização da Cidade Nova
+                if (!document.getElementById('comparativo-styles')) {
+                    const style = document.createElement('style');
+                    style.id = 'comparativo-styles';
+                    style.innerHTML = `
+                        /* Cores que se adaptam automaticamente ao clicar na Lua/Sol */
+                        :root { --comp-bar: #1b5e20; --comp-text: #2c3e50; }
+                        body.dark-mode { --comp-bar: #a3e635; --comp-text: #e0e0e0; }
+                        
+                        /* Força a centralização elegante dos cards na aba Visão Geral (Cidade Nova ficará no meio) */
+                        #tab-geral .executive { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+                        #tab-geral .executive-column { flex: 1 1 320px; max-width: 420px; }
+                    `;
+                    document.head.appendChild(style);
+                }
+
                 const obras = [
-                    { nome: 'Mirante da Lagoa', orc: 7859182, lotes: 705, custo: 11148, inv: 7762981, cor: '#1b5e20' },
-                    { nome: 'Joaquim Leme', orc: 5019403, lotes: 576, custo: 8714, inv: 3686659, cor: '#2e7d32' },
-                    { nome: 'Parque das Nações', orc: 5852117, lotes: 364, custo: 16077, inv: 591432, cor: '#388e3c' },
-                    { nome: 'Cidade Nova', orc: 0, lotes: 0, custo: 0, inv: 0, cor: '#4caf50' }
+                    { nome: 'Mirante da Lagoa', orc: 7859182, lotes: 705, custo: 11148, inv: 7762981 },
+                    { nome: 'Joaquim Leme', orc: 5019403, lotes: 576, custo: 8714, inv: 3686659 },
+                    { nome: 'Parque das Nações', orc: 5852117, lotes: 364, custo: 16077, inv: 591432 },
+                    { nome: 'Cidade Nova', orc: 0, lotes: 0, custo: 0, inv: 0 }
                 ];
 
-                function renderBlock(containerId, title, field, isMoney) {
+                function renderBlock(containerId, title, field, isMoney, svgIcon) {
                     let sorted = [...obras].sort((a, b) => b[field] - a[field]);
                     let maxVal = sorted[0][field] || 1;
                     
-                    let html = `<div style="font-size: 0.85rem; font-weight: 700; color: var(--title-color); text-align: center; margin-bottom: 15px; border-bottom: 2px solid var(--border-color); padding-bottom: 8px;">${title}</div>`;
+                    // Box minimalista envolvendo cada grupo
+                    let html = `
+                    <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; background: var(--bg-color-1); height: 100%; box-shadow: inset 0 0 10px rgba(0,0,0,0.02);">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.85rem; font-weight: 700; color: var(--comp-text); margin-bottom: 15px; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px; transition: color 0.4s;">
+                            ${svgIcon} ${title}
+                        </div>`;
+                    
                     sorted.forEach(item => {
                         let pctBarra = item[field] > 0 ? Math.max((item[field] / maxVal) * 100, 2) : 2;
                         let valStr = isMoney ? `R$ ${Math.round(item[field]).toLocaleString('pt-BR')}` : Math.round(item[field]).toLocaleString('pt-BR');
                         
                         html += `
                         <div style="margin-bottom: 12px; width: 100%; cursor: default; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
-                            <div style="font-size: 0.65rem; font-weight: 700; color: var(--text-color-base); text-transform: uppercase; margin-bottom: 4px;">${item.nome}</div>
+                            <div style="font-size: 0.65rem; font-weight: 700; color: var(--text-color-base); text-transform: uppercase; margin-bottom: 4px; transition: color 0.4s;">${item.nome}</div>
                             <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
-                                <div style="flex: 1; height: 16px; background: var(--gauge-fill-base); border-radius: 4px; overflow: hidden;">
-                                    <div style="width: ${pctBarra}%; height: 100%; border-radius: 4px; transition: width 0.8s ease; background-color: ${item.cor};"></div>
+                                <div style="flex: 1; height: 16px; background: var(--gauge-fill-base); border-radius: 4px; overflow: hidden; transition: background 0.4s;">
+                                    <div style="width: ${pctBarra}%; height: 100%; border-radius: 4px; transition: width 0.8s ease, background-color 0.4s; background-color: var(--comp-bar);"></div>
                                 </div>
-                                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-color-base); white-space: nowrap; width: 85px; text-align: right;">
+                                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-color-base); white-space: nowrap; width: 85px; text-align: right; transition: color 0.4s;">
                                     ${valStr}
                                 </div>
                             </div>
                         </div>
                         `;
                     });
+                    html += `</div>`;
                     const el = document.getElementById(containerId);
                     if (el) el.innerHTML = html;
                 }
 
-                renderBlock('comp-orcamentos', 'Maiores Orçamentos', 'orc', true);
-                renderBlock('comp-lotes', 'Maior Qtd. de Lotes', 'lotes', false);
-                renderBlock('comp-custolote', 'Maior Custo/Lote (Orçado)', 'custo', true);
-                renderBlock('comp-investimento', 'Maior Investimento Atual', 'inv', true);
+                // Ícones Vetoriais Minimalistas, Sem Cor Fixa (Pegam a cor do texto ativo)
+                const iconOrc = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg>`;
+                const iconLotes = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>`;
+                const iconCusto = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>`;
+                const iconInv = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>`;
+
+                renderBlock('comp-orcamentos', 'Maiores Orçamentos', 'orc', true, iconOrc);
+                renderBlock('comp-lotes', 'Maior Qtd. de Lotes', 'lotes', false, iconLotes);
+                renderBlock('comp-custolote', 'Maior Custo/Lote', 'custo', true, iconCusto);
+                renderBlock('comp-investimento', 'Maior Investimento', 'inv', true, iconInv);
             }
             renderComparativosGeral();
             // --- FIM DOS GRÁFICOS COMPARATIVOS ---

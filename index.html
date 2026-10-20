@@ -143,7 +143,8 @@
             align-items: center;
             justify-content: flex-start;
             min-height: calc(100vh - 40px);
-            background-image: linear-gradient(rgba(240, 242, 245, 0.65), rgba(240, 242, 245, 0.65)), url('DJI_0369.JPG');
+            /* Reduzido de 0.65 para 0.40 para deixar a foto mais viva */
+            background-image: linear-gradient(rgba(240, 242, 245, 0.40), rgba(240, 242, 245, 0.40)), url('DJI_0369.JPG');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -157,7 +158,8 @@
         }
 
         body.dark-mode .home-page {
-            background-image: linear-gradient(rgba(5, 16, 7, 0.8), rgba(5, 16, 7, 0.8)), url('DJI_0369.JPG');
+            /* Reduzido de 0.8 para 0.55 */
+            background-image: linear-gradient(rgba(5, 16, 7, 0.55), rgba(5, 16, 7, 0.55)), url('DJI_0369.JPG');
             border-color: rgba(163, 230, 53, 0.3);
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
@@ -184,10 +186,10 @@
 
         .home-frame {
             background-color: var(--card-bg);
-            border: 2px solid var(--active-color);
+            border: none; /* Borda removida! */
             border-radius: 16px;
             padding: 20px 40px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
             transition: all 0.4s ease;
             display: flex;
             flex-direction: column;
@@ -195,8 +197,7 @@
             justify-content: center;
         }
         body.dark-mode .home-frame {
-            border-color: var(--subtitle-color);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.5); /* Sem cor de borda aqui também */
         }
 
         .home-logo-frame { padding: 10px 20px; margin-top: 20px; margin-bottom: 30px; }
@@ -928,15 +929,14 @@
             </div>
 
             <div class="sub-tab-content" id="subtab-fotos-mirante">
-                <h3 style="color: var(--title-color); margin-bottom: 15px; text-align: center; font-size: 1.1rem; margin-top: 10px;">VISTA AÉREA</h3>
-                <div class="gallery-container">
-                    <div class="gallery-item" onclick="openPhotoModal('3.jpeg', this)"><img src="3.jpeg" alt="Foto"></div>
-                    <div class="gallery-item" onclick="openPhotoModal('5.jpeg', this)"><img src="5.jpeg" alt="Foto"></div>
-                    <div class="gallery-item" onclick="openPhotoModal('27.jpeg', this)"><img src="27.jpeg" alt="Foto"></div>
-                    <div class="gallery-item" onclick="openPhotoModal('8.jpg', this)"><img src="8.jpg" alt="Foto"></div>
-                    <div class="gallery-item" onclick="openPhotoModal('9.jpg', this)"><img src="9.jpg" alt="Foto"></div>
-                    <div class="gallery-item" onclick="openPhotoModal('33.jpg', this)"><img src="33.jpg" alt="Foto"></div>
-                </div>
+    <h3 style="color: var(--title-color); margin-bottom: 15px; text-align: center; font-size: 1.1rem; margin-top: 10px;">VISTA AÉREA</h3>
+    <div class="gallery-container">
+        <div class="gallery-item" onclick="openPhotoModal('AÉREANOVAMIRANTEDALAGOA01.jpeg', this)"><img src="AÉREANOVAMIRANTEDALAGOA01.jpeg" alt="Foto"></div>
+        <div class="gallery-item" onclick="openPhotoModal('AÉREANOVAMIRANTEDALAGOA02.jpeg', this)"><img src="AÉREANOVAMIRANTEDALAGOA02.jpeg" alt="Foto"></div>
+        <div class="gallery-item" onclick="openPhotoModal('AÉREANOVAMIRANTEDALAGOA03.jpeg', this)"><img src="AÉREANOVAMIRANTEDALAGOA03.jpeg" alt="Foto"></div>
+        <div class="gallery-item" onclick="openPhotoModal('AÉREANOVAMIRANTEDALAGOA04.jpeg', this)"><img src="AÉREANOVAMIRANTEDALAGOA04.jpeg" alt="Foto"></div>
+    </div>
+</div>
 
                 <h3 style="color: var(--title-color); margin-bottom: 15px; text-align: center; font-size: 1.1rem; margin-top: 15px;">CONSTRUÇÃO DO PARQUE LINEAR</h3>
                 <div class="gallery-container">
@@ -4564,9 +4564,9 @@
                     const style = document.createElement('style');
                     style.id = 'comparativo-styles';
                     style.innerHTML = `
-                        /* Cores que se adaptam automaticamente ao clicar na Lua/Sol */
-                        :root { --comp-bar: #1b5e20; --comp-text: #2c3e50; }
-                        body.dark-mode { --comp-bar: #a3e635; --comp-text: #e0e0e0; }
+                        /* Cores que se adaptam automaticamente ao clicar na Lua/Sol (Novo fundo intermediário) */
+                        :root { --comp-bar: #1b5e20; --comp-text: #2c3e50; --comp-bg: #f8fafc; }
+                        body.dark-mode { --comp-bar: #a3e635; --comp-text: #e0e0e0; --comp-bg: #173d1f; }
                         
                         /* Força a centralização elegante dos cards na aba Visão Geral (Cidade Nova ficará no meio) */
                         #tab-geral .executive { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
@@ -4586,9 +4586,9 @@
                     let sorted = [...obras].sort((a, b) => b[field] - a[field]);
                     let maxVal = sorted[0][field] || 1;
                     
-                    // Box minimalista envolvendo cada grupo
+                    // Box minimalista usando o novo fundo adaptável --comp-bg
                     let html = `
-                    <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; background: var(--bg-color-1); height: 100%; box-shadow: inset 0 0 10px rgba(0,0,0,0.02);">
+                    <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; background: var(--comp-bg); height: 100%; box-shadow: inset 0 0 10px rgba(0,0,0,0.02);">
                         <div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.85rem; font-weight: 700; color: var(--comp-text); margin-bottom: 15px; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px; transition: color 0.4s;">
                             ${svgIcon} ${title}
                         </div>`;

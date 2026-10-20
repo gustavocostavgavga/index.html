@@ -929,14 +929,13 @@
             </div>
 
             <div class="sub-tab-content" id="subtab-fotos-mirante">
-    <h3 style="color: var(--title-color); margin-bottom: 15px; text-align: center; font-size: 1.1rem; margin-top: 10px;">VISTA AÉREA</h3>
-    <div class="gallery-container">
-        <div class="gallery-item" onclick="openPhotoModal('AÉREANOVAMIRANTEDALAGOA01.jpeg', this)"><img src="AÉREANOVAMIRANTEDALAGOA01.jpeg" alt="Foto"></div>
-        <div class="gallery-item" onclick="openPhotoModal('AÉREANOVAMIRANTEDALAGOA02.jpeg', this)"><img src="AÉREANOVAMIRANTEDALAGOA02.jpeg" alt="Foto"></div>
-        <div class="gallery-item" onclick="openPhotoModal('AÉREANOVAMIRANTEDALAGOA03.jpeg', this)"><img src="AÉREANOVAMIRANTEDALAGOA03.jpeg" alt="Foto"></div>
-        <div class="gallery-item" onclick="openPhotoModal('AÉREANOVAMIRANTEDALAGOA04.jpeg', this)"><img src="AÉREANOVAMIRANTEDALAGOA04.jpeg" alt="Foto"></div>
-    </div>
-</div>
+                <h3 style="color: var(--title-color); margin-bottom: 15px; text-align: center; font-size: 1.1rem; margin-top: 10px;">VISTA AÉREA</h3>
+                <div class="gallery-container">
+                    <div class="gallery-item" onclick="openPhotoModal('AÉREANOVAMIRANTEDALAGOA01.jpeg', this)"><img src="AÉREANOVAMIRANTEDALAGOA01.jpeg" alt="Vista Aérea 01"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('AÉREANOVAMIRANTEDALAGOA02.jpeg', this)"><img src="AÉREANOVAMIRANTEDALAGOA02.jpeg" alt="Vista Aérea 02"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('AÉREANOVAMIRANTEDALAGOA03.jpeg', this)"><img src="AÉREANOVAMIRANTEDALAGOA03.jpeg" alt="Vista Aérea 03"></div>
+                    <div class="gallery-item" onclick="openPhotoModal('AÉREANOVAMIRANTEDALAGOA04.jpeg', this)"><img src="AÉREANOVAMIRANTEDALAGOA04.jpeg" alt="Vista Aérea 04"></div>
+                </div>
 
                 <h3 style="color: var(--title-color); margin-bottom: 15px; text-align: center; font-size: 1.1rem; margin-top: 15px;">CONSTRUÇÃO DO PARQUE LINEAR</h3>
                 <div class="gallery-container">
@@ -3134,14 +3133,23 @@
         function openPhotoModal(imgSrc, element) {
             resetGlobalZoom();
             const modal = document.getElementById('photoGlobalModal');
-            document.getElementById('photoGlobalImage').src = imgSrc;
+            const imgEl = document.getElementById('photoGlobalImage');
+            
+            // Corrige caminhos codificados (URLs com espaços)
+            let decodeSrc = decodeURI(imgSrc);
+            imgEl.src = decodeSrc;
+            
             if (element) {
                 const gallery = element.closest('.gallery-container');
                 if (gallery) {
-                    currentGalleryImages = Array.from(gallery.querySelectorAll('img')).map(img => img.getAttribute('src'));
-                    currentImageIndex = currentGalleryImages.indexOf(imgSrc);
+                    currentGalleryImages = Array.from(gallery.querySelectorAll('img')).map(img => decodeURI(img.getAttribute('src')));
+                    // Encontra o índice exato comparando strings limpas
+                    currentImageIndex = currentGalleryImages.findIndex(src => src.includes(decodeSrc) || decodeSrc.includes(src));
                     if(currentImageIndex === -1) currentImageIndex = 0;
                 }
+            } else {
+                currentGalleryImages = [decodeSrc];
+                currentImageIndex = 0;
             }
             modal.style.display = 'flex';
             setTimeout(() => modal.classList.add('active'), 10);
@@ -3150,14 +3158,19 @@
         function closePhotoModal() {
             const modal = document.getElementById('photoGlobalModal');
             modal.classList.remove('active');
-            setTimeout(() => { modal.style.display = 'none'; resetGlobalZoom(); }, 300);
+            setTimeout(() => { 
+                modal.style.display = 'none'; 
+                document.getElementById('photoGlobalImage').src = ''; // Limpa a memória para evitar fantasmas
+                resetGlobalZoom(); 
+            }, 300);
         }
 
         function changePhoto(direction) {
-            if (currentGalleryImages.length === 0) return;
+            if (!currentGalleryImages || currentGalleryImages.length === 0) return;
             currentImageIndex += direction;
             if (currentImageIndex >= currentGalleryImages.length) currentImageIndex = 0;
             else if (currentImageIndex < 0) currentImageIndex = currentGalleryImages.length - 1;
+            
             document.getElementById('photoGlobalImage').src = currentGalleryImages[currentImageIndex];
             resetGlobalZoom();
         }

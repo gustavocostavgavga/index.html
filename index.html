@@ -2519,6 +2519,18 @@
     </div>
 
     <!-- MODAL: Detalhamento do Comprometido + Projetado -->
+<!-- MODAL: Atividades do Ranking Top 5 -->
+    <div class="modal gauge-modal" id="modalRankingActivities" onclick="if(event.target===this) closeAllModals()">
+        <div class="gauge-modal-box" style="max-width: 650px; padding: 25px; text-align: left; max-height: 85vh; display: flex; flex-direction: column;">
+            <span class="gauge-modal-close" onclick="closeAllModals()">&times;</span>
+            <h3 id="rankingActivitiesTitle" style="margin-bottom: 5px; text-align: center; color: var(--title-color);">Título</h3>
+            <p id="rankingActivitiesObra" style="text-align: center; font-size: 0.85rem; color: var(--subtitle-color); margin-bottom: 20px; font-weight: 700; text-transform: uppercase;">OBRA</p>
+            
+            <div style="overflow-y: auto; flex: 1; padding-right: 15px;" id="rankingActivitiesContent">
+                <!-- Conteúdo injetado via JS -->
+            </div>
+        </div>
+    </div>
     <div class="modal gauge-modal" id="modalBreakdownProjetado" onclick="if(event.target===this) closeAllModals()">
         <div class="gauge-modal-box" style="max-width: 800px; padding: 25px; text-align: left; max-height: 90vh; display: flex; flex-direction: column;">
             <span class="gauge-modal-close" onclick="closeAllModals()">&times;</span>
@@ -3024,6 +3036,107 @@
         const cidadenovaFisicoRaw = [0.0];
         const pendenciasCidadeNova = { 'ETAPA BASE': ['Aguardando informações.'] };
 
+	// =========================================================================
+        // DADOS DE ATIVIDADES PARA OS MODAIS DE RANKING (TOP 5)
+        // =========================================================================
+        const rankingActivitiesDB = {
+            mirante: {
+                inv: {
+                    'PAVIMENTAÇÃO TOTAL': ['Pavimentação completa dos trechos pendentes', 'Recapeamento completo do empreendimento'],
+                    'ELETRIFICAÇÃO': ['Finalização da infraestrutura elétrica completa'],
+                    'RESERVATÓRIO / ADUTORA': ['Refazimento completo da rede adutora', 'Execução completa do sistema de captação de água dos poços artesianos', 'Eletrificação dos poços artesianos', 'Automação dos poços artesianos', 'Execução completa do sistema de captação de água nos reservatórios', 'Construção das casas de química e alambrados'],
+                    'REDE DE ÁGUA POTÁVEL': ['Execução completa da rede de água pendente', 'Recuperação completa da rede de água com patologias identificadas'],
+                    'GUIAS E SARJETAS': ['Execução das guias e sarjetas pendentes', 'Recuperação completa das guias e sarjetas antigas', 'Pintura completa dos meios-fios']
+                },
+                proj: {
+                    'MEIO AMBIENTE': ['Construção da calçada de pedestres do parque linear', 'Pintura de ciclovia', 'Paisagismo do parque linear'],
+                    'RESERVATÓRIO / ADUTORA': ['Teste dos reservatórios', 'Infraestrutura elétrica das casas de química', 'Acabamentos finais das casas de química'],
+                    'SISTEMA DE ESGOTO SANITÁRIO': ['Teste da rede de esgoto', 'Emissão de laudo técnico sobre a integridade da rede de esgoto'],
+                    'ESTAÇÃO ELEVATÓRIA DE ESGOTO': ['Finalização do tratamento preliminar (instalação de comportas e grades)', 'Execução de contrapartida ao SAE (Revitalização da área)', 'Construção de leito de secagem exigido pelo SAE'],
+                    'REDE DE ÁGUA POTÁVEL': ['Teste final da rede de distribuição', 'Emissão de laudo técnico sobre a integridade da rede de água']
+                }
+            },
+            joaquim: {
+                inv: {
+                    'ENERGIA / ILUMINAÇÃO': ['Execução completa da infraestrutura elétrica pendente'],
+                    'RESERVATÓRIO / ADUTORA': ['Aquisição e instalação da estrutura do reservatório', 'Contratação de projetos (estrutural, fundação, inspeções, SPDA, sondagens, etc)', 'Execução completa da base do reservatório', 'Interligações hidráulicas do reservatório na rede existente', 'Execução parcial da rede adutora (até próximo da área de jurisdição do DER)'],
+                    'INDIRETO DE OBRAS': ['Custo fixo de apontador de obras', 'Custo fixo de encarregado de obras', 'Custo fixo de vigilância patrimonial de obras', 'Custos gerais de deslocamento, hospedagem e alimentação durante a vigência da obra', 'Custos gerais de canteiro de obras (containers, proteções, sinalizações, etc).'],
+                    'DRENAGEM': ['Execução completa da rede de drenagem pendente, com exceção da ala dissipadora.', 'Recuperação completa da rede de drenagem antiga com patologias identificadas.'],
+                    'MANUTENÇÕES / AS-BUILTS': ['Limpezas do empreendimento', 'Custos de projetos, desenhos técnicos, despesas cartoriais etc.', 'Impressões e cópias']
+                },
+                proj: {
+                    'OBRA DE ACESSO': ['Elaboração de projetos', 'Execução completa da obra do acesso ao empreendimento (topografia, terraplenagem, drenagem e pavimentação).'],
+                    'SISTEMA DE ESGOTO SANITÁRIO': ['Construção completa do interceptor de esgoto'],
+                    'DRENAGEM': ['Construção de ala dissipadora'],
+                    'ESTAÇÃO ELEVATÓRIA DE ESGOTO': ['Aquisição e instalação do booster', 'Construção de abrigo do booster e de painel elétrico de automação e alimentação elétrica', 'Construção da linha de recalque', 'Travessia MND pela rodovia BR-154'],
+                    'TOPOGRAFIA DE ENTREGA': ['Execução completa da topografia de demarcação de lotes']
+                }
+            },
+            parque: {
+                inv: {
+                    'DRENAGEM': ['Execução parcial da rede de drenagem pendente', 'Recuperação completa da rede de drenagem antiga com patologias'],
+                    'LIMPEZA / MANUTENÇÕES': ['Limpezas do empreendimento', 'Despesas cartoriais, custos de projetos, licenças, consultorias técnicas, etc.', 'Proteções de obras'],
+                    'INDIRETO DE OBRAS': ['Custo fixo de encarregado de obras', 'Custos de deslocamento (combustível e pedágio)', 'Custos de vigilante provisório'],
+                    'TOPOGRAFIA': ['Acompanhamento de topografia durante obras de infraestrutura de drenagem', 'Levantamentos topográficos'],
+                    'DIAGNÓSTICO DE OBRAS EXIST.': ['Sondagem de rede de drenagem para identificação de patologias']
+                },
+                proj: {
+                    'PAVIMENTAÇÃO': ['Execução completa da pavimentação pendente'],
+                    'ACESSO': ['Elaboração de projetos', 'Execução completa da obra do acesso ao empreendimento (topografia, terraplenagem, drenagem e pavimentação).'],
+                    'GUIAS E SARJETAS': ['Recuperação completa das guias e sarjetas', 'Pintura completa dos meios-fios'],
+                    'REDE COLETORA DE ESGOTO': ['Finalização da rede de esgoto (recuperação de poços de visita, recomposição de ramais prediais e construção de rede)'],
+                    'REDE DE ÁGUA - RESERVAÇÃO': ['Regularização completa do reservatório (interligações hidráulicas, SPDA, barriletes, etc).']
+                }
+            },
+            cidadenova: { inv: {}, proj: {} }
+        };
+
+        function formatRoman(num) {
+            const roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+            return roman[num] || String(num + 1);
+        }
+
+        function openRankingActivitiesModal(obraId, type, titleText) {
+            const data = rankingActivitiesDB[obraId]?.[type];
+            if (!data) return;
+
+            let html = '';
+            for (const [etapa, atividades] of Object.entries(data)) {
+                html += `
+                    <div style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;">
+                        <h4 style="color: var(--title-color); font-size: 0.95rem; margin-bottom: 10px; text-transform: uppercase;">${etapa}</h4>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tbody>
+                `;
+                atividades.forEach((ativ, index) => {
+                    html += `
+                        <tr>
+                            <td style="width: 30px; text-align: right; padding-right: 10px; font-weight: bold; color: var(--subtitle-color); vertical-align: top; border: none;">${formatRoman(index)}</td>
+                            <td style="text-align: left; color: var(--text-color-base); font-size: 0.85rem; padding: 2px 0; border: none; vertical-align: top;">${ativ}</td>
+                        </tr>
+                    `;
+                });
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+
+            const modalTitle = document.getElementById('rankingActivitiesTitle');
+            const modalObra = document.getElementById('rankingActivitiesObra');
+            const modalContent = document.getElementById('rankingActivitiesContent');
+
+            if(modalTitle) modalTitle.textContent = titleText;
+            if(modalObra) {
+                if (obraId === 'mirante') modalObra.textContent = 'MIRANTE DA LAGOA';
+                else if (obraId === 'joaquim') modalObra.textContent = 'JOAQUIM LEME';
+                else if (obraId === 'parque') modalObra.textContent = 'PARQUE DAS NAÇÕES';
+            }
+            if(modalContent) modalContent.innerHTML = html;
+
+            document.getElementById('modalRankingActivities').classList.add('active');
+        }
         const dataMaps = {
             'mirante': { labels: miranteEtapas, orcado: miranteOrcado, investido: miranteComprometido, projetado: miranteProjetadoFuturo, pendencias: pendenciasMirante },
             'joaquim': { labels: joaquimEtapas, orcado: joaquimOrcado, investido: joaquimComprometido, projetado: joaquimProjetadoFuturo, pendencias: pendenciasJoaquim },
@@ -3188,6 +3301,7 @@
             document.getElementById('modalBreakdownProjetado').classList.remove('active');
             document.getElementById('modalDesembolsoComprometido').classList.remove('active');
             document.getElementById('modalDesembolsoMes').classList.remove('active');
+            document.getElementById('modalRankingActivities').classList.remove('active');
 	    document.getElementById('modalBuscaFornecedores').classList.remove('active');
             
             // Fecha o novo modal de Insights
@@ -4303,11 +4417,15 @@
             const coresVerde = ['#1b5e20', '#2e7d32', '#388e3c', '#4caf50', '#81c784'];
             const coresDesvio = ['#d32f2f', '#f57c00', '#ffa000', '#fbc02d', '#fff176']; 
 
-            function buildHTML(title, data, isDesvio, legenda) {
+            function buildHTML(title, data, isDesvio, typeKey, legenda) {
                 let maxVal = data.length > 0 ? data[0].valor || 1 : 1;
                 if(maxVal <= 0) maxVal = 1;
 
-                let html = `<div class="chart-title" style="margin-bottom: 20px; font-size: 0.95rem; text-align: center;">${title}</div>`;
+                const headerCursorStyle = !isDesvio ? 'cursor: pointer; transition: color 0.3s;' : '';
+                const headerHoverAction = !isDesvio ? `onmouseover="this.style.color='var(--active-color)'" onmouseout="this.style.color='var(--title-color)'"` : '';
+                const headerClickAction = !isDesvio ? `onclick="openRankingActivitiesModal('${obraId}', '${typeKey}', '${title}')"` : '';
+
+                let html = `<div class="chart-title" style="margin-bottom: 20px; font-size: 0.95rem; text-align: center; ${headerCursorStyle}" ${headerHoverAction} ${headerClickAction} title="${!isDesvio ? 'Clique para ver o detalhamento das atividades' : ''}">${title} ${!isDesvio ? '<span style="font-size: 0.8rem; opacity: 0.7;">🖱️</span>' : ''}</div>`;
                 
                 data.forEach((item, index) => {
                     if (isDesvio && item.valor <= 0) return;
@@ -4329,7 +4447,6 @@
                         let novoCustoStr = Math.round(item.eac).toLocaleString('pt-BR'); 
                         let pctStr = item.valor.toFixed(1).replace('.', ',');
 
-                        // Desvio em destaque no topo, Orçado e Novo Custo na base (verde)
                         valStr = `<div style="display: flex; flex-direction: column; gap: 3px; line-height: 1.1; text-align: right;">
                                       <span style="font-size: 0.72rem; font-weight: 700; color: var(--text-color-base);">Desvio: R$ ${desvioStr} (+${pctStr}%)</span>
                                       <span style="font-weight: 600; color: var(--subtitle-color); font-size: 0.60rem; white-space: nowrap;">
@@ -4340,15 +4457,16 @@
                         valStr = `<span style="font-size: 0.75rem;">R$ ${Math.round(item.valor).toLocaleString('pt-BR')}</span>`;
                     }
 
-                    // MÁGICA DO LAYOUT AQUI:
-                    // Se for a coluna de Desvio, usamos 100% do quadro e reduzimos a margem inferior para a altura total empatar com os outros quadros.
                     let margemInferior = isDesvio ? '15px' : '25px';
                     let larguraQuadro = isDesvio ? '100%' : '75%';
                     let paddingLateral = isDesvio ? '0 10px' : '0';
                     let larguraBarra = isDesvio ? '30%' : '55%';
+                    
+                    const itemCursorStyle = !isDesvio ? 'cursor: pointer;' : 'cursor: default;';
+                    const itemClickAction = !isDesvio ? `onclick="openRankingActivitiesModal('${obraId}', '${typeKey}', '${title}')"` : '';
 
                     html += `
-                    <div class="top5-item-container" style="margin-bottom: ${margemInferior}; width: ${larguraQuadro}; padding: ${paddingLateral}; margin-left: auto; margin-right: auto; cursor: default; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <div class="top5-item-container" style="margin-bottom: ${margemInferior}; width: ${larguraQuadro}; padding: ${paddingLateral}; margin-left: auto; margin-right: auto; ${itemCursorStyle} transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'" ${itemClickAction}>
                         <div class="top5-item-title" style="font-size: 0.65rem; font-weight: 700; color: var(--text-color-base); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">${item.etapa}</div>
                         <div class="top5-item-row" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%;">
                             <div class="top5-bar-track" style="width: ${larguraBarra}; height: 16px;">
@@ -4374,6 +4492,7 @@
                 'Maiores Investimentos Realizados', 
                 topInv, 
                 false, 
+                'inv',
                 'Valores totalizados pela soma de "Desembolsos + Verbas Comprometidas" por etapa.'
             );
             
@@ -4381,6 +4500,7 @@
                 'Maiores Projeções de Investimento', 
                 topProj, 
                 false, 
+                'proj',
                 'Valores gerados pelo planejamento de obras frente ao orçamento aprovado por etapa.'
             );
             
@@ -4388,6 +4508,7 @@
                 'Maiores Desvios Projetados', 
                 topDesv, 
                 true, 
+                'desv',
                 null
             );
         }
@@ -4407,34 +4528,31 @@
         let globalInsightIndex = 0;
         const insightsDB = {
             'mirante': [
-                { icon: '💰', title: 'Orçamento Geral', text: 'Projeção de extrapolação no fechamento (cerca de +3,1%), exigindo monitoramento rigoroso e travas nas etapas finais de execução.' },
-                { icon: '🛣️', title: 'Pavimentação', text: 'Principal ofensor do orçamento da obra. O custo final projetado superou substancialmente a linha de base inicial, demandando forte revisão e adequação técnica.' },
-                { icon: '💧', title: 'Reservatório e Adutora', text: 'O desvio orçamentário de 11,2% decorre da inviabilidade técnica de aproveitamento da infraestrutura pré-existente. Constatou-se a necessidade de execução integral de uma nova rede adutora, garantindo a integridade e eficiência do sistema.' },
-                { icon: '🚰', title: 'Rede de Água Potável', text: 'Durante a fase de comissionamento e testes de distribuição, identificaram-se falhas estruturais e vazamentos em trechos executados pela gestão anterior. A mitigação dessas patologias está resultando em um incremento projetado de até 80% no custo da etapa.' },
-                { icon: '🛡️', title: 'Ações Mitigadoras', text: 'Acelerar a entrega do loteamento e o repasse das redes às concessionárias para cessar imediatamente os Gastos Indiretos (vigilância, manutenção de canteiro), que seguem dilapidando o saldo disponível.' },
-                { icon: '🌳', title: 'Meio Ambiente', text: 'Projeta-se uma otimização orçamentária de aproximadamente 22% através da readequação técnica do projeto paisagístico e do Parque Linear. A estratégia assegura a manutenção do valor comercial agregado ao empreendimento, alinhando a execução às premissas de eficiência e controle de custos.' },
-                { icon: '⚡', title: 'Eletrificação', text: 'A empresa contratada para execução da infraestrutura elétrica pendente mobilizou ao empreendimento para finalizar as obras e viabilizar a manobra de energização no dia 20/08/2026.' },
-                { icon: '📈', title: 'Visão Estratégica', text: 'Assumimos a gestão com a obra em andamento e, mediante um diagnóstico técnico criterioso, implementamos um controle orçamentário rigoroso. Essa atuação cirúrgica mitigou os passivos herdados por falhas técnicas anteriores, contendo desvios estruturais e garantindo a viabilidade comercial do ativo, com um custo por lote fortemente preservado.' }
+                { icon: '💰', title: 'Orçamento Geral', text: 'Projeção de extrapolação no fechamento (cerca de +3,28%), exigindo monitoramento rigoroso e travas nas etapas finais de execução.' },
+                { icon: '🚰', title: 'Rede de Água Potável', text: 'Durante a fase de comissionamento e testes de distribuição, identificaram-se falhas estruturais e inúmeros vazamentos em trechos executados pela gestão anterior. A mitigação dessas patologias está resultando em um incremento projetado de até 201,2% no custo da etapa, configurando-se como o maior desvio orçamentário da obra.' },
+                { icon: '🌳', title: 'Meio Ambiente', text: 'Projeta-se uma otimização orçamentária de aproximadamente 53,20% através da readequação técnica do projeto paisagístico e do Parque Linear. A estratégia assegura a manutenção do valor comercial agregado ao empreendimento, alinhando a execução às premissas de eficiência e controle de custos.' },
+                { icon: '💧', title: 'Reservatório / Adutora', text: 'A conclusão das casas de química com seu devido cercamento foi um importante passo rumo a finalização das obras de saneamento do empreendimento.' }
             ],
             'joaquim': [
-                { icon: '💰', title: 'Orçamento Geral', text: 'Cenário positivo, sinalizado uma expressiva economia projetada de aproximadamente 10%, em relação à linha de base.' },
-                { icon: '💧', title: 'Reservatório / Adutora', text: 'Destaca-se como o maior gerador de economia, projetando um custo 41,6% menor que o previsto inicialmente, resultado de uma parceria estratégica com um empreendimento vizinho para o rateio das despesas da obra.' },
-                { icon: '🚧', title: 'Obras de acesso e entorno', text: 'Apresentam tendência de encostar no teto do orçamento previsto, sendo essenciais as aprovações executivas precisas para não corroer o saldo ganho em outras frentes.' },
-                { icon: '🔄', title: 'Sistema de Esgoto Sanitário e E.E.E', text: 'Tendência de economia devido a nova parceria firmada com vizinhos do empreendimento da nossa empresa.' },
-                { icon: '🌧️', title: 'Drenagem', text: 'O entendimento técnico da necessidade de execução de um dissipador conforme o projeto aprovado anteriormente será crucial para evitar uma extrapolação de até 65% do orçamento aprovado para a etapa.' },
-                { icon: '⚡', title: 'Eletrificação', text: 'A obra de infraestrutura elétrica foi 100% concluída e entregue à CEMIG, com a obtenção do CCO, marcando um avanço importantíssimo considerando o histórico desafiador do projeto.' },
-                { icon: '📈', title: 'Visão Estratégica Institucional', text: 'A rigorosa gestão orçamentária conteve falhas herdadas da gestão anterior. Parcerias estratégicas para divisão de custos viabilizaram uma economia significativa, garantindo um custo/lote atrativo e a viabilidade de comercialização do ativo.' }
+                { icon: '💰', title: 'Orçamento Geral', text: 'Cenário positivo, sinalizado uma expressiva economia projetada de aproximadamente 10,75%, em relação à linha de base.' },
+                { icon: '🔄', title: 'Sistema de Esgoto Sanitário e E.E.E', text: 'Tendência de economia de 18% viabilizada por meio de parcerias estratégicas firmadas com os empreendimentos vizinhos (Residencial Oliveiras e Ypê do Lago), visando o alinhamento de interesses e a otimização de custos para a entrega conjunta dos sistemas ao SAE.' },
+                { icon: '🌧️', title: 'Drenagem', text: 'O entendimento técnico da necessidade de execução de um dissipador conforme o projeto aprovado inicialmente será crucial para evitar uma extrapolação de até 65% do orçamento aprovado para a etapa.' },
+                { icon: '🚧', title: 'Pavimentação', text: 'A operação de recuperação asfáltica encontra-se em fase de conclusão. Sob a ótica financeira, a contratação assegurou uma economia projetada de até 50% frente ao orçamento inicial, resultado da consolidação de uma nova parceria com um fornecedor estratégico local.' },
+                { icon: '⚡', title: 'Eletrificação', text: 'A infraestrutura elétrica foi entregue completamente a CEMIG e recebemos o CCO, o que representa uma conquista enorme diante do contexto histórico da obra.' },
+                { icon: '📍', title: 'Topografia de Entrega', text: 'Identificou-se que o município dispensa a exigência de topografia de demarcação de lotes para o recebimento da obra. A viabilidade de exclusão deste escopo está sob análise técnica interna e poderá gerar uma redução de até R$ 80.000,00 no balanço orçamentário do projeto.' },
+                { icon: '🛡️', title: 'Indireto de Obras', text: 'É imperativa a aceleração do cronograma de conclusão para mitigar os custos recorrentes com vigilância, serviço atualmente indispensável para resguardar a infraestrutura investida dada a localização isolada do empreendimento. A desmobilização oportuna desta rubrica será determinante para a otimização financeira final.' }
             ],
             'parque': [
-                { icon: '💰', title: 'Orçamento Geral', text: 'Projeção indica aderência quase total ao orçamento original (desvio de apenas +0,44%), evidenciando a precisão do diagnóstico preliminar e margem para manobras cirúrgicas.' },
+                { icon: '💰', title: 'Orçamento Geral', text: 'Projeção indica aderência quase total ao orçamento original (desvio de apenas +0,31%), evidenciando a precisão do diagnóstico preliminar e margem para manobras cirúrgicas.' },
                 { icon: '🛣️', title: 'Pavimentação', text: 'Representa a maior fatia do orçamento com expressivos R$ 3,15M. O sucesso financeiro da obra passa invariavelmente pela eficiência na compra e execução deste escopo crítico.' },
                 { icon: '🚰', title: 'Rede de Saneamento', text: 'Água potável permanece como frente 100% projetada (ainda sem investimento consolidado expressivo).' },
-                { icon: '🌧️', title: 'Drenagem', text: 'Identificou-se um desvio projetado de 15% nesta etapa devido à necessidade de corrigir diversas patologias apontadas durante o diagnóstico e a reconstrução da rede. Para finalizar, resta a execução das caixas das bocas de lobo e o alteamento dos poços de visita.' },
-                { icon: '🛡️', title: 'Ações Preventivas', text: 'Intensificar campanhas de sondagem prévias e controle tecnológico rigoroso antes da liberação das frentes de infraestrutura pesada, para balizar os orçamentos vindouros.' },
-                { icon: '🔄', title: 'Saneamento', text: 'Com a drenagem quase concluída (90%), o foco agora se volta para os desafios de validar e diagnosticar as redes de água e esgoto existentes. Estratégias já foram traçadas para resolver essas pendências e destravar as próximas fases. Ao mesmo tempo, novos pacotes de serviços estão sendo montados para garantir a finalização completa do saneamento e a entrega do loteamento conforme o planejado.' }
+                { icon: '🌧️', title: 'Drenagem', text: 'A etapa está com 15% de desvio projetado dado a inúmeras patologias que tiveram de ser tratadas durante a execução do diagnóstico e reconstrução da rede, faltando ativar a construção das caixas das bocas de lobo e alteamento dos poços de visita para conclusão.' },
+                { icon: '🚧', title: 'Proteção de Obras', text: 'Dada a aproximação do período com maior incidência de precipitações, torna-se essencial a execução de medidas preventivas de contenção e proteção do terreno, visando resguardar a integridade das infraestruturas já implantadas.' },
+                { icon: '✅', title: 'Saneamento', text: 'Os projetos de abastecimento de água e esgotamento sanitário obtiveram aprovação integral junto à COPASA, representando um marco fundamental para a plena regularização e avanço legal do empreendimento.' }
             ],
-	
-	'cidadenova': [ { icon: '🏗️', title: 'Aguardando Dados', text: 'Informações e diagnósticos desta obra serão processados futuramente.' } ]
+            'cidadenova': [
+                { icon: '🏗️', title: 'Aguardando Dados', text: 'Informações e diagnósticos desta obra serão processados futuramente.' }
+            ]
         };
 
        function openGlobalInsightsModal() {

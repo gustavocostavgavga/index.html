@@ -3054,6 +3054,13 @@
                     'SISTEMA DE ESGOTO SANITÁRIO': ['Teste da rede de esgoto', 'Emissão de laudo técnico sobre a integridade da rede de esgoto'],
                     'ESTAÇÃO ELEVATÓRIA DE ESGOTO': ['Finalização do tratamento preliminar (instalação de comportas e grades)', 'Execução de contrapartida ao SAE (Revitalização da área)', 'Construção de leito de secagem exigido pelo SAE'],
                     'REDE DE ÁGUA POTÁVEL': ['Teste final da rede de distribuição', 'Emissão de laudo técnico sobre a integridade da rede de água']
+                },
+                desv: {
+                    'REDE DE ÁGUA POTÁVEL': ['Necessidade de execução de 214 pontos de reparos nas rede de distribuição de água', 'Locação de gerador para testes na rede', 'Aquisição de materiais para reposição', 'Locação de maquinários e equipamentos complementares'],
+                    'TERRAPLANAGEM': ['Execução de terraplanagem da avenida projetada 01 para adaptação do projeto de pavimentação', 'Limpezas de manutenção de calçadas e obras de contenção contra efeito das chuvas'],
+                    'SISTEMA DE ESGOTO SANITÁRIO': ['Previsão de verba para reparos na rede de esgoto (patologias e obstruções)'],
+                    'INDIRETO DE OBRAS': ['Custo de acompanhamento de obras (encarregado, deslocamento, hospedagem, alimentação, etc).', 'Custo com vigilância', 'Custo com canteiro de obras (container, energia, equipamentos, etc).'],
+                    'ELETRIFICAÇÃO': ['Aquisição de materiais para reposição de pontos com patologias', 'Adicional de mão de obra devido ao cancelamento da data agendada de energização pela CEMIG']
                 }
             },
             joaquim: {
@@ -3070,6 +3077,13 @@
                     'DRENAGEM': ['Construção de ala dissipadora'],
                     'ESTAÇÃO ELEVATÓRIA DE ESGOTO': ['Aquisição e instalação do booster', 'Construção de abrigo do booster e de painel elétrico de automação e alimentação elétrica', 'Construção da linha de recalque', 'Travessia MND pela rodovia BR-154'],
                     'TOPOGRAFIA DE ENTREGA': ['Execução completa da topografia de demarcação de lotes']
+                },
+                desv: {
+                    'TOPOGRAFIA DE ENTREGA': ['Eventual necessidade de demarcar os lotes após a separação total das unidades'],
+                    'DRENAGEM': ['Possibilidade de execução do dissipador conforme aprovado inicialmente pela antiga administração'],
+                    'INDIRETO DE OBRAS': ['Custos fixos de vigia, encarregado, apontador e complementares como deslocamento, alimentação, hospedagem, etc.'],
+                    'TOPOGRAFIA E CONTROLE': ['Acompanhamento de topografia das obras de infraestrutura'],
+                    'MEIO AMBIENTE / PRAÇAS': ['Construção de praça na rotatória central e implantação de paisagismo nos canteiros centrais']
                 }
             },
             parque: {
@@ -3086,9 +3100,16 @@
                     'GUIAS E SARJETAS': ['Recuperação completa das guias e sarjetas', 'Pintura completa dos meios-fios'],
                     'REDE COLETORA DE ESGOTO': ['Finalização da rede de esgoto (recuperação de poços de visita, recomposição de ramais prediais e construção de rede)'],
                     'REDE DE ÁGUA - RESERVAÇÃO': ['Regularização completa do reservatório (interligações hidráulicas, SPDA, barriletes, etc).']
+                },
+                desv: {
+                    'REDE COLETORA DE ESGOTO': ['Projeção de verba para recuperação e execução de pendências da rede de esgoto (poços de visita, rede e ramais)'],
+                    'DRENAGEM': ['Necessidade de execução de diagnóstico e recuperação completa da rede de drenagem', 'Projeção de verba para finalização da rede com execução de caixas das bocas de lobo'],
+                    'TOPOGRAFIA': ['Acompanhamento de topografia das obras de infraestrutura'],
+                    'REDE DE ÁGUA - ADUÇÃO': ['Projeção de verba para regularização da rede de adução'],
+                    'LIMPEZA / MANUTENÇÕES': ['Projeção de verba para limpeza de quadras e ruas para pavimentação e proteção da obra contra efeitos da chuva']
                 }
             },
-            cidadenova: { inv: {}, proj: {} }
+            cidadenova: { inv: {}, proj: {}, desv: {} }
         };
 
         function formatRoman(num) {
@@ -3096,23 +3117,56 @@
             return roman[num] || String(num + 1);
         }
 
-        function openRankingActivitiesModal(obraId, type, titleText) {
+       function openRankingActivitiesModal(obraId, type, titleText) {
             const data = rankingActivitiesDB[obraId]?.[type];
             if (!data) return;
 
             let html = '';
             for (const [etapa, atividades] of Object.entries(data)) {
+                
+                // MÁGICA AQUI: findIndex com toUpperCase() ignora diferenças de maiúsculas/minúsculas ("e" vs "E")
+                const etapaIdx = dataMaps[obraId].labels.findIndex(l => l.toUpperCase() === etapa.toUpperCase());
+                let informacaoDireita = '';
+                
+                if (etapaIdx !== -1) {
+                    if (type === 'inv') {
+                        const valor = Math.round(dataMaps[obraId].investido[etapaIdx]).toLocaleString('pt-BR');
+                        informacaoDireita = `<span style="font-size: 0.90rem; font-weight: 700; color: var(--text-color-base);">R$ ${valor}</span>`;
+                    } else if (type === 'proj') {
+                        const valor = Math.round(dataMaps[obraId].projetado[etapaIdx]).toLocaleString('pt-BR');
+                        informacaoDireita = `<span style="font-size: 0.90rem; font-weight: 700; color: var(--text-color-base);">R$ ${valor}</span>`;
+                    } else if (type === 'desv') {
+                        const orc = dataMaps[obraId].orcado[etapaIdx];
+                        const eac = dataMaps[obraId].investido[etapaIdx] + dataMaps[obraId].projetado[etapaIdx];
+                        const desvio = eac - orc;
+                        const pct = orc > 0 ? (desvio / orc * 100).toFixed(1).replace('.', ',') : '0,0';
+
+                        informacaoDireita = `
+                            <div style="text-align: right; color: var(--text-color-base); font-size: 0.72rem; line-height: 1.3;">
+                                <div style="font-weight: 500;">Orçado: R$ ${Math.round(orc).toLocaleString('pt-BR')}</div>
+                                <div style="font-weight: 500;">Desvio: R$ ${Math.round(desvio).toLocaleString('pt-BR')} (+${pct}%)</div>
+                                <div style="font-weight: 700;">Novo Custo: R$ ${Math.round(eac).toLocaleString('pt-BR')}</div>
+                            </div>
+                        `;
+                    }
+                }
+
                 html += `
-                    <div style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;">
-                        <h4 style="color: var(--title-color); font-size: 0.95rem; margin-bottom: 10px; text-transform: uppercase;">${etapa}</h4>
+                    <div style="margin-bottom: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;">
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                            <h4 style="color: var(--title-color); font-size: 0.95rem; margin: 0; text-transform: uppercase;">${etapa}</h4>
+                            ${informacaoDireita}
+                        </div>
+
                         <table style="width: 100%; border-collapse: collapse;">
                             <tbody>
                 `;
                 atividades.forEach((ativ, index) => {
                     html += `
                         <tr>
-                            <td style="width: 30px; text-align: right; padding-right: 10px; font-weight: bold; color: var(--subtitle-color); vertical-align: top; border: none;">${formatRoman(index)}</td>
-                            <td style="text-align: left; color: var(--text-color-base); font-size: 0.85rem; padding: 2px 0; border: none; vertical-align: top;">${ativ}</td>
+                            <td style="width: 35px; text-align: right; padding: 4px 12px 4px 0; font-weight: 800; color: var(--subtitle-color); vertical-align: top; border: none; font-size: 0.85rem; line-height: 1.4;">${formatRoman(index)}</td>
+                            <td style="text-align: left; color: var(--text-color-base); font-size: 0.85rem; padding: 4px 0; border: none; vertical-align: top; line-height: 1.4;">${ativ}</td>
                         </tr>
                     `;
                 });
@@ -4421,11 +4475,12 @@
                 let maxVal = data.length > 0 ? data[0].valor || 1 : 1;
                 if(maxVal <= 0) maxVal = 1;
 
-                const headerCursorStyle = !isDesvio ? 'cursor: pointer; transition: color 0.3s;' : '';
-                const headerHoverAction = !isDesvio ? `onmouseover="this.style.color='var(--active-color)'" onmouseout="this.style.color='var(--title-color)'"` : '';
-                const headerClickAction = !isDesvio ? `onclick="openRankingActivitiesModal('${obraId}', '${typeKey}', '${title}')"` : '';
+                // Agora todos são clicáveis
+                const headerCursorStyle = 'cursor: pointer; transition: color 0.3s;';
+                const headerHoverAction = `onmouseover="this.style.color='var(--active-color)'" onmouseout="this.style.color='var(--title-color)'"`;
+                const headerClickAction = `onclick="openRankingActivitiesModal('${obraId}', '${typeKey}', '${title}')"`;
 
-                let html = `<div class="chart-title" style="margin-bottom: 20px; font-size: 0.95rem; text-align: center; ${headerCursorStyle}" ${headerHoverAction} ${headerClickAction} title="${!isDesvio ? 'Clique para ver o detalhamento das atividades' : ''}">${title} ${!isDesvio ? '<span style="font-size: 0.8rem; opacity: 0.7;">🖱️</span>' : ''}</div>`;
+                let html = `<div class="chart-title" style="margin-bottom: 20px; font-size: 0.95rem; text-align: center; ${headerCursorStyle}" ${headerHoverAction} ${headerClickAction}>${title}</div>`;
                 
                 data.forEach((item, index) => {
                     if (isDesvio && item.valor <= 0) return;
@@ -4462,8 +4517,8 @@
                     let paddingLateral = isDesvio ? '0 10px' : '0';
                     let larguraBarra = isDesvio ? '30%' : '55%';
                     
-                    const itemCursorStyle = !isDesvio ? 'cursor: pointer;' : 'cursor: default;';
-                    const itemClickAction = !isDesvio ? `onclick="openRankingActivitiesModal('${obraId}', '${typeKey}', '${title}')"` : '';
+                    const itemCursorStyle = 'cursor: pointer;';
+                    const itemClickAction = `onclick="openRankingActivitiesModal('${obraId}', '${typeKey}', '${title}')"`;
 
                     html += `
                     <div class="top5-item-container" style="margin-bottom: ${margemInferior}; width: ${larguraQuadro}; padding: ${paddingLateral}; margin-left: auto; margin-right: auto; ${itemCursorStyle} transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'" ${itemClickAction}>
@@ -4481,9 +4536,9 @@
                 });
 
                 if (isDesvio) {
-                    html += `<div class="ranking-warning" style="font-size: 0.65rem; color: var(--text-color-base); font-style: italic; margin-top: auto; line-height: 1.4; border-top: 1px dashed var(--border-color); padding-top: 12px; text-align: justify; opacity: 0.8;"><strong>Aviso:</strong> A porcentagem em "Maiores desvios" representa a projeção de estouro (Projetado + Investido > Orçamento Aprovado). Diferente do gráfico "Saldo Disponível por Etapa", que avalia apenas o Orçamento Total contraposto pelo Investimento Atual.</div>`;
+                    html += `<div class="ranking-warning" style="font-size: 0.65rem; color: var(--text-color-base); font-style: italic; margin-top: auto; line-height: 1.4; border-top: 1px dashed var(--border-color); padding-top: 12px; text-align: justify; opacity: 0.8;"><strong>Aviso:</strong> A porcentagem em "Maiores desvios" representa a projeção de estouro (Projetado + Investido > Orçamento Aprovado). Diferente do gráfico "Saldo Disponível por Etapa", que avalia apenas o Orçamento Total contraposto pelo Investimento Atual. <strong>Clique para visualizar mais detalhes.</strong></div>`;
                 } else if (legenda) {
-                    html += `<div class="ranking-warning" style="font-size: 0.65rem; color: var(--text-color-base); font-style: italic; margin-top: auto; line-height: 1.4; border-top: 1px dashed var(--border-color); padding-top: 12px; text-align: justify; opacity: 0.8;"><strong>Legenda:</strong> ${legenda}</div>`;
+                    html += `<div class="ranking-warning" style="font-size: 0.65rem; color: var(--text-color-base); font-style: italic; margin-top: auto; line-height: 1.4; border-top: 1px dashed var(--border-color); padding-top: 12px; text-align: justify; opacity: 0.8;"><strong>Legenda:</strong> ${legenda} <strong>Clique para visualizar mais detalhes.</strong></div>`;
                 }
                 return html;
             }

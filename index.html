@@ -4754,17 +4754,13 @@
             // --- FIM DOS CÁLCULOS DE DESVIO ORÇAMENTÁRIO ---
 
 	// --- GRÁFICOS COMPARATIVOS VISÃO GERAL ---
-            function renderComparativosGeral() {
-                // 1. Injeção de CSS Dinâmico para resolver cores, tema noturno e centralização da Cidade Nova
+           function renderComparativosGeral() {
                 if (!document.getElementById('comparativo-styles')) {
                     const style = document.createElement('style');
                     style.id = 'comparativo-styles';
                     style.innerHTML = `
-                        /* Cores que se adaptam automaticamente ao clicar na Lua/Sol (Novo fundo intermediário) */
                         :root { --comp-bar: #1b5e20; --comp-text: #2c3e50; --comp-bg: #f8fafc; }
                         body.dark-mode { --comp-bar: #a3e635; --comp-text: #e0e0e0; --comp-bg: #173d1f; }
-                        
-                        /* Força a centralização elegante dos cards na aba Visão Geral (Cidade Nova ficará no meio) */
                         #tab-geral .executive { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
                         #tab-geral .executive-column { flex: 1 1 320px; max-width: 420px; }
                     `;
@@ -4782,16 +4778,24 @@
                     let sorted = [...obras].sort((a, b) => b[field] - a[field]);
                     let maxVal = sorted[0][field] || 1;
                     
-                    // Box minimalista usando o novo fundo adaptável --comp-bg
                     let html = `
-                    <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; background: var(--comp-bg); height: 100%; box-shadow: inset 0 0 10px rgba(0,0,0,0.02);">
+                    <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; background: var(--comp-bg); height: 100%; box-shadow: inset 0 0 10px rgba(0,0,0,0.02); display: flex; flex-direction: column;">
                         <div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.85rem; font-weight: 700; color: var(--comp-text); margin-bottom: 15px; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px; transition: color 0.4s;">
                             ${svgIcon} ${title}
-                        </div>`;
+                        </div>
+                        <div style="flex: 1;">`;
                     
+                    let sum = 0;
+                    let activeCount = 0;
+
                     sorted.forEach(item => {
                         let pctBarra = item[field] > 0 ? Math.max((item[field] / maxVal) * 100, 2) : 2;
                         let valStr = isMoney ? `R$ ${Math.round(item[field]).toLocaleString('pt-BR')}` : Math.round(item[field]).toLocaleString('pt-BR');
+                        
+                        if (item[field] > 0) {
+                            sum += item[field];
+                            activeCount++;
+                        }
                         
                         html += `
                         <div style="margin-bottom: 12px; width: 100%; cursor: default; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
@@ -4807,12 +4811,29 @@
                         </div>
                         `;
                     });
-                    html += `</div>`;
+
+                    // Lógica para Total ou Média Global
+                    let finalValue = sum;
+                    let labelTotal = 'TOTAL GERAL';
+                    
+                    if (field === 'custo') {
+                        finalValue = activeCount > 0 ? (sum / activeCount) : 0;
+                        labelTotal = 'MÉDIA GLOBAL';
+                    }
+                    
+                    let finalStr = isMoney ? `R$ ${Math.round(finalValue).toLocaleString('pt-BR')}` : Math.round(finalValue).toLocaleString('pt-BR');
+
+                    html += `</div>
+                        <div style="margin-top: 10px; border-top: 1px solid var(--border-color); padding-top: 12px; display: flex; align-items: center; justify-content: space-between; font-weight: 800; color: var(--title-color); font-size: 0.8rem; transition: color 0.4s;">
+                            <span>${labelTotal}</span>
+                            <span>${finalStr}</span>
+                        </div>
+                    </div>`;
+
                     const el = document.getElementById(containerId);
                     if (el) el.innerHTML = html;
                 }
 
-                // Ícones Vetoriais Minimalistas, Sem Cor Fixa (Pegam a cor do texto ativo)
                 const iconOrc = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg>`;
                 const iconLotes = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>`;
                 const iconCusto = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>`;

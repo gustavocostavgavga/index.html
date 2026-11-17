@@ -565,6 +565,72 @@
         .top5-val-money { width: 110px; text-align: right; }
         .top5-val-separator { color: var(--subtitle-color); font-weight: 400; }
         .top5-val-pct { width: 45px; text-align: left; }
+
+	/* ESTILOS DA MATRIZ DE FLUXO (ESTILO EXCEL CONGELADO) */
+        .matrix-table-wrapper {
+            max-height: 65vh;
+            overflow: auto;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--card-bg);
+            margin-top: 10px;
+        }
+        .matrix-table {
+            width: max-content;
+            min-width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 0.75rem;
+        }
+        .matrix-table th {
+            position: sticky;
+            top: 0;
+            background: var(--table-th-bg);
+            color: var(--title-color);
+            z-index: 10;
+            padding: 10px 15px;
+            border-bottom: 2px solid var(--border-color);
+            border-right: 1px dashed var(--table-border);
+            text-align: center;
+            white-space: nowrap;
+        }
+        .matrix-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--table-border);
+            border-right: 1px dashed var(--table-border);
+            white-space: nowrap;
+            color: var(--text-color-base);
+            text-align: right;
+        }
+        /* Congelando a Primeira Coluna (Etapas) */
+        .matrix-table th:first-child,
+        .matrix-table td:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 11;
+            text-align: left;
+            font-weight: 700;
+            color: var(--title-color);
+            border-right: 2px solid var(--border-color);
+        }
+        .matrix-table td:first-child {
+            background: var(--card-bg);
+        }
+        .matrix-table th:first-child {
+            z-index: 12; /* Canto superior esquerdo fica acima de tudo */
+            background: var(--table-th-bg);
+        }
+        /* Linha de Total no Rodapé */
+        .matrix-table tfoot td {
+            position: sticky;
+            bottom: 0;
+            background: var(--table-th-bg);
+            z-index: 10;
+            font-weight: 800;
+            color: var(--title-color);
+            border-top: 2px solid var(--border-color);
+        }
+        .matrix-table tfoot td:first-child { z-index: 11; }
         
         /* Estilos para o novo quadro de 3 colunas (Rankings) */
         .ranking-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
@@ -848,7 +914,8 @@
            
             <div class="sub-tab-content" id="subtab-historico-mirante">
                 <div class="chart-container" style="margin-bottom: 20px; position: relative;">
-                    <div class="chart-title">Histórico e Projeção de Desembolsos</div>
+                    <button class="resumo-btn" onclick="openFluxoMatrizModal('mirante')" style="top: 15px; left: 15px; right: auto; background: var(--title-color); color: #fff; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">📊 Ver Tabela Dinâmica Mensal</button>
+		    <div class="chart-title">Histórico e Projeção de Desembolsos</div>
                     <canvas id="chartMiranteHistorico"></canvas>
                     <div class="summary-container">
                         <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 7.735.615,00</div></div>
@@ -1308,7 +1375,8 @@
 
             <div class="sub-tab-content" id="subtab-historico-joaquim">
                 <div class="chart-container" style="margin-bottom: 20px; position: relative;">
-                    <div class="chart-title">Histórico e Projeção de Desembolsos</div>
+                    <button class="resumo-btn" onclick="openFluxoMatrizModal('joaquim')" style="top: 15px; left: 15px; right: auto; background: var(--title-color); color: #fff; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">📊 Ver Tabela Dinâmica Mensal</button>
+	            <div class="chart-title">Histórico e Projeção de Desembolsos</div>
                     <canvas id="chartJoaquimHistorico"></canvas>
                     <div class="summary-container">
                         <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 3.686.750,00</div></div>
@@ -1768,7 +1836,8 @@
 
             <div class="sub-tab-content" id="subtab-historico-parque">
                 <div class="chart-container" style="margin-bottom: 20px; position: relative;">
-                    <div class="chart-title">Histórico e Projeção de Desembolsos</div>
+                    <button class="resumo-btn" onclick="openFluxoMatrizModal('parque')" style="top: 15px; left: 15px; right: auto; background: var(--title-color); color: #fff; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">📊 Ver Tabela Dinâmica Mensal</button>
+		    <div class="chart-title">Histórico e Projeção de Desembolsos</div>
                     <canvas id="chartParqueHistorico"></canvas>
                     <div class="summary-container">
                         <div class="summary-box"><div class="summary-title">Valor Total Desembolsado no Período</div><div class="summary-value">R$ 576.173,25</div></div>
@@ -2632,6 +2701,24 @@
             </div>
         </div>
     </div>
+
+<!-- MODAL: Matriz Completa do Fluxo de Desembolsos (Estilo Excel) -->
+    <div class="modal gauge-modal" id="modalFluxoMatriz" onclick="if(event.target===this) closeAllModals()">
+        <div class="gauge-modal-box" style="max-width: 95vw; width: 100%; padding: 25px; text-align: left; display: flex; flex-direction: column;">
+            <span class="gauge-modal-close" onclick="closeAllModals()">&times;</span>
+            <h3 style="margin-bottom: 5px; text-align: center; color: var(--title-color);">Matriz Completa de Desembolsos por Etapa</h3>
+            <p id="matrizObraTitle" style="text-align: center; font-size: 0.8rem; color: var(--subtitle-color); margin-bottom: 20px; font-weight: 600;">OBRA</p>
+            
+            <div class="matrix-table-wrapper">
+                <table class="matrix-table" id="matrizTable">
+                    <thead id="matrizTableHead"></thead>
+                    <tbody id="matrizTableBody"></tbody>
+                    <tfoot id="matrizTableFoot"></tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <script>
         const insightStates = { mirante: 0, joaquim: 0, parque: 0 };
         function moveInsight(obra, direction) {
@@ -2814,69 +2901,92 @@
         // LEITURA DA NOVA PLANILHA "dados.xlsx" (OBRAS NA MESMA ABA)
         // =========================================================================
         
-        const csvHistoricoData = { mirante: {}, joaquim: {}, parque: {} };
+        const csvHistoricoData = { mirante: {}, joaquim: {}, parque: {}, cidadenova: {} };
 
         async function carregarDadosExcel() {
             try {
+                // ATENÇÃO: Renomeie o arquivo na sua pasta do GitHub para "dados.xlsx" 
+                // OU altere o nome do arquivo na linha abaixo para o exato que você subiu:
                 const response = await fetch('./dados.xlsx'); 
                 if (!response.ok) throw new Error("Arquivo Excel não encontrado.");
                 
                 const arrayBuffer = await response.arrayBuffer();
-                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-                const primeiraAba = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[primeiraAba];
+                const workbook = XLSX.read(arrayBuffer, { type: 'array', cellDates: true });
                 
-                const linhas = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "", raw: false });
+                // O código agora caça automaticamente a aba "FLUXO ORÇAMENTARIO"
+                let sheetName = workbook.SheetNames.find(s => s.toUpperCase().includes('FLUXO') && s.toUpperCase().includes('ORÇ'));
+                if (!sheetName) sheetName = workbook.SheetNames[0]; 
+                
+                const worksheet = workbook.Sheets[sheetName];
+                const linhas = XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: false });
                 processarLinhasExcel(linhas);
             } catch (error) {
                 console.warn("Erro ao carregar a planilha Excel:", error);
             }
         }
 
+        // Tradutor universal de datas para casar com o padrão mmm/yy do painel
+        function formatarMes(str) {
+            str = String(str).toLowerCase().trim();
+            const mapMeses = { 'jan':'jan', 'feb':'fev', 'fev':'fev', 'mar':'mar', 'apr':'abr', 'abr':'abr', 'may':'mai', 'mai':'mai', 'jun':'jun', 'jul':'jul', 'aug':'ago', 'ago':'ago', 'sep':'set', 'set':'set', 'oct':'out', 'out':'out', 'nov':'nov', 'dec':'dez', 'dez':'dez' };
+            
+            let matchAno = str.match(/20(2[3-7])/) || str.match(/\/([2][3-7])/);
+            let ano2d = matchAno ? matchAno[1] : '';
+
+            let matchDate = str.match(/202[3-7]-(\d{2})-\d{2}/);
+            if (matchDate && ano2d) {
+                const nomes = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+                return nomes[parseInt(matchDate[1], 10) - 1] + '/' + ano2d;
+            }
+            
+            for (let chave in mapMeses) {
+                if (str.includes(chave) && ano2d) return mapMeses[chave] + '/' + ano2d;
+            }
+            return str;
+        }
+
         function processarLinhasExcel(linhas) {
             let obraAtual = null;
-            let cabecalhoEtapas = [];
+            let mesesMap = {}; 
             
             for (let i = 0; i < linhas.length; i++) {
                 let linha = linhas[i].map(c => String(c).trim());
                 let rowStr = linha.join(" ").toUpperCase();
                 
-                if (rowStr.includes("FLUXO DE DESEMBOLSOS")) {
-                    if (rowStr.includes("MIRANTE")) obraAtual = "mirante";
-                    else if (rowStr.includes("JOAQUIM")) obraAtual = "joaquim";
-                    else if (rowStr.includes("PARQUE")) obraAtual = "parque";
-                    
-                    cabecalhoEtapas = linha; 
+                // 1. Identifica a obra pelas faixas azuis da planilha
+                if (rowStr.includes("MIRANTE DA LAGOA")) { obraAtual = "mirante"; continue; }
+                if (rowStr.includes("JOAQUIM LEME")) { obraAtual = "joaquim"; continue; }
+                if (rowStr.includes("PARQUE DAS NAÇÕES")) { obraAtual = "parque"; continue; }
+                if (rowStr.includes("CIDADE NOVA")) { obraAtual = "cidadenova"; continue; }
+                
+                // 2. Mapeia em quais colunas (0,1,2...) estão os meses
+                if (linha[0].toUpperCase() === "DESCRIÇÃO" || linha[0].toUpperCase().includes("ETAPA")) {
+                    mesesMap = {};
+                    for (let j = 1; j < linha.length; j++) {
+                        let mesPadrao = formatarMes(linha[j]);
+                        if (mesPadrao.includes('/')) mesesMap[j] = mesPadrao; 
+                    }
                     continue;
                 }
                 
-                if (!obraAtual || rowStr === "" || rowStr.includes("TOTAL")) continue;
+                if (!obraAtual || Object.keys(mesesMap).length === 0 || rowStr === "" || linha[0].toUpperCase() === "TOTAL") continue;
                 
-                let mesStr = "";
-                for (let c = 0; c < 3; c++) {
-                    if (linha[c] && (linha[c].includes('/') || linha[c].includes('-'))) {
-                        mesStr = linha[c].toLowerCase().replace(/\s+/g, '').replace('-', '/');
-                        break;
-                    }
-                }
-                if (!mesStr) mesStr = linha[1] ? linha[1].toLowerCase().trim() : "";
-                if (!mesStr) continue;
+                let nomeEtapa = linha[0];
+                if (!nomeEtapa) continue;
 
-                if (!csvHistoricoData[obraAtual][mesStr]) {
-                    csvHistoricoData[obraAtual][mesStr] = [];
-                }
-                
-                for (let j = 0; j < linha.length; j++) {
-                    let nomeEtapa = cabecalhoEtapas[j];
-                    if (!nomeEtapa || j < 2) continue; 
-                    
-                    let valorStr = String(linha[j]).replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.');
+                // 3. Desce alocando os valores nos meses corretos
+                for (let j in mesesMap) {
+                    let mesStr = mesesMap[j];
+                    let valorStr = String(linha[j] || "0").replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.');
                     let valorFloat = parseFloat(valorStr);
                     if (isNaN(valorFloat)) valorFloat = 0;
                     
                     if (valorFloat !== 0) {
+                        if (!csvHistoricoData[obraAtual][mesStr]) {
+                            csvHistoricoData[obraAtual][mesStr] = [];
+                        }
                         csvHistoricoData[obraAtual][mesStr].push({
-                            etapa: nomeEtapa,
+                            etapa: nomeEtapa.toUpperCase(),
                             valor: valorFloat
                         });
                     }
@@ -3356,6 +3466,7 @@
             document.getElementById('modalDesembolsoMes').classList.remove('active');
             document.getElementById('modalRankingActivities').classList.remove('active');
 	    document.getElementById('modalBuscaFornecedores').classList.remove('active');
+	    document.getElementById('modalFluxoMatriz').classList.remove('active');
             
             // Fecha o novo modal de Insights
             const modalInsights = document.getElementById('modalInsightsGlobal');
@@ -3537,6 +3648,96 @@
             });
             document.getElementById('modalResumoPendencias').classList.add('active');
         }
+	function openFluxoMatrizModal(obraId) {
+            const isMirante = obraId === 'mirante';
+            const isJoaquim = obraId === 'joaquim';
+            const isParque = obraId === 'parque';
+            
+            const nomeObra = isMirante ? 'MIRANTE DA LAGOA' : isJoaquim ? 'JOAQUIM LEME' : isParque ? 'PARQUE DAS NAÇÕES' : 'CIDADE NOVA';
+            document.getElementById('matrizObraTitle').textContent = nomeObra;
+            
+            const thead = document.getElementById('matrizTableHead');
+            const tbody = document.getElementById('matrizTableBody');
+            const tfoot = document.getElementById('matrizTableFoot');
+            
+            // 1. Cabeçalho (Meses)
+            let headHtml = '<tr><th>Macro Etapa</th>';
+            mesesHistorico.forEach(mes => {
+                headHtml += `<th>${mes.toUpperCase()}</th>`;
+            });
+            headHtml += '<th style="background: var(--active-color); color: #fff;">TOTAL ETAPA</th></tr>';
+            thead.innerHTML = headHtml;
+            
+            // 2. Corpo (Etapas e Valores)
+            let bodyHtml = '';
+            const etapas = dataMaps[obraId].labels;
+            let totaisMes = new Array(mesesHistorico.length).fill(0);
+            let totalGeral = 0;
+            
+            etapas.forEach(etapa => {
+                let rowHtml = `<tr><td>${etapa}</td>`;
+                let totalEtapa = 0;
+                
+                mesesHistorico.forEach((mes, idx) => {
+                    const mesKey = mes.toLowerCase().replace('-', '/').trim();
+                    let dadosMes = csvHistoricoData[obraId][mesKey];
+                    
+                    if (!dadosMes) {
+                        const possibleKeys = Object.keys(csvHistoricoData[obraId]);
+                        const matchedKey = possibleKeys.find(k => k.includes(mesKey) || mesKey.includes(k));
+                        if (matchedKey) dadosMes = csvHistoricoData[obraId][matchedKey];
+                    }
+                    
+                    let val = 0;
+                    if (dadosMes) {
+                        const item = dadosMes.find(d => d.etapa.toUpperCase().trim() === etapa.toUpperCase().trim());
+                        if (item) val = item.valor;
+                    }
+                    
+                    totalEtapa += val;
+                    totaisMes[idx] += val;
+                    totalGeral += val;
+                    
+                    // Se for 0, coloca um traço para manter limpo
+                    rowHtml += `<td>${val !== 0 ? val.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) : '-'}</td>`;
+                });
+                
+                rowHtml += `<td style="font-weight: bold; color: var(--title-color); background: var(--insight-bg);">${totalEtapa.toLocaleString('pt-BR', {style:'currency', currency:'BRL'})}</td></tr>`;
+                bodyHtml += rowHtml;
+            });
+            tbody.innerHTML = bodyHtml;
+            
+            // 3. Rodapé (Totais Mensais)
+            let footHtml = '<tr><td>TOTAL MENSAL</td>';
+            totaisMes.forEach(tot => {
+                footHtml += `<td>${tot !== 0 ? tot.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) : '-'}</td>`;
+            });
+            footHtml += `<td style="color: #fff; background: var(--active-color);">${totalGeral.toLocaleString('pt-BR', {style:'currency', currency:'BRL'})}</td></tr>`;
+            tfoot.innerHTML = footHtml;
+            
+            document.getElementById('modalFluxoMatriz').classList.add('active');
+        }
+// Injeta os botões da Tabela Dinâmica automaticamente nos 3 gráficos
+        window.addEventListener('DOMContentLoaded', () => {
+            ['mirante', 'joaquim', 'parque'].forEach(obra => {
+                // Monta o ID do canvas (ex: chartMiranteHistorico)
+                let nomeId = obra.charAt(0).toUpperCase() + obra.slice(1);
+                let canvas = document.getElementById('chart' + nomeId + 'Historico');
+                
+                if (canvas) {
+                    let container = canvas.closest('.chart-container');
+                    // Cria o botão se ele ainda não existir
+                    if (container && !container.querySelector('.btn-tabela-dinamica')) {
+                        let btn = document.createElement('button');
+                        btn.className = 'resumo-btn btn-tabela-dinamica';
+                        btn.innerHTML = '📊 Ver Tabela Dinâmica Mensal';
+                        btn.style.cssText = 'top: 15px; left: 15px; right: auto; background: var(--title-color); color: #fff; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 100;';
+                        btn.onclick = () => openFluxoMatrizModal(obra);
+                        container.appendChild(btn);
+                    }
+                }
+            });
+        });
 
         function createMainGauge(canvasId, valOrcado, valDesembolso, valComprometidoTotal, customLabels = null) {
             const maxEscala = valOrcado > 0 ? (valOrcado / 0.75) : 100; 

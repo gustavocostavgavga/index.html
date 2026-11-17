@@ -2901,46 +2901,61 @@
         // LEITURA DA NOVA PLANILHA "dados.xlsx" (OBRAS NA MESMA ABA)
         // =========================================================================
         
-        const csvHistoricoData = { mirante: {}, joaquim: {}, parque: {}, cidadenova: {} };
+       const csvHistoricoData = { mirante: {}, joaquim: {}, parque: {}, cidadenova: {} };
 
         async function carregarDadosExcel() {
             try {
-                // ATENÇÃO: Renomeie o arquivo na sua pasta do GitHub para "dados.xlsx" 
-                // OU altere o nome do arquivo na linha abaixo para o exato que você subiu:
+                // Aponta estritamente para o arquivo "dados.xlsx" no GitHub
                 const response = await fetch('./dados.xlsx'); 
-                if (!response.ok) throw new Error("Arquivo Excel não encontrado.");
+                if (!response.ok) throw new Error("Arquivo 'dados.xlsx' não encontrado.");
                 
                 const arrayBuffer = await response.arrayBuffer();
                 const workbook = XLSX.read(arrayBuffer, { type: 'array', cellDates: true });
                 
-                // O código agora caça automaticamente a aba "FLUXO ORÇAMENTARIO"
-                let sheetName = workbook.SheetNames.find(s => s.toUpperCase().includes('FLUXO') && s.toUpperCase().includes('ORÇ'));
+                let sheetName = workbook.SheetNames.find(s => s.toUpperCase().includes('FLUXO') && (s.toUpperCase().includes('ORÇ') || s.toUpperCase().includes('ORC')));
                 if (!sheetName) sheetName = workbook.SheetNames[0]; 
                 
                 const worksheet = workbook.Sheets[sheetName];
                 const linhas = XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: false });
                 processarLinhasExcel(linhas);
             } catch (error) {
-                console.warn("Erro ao carregar a planilha Excel:", error);
+                console.error("Erro ao carregar dados.xlsx:", error);
             }
         }
 
-        // Tradutor universal de datas para casar com o padrão mmm/yy do painel
         function formatarMes(str) {
             str = String(str).toLowerCase().trim();
-            const mapMeses = { 'jan':'jan', 'feb':'fev', 'fev':'fev', 'mar':'mar', 'apr':'abr', 'abr':'abr', 'may':'mai', 'mai':'mai', 'jun':'jun', 'jul':'jul', 'aug':'ago', 'ago':'ago', 'sep':'set', 'set':'set', 'oct':'out', 'out':'out', 'nov':'nov', 'dec':'dez', 'dez':'dez' };
+            const mapPt = { 'jan':'jan', 'fev':'fev', 'feb':'fev', 'mar':'mar', 'abr':'abr', 'apr':'abr', 'mai':'mai', 'may':'mai', 'jun':'jun', 'jul':'jul', 'ago':'ago', 'aug':'ago', 'set':'set', 'sep':'set', 'out':'out', 'oct':'out', 'nov':'nov', 'dez':'dez', 'dec':'dez' };
             
-            let matchAno = str.match(/20(2[3-7])/) || str.match(/\/([2][3-7])/);
-            let ano2d = matchAno ? matchAno[1] : '';
+            let anoMatch = str.match(/20(2[3-9])/);
+            let ano = anoMatch ? anoMatch[1] : '';
+            if(!ano) {
+                let anoCurto = str.match(/\/([2][3-9])/);
+                if(anoCurto) ano = anoCurto[1];
+            }
+            if(!ano) {
+                 let anoIso = str.match(/^20(2[3-9])-/);
+                 if (anoIso) ano = anoIso[1];
+            }
+            if(!ano) return str; 
 
-            let matchDate = str.match(/202[3-7]-(\d{2})-\d{2}/);
-            if (matchDate && ano2d) {
+            let isoMatch = str.match(/202[3-9]-(\d{2})-\d{2}/);
+            if (isoMatch) {
+                const num = parseInt(isoMatch[1], 10);
                 const nomes = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-                return nomes[parseInt(matchDate[1], 10) - 1] + '/' + ano2d;
+                if (num >= 1 && num <= 12) return nomes[num - 1] + '/' + ano;
             }
             
-            for (let chave in mapMeses) {
-                if (str.includes(chave) && ano2d) return mapMeses[chave] + '/' + ano2d;
+            let numMatch = str.match(/(\d{1,2})\/(\d{1,2})\/202[3-9]/) || str.match(/(\d{1,2})\/202[3-9]/);
+            if (numMatch) {
+                let mesNum = parseInt(numMatch.length === 2 ? numMatch[1] : numMatch[2], 10);
+                if (numMatch.length === 3 && mesNum > 12) mesNum = parseInt(numMatch[1], 10);
+                const nomes = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+                if(mesNum >= 1 && mesNum <= 12) return nomes[mesNum - 1] + '/' + ano;
+            }
+
+            for (let chave in mapPt) { 
+                if (str.includes(chave)) return mapPt[chave] + '/' + ano; 
             }
             return str;
         }
@@ -2953,14 +2968,12 @@
                 let linha = linhas[i].map(c => String(c).trim());
                 let rowStr = linha.join(" ").toUpperCase();
                 
-                // 1. Identifica a obra pelas faixas azuis da planilha
                 if (rowStr.includes("MIRANTE DA LAGOA")) { obraAtual = "mirante"; continue; }
                 if (rowStr.includes("JOAQUIM LEME")) { obraAtual = "joaquim"; continue; }
-                if (rowStr.includes("PARQUE DAS NAÇÕES")) { obraAtual = "parque"; continue; }
+                if (rowStr.includes("PARQUE DAS NAÇÕES") || rowStr.includes("PARQUE DAS NACOES")) { obraAtual = "parque"; continue; }
                 if (rowStr.includes("CIDADE NOVA")) { obraAtual = "cidadenova"; continue; }
                 
-                // 2. Mapeia em quais colunas (0,1,2...) estão os meses
-                if (linha[0].toUpperCase() === "DESCRIÇÃO" || linha[0].toUpperCase().includes("ETAPA")) {
+                if (linha[0].toUpperCase().includes("DESCRIÇÃO") || linha[0].toUpperCase().includes("DESCRICAO") || linha[0].toUpperCase().includes("ETAPA")) {
                     mesesMap = {};
                     for (let j = 1; j < linha.length; j++) {
                         let mesPadrao = formatarMes(linha[j]);
@@ -2974,7 +2987,6 @@
                 let nomeEtapa = linha[0];
                 if (!nomeEtapa) continue;
 
-                // 3. Desce alocando os valores nos meses corretos
                 for (let j in mesesMap) {
                     let mesStr = mesesMap[j];
                     let valorStr = String(linha[j] || "0").replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.');

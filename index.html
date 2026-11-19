@@ -13,6 +13,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
   
     
     <!-- BIBLIOTECA DO GANTT -->
@@ -566,21 +568,23 @@
         .top5-val-separator { color: var(--subtitle-color); font-weight: 400; }
         .top5-val-pct { width: 45px; text-align: left; }
 
-	/* ESTILOS DA MATRIZ DE FLUXO (ESTILO EXCEL CONGELADO) */
+	/* ESTILOS DA MATRIZ DE FLUXO (COMPACTA, SEM ROLAGEM VERTICAL) */
         .matrix-table-wrapper {
-            max-height: 65vh;
-            overflow: auto;
+            max-height: none;
+            overflow-x: auto;
+            overflow-y: visible;
             border: 2px solid var(--border-color);
             border-radius: 8px;
             background: var(--card-bg);
-            margin-top: 10px;
+            margin-top: 4px;
+            padding-top: 32px; /* Espaço exclusivo para os balões acima da linha tracejada */
         }
         .matrix-table {
             width: max-content;
             min-width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
         }
         .matrix-table th {
             position: sticky;
@@ -588,19 +592,21 @@
             background: var(--table-th-bg);
             color: var(--title-color);
             z-index: 10;
-            padding: 10px 15px;
+            padding: 6px 10px;
+            border-top: 1px solid var(--border-color);
             border-bottom: 2px solid var(--border-color);
             border-right: 1px dashed var(--table-border);
             text-align: center;
             white-space: nowrap;
         }
         .matrix-table td {
-            padding: 8px 12px;
+            padding: 5px 10px;
             border-bottom: 1px solid var(--table-border);
             border-right: 1px dashed var(--table-border);
             white-space: nowrap;
             color: var(--text-color-base);
             text-align: right;
+            line-height: 1.25;
         }
         /* Congelando a Primeira Coluna (Etapas) */
         .matrix-table th:first-child,
@@ -613,24 +619,121 @@
             color: var(--title-color);
             border-right: 2px solid var(--border-color);
         }
-        .matrix-table td:first-child {
-            background: var(--card-bg);
+        .matrix-table td:first-child { background: var(--card-bg); }
+        .matrix-table th:first-child { z-index: 13; background: var(--table-th-bg); }
+
+        /* Congelando a Última Coluna (TOTAL ETAPA) à direita */
+        .matrix-table th:last-child,
+        .matrix-table td:last-child,
+        .matrix-table tfoot td:last-child {
+            position: sticky;
+            right: 0;
+            z-index: 11;
+            border-left: 2px solid var(--border-color);
         }
-        .matrix-table th:first-child {
-            z-index: 12; /* Canto superior esquerdo fica acima de tudo */
-            background: var(--table-th-bg);
-        }
+        .matrix-table th:last-child { z-index: 13; }
+
         /* Linha de Total no Rodapé */
         .matrix-table tfoot td {
-            position: sticky;
-            bottom: 0;
             background: var(--table-th-bg);
-            z-index: 10;
             font-weight: 800;
             color: var(--title-color);
             border-top: 2px solid var(--border-color);
+            padding: 7px 10px;
         }
-        .matrix-table tfoot td:first-child { z-index: 11; }
+
+        /* Linha vertical tracejada vermelha separando Consolidado | Projeção */
+        .matrix-divider-cell {
+            border-right: 2.5px dashed #d32f2f !important;
+        }
+        .matrix-divider-th {
+            overflow: visible !important;
+            z-index: 14 !important;
+        }
+        .matrix-divider-badges {
+            position: absolute;
+            top: -26px;
+            right: -1.25px; /* Eixo exato da borda direita de 2.5px */
+            width: 0;
+            height: 20px;
+            overflow: visible;
+            z-index: 25;
+            pointer-events: none;
+        }
+        .divider-pipe {
+            position: absolute;
+            left: -1.25px;
+            top: 2px;
+            width: 0;
+            height: 16px;
+            border-left: 2.5px dashed #d32f2f;
+        }
+        .divider-side-left {
+            position: absolute;
+            right: 6px; /* Cresce exclusivamente para a esquerda da linha */
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+        .divider-side-right {
+            position: absolute;
+            left: 6px; /* Cresce exclusivamente para a direita da linha */
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+        .badge-consolidado {
+            background: #d32f2f;
+            color: #ffffff;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+        .badge-projecao {
+            background: #1976d2;
+            color: #ffffff;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+        .divider-arrow-left { color: #d32f2f; font-size: 0.72rem; font-weight: 800; }
+        .divider-arrow-right { color: #1976d2; font-size: 0.72rem; font-weight: 800; }
+        .divider-pipe { width: 0; height: 15px; border-left: 2.5px dashed #d32f2f; }
+
+        /* Botão de Download PDF acima de TOTAL ETAPA */
+        .btn-pdf-matriz {
+            background: #c62828;
+            color: #ffffff;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+            transition: all 0.25s ease;
+        }
+        .btn-pdf-matriz:hover {
+            background: #b71c1c;
+            transform: translateY(-1px);
+        }
         
         /* Estilos para o novo quadro de 3 colunas (Rankings) */
         .ranking-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
@@ -914,7 +1017,7 @@
            
             <div class="sub-tab-content" id="subtab-historico-mirante">
                 <div class="chart-container" style="margin-bottom: 20px; position: relative;">
-                    <button class="resumo-btn" onclick="openFluxoMatrizModal('mirante')" style="top: 15px; left: 15px; right: auto; background: var(--title-color); color: #fff; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">📊 Ver Tabela Dinâmica Mensal</button>
+                    <button class="resumo-btn" onclick="openFluxoMatrizModal('mirante')" style="top: 15px; left: 15px; right: auto; background: var(--title-color); color: #fff; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">📊 Tabela Desembolso x Etapa Mensal</button>
 		    <div class="chart-title">Histórico e Projeção de Desembolsos</div>
                     <canvas id="chartMiranteHistorico"></canvas>
                     <div class="summary-container">
@@ -1375,7 +1478,7 @@
 
             <div class="sub-tab-content" id="subtab-historico-joaquim">
                 <div class="chart-container" style="margin-bottom: 20px; position: relative;">
-                    <button class="resumo-btn" onclick="openFluxoMatrizModal('joaquim')" style="top: 15px; left: 15px; right: auto; background: var(--title-color); color: #fff; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">📊 Ver Tabela Dinâmica Mensal</button>
+                    <button class="resumo-btn" onclick="openFluxoMatrizModal('joaquim')" style="top: 15px; left: 15px; right: auto; background: var(--title-color); color: #fff; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">📊 Tabela Desembolso x Etapa Mensal</button>
 	            <div class="chart-title">Histórico e Projeção de Desembolsos</div>
                     <canvas id="chartJoaquimHistorico"></canvas>
                     <div class="summary-container">
@@ -1836,7 +1939,7 @@
 
             <div class="sub-tab-content" id="subtab-historico-parque">
                 <div class="chart-container" style="margin-bottom: 20px; position: relative;">
-                    <button class="resumo-btn" onclick="openFluxoMatrizModal('parque')" style="top: 15px; left: 15px; right: auto; background: var(--title-color); color: #fff; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">📊 Ver Tabela Dinâmica Mensal</button>
+                    <button class="resumo-btn" onclick="openFluxoMatrizModal('parque')" style="top: 15px; left: 15px; right: auto; background: var(--title-color); color: #fff; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">📊 Tabela Desembolso x Etapa Mensal</button>
 		    <div class="chart-title">Histórico e Projeção de Desembolsos</div>
                     <canvas id="chartParqueHistorico"></canvas>
                     <div class="summary-container">
@@ -2703,11 +2806,18 @@
     </div>
 
 <!-- MODAL: Matriz Completa do Fluxo de Desembolsos (Estilo Excel) -->
+    <!-- MODAL: Matriz Completa do Fluxo de Desembolsos (Estilo Excel) -->
     <div class="modal gauge-modal" id="modalFluxoMatriz" onclick="if(event.target===this) closeAllModals()">
-        <div class="gauge-modal-box" style="max-width: 95vw; width: 100%; padding: 25px; text-align: left; display: flex; flex-direction: column;">
+        <div class="gauge-modal-box" style="max-width: 96vw; width: 100%; padding: 18px 22px; text-align: left; display: flex; flex-direction: column;">
             <span class="gauge-modal-close" onclick="closeAllModals()">&times;</span>
-            <h3 style="margin-bottom: 5px; text-align: center; color: var(--title-color);">Matriz Completa de Desembolsos por Etapa</h3>
-            <p id="matrizObraTitle" style="text-align: center; font-size: 0.8rem; color: var(--subtitle-color); margin-bottom: 20px; font-weight: 600;">OBRA</p>
+            <h3 style="margin-bottom: 2px; text-align: center; color: var(--title-color); font-size: 1.05rem;">Matriz Completa de Desembolsos por Etapa</h3>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; gap: 10px;">
+                <div style="width: 140px;"></div>
+                <p id="matrizObraTitle" style="text-align: center; font-size: 0.8rem; color: var(--subtitle-color); margin: 0; font-weight: 700;">OBRA</p>
+                <div style="display: flex; justify-content: flex-end; min-width: 140px;">
+                    <button class="btn-pdf-matriz" id="btnExportMatrizPDF" onclick="exportarMatrizFluxoPDF()">📄 Baixar PDF</button>
+                </div>
+            </div>
             
             <div class="matrix-table-wrapper">
                 <table class="matrix-table" id="matrizTable">
@@ -2898,167 +3008,121 @@
         Chart.register(dateLimitPlugin);
 
         // =========================================================================
-        // LEITURA DA NOVA PLANILHA "dados.xlsx" (OBRAS NA MESMA ABA)
+        // DADOS EMBUTIDOS DO FLUXO DE DESEMBOLSOS (SEM DEPENDÊNCIA DE dados.xlsx)
         // =========================================================================
-        
-       const csvHistoricoData = { mirante: {}, joaquim: {}, parque: {}, cidadenova: {} };
+        const csvHistoricoData = { mirante: {}, joaquim: {}, parque: {}, cidadenova: {} };
 
-        async function carregarDadosExcel() {
-            try {
-                // Aponta estritamente para o arquivo "dados.xlsx" no GitHub
-                const response = await fetch('./dados.xlsx'); 
-                if (!response.ok) throw new Error("Arquivo 'dados.xlsx' não encontrado.");
-                
-                const arrayBuffer = await response.arrayBuffer();
-                const workbook = XLSX.read(arrayBuffer, { type: 'array', cellDates: true });
-                
-                let sheetName = workbook.SheetNames.find(s => s.toUpperCase().includes('FLUXO') && (s.toUpperCase().includes('ORÇ') || s.toUpperCase().includes('ORC')));
-                if (!sheetName) sheetName = workbook.SheetNames[0]; 
-                
-                const worksheet = workbook.Sheets[sheetName];
-                const linhas = XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: false });
-                processarLinhasExcel(linhas);
-            } catch (error) {
-                console.error("Erro ao carregar dados.xlsx:", error);
+        const fluxoEtapasMirante = {
+            'TOPOGRAFIA E CONTROLE': {
+                'nov/24': 1000.00, 'fev/25': 1300.00, 'mar/25': 5912.50, 'abr/25': 6500.00,
+                'mai/25': 6000.00, 'jun/25': 2800.00, 'jul/25': 2600.00, 'out/25': 3500.00,
+                'nov/25': 1600.00, 'dez/25': 4845.22, 'abr/26': 600.00, 'jun/26': 600.00
+            },
+            'MANUTENÇÕES / AS BUILTS': {
+                'mar/24': 6500.00, 'abr/24': 3720.00, 'jun/24': 6519.20, 'jul/24': 1700.00,
+                'ago/24': 3036.00, 'out/24': 8000.00, 'nov/24': 6500.00, 'jan/25': 7.00,
+                'fev/25': 3044.00, 'mar/25': 41940.00, 'abr/25': 9817.07, 'mai/25': 6556.00,
+                'jun/25': 121.00, 'jul/25': 13770.65, 'ago/25': 11797.03, 'set/25': 11075.00,
+                'out/25': 8335.00, 'nov/25': 3218.70, 'abr/26': 9823.00, 'mai/26': 80.67,
+                'jun/26': 41412.50, 'jul/26': 13893.00, 'ago/26': 125.79, 'set/26': 10857.00,
+                'out/26': 41.93, 'nov/26': 5000.00, 'dez/26': 5000.00
+            },
+            'TERRAPLANAGEM': {
+                'jun/24': 13000.00, 'jul/24': 14500.00, 'ago/24': 10000.00, 'nov/24': 3000.00,
+                'dez/24': 2000.00, 'jan/25': 4000.00, 'jan/26': 83924.06, 'fev/26': 2402.62,
+                'abr/26': 2000.00, 'ago/26': 85291.95, 'set/26': 19983.01
+            },
+            'DRENAGEM': {
+                'set/24': 3720.00, 'fev/25': 27280.00, 'mar/25': 6400.00, 'abr/25': 32406.92,
+                'mai/25': 18600.90, 'jun/25': 40592.00, 'jul/25': 550.00, 'set/25': 13287.50,
+                'out/25': 7750.72, 'nov/25': 19915.00, 'dez/25': 61233.08, 'jan/26': 9053.03,
+                'fev/26': -1137.39, 'mar/26': 2050.00, 'abr/26': 17070.00, 'mai/26': 10446.15,
+                'ago/26': 3999.00, 'set/26': 3150.00, 'nov/26': 14200.00
+            },
+            'REDE DE ÁGUA POTÁVEL': {
+                'set/24': 1000.00, 'out/24': 8900.00, 'fev/25': 3300.00, 'abr/25': 3763.36,
+                'mai/25': 1640.00, 'jun/25': 249.60, 'jul/25': 10955.01, 'ago/25': 32921.20,
+                'set/25': 1970.75, 'out/25': 78799.40, 'nov/25': 45519.42, 'dez/25': 2505.54,
+                'jan/26': 460.00, 'fev/26': -795.83, 'mai/26': 23368.40, 'jun/26': 17501.23,
+                'jul/26': 64436.90, 'ago/26': 215521.89, 'set/26': 88239.23, 'out/26': 24326.20,
+                'nov/26': 9639.00
+            },
+            'RESERVATÓRIO / ADUTORA': {
+                'fev/25': 19485.28, 'mar/25': 28221.62, 'abr/25': 42160.23, 'jun/25': 20050.00,
+                'jul/25': 22478.55, 'ago/25': 1800.00, 'set/25': 114636.46, 'out/25': 116225.99,
+                'nov/25': 105668.47, 'dez/25': 31026.44, 'jan/26': 4586.49, 'fev/26': 20485.51,
+                'mai/26': 4239.00, 'jun/26': 2575.00, 'jul/26': 15703.00, 'ago/26': 17957.47,
+                'set/26': 24856.40, 'out/26': 62681.15, 'nov/26': 74835.60
+            },
+            'SISTEMA DE ESGOTO SANITÁRIO': {
+                'set/24': 7080.00, 'fev/25': 5704.00, 'mar/25': 660.00, 'abr/25': 28048.17,
+                'mai/25': 1445.00, 'jun/25': 8685.00, 'jul/25': 272.00, 'ago/25': 14181.20,
+                'set/25': 1146.25, 'out/25': 76437.27, 'nov/25': 14625.40, 'dez/25': 9200.00,
+                'jan/26': 1275.00, 'jun/26': 2876.44, 'set/26': 1700.00, 'out/26': 14960.00,
+                'nov/26': 1950.00
+            },
+            'ESTAÇÃO ELEVATÓRIA DE ESGOTO': {
+                'abr/25': 31000.00, 'mai/25': 9895.01, 'jun/25': 14010.54, 'jul/25': 16264.84,
+                'ago/25': 17025.75, 'set/25': 24511.34, 'out/25': 7031.60, 'nov/25': 39809.00,
+                'dez/25': 8687.30, 'mar/26': 975.73, 'jun/26': 3316.73, 'jul/26': 5498.40,
+                'ago/26': 915.00, 'out/26': 898.00, 'nov/26': 75294.50
+            },
+            'GUIAS E SARJETAS': {
+                'jul/25': 50000.00, 'ago/25': 46822.80, 'set/25': 52611.39, 'out/25': 35088.18,
+                'nov/25': 173496.67, 'dez/25': 63964.18, 'jan/26': 73734.20, 'fev/26': 774.00,
+                'mar/26': 46712.53, 'set/26': 5913.25, 'out/26': 52020.16
+            },
+            'PAVIMENTAÇÃO TOTAL': {
+                'jul/25': 59502.00, 'ago/25': 257047.11, 'set/25': 145482.07, 'out/25': 187180.59,
+                'nov/25': 397987.99, 'dez/25': 178446.23, 'jan/26': 105785.75, 'mai/26': 250000.00,
+                'jun/26': 282000.00, 'jul/26': 282000.00, 'ago/26': 282000.00, 'set/26': 282199.74,
+                'out/26': 303256.14, 'nov/26': 2500.00
+            },
+            'ELETRIFICAÇÃO': {
+                'out/23': 1700.00, 'nov/23': 1000.00, 'dez/23': 1000.00, 'jan/24': 1000.00,
+                'fev/24': 1000.00, 'mar/24': 1000.00, 'abr/24': 1000.00, 'jun/24': 2840.00,
+                'jul/24': 1000.00, 'dez/24': 2000.00, 'jan/25': 1000.00, 'fev/25': 1000.00,
+                'mar/25': 1000.00, 'abr/25': 54019.23, 'mai/25': 1000.00, 'jul/25': 2000.00,
+                'ago/25': 17000.00, 'set/25': 1000.00, 'out/25': 7640.21, 'nov/25': 69989.14,
+                'dez/25': 186340.53, 'jan/26': 71236.58, 'fev/26': 72656.68, 'mar/26': 145300.00,
+                'abr/26': 700.00, 'ago/26': 19376.92, 'set/26': 232548.63
+            },
+            'MEIO AMBIENTE': {
+                'nov/24': 33580.40, 'dez/24': 15908.00, 'jan/25': 23077.00, 'fev/25': 57638.90,
+                'mar/25': 1070.00, 'abr/25': 568.24, 'mai/25': 3106.97, 'jun/25': 506.66,
+                'jul/25': 23294.12, 'ago/25': 2680.48, 'set/25': 1240.89, 'out/25': 2940.00,
+                'nov/25': 15311.43, 'dez/25': 18002.84, 'jan/26': 810.00, 'fev/26': 2008.93,
+                'mar/26': 2000.45, 'abr/26': 2840.00, 'mai/26': 1817.91, 'jun/26': 38020.67,
+                'jul/26': 55084.68, 'ago/26': 67241.86, 'set/26': 8851.48, 'out/26': 18736.81,
+                'nov/26': 194885.50, 'dez/26': 890.00
+            },
+            'TOPOGRAFIA DE ENTREGA': {
+                'jan/24': 6000.00, 'fev/24': 6500.00, 'mar/24': 2000.00, 'abr/24': 14500.00,
+                'jun/24': 5000.00, 'set/24': 2000.00, 'nov/24': 11500.00, 'dez/24': 1000.00,
+                'jan/25': 19615.00, 'fev/25': 13701.90, 'mar/25': 3250.00, 'nov/25': 6649.50,
+                'dez/25': 92.00, 'jul/26': 14429.20, 'ago/26': 23.50, 'set/26': 149.40
+            },
+            'INDIRETO DE OBRAS': {
+                'out/23': 14240.80, 'nov/23': 9938.10, 'jan/25': 8000.00, 'fev/25': 4000.00,
+                'mar/25': 14724.01, 'abr/25': 8880.24, 'mai/25': 8660.44, 'jun/25': 4516.27,
+                'jul/25': 22247.47, 'ago/25': 9010.83, 'set/25': 12574.41, 'out/25': 7229.29,
+                'nov/25': 11338.27, 'dez/25': 4112.25, 'jan/26': 12629.90, 'fev/26': 13814.50,
+                'mar/26': 12418.00, 'abr/26': 12879.80, 'mai/26': 15723.87, 'jun/26': 12477.49,
+                'jul/26': 18121.80, 'ago/26': 19527.36, 'set/26': 22261.18, 'out/26': 18995.14,
+                'nov/26': 29877.88, 'dez/26': 8102.25
             }
-        }
+        };
 
-        function formatarMes(str) {
-            str = String(str).toLowerCase().trim();
-            const mapPt = { 'jan':'jan', 'fev':'fev', 'feb':'fev', 'mar':'mar', 'abr':'abr', 'apr':'abr', 'mai':'mai', 'may':'mai', 'jun':'jun', 'jul':'jul', 'ago':'ago', 'aug':'ago', 'set':'set', 'sep':'set', 'out':'out', 'oct':'out', 'nov':'nov', 'dez':'dez', 'dec':'dez' };
-            
-            let anoMatch = str.match(/20(2[3-9])/);
-            let ano = anoMatch ? anoMatch[1] : '';
-            if(!ano) {
-                let anoCurto = str.match(/\/([2][3-9])/);
-                if(anoCurto) ano = anoCurto[1];
-            }
-            if(!ano) {
-                 let anoIso = str.match(/^20(2[3-9])-/);
-                 if (anoIso) ano = anoIso[1];
-            }
-            if(!ano) return str; 
-
-            let isoMatch = str.match(/202[3-9]-(\d{2})-\d{2}/);
-            if (isoMatch) {
-                const num = parseInt(isoMatch[1], 10);
-                const nomes = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-                if (num >= 1 && num <= 12) return nomes[num - 1] + '/' + ano;
-            }
-            
-            let numMatch = str.match(/(\d{1,2})\/(\d{1,2})\/202[3-9]/) || str.match(/(\d{1,2})\/202[3-9]/);
-            if (numMatch) {
-                let mesNum = parseInt(numMatch.length === 2 ? numMatch[1] : numMatch[2], 10);
-                if (numMatch.length === 3 && mesNum > 12) mesNum = parseInt(numMatch[1], 10);
-                const nomes = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-                if(mesNum >= 1 && mesNum <= 12) return nomes[mesNum - 1] + '/' + ano;
-            }
-
-            for (let chave in mapPt) { 
-                if (str.includes(chave)) return mapPt[chave] + '/' + ano; 
-            }
-            return str;
-        }
-
-        function processarLinhasExcel(linhas) {
-            let obraAtual = null;
-            let mesesMap = {}; 
-            
-            for (let i = 0; i < linhas.length; i++) {
-                let linha = linhas[i].map(c => String(c).trim());
-                let rowStr = linha.join(" ").toUpperCase();
-                
-                if (rowStr.includes("MIRANTE DA LAGOA")) { obraAtual = "mirante"; continue; }
-                if (rowStr.includes("JOAQUIM LEME")) { obraAtual = "joaquim"; continue; }
-                if (rowStr.includes("PARQUE DAS NAÇÕES") || rowStr.includes("PARQUE DAS NACOES")) { obraAtual = "parque"; continue; }
-                if (rowStr.includes("CIDADE NOVA")) { obraAtual = "cidadenova"; continue; }
-                
-                if (linha[0].toUpperCase().includes("DESCRIÇÃO") || linha[0].toUpperCase().includes("DESCRICAO") || linha[0].toUpperCase().includes("ETAPA")) {
-                    mesesMap = {};
-                    for (let j = 1; j < linha.length; j++) {
-                        let mesPadrao = formatarMes(linha[j]);
-                        if (mesPadrao.includes('/')) mesesMap[j] = mesPadrao; 
-                    }
-                    continue;
-                }
-                
-                if (!obraAtual || Object.keys(mesesMap).length === 0 || rowStr === "" || linha[0].toUpperCase() === "TOTAL") continue;
-                
-                let nomeEtapa = linha[0];
-                if (!nomeEtapa) continue;
-
-                for (let j in mesesMap) {
-                    let mesStr = mesesMap[j];
-                    let valorStr = String(linha[j] || "0").replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.');
-                    let valorFloat = parseFloat(valorStr);
-                    if (isNaN(valorFloat)) valorFloat = 0;
-                    
-                    if (valorFloat !== 0) {
-                        if (!csvHistoricoData[obraAtual][mesStr]) {
-                            csvHistoricoData[obraAtual][mesStr] = [];
-                        }
-                        csvHistoricoData[obraAtual][mesStr].push({
-                            etapa: nomeEtapa.toUpperCase(),
-                            valor: valorFloat
-                        });
-                    }
-                }
-            }
-        }
-
-        function openDesembolsoMesModal(canvasId, mesLabel, index) {
-            const isMirante = canvasId.includes('Mirante');
-            const isJoaquim = canvasId.includes('Joaquim');
-            const obraId = isMirante ? 'mirante' : isJoaquim ? 'joaquim' : 'parque';
-            const nomeObra = isMirante ? 'MIRANTE DA LAGOA' : isJoaquim ? 'JOAQUIM LEME' : 'PARQUE DAS NAÇÕES';
-            
-            document.getElementById('desembolsoMesTitle').textContent = mesLabel;
-            document.getElementById('desembolsoMesObra').textContent = nomeObra;
-            const tbody = document.getElementById('desembolsoMesTableBody');
-            tbody.innerHTML = '';
-            
-            const mesKey = mesLabel.toLowerCase().replace('-', '/').trim();
-            let dadosMes = csvHistoricoData[obraId][mesKey];
-            
-            if (!dadosMes) {
-                const possibleKeys = Object.keys(csvHistoricoData[obraId]);
-                const matchedKey = possibleKeys.find(k => k.includes(mesKey) || mesKey.includes(k));
-                if (matchedKey) dadosMes = csvHistoricoData[obraId][matchedKey];
-            }
-            
-            if (!dadosMes || dadosMes.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:15px; color:var(--subtitle-color);">Sem dados detalhados para este mês na planilha.</td></tr>';
-                document.getElementById('desembolsoMesTot').textContent = 'R$ 0,00';
-                document.getElementById('modalDesembolsoMes').classList.add('active');
-                return;
-            }
-
-            const filtrados = dadosMes.filter(d => d.valor !== 0).sort((a, b) => Math.abs(b.valor) - Math.abs(a.valor));
-            let total = 0;
-
-            if (filtrados.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:15px; color:var(--subtitle-color);">Nenhum desembolso em etapas para este mês.</td></tr>';
-            } else {
-                filtrados.forEach(item => {
-                    total += item.valor;
-                    tbody.innerHTML += `
-                        <tr>
-                            <td style="text-align: left; font-weight: 600; color: var(--title-color); border-bottom: 1px solid var(--table-border); padding: 8px;">
-                                ✅ ${item.etapa}
-                            </td>
-                            <td style="text-align: center; border-bottom: 1px solid var(--table-border); padding: 8px;">
-                                ${item.valor.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}
-                            </td>
-                        </tr>
-                    `;
+        // Popula automaticamente o csvHistoricoData no formato exato da tabela dinâmica
+        function registrarFluxoObra(obraId, mapaEtapas) {
+            Object.entries(mapaEtapas).forEach(([etapa, meses]) => {
+                Object.entries(meses).forEach(([mes, valor]) => {
+                    if (!csvHistoricoData[obraId][mes]) csvHistoricoData[obraId][mes] = [];
+                    csvHistoricoData[obraId][mes].push({ etapa, valor });
                 });
-            }
-            
-            document.getElementById('desembolsoMesTot').textContent = total.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
-            document.getElementById('modalDesembolsoMes').classList.add('active');
+            });
         }
-
-        carregarDadosExcel();
+        registrarFluxoObra('mirante', fluxoEtapasMirante);
 
         // =========================================================================
         // VARIAVEIS E MATRIZES DE DADOS ORIGINAIS
@@ -3660,7 +3724,41 @@
             });
             document.getElementById('modalResumoPendencias').classList.add('active');
         }
-	function openFluxoMatrizModal(obraId) {
+	let currentMatrizObraId = 'mirante';
+
+        // 22 cores pastéis encorpadas e distintas (usadas na tela e no PDF)
+        const coresPasteisMatriz = [
+            '#F8BBD0', '#BBDEFB', '#C8E6C9', '#FFE082', '#E1BEE7',
+            '#B2EBF2', '#FFCC80', '#D7CCC8', '#C5CAE9', '#DCEDC8',
+            '#FFAB91', '#B2DFDB', '#FFF59D', '#D1C4E9', '#E6EE9C',
+            '#CFD8DC', '#EF9A9A', '#B3E5FC', '#F48FB1', '#A5D6A7',
+            '#FFCCBC', '#CE93D8'
+        ];
+
+        function hexToRgbArray(hex) {
+            const clean = hex.replace('#', '');
+            return [
+                parseInt(clean.substring(0, 2), 16),
+                parseInt(clean.substring(2, 4), 16),
+                parseInt(clean.substring(4, 6), 16)
+            ];
+        }
+
+        function obterValorMesEtapa(obraId, mes, etapa) {
+            const mesKey = mes.toLowerCase().replace('-', '/').trim();
+            let dadosMes = csvHistoricoData[obraId][mesKey];
+            if (!dadosMes) {
+                const possibleKeys = Object.keys(csvHistoricoData[obraId]);
+                const matchedKey = possibleKeys.find(k => k.includes(mesKey) || mesKey.includes(k));
+                if (matchedKey) dadosMes = csvHistoricoData[obraId][matchedKey];
+            }
+            if (!dadosMes) return 0;
+            const item = dadosMes.find(d => d.etapa.toUpperCase().trim() === etapa.toUpperCase().trim());
+            return item ? item.valor : 0;
+        }
+
+        function openFluxoMatrizModal(obraId) {
+            currentMatrizObraId = obraId;
             const isMirante = obraId === 'mirante';
             const isJoaquim = obraId === 'joaquim';
             const isParque = obraId === 'parque';
@@ -3671,63 +3769,344 @@
             const thead = document.getElementById('matrizTableHead');
             const tbody = document.getElementById('matrizTableBody');
             const tfoot = document.getElementById('matrizTableFoot');
-            
-            // 1. Cabeçalho (Meses)
+
+            // Remove Jan/27 até Mai/27 para Mirante da Lagoa (mantém Ago/23 até Dez/26)
+            const mesesObra = isMirante ? mesesHistorico.slice(0, 41) : mesesHistorico;
+            const idxCorte = mesesObra.indexOf('out/26');
+
+            // 1. Cabeçalho em linha única + balões com setas no divisor de Out/26 | Nov/26
             let headHtml = '<tr><th>Macro Etapa</th>';
-            mesesHistorico.forEach(mes => {
-                headHtml += `<th>${mes.toUpperCase()}</th>`;
+            mesesObra.forEach((mes, idx) => {
+                if (idx === idxCorte) {
+                    headHtml += `
+                        <th class="matrix-divider-cell matrix-divider-th">
+                            <div class="matrix-divider-badges">
+                                <div class="divider-side-left">
+                                    <span class="badge-consolidado">Consolidado</span>
+                                    <span class="divider-arrow-left">◀</span>
+                                </div>
+                                <span class="divider-pipe"></span>
+                                <div class="divider-side-right">
+                                    <span class="divider-arrow-right">▶</span>
+                                    <span class="badge-projecao">Projeção</span>
+                                </div>
+                            </div>
+                            ${mes.toUpperCase()}
+                        </th>`;
+                } else {
+                    headHtml += `<th>${mes.toUpperCase()}</th>`;
+                }
             });
             headHtml += '<th style="background: var(--active-color); color: #fff;">TOTAL ETAPA</th></tr>';
             thead.innerHTML = headHtml;
             
-            // 2. Corpo (Etapas e Valores)
+            // 2. Corpo (Etapas e Valores sem decimais + cor única por linha + linha tracejada)
             let bodyHtml = '';
             const etapas = dataMaps[obraId].labels;
-            let totaisMes = new Array(mesesHistorico.length).fill(0);
+            let totaisMes = new Array(mesesObra.length).fill(0);
             let totalGeral = 0;
             
-            etapas.forEach(etapa => {
+            etapas.forEach((etapa, etapaIdx) => {
+                const corPastelLinha = coresPasteisMatriz[etapaIdx % coresPasteisMatriz.length];
                 let rowHtml = `<tr><td>${etapa}</td>`;
                 let totalEtapa = 0;
                 
-                mesesHistorico.forEach((mes, idx) => {
-                    const mesKey = mes.toLowerCase().replace('-', '/').trim();
-                    let dadosMes = csvHistoricoData[obraId][mesKey];
-                    
-                    if (!dadosMes) {
-                        const possibleKeys = Object.keys(csvHistoricoData[obraId]);
-                        const matchedKey = possibleKeys.find(k => k.includes(mesKey) || mesKey.includes(k));
-                        if (matchedKey) dadosMes = csvHistoricoData[obraId][matchedKey];
-                    }
-                    
-                    let val = 0;
-                    if (dadosMes) {
-                        const item = dadosMes.find(d => d.etapa.toUpperCase().trim() === etapa.toUpperCase().trim());
-                        if (item) val = item.valor;
-                    }
-                    
+                mesesObra.forEach((mes, idx) => {
+                    const val = obterValorMesEtapa(obraId, mes, etapa);
                     totalEtapa += val;
                     totaisMes[idx] += val;
                     totalGeral += val;
-                    
-                    // Se for 0, coloca um traço para manter limpo
-                    rowHtml += `<td>${val !== 0 ? val.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) : '-'}</td>`;
+
+                    const dividerClass = idx === idxCorte ? ' class="matrix-divider-cell"' : '';
+                    if (val !== 0) {
+                        const valFormatado = Math.round(val).toLocaleString('pt-BR');
+                        rowHtml += `<td${dividerClass} style="background-color: ${corPastelLinha}; color: #374151; font-weight: 600;">${valFormatado}</td>`;
+                    } else {
+                        rowHtml += `<td${dividerClass}>-</td>`;
+                    }
                 });
                 
-                rowHtml += `<td style="font-weight: bold; color: var(--title-color); background: var(--insight-bg);">${totalEtapa.toLocaleString('pt-BR', {style:'currency', currency:'BRL'})}</td></tr>`;
+                const totalEtapaStr = 'R$ ' + Math.round(totalEtapa).toLocaleString('pt-BR');
+                rowHtml += `<td style="font-weight: 700; color: var(--title-color); background: var(--insight-bg);">${totalEtapaStr}</td></tr>`;
                 bodyHtml += rowHtml;
             });
             tbody.innerHTML = bodyHtml;
             
-            // 3. Rodapé (Totais Mensais)
+            // 3. Rodapé (Totais Mensais sem decimais)
             let footHtml = '<tr><td>TOTAL MENSAL</td>';
-            totaisMes.forEach(tot => {
-                footHtml += `<td>${tot !== 0 ? tot.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) : '-'}</td>`;
+            totaisMes.forEach((tot, idx) => {
+                const dividerClass = idx === idxCorte ? ' class="matrix-divider-cell"' : '';
+                footHtml += `<td${dividerClass}>${tot !== 0 ? Math.round(tot).toLocaleString('pt-BR') : '-'}</td>`;
             });
-            footHtml += `<td style="color: #fff; background: var(--active-color);">${totalGeral.toLocaleString('pt-BR', {style:'currency', currency:'BRL'})}</td></tr>`;
+            const totalGeralStr = 'R$ ' + Math.round(totalGeral).toLocaleString('pt-BR');
+            footHtml += `<td style="color: #fff; background: var(--active-color);">${totalGeralStr}</td></tr>`;
             tfoot.innerHTML = footHtml;
             
             document.getElementById('modalFluxoMatriz').classList.add('active');
+        }
+
+        let montserratBase64Cache = null;
+
+        async function carregarMontserratBase64() {
+            if (montserratBase64Cache) return montserratBase64Cache;
+            const toBase64 = async (url) => {
+                const res = await fetch(url);
+                if (!res.ok) throw new Error('Falha ao baixar fonte');
+                const buf = await res.arrayBuffer();
+                let bin = '';
+                const bytes = new Uint8Array(buf);
+                for (let i = 0; i < bytes.byteLength; i++) bin += String.fromCharCode(bytes[i]);
+                return btoa(bin);
+            };
+            try {
+                const [regular, bold] = await Promise.all([
+                    toBase64('https://cdn.jsdelivr.net/gh/JulietaUla/Montserrat@master/fonts/ttf/Montserrat-Regular.ttf'),
+                    toBase64('https://cdn.jsdelivr.net/gh/JulietaUla/Montserrat@master/fonts/ttf/Montserrat-Bold.ttf')
+                ]);
+                montserratBase64Cache = { regular, bold };
+                return montserratBase64Cache;
+            } catch (e) {
+                console.warn('Usando fonte padrão no PDF (Montserrat indisponível):', e);
+                return null;
+            }
+        }
+
+        async function exportarMatrizFluxoPDF() {
+            if (!window.jspdf) {
+                alert('Biblioteca de PDF ainda carregando. Tente novamente em alguns segundos.');
+                return;
+            }
+            const btnPdf = document.getElementById('btnExportMatrizPDF');
+            if (btnPdf) { btnPdf.disabled = true; btnPdf.textContent = '⏳ Gerando PDF...'; }
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const fontesMontserrat = await carregarMontserratBase64();
+                const fontePDF = fontesMontserrat ? 'Montserrat' : 'helvetica';
+
+                const registrarFonte = (docInstance) => {
+                    if (fontesMontserrat) {
+                        docInstance.addFileToVFS('Montserrat-Regular.ttf', fontesMontserrat.regular);
+                        docInstance.addFont('Montserrat-Regular.ttf', 'Montserrat', 'normal');
+                        docInstance.addFileToVFS('Montserrat-Bold.ttf', fontesMontserrat.bold);
+                        docInstance.addFont('Montserrat-Bold.ttf', 'Montserrat', 'bold');
+                    }
+                };
+
+                const obraId = currentMatrizObraId || 'mirante';
+                const isMirante = obraId === 'mirante';
+                const isJoaquim = obraId === 'joaquim';
+                const isParque = obraId === 'parque';
+                const nomeObra = isMirante ? 'MIRANTE DA LAGOA' : isJoaquim ? 'JOAQUIM LEME' : isParque ? 'PARQUE DAS NAÇÕES' : 'CIDADE NOVA';
+
+                const mesesObra = isMirante ? mesesHistorico.slice(0, 41) : mesesHistorico;
+                const etapas = dataMaps[obraId].labels;
+                const idxCorte = mesesObra.indexOf('out/26');
+
+                // Calcula totalizadores Consolidado, Projetado, por Etapa e por Mês
+                let totalConsolidado = 0;
+                let totalProjetado = 0;
+                const totaisPorEtapa = new Array(etapas.length).fill(0);
+                const totaisPorMes = new Array(mesesObra.length).fill(0);
+
+                mesesObra.forEach((mes, mIdx) => {
+                    etapas.forEach((etapa, eIdx) => {
+                        const v = obterValorMesEtapa(obraId, mes, etapa);
+                        totaisPorEtapa[eIdx] += v;
+                        totaisPorMes[mIdx] += v;
+                        if (idxCorte === -1 || mIdx <= idxCorte) totalConsolidado += v;
+                        else totalProjetado += v;
+                    });
+                });
+                const totalExecucao = totalConsolidado + totalProjetado;
+
+                const inicioCons = mesesObra[0].toUpperCase();
+                const fimCons = (idxCorte !== -1 ? mesesObra[idxCorte] : mesesObra[mesesObra.length - 1]).toUpperCase();
+                const inicioProj = idxCorte !== -1 && idxCorte + 1 < mesesObra.length ? mesesObra[idxCorte + 1].toUpperCase() : '-';
+                const fimProj = mesesObra[mesesObra.length - 1].toUpperCase();
+
+                const fmtBRLInt = v => 'R$ ' + Math.round(v).toLocaleString('pt-BR');
+
+                // Tabela transposta: Meses nas linhas (esquerda) e Etapas nas colunas (topo)
+                const headRow = ['MÊS', ...etapas, 'TOTAL MENSAL'];
+                const bodyRows = [];
+
+                mesesObra.forEach((mes, mIdx) => {
+                    const row = [mes.toUpperCase()];
+                    etapas.forEach((etapa) => {
+                        const val = obterValorMesEtapa(obraId, mes, etapa);
+                        row.push(val !== 0 ? Math.round(val).toLocaleString('pt-BR') : '-');
+                    });
+                    row.push(totaisPorMes[mIdx] !== 0 ? fmtBRLInt(totaisPorMes[mIdx]) : '-');
+                    bodyRows.push(row);
+                });
+
+                const footRow = ['TOTAL ETAPA', ...totaisPorEtapa.map(t => t !== 0 ? Math.round(t).toLocaleString('pt-BR') : '-'), fmtBRLInt(totalExecucao)];
+                bodyRows.push(footRow);
+
+                const larguraPagina = 297; // Largura A4 Paisagem fixa
+                const marginX = 6;
+                const muitasEtapas = etapas.length > 16;
+
+                function desenharRelatorio(docInstance) {
+                    registrarFonte(docInstance);
+                    const pageW = docInstance.internal.pageSize.getWidth();
+
+                    // 1. Título centralizado
+                    docInstance.setFont(fontePDF, 'bold');
+                    docInstance.setFontSize(11.5);
+                    docInstance.setTextColor(27, 94, 32);
+                    docInstance.text(`RELATÓRIO DE DESEMBOLSOS MENSAIS POR ETAPA DA OBRA ${nomeObra}`, pageW / 2, 11, { align: 'center' });
+
+                    // 2. Quadros de resumo (3 caixas lado a lado)
+                    const cardY = 15;
+                    const cardH = 13;
+                    const gap = 4;
+                    const cardW = (pageW - marginX * 2 - gap * 2) / 3;
+
+                    const cardsResumo = [
+                        {
+                            titulo: `VALOR TOTAL DESEMBOLSADO PERÍODO ${inicioCons} ATÉ ${fimCons}:`,
+                            valor: fmtBRLInt(totalConsolidado),
+                            borda: [211, 47, 47],
+                            fundo: [255, 245, 245]
+                        },
+                        {
+                            titulo: `VALOR TOTAL PROJETADO ${inicioProj} ATÉ ${fimProj}:`,
+                            valor: fmtBRLInt(totalProjetado),
+                            borda: [25, 118, 210],
+                            fundo: [240, 247, 255]
+                        },
+                        {
+                            titulo: 'VALOR TOTAL DE EXECUÇÃO PROJETADO:',
+                            valor: fmtBRLInt(totalExecucao),
+                            borda: [27, 94, 32],
+                            fundo: [241, 248, 233]
+                        }
+                    ];
+
+                    cardsResumo.forEach((c, i) => {
+                        const x = marginX + i * (cardW + gap);
+                        docInstance.setFillColor(...c.fundo);
+                        docInstance.setDrawColor(...c.borda);
+                        docInstance.setLineWidth(0.5);
+                        docInstance.roundedRect(x, cardY, cardW, cardH, 2, 2, 'FD');
+
+                        docInstance.setFont(fontePDF, 'bold');
+                        docInstance.setFontSize(6.2);
+                        docInstance.setTextColor(70, 70, 70);
+                        docInstance.text(c.titulo, x + cardW / 2, cardY + 4.8, { align: 'center' });
+
+                        docInstance.setFontSize(9.8);
+                        docInstance.setTextColor(...c.borda);
+                        docInstance.text(c.valor, x + cardW / 2, cardY + 10.2, { align: 'center' });
+                    });
+
+                    // 3. Tabela transposta (sem legenda extra no topo)
+                    docInstance.autoTable({
+                        startY: cardY + cardH + 5,
+                        margin: { left: marginX, right: marginX, bottom: 6 },
+                        head: [headRow],
+                        body: bodyRows,
+                        theme: 'grid',
+                        styles: {
+                            font: fontePDF,
+                            fontSize: muitasEtapas ? 4.6 : 5.8,
+                            cellPadding: muitasEtapas ? 1.0 : 1.3,
+                            halign: 'right',
+                            valign: 'middle',
+                            textColor: [55, 65, 81],
+                            lineColor: [215, 215, 215],
+                            lineWidth: 0.15
+                        },
+                        headStyles: {
+                            fillColor: [27, 94, 32],
+                            textColor: [255, 255, 255],
+                            fontStyle: 'bold',
+                            halign: 'center',
+                            valign: 'middle',
+                            fontSize: muitasEtapas ? 4.2 : 5.1
+                        },
+                        columnStyles: {
+                            0: { halign: 'center', fontStyle: 'bold', cellWidth: 16 },
+                            [headRow.length - 1]: { fontStyle: 'bold', cellWidth: 22 }
+                        },
+                        didParseCell: function (data) {
+                            const isTotalRow = data.section === 'body' && data.row.index === bodyRows.length - 1;
+                            const isMesCol = data.column.index === 0;
+                            const isTotalCol = data.column.index === headRow.length - 1;
+
+                            if (isTotalRow) {
+                                data.cell.styles.fillColor = [232, 245, 233];
+                                data.cell.styles.fontStyle = 'bold';
+                                data.cell.styles.textColor = [27, 94, 32];
+                                if (isTotalCol) {
+                                    data.cell.styles.fillColor = [27, 94, 32];
+                                    data.cell.styles.textColor = [255, 255, 255];
+                                }
+                                return;
+                            }
+
+                            if (data.section === 'body') {
+                                const ehProjecao = idxCorte !== -1 && data.row.index > idxCorte;
+
+                                if (isMesCol) {
+                                    if (ehProjecao) {
+                                        data.cell.styles.fillColor = [25, 118, 210];
+                                        data.cell.styles.textColor = [255, 255, 255];
+                                    } else {
+                                        data.cell.styles.fillColor = [245, 245, 245];
+                                        data.cell.styles.textColor = [27, 94, 32];
+                                    }
+                                    return;
+                                }
+
+                                if (isTotalCol) {
+                                    data.cell.styles.fillColor = ehProjecao ? [227, 242, 253] : [241, 245, 249];
+                                    data.cell.styles.textColor = ehProjecao ? [25, 118, 210] : [27, 94, 32];
+                                    return;
+                                }
+
+                                if (data.cell.raw !== '-') {
+                                    const etapaIdx = data.column.index - 1;
+                                    const hexCor = coresPasteisMatriz[etapaIdx % coresPasteisMatriz.length];
+                                    data.cell.styles.fillColor = hexToRgbArray(hexCor);
+                                    data.cell.styles.fontStyle = 'bold';
+                                }
+                            }
+                        },
+                        didDrawCell: function (data) {
+                            if (data.section === 'body' && idxCorte !== -1 && data.row.index === idxCorte) {
+                                const yLinha = data.cell.y + data.cell.height;
+                                docInstance.saveGraphicsState();
+                                docInstance.setDrawColor(211, 47, 47);
+                                docInstance.setLineWidth(0.6);
+                                docInstance.setLineDashPattern([2, 1.5], 0);
+                                docInstance.line(data.cell.x, yLinha, data.cell.x + data.cell.width, yLinha);
+                                docInstance.setLineDashPattern([], 0);
+                                docInstance.restoreGraphicsState();
+                            }
+                        }
+                    });
+
+                    return docInstance.lastAutoTable.finalY;
+                }
+
+                // 1º passe invisível para medir a altura exata necessária
+                const tempDoc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: [larguraPagina, 2500] });
+                const finalY = desenharRelatorio(tempDoc);
+
+                // 2º passe: gera o PDF final com largura A4 paisagem (297 mm) e altura contínua exata
+                const alturaFinal = Math.max(120, Math.ceil(finalY + 8));
+                const orientacaoFinal = alturaFinal > larguraPagina ? 'portrait' : 'landscape';
+                const doc = new jsPDF({ orientation: orientacaoFinal, unit: 'mm', format: [larguraPagina, alturaFinal] });
+                desenharRelatorio(doc);
+
+                const nomeArquivo = `Relatorio_Desembolsos_${nomeObra.replace(/\s+/g, '_')}.pdf`;
+                doc.save(nomeArquivo);
+            } finally {
+                if (btnPdf) { btnPdf.disabled = false; btnPdf.textContent = '📄 Baixar PDF'; }
+            }
         }
 // Injeta os botões da Tabela Dinâmica automaticamente nos 3 gráficos
         window.addEventListener('DOMContentLoaded', () => {
@@ -3742,7 +4121,7 @@
                     if (container && !container.querySelector('.btn-tabela-dinamica')) {
                         let btn = document.createElement('button');
                         btn.className = 'resumo-btn btn-tabela-dinamica';
-                        btn.innerHTML = '📊 Ver Tabela Dinâmica Mensal';
+                        btn.innerHTML = '📊 Tabela Desembolso x Etapa Mensal';
                         btn.style.cssText = 'top: 15px; left: 15px; right: auto; background: var(--title-color); color: #fff; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 100;';
                         btn.onclick = () => openFluxoMatrizModal(obra);
                         container.appendChild(btn);
